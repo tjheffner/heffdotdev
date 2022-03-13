@@ -23,7 +23,7 @@ const rehypePlugins = [
 	]
 ];
 
-const allowedPosters = ['sw-yx'];
+const allowedPosters = ['tjheffner'];
 const publishedTags = ['Published'];
 let allBlogposts = [];
 // let etag = null // todo - implmement etag header
@@ -35,6 +35,7 @@ export async function listContent() {
 	/** @type {import('./types').ContentItem[]} */
 	let _allBlogposts = [];
 	let next = null;
+	let limit = 0; // just a failsafe against infinite loop - feel free to remove
 	const authheader = process.env.GH_TOKEN && {
 		Authorization: `token ${process.env.GH_TOKEN}`
 	};
@@ -76,7 +77,7 @@ export async function getContent(slug) {
 		console.log('loaded ' + allBlogposts.length + ' blogposts');
 		if (!allBlogposts.length)
 			throw new Error(
-				'failed to load blogposts for some reason. check token: ' + process.env.GH_TOKEN
+				'failed to load blogposts for some reason. check token' + process.env.GH_TOKEN
 			);
 	}
 	if (!allBlogposts.length) throw new Error('no blogposts');
