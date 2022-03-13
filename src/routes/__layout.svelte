@@ -1,5 +1,5 @@
 <script context="module">
-	import { MY_TWITTER_HANDLE, MY_YOUTUBE, REPO_URL, SITE_TITLE } from '$lib/siteConfig';
+	import { MY_TWITTER_HANDLE, REPO_URL, SITE_TITLE } from '$lib/siteConfig';
 </script>
 
 <script>
@@ -50,14 +50,6 @@
 				href={REPO_URL}
 			>
 				GitHub
-			</a>
-			<a
-				class="text-gray-500 transition hover:text-gray-300"
-				target="_blank"
-				rel="noopener noreferrer"
-				href={MY_YOUTUBE}
-			>
-				YouTube
 			</a>
 		</div>
 	</div>

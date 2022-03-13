@@ -26,7 +26,7 @@
 	export let page;
 	export let list;
 
-	// technically this is a slighlty different type because doesnt have 'content' but we'll let it slide
+	// technically this is a slightly different type because doesnt have 'content' but we'll let it slide
 	/** @type {import('$lib/types').ContentItem[]} */
 	export let items;
 
@@ -48,7 +48,7 @@
 </script>
 
 <svelte:head>
-	<title>Swyxkit Blog Index</title>
+	<title>heffdotdev Blog Index</title>
 	<meta name="description" content="Latest Hacker News stories in the {list} category" />
 </svelte:head>
 

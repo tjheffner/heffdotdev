@@ -11,7 +11,7 @@
 </script>
 
 <script>
-	import Newsletter from '../components/Newsletter.svelte';
+	// import Newsletter from '../components/Newsletter.svelte';
 	import FeatureCard from '../components/FeatureCard.svelte';
 </script>
 
@@ -47,12 +47,14 @@
 				</span>
 				!
 			</h1>
-			<h2 class="mb-4 text-gray-700 dark:text-gray-200">
-				An opinionated blog starter for <span class="font-semibold"
-					>SvelteKit + Tailwind + Netlify.</span
-				> Refreshed for 2022!
+			<h2 class="mt-6 mb-4 text-gray-700 dark:text-gray-200">
+				Tanner Heffner is a senior software engineer currently working on the modernization effort for VA.gov with the team at Agile6.
 			</h2>
 			<p class="mb-16 text-gray-600 dark:text-gray-400">
+				Before that, I helped shipped a multitude of projects at Instrument and Phase2.
+
+				I'm passionate about design systems, component libraries, web accessibility, developer experience, and much more.
+
 				<a href={REPO_URL}>View source here!</a>
 			</p>
 		</div>
@@ -92,5 +94,5 @@
 			></a
 		>
 	</section>
-	<Newsletter />
+	<!-- <Newsletter /> -->
 </div>

@@ -35,7 +35,6 @@ export async function listContent() {
 	/** @type {import('./types').ContentItem[]} */
 	let _allBlogposts = [];
 	let next = null;
-	let limit = 0; // just a failsafe against infinite loop - feel free to remove
 	const authheader = process.env.GH_TOKEN && {
 		Authorization: `token ${process.env.GH_TOKEN}`
 	};
@@ -77,7 +76,7 @@ export async function getContent(slug) {
 		console.log('loaded ' + allBlogposts.length + ' blogposts');
 		if (!allBlogposts.length)
 			throw new Error(
-				'failed to load blogposts for some reason. check token' + process.env.GH_TOKEN
+				'failed to load blogposts for some reason. check token: ' + process.env.GH_TOKEN
 			);
 	}
 	if (!allBlogposts.length) throw new Error('no blogposts');
@@ -117,7 +116,7 @@ export async function getContent(slug) {
 					const url = x.startsWith('https://twitter.com/') ? x : `https://twitter.com/x/status/${x}`;
 					return `
 					<blockquote class="twitter-tweet" data-lang="en" data-dnt="true" data-theme="dark">
-					<a href="${url}"></a></blockquote> 
+					<a href="${url}"></a></blockquote>
 					<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 					`
 				}
