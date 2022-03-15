@@ -1,7 +1,7 @@
 # About
 
-This is my personal site, built using swyxkit.
+this site is the online home of tanner heffner. it's part portfolio, part playground and all [digital garden](https://joelhooks.com/digital-garden), using [swyxkit]() as my starting point.
 
-It is a place for me to share my work as well as dump longer form writing than is appropriate for twitter.
-Some posts will be technical in nature but I envision posting recipes and gardening updates here as well.
-I'm sure it will evolve over time, but this is only the beginning. Thanks for visiting! :)
+i intend to have information about past projects, as well as a place to post technical snippets, cooking recipes, reviews and longer writing that isn't appropriate for twitter. lord knows i've tweeted enough already.
+
+maybe some things you find here will be useful or interesting to you, maybe they won't. this website is for me.

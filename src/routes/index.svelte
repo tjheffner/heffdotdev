@@ -12,7 +12,8 @@
 
 <script>
 	// import Newsletter from '../components/Newsletter.svelte';
-	import FeatureCard from '../components/FeatureCard.svelte';
+	// import FeatureCard from '../components/FeatureCard.svelte';
+	import Slice from '../components/Slice.svelte';
 </script>
 
 <svelte:head>
@@ -38,32 +39,36 @@
 	<div class="flex flex-col-reverse items-start sm:flex-row">
 		<div class="flex flex-col pr-8">
 			<h1 class="mb-3 text-3xl font-bold tracking-tight text-black dark:text-white md:text-5xl">
-				This is
-
 				<span
 					class="relative ml-2 inline-block before:absolute before:-inset-1 before:block before:-skew-y-3 before:bg-red-500"
 				>
-					<span class="relative skew-y-3 text-yellow-400">{SITE_TITLE}</span>
+					<span class="relative skew-y-3 text-yellow-400">Tanner Heffner</span>
 				</span>
-				!
 			</h1>
 			<h2 class="mt-6 mb-4 text-gray-700 dark:text-gray-200">
-				Tanner Heffner is a senior software engineer currently working on the modernization effort for VA.gov with the team at Agile6.
+
 			</h2>
-			<p class="mb-16 text-gray-600 dark:text-gray-400">
-				Before that, I helped shipped a multitude of projects at Instrument and Phase2.
-
-				I'm passionate about design systems, component libraries, web accessibility, developer experience, and much more.
-
-				<a href={REPO_URL}>View source here!</a>
-			</p>
 		</div>
-		<!-- <div
-				class="w-[80px] h-[80px] rounded-full sm:w-[176px] sm:h-[136px] relative mb-8 sm:mb-0 mr-auto bg-cyan-300 bg-opacity-25"
-			/> -->
 	</div>
 
-	<section class="mb-16 w-full">
+	<section>
+		<Slice title="Vision">
+			I'm passionate about design systems, responsive web design and web accessibility.
+		</Slice>
+		<Slice title="Expertise">
+
+		</Slice>
+		<Slice title="Background">
+			Professional web developer since 2015. Amateur web developer since 2005.
+
+			I first learned about the power and frustration of CSS hacking together a phpBB forum's theme as a pre-teen. Never even considered it could be a career until much later. I've never lost that spirit of figuring out how things work, and how to make them work better.
+		</Slice>
+		<Slice title="Get in touch">
+			If this jives with you, or you just want to say hello, feel free to send me an <a href="mailto:tannerjheffner@gmail.com">email</a> or bug me on twitter.
+		</Slice>
+	</section>
+
+	<!-- <section class="mb-16 w-full">
 		<h3 class="mb-6 text-2xl font-bold tracking-tight text-black dark:text-white md:text-4xl">
 			Featured Posts
 		</h3>
@@ -93,6 +98,6 @@
 				/></svg
 			></a
 		>
-	</section>
+	</section> -->
 	<!-- <Newsletter /> -->
 </div>
