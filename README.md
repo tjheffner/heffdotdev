@@ -1,30 +1,13 @@
-<img height=200 src="https://user-images.githubusercontent.com/6764957/155878641-c13ecdc0-ed2f-458c-88c6-cd34bdb38dae.png" />
+# heffdotdev
+Tanner Heffner's personal website
 
-A lightly opinionated starter for Svelte projects:
-
+This is based on swyxkit, a lightly opinionated starter for Svelte projects:
 - SvelteKit + Netlify adapter!
 - Tailwind 3 + Tailwind Typography (with [swyx fixes](https://youtu.be/-FzemNMcOGs))
 - [JSDoc Typechecking](https://swyxkit.netlify.app/how-to-add-jsdoc-typechecking-to-sveltekit)
 - [GitHub Issues as CMS](https://github.com/sw-yx/swyxkit/issues/10)
 
-Feel free to rip out these opinions as you see fit of course.
-
-## Live Demo
-
-See https://swyxkit.netlify.app/ (see [Deploy Logs](https://app.netlify.com/sites/swyxkit/deploys))
-
-![screenshot of swyxkit in action](https://user-images.githubusercontent.com/6764957/147861359-3ad9438f-41d1-47c8-aa05-95c7d18497f0.png)
-
-![screenshot of swyxkit in action](https://user-images.githubusercontent.com/6764957/147861337-d40a1798-e7ff-40e1-8dd8-ba1350fd3784.png)
-
-## Users in the wild
-
-- https://swyx.io
-- https://twitter.com/iambenwis/status/1500998985388937216?s=21
-- add yourself here!
-
 ## Key Features and Design Considerations:
-
 - **Features**
   - Dark mode
   - Github-issues-driven Blog with blog index
@@ -65,66 +48,18 @@ See https://swyxkit.netlify.app/ (see [Deploy Logs](https://app.netlify.com/site
   - [Nightly lockfile upgrades](https://mobile.twitter.com/FredKSchott/status/1489287560387956736)
 
 ## Setup
-
 ```bash
-npx degit https://github.com/sw-yx/swyxkit
-export GH_TOKEN=your_gh_token_here # can skip if just trying out this repo casually
 npm install
 npm run start
 ```
 
-You should be able to deploy this project straight to Netlify as is, just [like this project is](https://app.netlify.com/sites/swyxkit/deploys/).
-
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/sw-yx/swyxkit)
-
-## Personalization Configuration
-
-As you become ready to seriously adopt this, remember to configure `/lib/siteConfig.js` - just some hardcoded vars i want you to remember to configure.
-
-```js
-export const SITE_URL = 'https://swyxkit.netlify.app';
-export const GH_USER_REPO = 'sw-yx/swyxkit'; // used for pulling github issues and offering comments
-export const REPO_URL = 'https://github.com/' + GH_USER_REPO;
-export const SITE_TITLE = 'SwyxKit';
-export const SITE_DESCRIPTION = "swyx's default SvelteKit + Tailwind starter";
-export const DEFAULT_OG_IMAGE =
-	'https://user-images.githubusercontent.com/6764957/147861359-3ad9438f-41d1-47c8-aa05-95c7d18497f0.png';
-export const MY_TWITTER_HANDLE = 'swyx';
-export const MY_YOUTUBE = 'https://youtube.com/swyxTV';
-```
-
-Of course, you should then go page by page (there aren't that many) and customize some of the other hardcoded items, for example
-
-- the Newsletter component needs to be wired up to a newsletter service (I like buttondown, tinyletter, and revue)
-- page `Cache-Control` policy and SvelteKit `maxage`
-- site favicons (use https://realfavicongenerator.net/ to make all the variants and stick it in `/static`)
-- (if migrating content from previous blog) setup Netlify redirects at `/static/_redirects`
-
-This blog uses GitHub as a CMS - if you are doing any serious development at all, you should give the `GH_TOKEN` env variable to raise rate limit from 60 to 5000.
-
-- Just make a really basic personal access token [here](https://github.com/settings/tokens/new), should be enough.
-  https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting
-- and [set the env variables in Netlify](https://docs.netlify.com/configure-builds/environment-variables/#declare-variables)
-
-When deploying, don't forget to set it in Netlify: https://app.netlify.com/sites/YOUR_SITE/settings/deploys#environment
-
 ## Optimizations to try after you are done deploying
-
 - Customize your JSON+LD for [FAQ pages](https://rodneylab.com/sveltekit-faq-page-seo/), [organization, or products](https://navillus.dev/blog/json-ld-in-sveltekit). There is a schema for blogposts, but it is so dead simple that swyxkit does not include it.
-
-## Further Reading
-
-You can read:
-
-- [Why I Enjoy Svelte](https://www.swyx.io/svelte-why/)
-- [Svelte for Sites, React for Apps](https://www.swyx.io/svelte-sites-react-apps/)
-- [Why Tailwind CSS](https://www.swyx.io/why-tailwind/)
-- [Moving to a GitHub CMS](https://swyxkit.netlify.app/moving-to-a-github-cms)
-- [How to Setup Svelte with Tailwind](https://dev.to/swyx/how-to-set-up-svelte-with-tailwind-css-4fg5)
 
 ## Acknowledgements
 
 - Design from Lee Robinson: https://github.com/leerob/leerob.io/
+- Homepage design from Rene Stalder: https://renestalder.me/en/
 - MDSvex from Pngwn is amazing https://mdsvex.pngwn.io/docs#layout
 - Other people's code I borrowed from
   - https://github.com/mvasigh/sveltekit-mdsvex-blog
@@ -143,3 +78,10 @@ You can read:
 - store results in netlify build cache
 - separate hydration path for mobile nav (so that we could `hydrate=false` some pages)
 - custom components in MDX, and rehype plugins
+
+- add filter to blogs for different categories
+- fix layout
+- fix colors
+- add projects gallery & pages
+- port old blogs?
+- customize json+ld

@@ -1,7 +1,6 @@
 # About
 
-this site is the online home of tanner heffner. it's part portfolio, part playground and all [digital garden](https://joelhooks.com/digital-garden), using [swyxkit]() as my starting point.
+this site is the online home of tanner heffner. it's part portfolio, part playground and all [digital garden](https://joelhooks.com/digital-garden), using [swyxkit](https://swyxkit.netlify.app/about) as my starting point.
 
-i intend to have information about past projects, as well as a place to post technical snippets, cooking recipes, reviews and longer writing that isn't appropriate for twitter. lord knows i've tweeted enough already.
-
-maybe some things you find here will be useful or interesting to you, maybe they won't. this website is for me.
+you can find technical snippets & longer blogs, cooking recipes, reviews and potentially much more. we're just
+getting started watering this garden :)

@@ -75,6 +75,10 @@ h6 a {
 	content: '#### ';
 }
 
+.slice + .slice {
+	border-top: 1px solid var(--brand-accent);
+}
+
 /* https://seek-oss.github.io/capsize/ */
 .capsize::before {
 	content: '';
