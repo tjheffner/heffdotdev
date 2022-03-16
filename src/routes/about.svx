@@ -1,6 +1,15 @@
 # About
 
+## the site
 this site is the online home of tanner heffner. it's part portfolio, part playground and all [digital garden](https://joelhooks.com/digital-garden), using [swyxkit](https://swyxkit.netlify.app/about) as my starting point.
 
 you can find technical snippets & longer blogs, cooking recipes, reviews and potentially much more. we're just
 getting started watering this garden :)
+
+
+## me
+i'm 30 years young and when i'm not staring at screens i like to get outside and play disc golf, hike the pnw, or ride my bike.
+
+i also like to cook, garden, play with my cat, and make art (both digital and physical).
+
+thanks for being here!

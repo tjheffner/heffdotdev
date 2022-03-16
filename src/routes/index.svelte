@@ -50,15 +50,17 @@
 		<Slice title="Mission Statement">
 			<h3 class="mb-3">I'm passionate about design systems, responsive web design and web accessibility.</h3>
 
-			<p class="mb-3">I believe the web should be enjoyable for all. What that means to me is that websites should load quickly with minimal page bloat (no unnecessary tracking, etc.), be usable for all users regardless of their manner of access (sighted or screenreaders, navigable by keyboard, mouse or touch, etc.), and at the bare minimum pass WCAG-AA accessibility guidelines.</p>
+			<p class="mb-3">I believe the web should be enjoyable for all. What that means to me is that websites should load quickly with minimal page bloat and disruption (no unnecessary tracking, excessive and obtrusive advertisements, autoplaying videos etc.), be usable for all users regardless of their manner of access (sighted or screenreaders, navigable by keyboard, mouse or touch, etc.), and at the bare minimum pass WCAG-AA accessibility guidelines.</p>
 
 			<p class="font-bold">The web can be so much more than it is. Let's make it better.</p>
 		</Slice>
 
 		<Slice title="Expertise & Skillset">
-			<p class="mb-3">I have helped launch websites and apps at scale, public and internal for a number of Fortune 500 clients across industries as well as various government departments across the tech stack.</p>
+			<p class="mb-3">Working across the tech stack, I launch websites and apps at scale, both public and internally, for a number of Fortune 500 clients across industries as well as various government departments.</p>
 
-			<p class="mb-3">I have designed and architected design systems and component libraries in close collaboration with designers as well as build and maintain agency-wide front-end tooling for consistently delivering best practices to clients and stakeholders.</p>
+			<p class="mb-3">I design and architect design systems and component libraries in close collaboration with designers. In the past, I've helped build and maintain agency-wide front-end tooling for consistently delivering best practices to clients and stakeholders.</p>
+
+			<p class="mb-3">I'm comfortable working in and with a number of languages and technologies, but have a strong preference towards modern Javascript. I've been an off-and-on contributor to the Drupal ecosystem for seven years. I created a command line workshop for <a href="https://nodeschool.io/">nodeschool.io</a> in 2015. It has not been maintained.</p>
 
 			<p class="mb-3">I mentor new and junior developers and perform duties as a front-end tech lead.</p>
 
@@ -78,17 +80,17 @@
 		</Slice>
 
 		<Slice title="Background">
-			<p class="mb-3"> I hacked together my first CSS file at age 12 customizing a phpBB forum theme. Years later in a college art class, I was exposed to the Processing language and rediscovered how magical that feeling of creation through code was. After graduating with a degree in advertising, I attended a four-month programming bootcamp and leaned all the way in. I've been a professional web developer since 2015, across all parts of the web stack. That means I know just enough SQL to be dangerous, but I'd rather work on the front end. ;)</p>
+			<p class="mb-3"> I hacked together my first CSS file at age 12 customizing a phpBB forum theme. Years later in a college art class, I was exposed to the Processing language and rediscovered how magical that feeling of creation through code was. After graduating with a journalism degree, I attended a four-month programming bootcamp and leaned all the way in. I've been a professional web developer since 2015, across all parts of the web stack. That means I know just enough SQL to be dangerous, but I'd rather work on the front end. ;)</p>
 
 			<p class="mb-3">Currently, I'm a senior software developer at <a href="https://agile6.com/">Agile6</a>, working on the modernization effort for <a href="https://va.gov">VA.gov</a> serving millions of veterans nationwide.</p>
 
-			<p class="mb-3">Prior: <a href="https://www.instrument.com/">Instrument</a>, <a href="https://www.phase2technology.com/">Phase2</a></p>
+			<p>Prior: <a href="https://www.instrument.com/">Instrument</a>, <a href="https://www.phase2technology.com/">Phase2</a></p>
 		</Slice>
 
 		<Slice title="Get in touch">
-			<p class="mb-3">If this jives with you, or you just want to say hello, feel free to send me an <a href="mailto:tannerjheffner@gmail.com">email</a> or <a href="">linkedin</a>.</p>
+			<p class="mb-3">Feel free to send me an <a href="mailto:tannerjheffner@gmail.com">email</a> or connect on <a href="https://www.linkedin.com/in/tannerheffner/">linkedin</a> with a message.</p>
 
-			<p>Please no recruiters. I will ignore you. I'm happy where I'm at. :)</p>
+			<p>Please no recruiters. I will almost certainly ignore you. I'm happy where I'm at. :)</p>
 		</Slice>
 	</section>
 </div>
