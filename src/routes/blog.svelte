@@ -100,7 +100,7 @@
 		}
 		incluye(item.title);
 		incluye(item.slug);
-		incluye(item.categories);
+		incluye(item.category);
 		incluye(item.description);
 		return res;
 	}
