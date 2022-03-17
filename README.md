@@ -1,7 +1,7 @@
 # heffdotdev
 Tanner Heffner's personal website
 
-This is based on swyxkit, a lightly opinionated starter for Svelte projects:
+This site is based on swyxkit, a lightly opinionated starter for Svelte projects:
 - SvelteKit + Netlify adapter!
 - Tailwind 3 + Tailwind Typography (with [swyx fixes](https://youtu.be/-FzemNMcOGs))
 - [JSDoc Typechecking](https://swyxkit.netlify.app/how-to-add-jsdoc-typechecking-to-sveltekit)
@@ -21,9 +21,9 @@ npm run start
 - swyxkit & swyx.io for so many decisions, but especially github as cms + blog filtering
 
 ## Todos
-- fix layout
-- fix colors
+- fix nav alignment + colors
+- fix blog index layout + colors
 - add projects gallery & pages
-- port old blogs?
+- port old blogs
 - customize json+ld
 - ogimage for unfurls

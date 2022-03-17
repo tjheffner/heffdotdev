@@ -58,7 +58,7 @@
 
 			<p class="mb-3">I design and architect design systems and component libraries in close collaboration with designers. In the past, I've helped build and maintain agency-wide front-end tooling for consistently delivering best practices to clients and stakeholders.</p>
 
-			<p class="mb-3">I'm comfortable working in and with a number of languages and technologies, but have a strong preference towards modern Javascript. I've been an off-and-on contributor to the Drupal ecosystem for seven years. I created a command line workshop for <a href="https://nodeschool.io/">nodeschool.io</a> in 2015. It has not been maintained.</p>
+			<p class="mb-3">I'm comfortable working in and with a number of languages and technologies, but have a strong preference towards modern Javascript. I've been an off-and-on <a href="https://www.drupal.org/u/tjh">contributor to the Drupal ecosystem</a> for seven years. I created a command line workshop for <a href="https://nodeschool.io/">nodeschool.io</a> in 2015. It has not been maintained.</p>
 
 			<p class="mb-3">I mentor new and junior developers and perform duties as a front-end tech lead.</p>
 
