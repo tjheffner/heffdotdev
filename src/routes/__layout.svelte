@@ -16,14 +16,21 @@
 	/>
 </svelte:head>
 
-<div class="flex flex-col justify-center bg-gray-50 px-4 dark:bg-gray-900 sm:px-8">
+<div class="flex flex-col justify-center bg-gray-50 px-4 dark:bg-slate-900 sm:px-8">
 	<Nav />
 </div>
-<main class="flex flex-col justify-center bg-gray-50 px-4 dark:bg-gray-900 sm:px-8">
+<!-- skip link added in nav -->
+<main id="skip" class="flex flex-col justify-center bg-gray-50 px-4 dark:bg-slate-900 sm:px-8">
 	<slot />
 </main>
 
-<!-- <footer class="mx-auto mb-8 flex w-full max-w-2xl flex-col items-start justify-center">
-	<hr class="border-1 mb-8 w-full border-gray-200 dark:border-gray-800" />
-	<p class="prose dark:prose-invert"> built with svelte, based on swyxkit </p>
-</footer> -->
+<footer class="flex flex-col justify-center bg-gray-50 px-4 py-12 dark:bg-slate-900 sm:px-8">
+	<hr class="border-1 mb-8 w-full border-gray-200 dark:border-blue-300" />
+	<div class="prose prose-slate dark:prose-invert md:ml-4 lg:ml-12">
+		<a class="block" href="/blog">Posts</a>
+		<a class="block" href="#">Work [coming soon]</a>
+		<a class="block" href="#">Gallery [coming soon]</a>
+		<a class="block" href="/about">About</a>
+		<p>© 2022 tanner heffner</p>
+	</div>
+</footer>

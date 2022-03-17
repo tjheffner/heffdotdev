@@ -8,7 +8,7 @@ This is based on swyxkit, a lightly opinionated starter for Svelte projects:
 - [GitHub Issues as CMS](https://github.com/sw-yx/swyxkit/issues/10)
 
 ## Setup
-```bash
+```sh
 npm install
 npm run start
 ```

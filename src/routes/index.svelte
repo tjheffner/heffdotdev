@@ -31,26 +31,24 @@
 	<meta name="twitter:image" content={DEFAULT_OG_IMAGE} />
 </svelte:head>
 
-<div
-	class="mx-auto flex max-w-2xl flex-col items-start justify-center border-gray-200 px-4 pb-16 dark:border-gray-700 sm:px-8"
->
+<div class="">
 	<section>
 		<Slice>
-			<h1 class="mb-3 text-3xl font-bold tracking-tight text-black dark:text-white md:text-5xl">
-				<span
-					class="relative ml-2 inline-block before:absolute before:-inset-1 before:block before:-skew-y-3 before:bg-red-500
-								 hover:before:-skew-y-0 hover:before:-skew-x-3 hover:before:bg-teal-500
-					"
-				>
-					<span class="relative skew-y-3 text-yellow-400">Tanner Heffner</span>
-				</span>
+			<h1 class="mb-3 text-3xl font-bold tracking-tight text-black dark:text-blue-300 md:text-5xl">
+			Creative technologist passionate about design systems, responsive web design and accessibility.
 			</h1>
 		</Slice>
 
 		<Slice title="Mission Statement">
-			<h3 class="mb-3">I'm passionate about design systems, responsive web design and web accessibility.</h3>
+			<p class="font-bold text-2xl mb-3">I believe the web should be enjoyable for all.<p>
 
-			<p class="mb-3">I believe the web should be enjoyable for all. What that means to me is that websites should load quickly with minimal page bloat and disruption (no unnecessary tracking, excessive and obtrusive advertisements, autoplaying videos etc.), be usable for all users regardless of their manner of access (sighted or screenreaders, navigable by keyboard, mouse or touch, etc.), and at the bare minimum pass WCAG-AA accessibility guidelines.</p>
+			<p class="mb-3">To me, that means that websites should:</p>
+
+			<ul>
+				<li>Load quickly with minimal page bloat and disruption (no unnecessary tracking, excessive and obtrusive advertisements, autoplaying videos etc.)</li>
+				<li>Be functional for all users regardless of their manner of access (sighted or screenreaders, navigable by keyboard, mouse or touch, etc.)</li>
+				<li>At the bare minimum, pass WCAG-AA accessibility guidelines</li>
+			</ul>
 
 			<p class="font-bold">The web can be so much more than it is. Let's make it better.</p>
 		</Slice>
@@ -64,8 +62,8 @@
 
 			<p class="mb-3">I mentor new and junior developers and perform duties as a front-end tech lead.</p>
 
-			<p class="mb-1">Select Clients:</p>
-			<ul class="list-disc ml-6">
+			<p class="mb-1 font-bold">Select Clients:</p>
+			<ul class="list-disc">
 				<li>US Department of Veterans Affairs</li>
 				<li>Twitter Brand Studio</li>
 				<li>Google.org</li>
@@ -80,17 +78,23 @@
 		</Slice>
 
 		<Slice title="Background">
-			<p class="mb-3"> I hacked together my first CSS file at age 12 customizing a phpBB forum theme. Years later in a college art class, I was exposed to the Processing language and rediscovered how magical that feeling of creation through code was. After graduating with a journalism degree, I attended a four-month programming bootcamp and leaned all the way in. I've been a professional web developer since 2015, across all parts of the web stack. That means I know just enough SQL to be dangerous, but I'd rather work on the front end. ;)</p>
+			<p class="font-bold text-2xl mb-3">Designing for the web since '05.<p>
+
+			<p class="mb-3"> I hacked together my first CSS file at age 12 customizing a phpBB forum theme. Years later in a college art class, I was exposed to the <a href="https://processing.org/">Processing</a> language and rediscovered how magical that feeling of creation through code was.</p>
+
+			<p class="mb-3">After graduating with a journalism degree, I attended a four-month programming bootcamp and leaned all the way in. I've been a professional web developer since 2015, across all parts of the web stack. That means I know just enough SQL to be dangerous, but I'd rather work on the front end. <span role="img" aria-label="winking face">&#128521;</span></p>
 
 			<p class="mb-3">Currently, I'm a senior software developer at <a href="https://agile6.com/">Agile6</a>, working on the modernization effort for <a href="https://va.gov">VA.gov</a> serving millions of veterans nationwide.</p>
 
-			<p>Prior: <a href="https://www.instrument.com/">Instrument</a>, <a href="https://www.phase2technology.com/">Phase2</a></p>
+			<p>Previously: <a href="https://www.instrument.com/">Instrument</a>, <a href="https://www.phase2technology.com/">Phase2</a></p>
 		</Slice>
 
 		<Slice title="Get in touch">
+			<p class="font-bold text-2xl mb-3">If any of the above resonates with you, let's talk.<p>
+
 			<p class="mb-3">Feel free to send me an <a href="mailto:tannerjheffner@gmail.com">email</a> or connect on <a href="https://www.linkedin.com/in/tannerheffner/">linkedin</a> with a message.</p>
 
-			<p>Please no recruiters. I will almost certainly ignore you. I'm happy where I'm at. :)</p>
+			<p>Please no recruiters. I'm happy where I'm at. <span role="img" aria-label="happy cowboy">&#129312;</span></p>
 		</Slice>
 	</section>
 </div>

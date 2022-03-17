@@ -1,10 +1,10 @@
 @tailwind base;
 @tailwind components;
-@tailwind utilities;
 
 @layer components {
 	body {
-		--brand-accent: #2ecd8d;
+		--brand-accent: #93c5fd;
+
 		/* https://ishadeed.com/article/defensive-css */
 		overflow-wrap: break-word;
 		overflow-y: auto;
@@ -52,7 +52,7 @@
 }
 /* bg-yellow-200 dark:hover:bg-yellow-800 */
 a {
-	@apply text-yellow-600 hover:text-yellow-700 hover:underline dark:text-yellow-400 dark:hover:text-yellow-200;
+	@apply text-teal-600 hover:text-yellow-700 hover:underline dark:text-teal-400 dark:hover:text-purple-400;
 }
 
 .bimodalpurple {
@@ -71,16 +71,19 @@ h5 a,
 h6 a {
 	/* margin-left: 1rem; */
 	text-decoration: none !important;
-	@apply text-orange-700 dark:text-orange-400;
+	@apply text-teal-700 dark:text-teal-400 hover:no-underline;
 }
 .prose h2::before {
-	content: '## ';
+	content: '# ';
+	color: var(--brand-accent);
 }
 .prose h3::before {
-	content: '### ';
+	content: '## ';
+	color: var(--brand-accent);
 }
 .prose h4::before {
-	content: '#### ';
+	content: '### ';
+	color: var(--brand-accent);
 }
 
 .slice + .slice {
@@ -115,3 +118,5 @@ body::-webkit-scrollbar-thumb {
 	background: linear-gradient(var(--scrollbar-primary-color), var(--text-color));
 	border-radius: 4px;
 }
+
+@tailwind utilities;
