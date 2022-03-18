@@ -3,12 +3,15 @@
 
 @layer components {
 	body {
-		--brand-accent: #93c5fd;
+		--brand-accent: #4338ca;
 
 		/* https://ishadeed.com/article/defensive-css */
 		overflow-wrap: break-word;
 		overflow-y: auto;
 		scrollbar-gutter: stable;
+	}
+	.dark body {
+		--brand-accent: #93c5fd;
 	}
 	:root {
 		accent-color: var(--brand-accent);
@@ -53,7 +56,8 @@
 	/* Links highlight from bottom */
 	.footer-link,
 	.prose a {
-		@apply from-yellow-400 to-yellow-400;
+		@apply from-indigo-700 to-indigo-700 dark:from-yellow-400 dark:to-yellow-400;
+		@apply text-indigo-700 hover:text-sky-200 dark:text-yellow-400 dark:hover:text-slate-900;
 
 		cursor: pointer;
     text-decoration: none;
@@ -101,7 +105,7 @@ h6 a {
 }
 
 .slice + .slice {
-	border-top: 1px solid var(--brand-accent);
+	border-top: 2px solid var(--brand-accent);
 }
 
 /* https://seek-oss.github.io/capsize/ */

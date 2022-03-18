@@ -24,7 +24,6 @@ module.exports = {
 						'blockquote p:last-of-type::after': {
 							content: ''
 						},
-
 						'code::before': false,
 						'code::after': false,
 						code: {
@@ -32,16 +31,6 @@ module.exports = {
 							padding: '0.15rem 0.3rem',
 							borderWidth: '2px',
 							borderColor: 'rgba(0,0,0,0.1)'
-						},
-						'a:hover': {
-							// slate-900
-							color: '#0f172a',
-							textDecoration: 'none'
-						},
-						a: {
-							// yellow-400
-							color: '#facc15',
-							textDecoration: 'none'
 						},
 						'a code': {
 							color: 'unset'

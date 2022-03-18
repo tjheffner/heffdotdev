@@ -31,7 +31,7 @@
 	<h1 class="font-bold text-lg text-black dark:text-blue-300"><a href="/">Tanner Heffner</a></h1>
 	<button
 		aria-label="Toggle Dark Mode"
-		class="ml-1 flex h-9 w-9 items-center justify-center rounded-lg bg-yellow-400 ring-yellow-400
+		class="ml-1 flex h-9 w-9 items-center justify-center rounded-lg bg-yellow-400 ring-yellow-800 dark:ring-yellow-400
 		transition-all hover:ring-2 dark:bg-yellow-800"
 		on:click={toggleDarkMode}
 	>
@@ -69,19 +69,3 @@
 		{/if}
 	</button>
 </nav>
-
-<style>
-	/* .skip-nav {
-		position:absolute;
-		left:-10000px;
-		top:auto;
-		width:1px;
-		height:1px;
-		overflow:hidden;
-	}
-	.skip-nav:focus {
-		position:static;
-		width:auto;
-		height:auto;
-	} */
-</style>
