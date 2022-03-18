@@ -4,8 +4,9 @@
 
 <script>
 	import '../tailwind.css';
-	import Nav from '../components/Nav.svelte';
+	import Header from '../components/Header.svelte';
 	import Icon from '../components/Icon.svelte';
+	import NavLink from '../components/NavLink.svelte';
 </script>
 
 <svelte:head>
@@ -18,22 +19,22 @@
 </svelte:head>
 
 <div class="flex flex-col justify-center bg-sky-200 px-4 py-12 dark:bg-slate-900 sm:px-8">
-	<Nav />
+	<Header />
 </div>
-<!-- skip link added in nav -->
+<!-- for skip link -->
 <main id="maincontent" class="flex flex-col justify-center bg-sky-200 px-4 dark:bg-slate-900 sm:px-8">
 	<slot />
-</main>
 
+	<a href="#maincontent" class="font-bold text-accent md:mx-4 lg:mx-12">Back to top</a>
+</main>
 <footer class="flex flex-col justify-center bg-sky-200 px-4 py-12 dark:bg-slate-900 sm:px-8">
 	<hr class="border-t-2 mb-8 w-full border-indigo-700 dark:border-blue-300" />
 	<div class="grid grid-cols-4 gap-4 md:gap-8 lg:gap-12 xl:gap-16 md:mx-4 lg:mx-12">
 		<div class="col-span-3 md:col-span-2">
-			<a class="block w-fit my-4 footer-link font-bold" href="/blog">Posts</a>
-			<a class="block w-fit my-4 footer-link font-bold" href="#">Work [coming soon]</a>
-			<a class="block w-fit my-4 footer-link font-bold" href="#">Gallery [coming soon]</a>
-			<a class="block w-fit my-4 footer-link font-bold" href="/about">About</a>
-			<p class="text-black dark:text-blue-300">© 2022 tanner heffner - built with svelte & tailwindcss</p>
+			<NavLink href="/blog">Posts</NavLink>
+			<NavLink href="/work">Work [coming soon]</NavLink>
+			<NavLink href="/gallery">Gallery [coming soon]</NavLink>
+			<NavLink href="/about">About</NavLink>
 		</div>
 
 		<div class="text-right col-span-1 md:col-span-2 md:col-start-4">

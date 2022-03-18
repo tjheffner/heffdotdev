@@ -3,7 +3,7 @@
 
 @layer components {
 	body {
-		--brand-accent: #4338ca;
+		--brand-accent: theme('colors.indigo.700');
 
 		/* https://ishadeed.com/article/defensive-css */
 		overflow-wrap: break-word;
@@ -11,7 +11,7 @@
 		scrollbar-gutter: stable;
 	}
 	.dark body {
-		--brand-accent: #93c5fd;
+		--brand-accent: theme('colors.blue.300');
 	}
 	:root {
 		accent-color: var(--brand-accent);
@@ -20,13 +20,16 @@
 		outline-color: var(--brand-accent);
 	}
 	::selection {
-		color: #bae6fd;
+		color: theme('colors.sky.200');
 		background-color: var(--brand-accent);
 	}
 	.dark ::selection {
-		color: #1d1d1d;
+		color: theme('colors.slate.900');
 	}
 	::marker {
+		color: var(--brand-accent);
+	}
+	.text-accent {
 		color: var(--brand-accent);
 	}
 
@@ -75,38 +78,22 @@
 	}
 }
 
-.bimodalpurple {
-	@apply bg-purple-100 text-purple-900 dark:bg-purple-900 dark:text-purple-100;
-}
-.mytext {
-	@apply text-gray-800 dark:text-gray-200;
-}
 
-.prose h1 a,
-h2 a,
-h3 a,
-h4 a,
-h5 a,
-h6 a {
-	/* margin-left: 1rem; */
-	text-decoration: none !important;
-	@apply text-teal-700 dark:text-teal-400 hover:no-underline;
+.prose h1 a {
+	@apply text-lime-800 hover:text-lime-800 dark:text-yellow-400 dark:hover:text-yellow-400;
+	background: unset;
 }
-.prose h2::before {
-	content: '##';
-	color: var(--brand-accent);
+.prose h2 a, .prose h3 a, .prose h4 a {
+	background: unset;
+	color: var(--brand-accent) !important;
 }
-.prose h3::before {
-	content: '###';
-	color: var(--brand-accent);
-}
+.prose h2::before,
+.prose h3::before,
 .prose h4::before {
-	content: '####';
+	content: '#';
 	color: var(--brand-accent);
-}
-
-.slice + .slice {
-	border-top: 2px solid var(--brand-accent);
+	margin-left: -2rem;
+	margin-right: 1rem;
 }
 
 /* https://seek-oss.github.io/capsize/ */
@@ -127,14 +114,22 @@ h6 a {
   - https://css-tricks.com/strut-your-stuff-with-a-custom-scrollbar/
   */
 body {
-	--scrollbar-primary-color: #2ecd8d;
-	--text-color: #4E2ECD;
+	--sb-primary-color: theme('colors.yellow.400');
+	--sb-accent-color: theme('colors.blue.500');
+	--sb-track: theme('colors.sky.900');
+}
+.dark body {
+	--sb-primary-color: #2ecd8d;
+	--sb-accent-color: #4E2ECD;
 }
 body::-webkit-scrollbar {
 	width: 1rem;
 }
+body::-webkit-scrollbar-track {
+	background: var(--sb-track);
+}
 body::-webkit-scrollbar-thumb {
-	background: linear-gradient(var(--scrollbar-primary-color), var(--text-color));
+	background: linear-gradient(var(--sb-primary-color), var(--sb-accent-color));
 	border-radius: 4px;
 }
 

@@ -1,15 +1,39 @@
-# About
+<script>
+  import Slice from '../components/Slice.svelte';
+</script>
+
+# about
 
 ## the site
-this site is the online home of tanner heffner. it's part portfolio, part playground and all [digital garden](https://joelhooks.com/digital-garden), using [swyxkit](https://swyxkit.netlify.app/about) as my starting point.
+this site is the online home of tanner heffner. it's part [playground](/gallery), part [portfolio](/work), part [resume](/resume), and all [digital garden](https://joelhooks.com/digital-garden), using [swyxkit](https://swyxkit.netlify.app/about) as my starting point.
 
-you can find technical snippets & longer blogs, cooking recipes, reviews and potentially much more. we're just
-getting started watering this garden :)
-
+you'll find technical snippets & longer blogs, cooking recipes, reviews, old projects both professional and personal, and potentially much more. we're just getting started watering this garden :)
 
 ## me
-i'm 30 years young and when i'm not staring at screens i like to get outside and play disc golf, hike the pnw, or ride my bike.
+i do a lot of different stuff. when i'm not staring at screens for work and fun,
+i like to get outside in the pnw.
 
-i also like to cook, garden, play with my cat, and make art (both digital and physical).
+here's a list of my favorite disc golf courses in the portland area.
+if you're in the area you might catch me out here!
 
-thanks for being here!
+<ul class="list-outside">
+  <li>Dabney</li>
+  <li>Pier on an empty day</li>
+  <li>Ft. Stevens</li>
+  <li>Milo</li>
+  <li>Blue Lake on a still day</li>
+  <li>Stub Stewart</li>
+  <li>Horning's</li>
+  <li>Champoeg</li>
+  <li>Timber</li>
+  <li>McCormick</li>
+  <li>Rooster Rock</li>
+  <li>Pier on a busy day</li>
+  <li>Leveritch</li>
+  <li>...</li>
+  <li>Blue Lake on a windy day</li>
+  <li>Trojan</li>
+  <li>Eco Park</li>
+</ul>
+
+i'm hoping to play Buxton soon!

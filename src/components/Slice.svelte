@@ -9,9 +9,10 @@
 	<div class="col-span-4 md:col-span-1">
 		<h2 class="sticky top-4 mb-2 md:ml-4 lg:ml-12
 							 text-black font-bold dark:text-blue-300 text-xl md:text-2xl
-							 prose dark:prose-invert
 		">
+			<a href="#{title}" class="slice-title">
 			{title}
+			</a>
 		</h2>
 	</div>
   {/if}
@@ -21,3 +22,15 @@
   	</p>
   </div>
 </div>
+
+<style>
+	.slice h2::before {
+		display: none;
+	}
+	.slice-title {
+		color: var(--brand-accent) !important;
+	}
+	.slice:not(:first-child) {
+		border-top: 2px solid var(--brand-accent);
+	}
+</style>

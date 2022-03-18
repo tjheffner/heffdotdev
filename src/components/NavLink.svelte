@@ -5,8 +5,11 @@
 </script>
 
 <a
-	class="hidden rounded-lg p-1 text-gray-800 transition-all hover:bg-yellow-200 dark:text-gray-200 dark:hover:bg-yellow-800 sm:px-3 sm:py-2 md:inline-block"
-	class:font-semibold={isActive}
+	class="{isActive
+		? 'block w-fit my-4 footer-link font-bold text-sky-200 dark:text-slate-900 bg-[length:4px_50px]'
+		: 'block w-fit my-4 footer-link font-bold'
+	}"
 	{href}
-	><span class="capsize"><slot /> </span>
+	>
+	<slot />
 </a>
