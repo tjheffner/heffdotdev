@@ -128,7 +128,7 @@
 </script>
 
 <svelte:head>
-	<title>heffdotdev | posts</title>
+	<title>heffner.dev | posts</title>
 	<meta name="description" content="Latest musings fit to print." />
 </svelte:head>
 

@@ -13,7 +13,7 @@ you'll find technical snippets & longer blogs, cooking recipes, reviews, old pro
 i do a lot of different stuff. when i'm not staring at screens for work and fun,
 i like to get outside in the pnw.
 
-here's a list of my favorite disc golf courses in the portland area.
+here's a list of my favorite disc golf courses around portland, or.
 if you're in the area you might catch me out here!
 
 <ul class="list-outside">
