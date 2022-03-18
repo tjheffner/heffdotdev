@@ -82,7 +82,7 @@
 
 			<p class="mb-3"> I hacked together my first CSS file at age 12 customizing a phpBB forum theme. Years later in a college art class, I was exposed to the <a href="https://processing.org/">Processing</a> language and rediscovered how magical that feeling of creation through code was.</p>
 
-			<p class="mb-3">After graduating with a journalism degree, I attended a four-month programming bootcamp and leaned all the way in. I've been a professional web developer since 2015, across all parts of the web stack. That means I know just enough SQL to be dangerous, but I'd rather work on the front end. <span role="img" aria-label="winking face">&#128521;</span></p>
+			<p class="mb-3">After graduating from the University of Oregon with a journalism degree, I continued my education with a four-month programming bootcamp. I've been a professional web developer since 2015, across all parts of the web stack. That means I know just enough SQL to be dangerous, but I'd rather work on the front end. <span role="img" aria-label="winking face">&#128521;</span></p>
 
 			<p class="mb-3">Currently, I'm a senior software developer at <a href="https://agile6.com/">Agile6</a>, working on the modernization effort for <a href="https://va.gov">VA.gov</a> serving millions of veterans nationwide.</p>
 

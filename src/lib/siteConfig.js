@@ -1,4 +1,5 @@
 export const SITE_URL = 'https://swyxkit.netlify.app';
+export const GH_USER = 'tjheffner'
 export const GH_USER_REPO = 'tjheffner/heffdotdev'; // used for pulling github issues and offering comments
 export const REPO_URL = 'https://github.com/' + GH_USER_REPO;
 export const SITE_TITLE = 'heff.dev';

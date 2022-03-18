@@ -1,5 +1,5 @@
 <script>
-	export let title;
+	export let title = false;
 </script>
 
 <div class="slice w-full py-8 md:py-12 mb-6 md:mb-8

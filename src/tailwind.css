@@ -49,10 +49,20 @@
 		object-fit: cover;
 		background-color: grey;
 	}
-}
-/* bg-yellow-200 dark:hover:bg-yellow-800 */
-a {
-	@apply text-teal-600 hover:text-yellow-700 hover:underline dark:text-teal-400 dark:hover:text-purple-400;
+
+	/* figure out this in tailwind */
+	/* .prose a {
+		padding: 0 2px;
+		background: linear-gradient(to bottom, #000000 0%, #000000 100%);
+		background-position: 0 100%;
+		background-repeat: repeat-x;
+		background-size: 4px 2px;
+		transition: all .3s linear;
+	}
+	.prose a:hover {
+		color: #fff;
+		background-size: 4px 50px;
+	} */
 }
 
 .bimodalpurple {
@@ -61,7 +71,6 @@ a {
 .mytext {
 	@apply text-gray-800 dark:text-gray-200;
 }
-
 
 .prose h1 a,
 h2 a,
@@ -74,15 +83,15 @@ h6 a {
 	@apply text-teal-700 dark:text-teal-400 hover:no-underline;
 }
 .prose h2::before {
-	content: '# ';
+	content: '##';
 	color: var(--brand-accent);
 }
 .prose h3::before {
-	content: '## ';
+	content: '###';
 	color: var(--brand-accent);
 }
 .prose h4::before {
-	content: '### ';
+	content: '####';
 	color: var(--brand-accent);
 }
 

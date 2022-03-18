@@ -21,7 +21,6 @@ npm run start
 - swyxkit & swyx.io for so many decisions, but especially github as cms + blog filtering
 
 ## Todos
-- fix nav alignment + colors
 - fix blog index layout + colors
 - add projects gallery & pages
 - port old blogs
