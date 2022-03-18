@@ -50,19 +50,24 @@
 		background-color: grey;
 	}
 
-	/* figure out this in tailwind */
-	/* .prose a {
-		padding: 0 2px;
-		background: linear-gradient(to bottom, #000000 0%, #000000 100%);
-		background-position: 0 100%;
-		background-repeat: repeat-x;
-		background-size: 4px 2px;
-		transition: all .3s linear;
+	/* Links highlight from bottom */
+	.footer-link,
+	.prose a {
+		@apply from-yellow-400 to-yellow-400;
+
+		cursor: pointer;
+    text-decoration: none;
+    padding: 1px 4px;
+		background: linear-gradient(to bottom, var(--tw-gradient-from) 0%, var(--tw-gradient-to) 100%);
+    background-position: 0 100%;
+    background-repeat: repeat-x;
+    background-size: 4px 2px;
+    transition: all .3s linear;
 	}
+	.footer-link:hover,
 	.prose a:hover {
-		color: #fff;
 		background-size: 4px 50px;
-	} */
+	}
 }
 
 .bimodalpurple {

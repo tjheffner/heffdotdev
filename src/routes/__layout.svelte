@@ -28,11 +28,11 @@
 <footer class="flex flex-col justify-center bg-gray-50 px-4 py-12 dark:bg-slate-900 sm:px-8">
 	<hr class="border-1 mb-8 w-full border-gray-200 dark:border-blue-300" />
 	<div class="grid grid-cols-4 gap-4 md:gap-8 lg:gap-12 xl:gap-16 md:mx-4 lg:mx-12">
-		<div class="col-span-3 md:col-span-2 prose prose-slate dark:prose-invert">
-			<a class="block py-4" href="/blog">Posts</a>
-			<a class="block py-4" href="#">Work [coming soon]</a>
-			<a class="block py-4" href="#">Gallery [coming soon]</a>
-			<a class="block py-4" href="/about">About</a>
+		<div class="col-span-3 md:col-span-2">
+			<a class="block w-fit my-4 footer-link font-bold text-black dark:text-yellow-400 dark:hover:text-slate-900" href="/blog">Posts</a>
+			<a class="block w-fit my-4 footer-link font-bold text-black dark:text-yellow-400 dark:hover:text-slate-900" href="#">Work [coming soon]</a>
+			<a class="block w-fit my-4 footer-link font-bold text-black dark:text-yellow-400 dark:hover:text-slate-900" href="#">Gallery [coming soon]</a>
+			<a class="block w-fit my-4 footer-link font-bold text-black dark:text-yellow-400 dark:hover:text-slate-900" href="/about">About</a>
 			<p class="dark:text-blue-300">© 2022 tanner heffner - built with svelte & tailwindcss</p>
 		</div>
 
