@@ -7,7 +7,7 @@
 		DEFAULT_OG_IMAGE,
 		MY_TWITTER_HANDLE
 	} from '$lib/siteConfig';
-	export const prerender = true; // index page is most visited, lets prerender
+	// export const prerender = false; // index page is most visited, lets prerender
 </script>
 
 <script>
@@ -15,7 +15,7 @@
 </script>
 
 <svelte:head>
-	<title>{SITE_TITLE}</title>
+	<title>Tanner Heffner's Resume</title>
 	<link rel="canonical" href={SITE_URL} />
 	<link rel="alternate" type="application/rss+xml" href={SITE_URL + '/api/rss.xml'} />
 	<meta property="og:url" content={SITE_URL} />
@@ -34,7 +34,7 @@
 <div class="">
 	<section>
 		<Slice>
-			<h1 class="mb-3 text-3xl font-bold tracking-tight text-black dark:text-blue-300 md:text-5xl">
+			<h1 class="mb-3 text-3xl font-bold tracking-tight text-orange-600 dark:text-blue-300 md:text-5xl">
 			Creative technologist passionate about design systems, responsive web design and accessibility.
 			</h1>
 		</Slice>
@@ -58,7 +58,7 @@
 
 			<p class="mb-3">I love to design and architect design systems and responsive component libraries in close collaboration with designers. In the past, I've helped build and maintain agency-wide front-end tooling for consistently delivering best practices to clients and stakeholders. Rapid prototyping is my jam.</p>
 
-			<p class="mb-3">I'm comfortable working in and with a number of languages and technologies, but have a strong preference towards modern Javascript and CSS. I've been a mostly off-and-on <a href="https://www.drupal.org/u/tjh">contributor to the Drupal ecosystem</a> for seven years. A long time ago, I dove into node and an early edition of pattern lab to build a command line-based training module for <a href="https://nodeschool.io/">nodeschool.io</a> in 2015. It is not being maintained.</p>
+			<p class="mb-3">I'm comfortable working in and with a number of languages and technologies, but have a strong preference towards modern Javascript and CSS. I've been a mostly off-and-on <a href="https://www.drupal.org/u/tjh">contributor to the Drupal ecosystem</a> for seven years. A long time ago (2015), I dove into node and an early edition of pattern lab to build a command line-based training module for <a href="https://nodeschool.io/">nodeschool.io</a>. It is not being maintained.</p>
 
 			<p class="mb-3">I mentor new and junior developers and perform duties as a front-end tech lead.</p>
 
