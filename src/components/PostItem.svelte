@@ -3,7 +3,6 @@
 
 	// gimme full item
 	export let item;
-	let date = new Date(item?.date).toISOString().slice(0, 10);
 </script>
 
 <a sveltekit:prefetch
@@ -26,7 +25,9 @@
     </span>
 		{/if}
 
-    <p class="col-span-1 col-start-4 row-start-1 justify-self-end text-slate-800 dark:text-gray-400 font-semibold">{date}</p>
+    <p class="col-span-1 col-start-4 row-start-1 justify-self-end text-slate-800 dark:text-gray-400 font-semibold">
+			{new Date(item.date).toISOString().slice(0, 10)}
+		</p>
 
     {#if item.ghMetadata && item.ghMetadata.reactions.total_count}
       <p class="col-span-1 col-start-4 justify-self-end text-accent">
