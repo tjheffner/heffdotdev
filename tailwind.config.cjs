@@ -41,6 +41,9 @@ module.exports = {
 						'a code': {
 							color: 'unset'
 						},
+						'a strong': {
+							color: 'currentColor'
+						},
 						'li, ul, ol': {
 							margin: 0
 						},
@@ -53,6 +56,16 @@ module.exports = {
 						},
 						'ul > li::marker': {
 							color: 'var(--tw-prose-body)'
+						},
+						// prose fixes
+						tfoot: {
+								borderTopWidth: '1px',
+								borderColor: 'var(--tw-prose-th-borders)'
+						},
+						mark: {
+							padding: '0.25rem',
+							background: theme('colors.indigo.300'),
+							color: 'var(--tw-prose-body)'
 						}
 					}
 				},
@@ -61,6 +74,10 @@ module.exports = {
 					css: {
 						'--tw-prose-th-borders': theme('colors.blue.300'),
 						'--tw-prose-td-borders': theme('colors.gray.600'),
+						mark: {
+							background: theme('colors.blue.300'),
+							color: theme('colors.slate.900')
+						}
 					}
 				}
 			})

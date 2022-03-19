@@ -115,14 +115,14 @@
 .prose h2,
 .prose h3,
 .prose h4 {
+	@apply relative;
 	a {
 		@apply bg-unset font-bold !text-accent;
 	}
 	&::before {
+		@apply absolute -left-6;
 		@apply text-accent;
 		content: '#';
-		margin-left: -2rem;
-		margin-right: .5rem;
 	}
 }
 
