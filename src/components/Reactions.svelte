@@ -16,7 +16,7 @@
 </script>
 
 {#if reactions.total_count > 0}
-<a href={`${issueUrl}#issuecomment-new`}
+<a href={`${issueUrl}`}
 	 class="no-underline !bg-unset font-bold text-accent hover:text-accent dark:text-yellow-400 dark:hover:text-yellow-400">
 	{#each Object.keys(reactions) as reaction}
 		{#if Object.keys(emojiMap).includes(reaction) && reactions[reaction] > 0}

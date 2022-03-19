@@ -10,7 +10,7 @@
 </script>
 
 {#if data.length}
-	<p class="text-accent font-bold my-4 md:w-4/5 md:mx-auto">Comments:</p>
+	<p class="text-accent font-bold my-4">Comments:</p>
 {/if}
 <div class="prose mb-8 dark:prose-invert divide-y divide-dashed divide-indigo-700 dark:divide-blue-300">
 	{#each data as comment}

@@ -126,12 +126,6 @@
 	}
 }
 
-/* clean comment borders up with divide-y */
-.comment:last-child {
-	border-bottom: 4px;
-	border-style: dashed none solid none;
-}
-
 /*
   CUSTOM SCROLLBARS!
   - https://css-tricks.com/strut-your-stuff-with-a-custom-scrollbar/
