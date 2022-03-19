@@ -19,7 +19,7 @@
 </script>
 
 <script>
-	import IndexCard from '../components/IndexCard.svelte';
+	import PostItem from '../components/PostItem.svelte';
 	import queryString from 'query-string';
 	import { onMount } from 'svelte';
 
@@ -157,7 +157,7 @@
 						"
 		/>
 		<svg
-			class="absolute right-3 top-3 h-5 w-5 text-gray-400 dark:text-gray-300"
+			class="absolute right-3 top-3 h-5 w-5 text-gray-700 dark:text-gray-300"
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
 			viewBox="0 0 24 24"
@@ -225,12 +225,12 @@
 	<hr class="border-t-2 mb-12 w-full border-indigo-700 dark:border-blue-300" />
 
 	{#if list.length}
-		<ul class="max-w-full">
+		<ul class="w-full md:w-4/5 md:mx-auto divide-y divide-dashed divide-indigo-700 dark:divide-blue-300">
 			{#each list as item}
 				<li class="mb-4">
-					<IndexCard item={item}>
+					<PostItem item={item}>
 						{item.description}
-					</IndexCard>
+					</PostItem>
 				</li>
 			{/each}
 		</ul>
@@ -238,9 +238,12 @@
 			<div class="flex justify-center">
 				<button
 					on:click={() => (showAll = true)}
-					class="inline-block rounded bg-blue-100 p-4 text-lg font-bold tracking-tight text-black hover:text-yellow-900 dark:bg-blue-900 dark:text-white hover:dark:text-yellow-200 md:text-2xl"
+					class="my-4 p-2 rounded-lg font-bold transition-all ease-in-out duration-200
+					text-yellow-800 bg-yellow-400 hover:ring-2 ring-yellow-800
+					dark:ring-yellow-400 dark:bg-yellow-800 dark:text-yellow-100
+					"
 				>
-					Load More Posts...
+					See more posts
 				</button>
 			</div>
 		{/if}
