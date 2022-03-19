@@ -2,6 +2,11 @@
   import Slice from '../components/Slice.svelte';
 </script>
 
+<svelte:head>
+  <title>heffner.dev | about</title>
+  <meta name="description" content="About this site." />
+</svelte:head>
+
 # about
 
 ## the site

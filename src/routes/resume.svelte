@@ -54,11 +54,11 @@
 		</Slice>
 
 		<Slice title="Expertise & Skillset">
-			<p class="font-bold text-2xl mb-3">Working across the web tech stack, I've consulted, architected, and delivered numerous projects for clients big and small for all sorts of use cases.</p>
+			<p class="font-bold text-2xl mb-3">Working across the web tech stack, I've consulted, architected, and delivered numerous projects for clients big and small with all sorts of use cases.</p>
 
 			<p class="mb-3">I love to design and architect design systems and responsive component libraries in close collaboration with designers. In the past, I've helped build and maintain agency-wide front-end tooling for consistently delivering best practices to clients and stakeholders. Rapid prototyping is my jam.</p>
 
-			<p class="mb-3">I'm comfortable working in and with a number of languages and technologies, but have a strong preference towards modern Javascript and CSS. I've been a mostly off-and-on <a href="https://www.drupal.org/u/tjh">contributor to the Drupal ecosystem</a> for seven years. A long time ago (2015), I dove into node and an early edition of pattern lab to build a command line-based training module for <a href="https://nodeschool.io/">nodeschool.io</a>. It is not being maintained.</p>
+			<p class="mb-3">I'm comfortable working in and with a number of languages and technologies, but have a strong preference towards modern Javascript and CSS. I've been a mostly off-and-on <a href="https://www.drupal.org/u/tjh">contributor to the Drupal ecosystem</a> for seven years. A long time ago (read: 2015), I dove into node and an early edition of <a href="https://patternlab.io/">Pattern Lab</a> to build a command line-based training module around atomic design concepts for <a href="https://nodeschool.io/">nodeschool.io</a>. It is not being maintained.</p>
 
 			<p class="mb-3">I mentor new and junior developers and perform duties as a front-end tech lead.</p>
 
