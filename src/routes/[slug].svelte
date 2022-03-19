@@ -93,7 +93,8 @@
 	</div>
 </article>
 
-<div class="mx-auto mb-16 w-fit max-w-2xl flex flex-col justify-center px-4 sm:px-8">
+<div class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8">
+<!-- <div class="mx-auto mb-16 w-fit max-w-2xl flex flex-col justify-center px-4 sm:px-8"> -->
 	<div class="p-4 mb-12 border-t-2 border-b-2 border-indigo-700 text-gray-700 dark:text-gray-400 dark:border-blue-300 p-4 w-fit self-center">
 		{#if json.ghMetadata.reactions.total_count > 0}
 			Reactions: <Reactions
@@ -105,7 +106,7 @@
 			if you liked this post! 🧡
 		{/if}
 	</div>
-	<div class="mb-8">
+	<div class="mb-8 w-full">
 		<Comments ghMetadata={json.ghMetadata} />
 	</div>
 

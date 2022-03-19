@@ -86,7 +86,14 @@
 			background-size: 4px 50px;
 		}
 	}
+
+	/* to undo above */
+	.bg-unset {
+		background: unset;
+		color: currentColor;
+	}
 }
+
 
 /* filters on /blog page */
 .filter {
@@ -103,15 +110,13 @@
 
 /* Cleanup styles for markdown headers */
 .prose h1 a {
-	@apply text-lime-800 hover:text-lime-800 dark:text-yellow-400 dark:hover:text-yellow-400;
-	background: unset;
+	@apply bg-unset text-lime-800 hover:text-lime-800 dark:text-yellow-400 dark:hover:text-yellow-400;
 }
 .prose h2,
 .prose h3,
 .prose h4 {
 	a {
-		@apply font-bold !text-accent;
-		background: unset;
+		@apply bg-unset font-bold !text-accent;
 	}
 	&::before {
 		@apply text-accent;
@@ -119,6 +124,12 @@
 		margin-left: -2rem;
 		margin-right: .5rem;
 	}
+}
+
+/* clean comment borders up with divide-y */
+.comment:last-child {
+	border-bottom: 4px;
+	border-style: dashed none solid none;
 }
 
 /*

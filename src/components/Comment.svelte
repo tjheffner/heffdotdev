@@ -11,7 +11,6 @@
 	doc.normalize();
 	_sanitize(doc.body);
 	let body = doc.body.innerHTML;
-	console.log(body);
 
 	// https://github.com/developit/snarkdown/issues/11
 	function snarkdownEnhanced(markdown) {
@@ -49,11 +48,12 @@
 </script>
 
 <div
-	class="mb-4 border-y-2 px-2 pt-4 dark:border-blue-700 sm:border-x sm:border-blue-200 sm:border-opacity-40 sm:px-4"
+	class="p-4 border-t-2 border-accent comment"
 >
 	<div>
 		{@html body}
-		<div class="flex min-w-[8rem] flex-row-reverse items-center text-xs">
+
+		<div class="flex w-full min-w-[8rem] flex-row-reverse items-center text-xs">
 			<img
 				class="ml-4 h-8 w-8 rounded-full"
 				alt={`avatar of commenter ${comment.user.login}`}
@@ -65,7 +65,17 @@
 				</a>
 				{comment.user.login}
 			</div>
-			<Reactions issueUrl={comment.issue_url} reactions={comment.reactions} />
+			<span class="mr-auto no-underline">
+				<Reactions issueUrl={comment.issue_url} reactions={comment.reactions} />
+			</span>
 		</div>
 	</div>
 </div>
+
+<style>
+	/* clean comment borders up with divide-y */
+	.comment:last-child {
+		border-bottom: 2px;
+		border-style: dashed none solid none;
+	}
+</style>
