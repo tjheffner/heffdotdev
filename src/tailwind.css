@@ -78,16 +78,16 @@
 	}
 }
 
+/* filters on /blog page */
 .filter {
-	@apply px-4 py-2 m-1 rounded rounded-md;
-	@apply border-zinc-400 bg-indigo-300 text-gray-900;
+	@apply px-4 py-2 m-1 inline-block whitespace-nowrap rounded rounded-md;
+	@apply border-zinc-400 bg-indigo-300 text-gray-900 font-bold;
 	@apply dark:border-slate-600 dark:bg-gray-800 dark:text-gray-100;
 }
 .activefilter {
 	@apply border-zinc-400 bg-indigo-700 text-blue-300;
-	@apply dark:border-slate-600 dark:bg-gray-800 dark:text-gray-100;
+	@apply dark:border-slate-600 dark:bg-sky-300 dark:text-slate-800;
 }
-
 
 /* Cleanup styles for markdown headers */
 .prose h1 a {

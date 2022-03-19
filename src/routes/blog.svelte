@@ -134,14 +134,15 @@
 
 <svelte:window on:keyup={focusSearch} />
 
-<section class="mx-auto mb-16 flex w-fit flex-col items-start px-4 sm:px-8">
+<section class="mx-auto mb-16 flex w-full lg:w-2/3 flex-col items-start px-4 sm:px-8">
 	<h1 class="mb-4 text-3xl font-bold tracking-tight text-accent md:text-5xl">
 		Posts
 	</h1>
 	<p class="mb-4 text-zinc-900 dark:text-gray-400">
 		In total, I've written {items.length} posts on my blog. Use the search below to
-		filter by title.
+		filter.
 	</p>
+
 	<div class="relative w-full">
 		<input
 			aria-label="Search articles"
@@ -150,7 +151,7 @@
 			on:input={saveURLState}
 			bind:value={filterStr}
 			placeholder="Hit / to search"
-			class="block w-full max-w-2xl rounded-md border px-4 py-2
+			class="block w-full rounded-md border px-4 py-2
 						border-zinc-400 bg-lime-100 text-gray-900 placeholder:text-zinc-700
 						dark:border-slate-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-zinc-50
 						"
@@ -170,9 +171,10 @@
 			/>
 		</svg>
 	</div>
-	<div class="mb-12 mt-2 flex items-center ">
+
+	<div class="my-4 w-full flex items-center">
 		<span class="mr-2 text-zinc-900 dark:text-gray-400"> Filter: </span>
-		<span class="relative z-0 grid grid-cols-3 rounded-md sm:grid-cols-6">
+		<span class="">
 			<button
 				type="button"
 				on:click={() => {
@@ -180,7 +182,6 @@
 					recipes = !recipes;
 				}}
 				class:activefilter={recipes}
-				class:font-medium={recipes}
 				class="filter"
 			>
 				Recipes
@@ -192,7 +193,6 @@
 					snippets = !snippets;
 				}}
 				class:activefilter={snippets}
-				class:font-medium={snippets}
 				class="filter"
 			>
 				Snippets
@@ -204,7 +204,6 @@
 					technical = !technical;
 				}}
 				class:activefilter={technical}
-				class:font-medium={technical}
 				class="filter"
 			>
 				Technical
@@ -216,13 +215,15 @@
 					notes = !notes;
 				}}
 				class:activefilter={notes}
-				class:font-medium={notes}
 				class="filter"
 			>
 				Notes
 			</button>
 		</span>
 	</div>
+
+	<hr class="border-t-2 mb-12 w-full border-indigo-700 dark:border-blue-300" />
+
 	{#if list.length}
 		<ul class="max-w-full">
 			{#each list as item}
