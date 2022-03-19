@@ -7,13 +7,19 @@ module.exports = {
 	darkMode: 'class',
 	theme: {
 		extend: {
+			colors: {
+				'accent': 'var(--brand-accent)',
+				'alternate': 'var(--brand-alternate)',
+			},
 			typography: (theme) => ({
 				DEFAULT: {
 					css: {
 						'--tw-prose-bullets': theme('colors.black'),
+						'--tw-prose-th-borders': theme('colors.accent'),
+						'--tw-prose-td-borders': theme('colors.accent'),
 						// these customizations are explained here https://youtu.be/-FzemNMcOGs
 						blockquote: {
-							borderLeft: '3px solid red',
+							borderLeft: '3px solid theme("colors.accent")',
 							fontSize: 'inherit',
 							fontStyle: 'inherit',
 							fontWeight: 'medium'
@@ -48,6 +54,13 @@ module.exports = {
 						'ul > li::marker': {
 							color: 'var(--tw-prose-body)'
 						}
+					}
+				},
+				// for dark:prose-invert
+				invert: {
+					css: {
+						'--tw-prose-th-borders': theme('colors.blue.300'),
+						'--tw-prose-td-borders': theme('colors.gray.600'),
 					}
 				}
 			})

@@ -65,7 +65,7 @@
 <article
 	class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8"
 >
-	<h1 class="mb-8 text-3xl font-bold tracking-tight text-black dark:text-white md:text-5xl ">
+	<h1 class="mb-8 text-3xl font-bold tracking-tight md:text-6xl text-shadow text-lime-500 dark:text-yellow-400">
 		{json.title}
 	</h1>
 	<div
@@ -75,29 +75,33 @@
 		<p class="min-w-32 flex items-center text-sm text-gray-600 dark:text-gray-400 md:mt-0">
 			<a href={json.ghMetadata.issueUrl} rel="external" class="no-underline" target="_blank">
 				<span class="mr-4 font-mono text-xs text-gray-700 text-opacity-70 dark:text-gray-300"
-					>{json.ghMetadata.reactions.total_count} reactions</span
+					>{json.ghMetadata.reactions.total_count} {#if json.ghMetadata.reactions.total_count === 1}reaction{:else}reactions{/if}</span
 				>
 			</a>
 			{new Date(json.date).toISOString().slice(0, 10)}
 		</p>
 	</div>
-	<div
-		class="-mx-4 my-2 flex h-1 w-[100vw] bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 sm:mx-0 sm:w-full"
-	/>
 
-	<div class="prose mt-16 mb-32 w-full max-w-none dark:prose-invert">
+	<hr class="border-t-2 mt-2 w-full border-indigo-700 dark:border-blue-300" />
+
+	<!-- <div
+		class="-mx-4 my-2 flex h-1 w-[100vw] bg-gradient-to-r from-blue-300 via-indigo-700 to-slate-900 sm:mx-0 sm:w-full"
+	/> -->
+
+	<div class="prose mt-12 mb-12 w-full max-w-none dark:prose-invert">
 		{@html json.content}
 	</div>
 </article>
-<div class="mx-auto max-w-2xl">
-	<div class="prose mb-12 border-t border-b border-blue-800 p-4 dark:prose-invert">
+
+<div class="mx-auto mb-16 w-fit max-w-2xl flex flex-col justify-center px-4 sm:px-8">
+	<div class="p-4 mb-12 border-t-2 border-b-2 border-indigo-700 text-gray-700 dark:text-gray-400 dark:border-blue-300 p-4 w-fit self-center">
 		{#if json.ghMetadata.reactions.total_count > 0}
 			Reactions: <Reactions
 				issueUrl={json.ghMetadata.issueUrl}
 				reactions={json.ghMetadata.reactions}
 			/>
 		{:else}
-			<a href={json.ghMetadata.issueUrl}>Leave a reaction </a>
+			<a class="gh-link" href={json.ghMetadata.issueUrl}>Leave a reaction </a>
 			if you liked this post! 🧡
 		{/if}
 	</div>

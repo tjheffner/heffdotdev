@@ -11,6 +11,7 @@
 	doc.normalize();
 	_sanitize(doc.body);
 	let body = doc.body.innerHTML;
+	console.log(body);
 
 	// https://github.com/developit/snarkdown/issues/11
 	function snarkdownEnhanced(markdown) {

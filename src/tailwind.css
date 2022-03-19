@@ -4,6 +4,7 @@
 @layer components {
 	body {
 		--brand-accent: theme('colors.indigo.700');
+		--brand-alternate: theme('colors.blue.300');
 
 		/* https://ishadeed.com/article/defensive-css */
 		overflow-wrap: break-word;
@@ -12,6 +13,7 @@
 	}
 	.dark body {
 		--brand-accent: theme('colors.blue.300');
+		--brand-alternate: theme('colors.indigo.700');
 	}
 	:root {
 		accent-color: var(--brand-accent);
@@ -57,7 +59,15 @@
 		background-color: grey;
 	}
 
-	/* Links highlight from bottom */
+	.text-shadow {
+		text-shadow: 2px 3px 1px theme('colors.indigo.700');
+	}
+	.dark .text-shadow {
+		text-shadow: 2px 3px 1px theme('colors.yellow.700');
+	}
+
+	/* Links that highlight from bottom */
+	.gh-link,
 	.footer-link,
 	.prose a {
 		@apply from-indigo-700 to-indigo-700 dark:from-yellow-400 dark:to-yellow-400;
@@ -71,10 +81,10 @@
     background-repeat: repeat-x;
     background-size: 4px 2px;
     transition: all .3s linear;
-	}
-	.footer-link:hover,
-	.prose a:hover {
-		background-size: 4px 50px;
+
+		&:hover {
+			background-size: 4px 50px;
+		}
 	}
 }
 
@@ -96,17 +106,19 @@
 	@apply text-lime-800 hover:text-lime-800 dark:text-yellow-400 dark:hover:text-yellow-400;
 	background: unset;
 }
-.prose h2 a, .prose h3 a, .prose h4 a {
-	background: unset;
-	color: var(--brand-accent) !important;
-}
-.prose h2::before,
-.prose h3::before,
-.prose h4::before {
-	content: '#';
-	color: var(--brand-accent);
-	margin-left: -2rem;
-	margin-right: 1rem;
+.prose h2,
+.prose h3,
+.prose h4 {
+	a {
+		@apply font-bold !text-accent;
+		background: unset;
+	}
+	&::before {
+		@apply text-accent;
+		content: '#';
+		margin-left: -2rem;
+		margin-right: .5rem;
+	}
 }
 
 /*

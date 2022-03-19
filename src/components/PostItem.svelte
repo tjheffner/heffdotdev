@@ -15,6 +15,7 @@
 
     <p class="col-span-3 text-slate-800 dark:text-gray-400 mb-2"><slot /></p>
 
+		{#if item.category}
     <span class="col-span-1 col-start-1 w-fit inline-block rounded-full
         bg-amber-600 text-white
         dark:bg-lime-600 dark:text-gray-900
@@ -23,6 +24,7 @@
     ">
         {item.category}
     </span>
+		{/if}
 
     <p class="col-span-1 col-start-4 row-start-1 justify-self-end text-slate-800 dark:text-gray-400 font-semibold">{date}</p>
 

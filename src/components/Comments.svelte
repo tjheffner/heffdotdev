@@ -18,7 +18,9 @@
 	href={`${ghMetadata.issueUrl}#issuecomment-new`}
 	rel="external"
 	target="_blank"
-	class="flex justify-center border-y border-blue-700 p-4 no-underline hover:text-yellow-700 dark:hover:text-yellow-200 sm:inline sm:rounded-xl sm:border-x"
+	class="my-4 p-2 rounded-lg font-bold transition-all ease-in-out duration-200
+	text-yellow-800 bg-yellow-400 hover:ring-2 ring-yellow-800
+	dark:ring-yellow-400 dark:bg-yellow-800 dark:text-yellow-100"
 >
 	Leave a new comment!
 </a>
@@ -26,7 +28,7 @@
 <!-- <pre class="prose dark:prose-invert">
   {JSON.stringify(data, null, 2)}
 </pre> -->
-<!-- 
+<!--
 {
   "url": "https://api.github.com/repos/sw-yx/swyxkit/issues/comments/1008454294",
   "html_url": "https://github.com/sw-yx/swyxkit/issues/10#issuecomment-1008454294",
