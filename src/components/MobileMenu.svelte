@@ -60,11 +60,11 @@
 	</button>
 	{#if isOpen}
 		<ul
-			class="menu absolute flex flex-col bg-gray-50 text-2xl  uppercase dark:bg-gray-900"
+			class="menu absolute flex flex-col text-2xl uppercase bg-lime-300 dark:bg-gray-900"
 			class:menuRendered={isMenuRendered}
 		>
 			<li
-				class="border-b border-gray-300 font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-100"
+				class="border-b border-indigo-700 font-semibold text-gray-900 dark:border-yellow-400 dark:text-gray-100"
 				style="transition-delay: 150ms;"
 			>
 				<a
@@ -75,18 +75,40 @@
 				>
 			</li>
 			<li
-				class="border-b border-gray-300 font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-100"
+				class="border-b border-indigo-700 font-semibold text-gray-900 dark:border-yellow-400 dark:text-gray-100"
 				style="transition-delay: 250ms;"
 			>
 				<a
 					class="flex w-auto pb-4"
 					sveltekit:prefetch
 					on:click={() => setTimeout(() => (isOpen = false), 300)}
-					href="/blog">Blog</a
+					href="/blog">Posts</a
 				>
 			</li>
 			<li
-				class="border-b border-gray-300 font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-100"
+				class="border-b border-indigo-700 font-semibold text-gray-900 dark:border-yellow-400 dark:text-gray-100"
+				style="transition-delay: 250ms;"
+			>
+				<a
+					class="flex w-auto pb-4"
+					sveltekit:prefetch
+					on:click={() => setTimeout(() => (isOpen = false), 300)}
+					href="/work">Work</a
+				>
+			</li>
+			<li
+				class="border-b border-indigo-700 font-semibold text-gray-900 dark:border-yellow-400 dark:text-gray-100"
+				style="transition-delay: 250ms;"
+			>
+				<a
+					class="flex w-auto pb-4"
+					sveltekit:prefetch
+					on:click={() => setTimeout(() => (isOpen = false), 300)}
+					href="/gallery">Gallery</a
+				>
+			</li>
+			<li
+				class="border-b border-indigo-700 font-semibold text-gray-900 dark:border-yellow-400 dark:text-gray-100"
 				style="transition-delay: 350ms;"
 			>
 				<a
@@ -97,21 +119,25 @@
 				>
 			</li>
 			<li
-				class="border-b border-gray-300 font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-100"
+				class="border-b border-indigo-700 font-semibold text-gray-900 dark:border-yellow-400 dark:text-gray-100"
 				style="transition-delay: 400ms;"
 			>
 				<a
 					class="flex w-auto pb-4"
 					on:click={() => setTimeout(() => (isOpen = false), 300)}
-					href="https://github.com/tjheffner/heffdotdev">GitHub</a
+					href="https://github.com/tjheffner">GitHub</a
 				>
 			</li>
-			<!-- <li
-			class="border-b border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 font-semibold"
+			<li
+			class="border-b border-indigo-700 dark:border-yellow-400 text-gray-900 dark:text-gray-100 font-semibold"
 			style="transition-delay: 325ms;"
 		>
-			<a class="flex w-auto pb-4" on:click={() => setTimeout(() => isOpen = false, 200)} href="/tweets">Tweets</a>
-		</li> -->
+			<a
+				class="flex w-auto pb-4"
+				on:click={() => setTimeout(() => isOpen = false, 200)}
+				href="https://twitter.com/foodpyramids">Tweets</a
+			>
+		</li>
 		</ul>
 	{/if}
 </div>
@@ -135,7 +161,7 @@
 	}
 
 	.menu {
-		padding: 0 28px 0 4px;
+		padding: 0 28px 0 25px;
 		margin: 0;
 		padding-top: 24px;
 		width: 100%;
@@ -159,7 +185,7 @@
 	}
 
 	.menuRendered li {
-		@apply w-full border-gray-200 dark:border-gray-600;
+		@apply w-full border-indigo-700 dark:border-yellow-400;
 		transform: translateX(0);
 		opacity: 1;
 	}

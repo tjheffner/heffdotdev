@@ -134,11 +134,11 @@
 
 <svelte:window on:keyup={focusSearch} />
 
-<section class="mx-auto mb-16 flex max-w-3xl flex-col items-start justify-center px-4 sm:px-8">
-	<h1 class="mb-4 text-3xl font-bold tracking-tight text-black dark:text-white md:text-5xl">
+<section class="mx-auto mb-16 flex w-fit flex-col items-start px-4 sm:px-8">
+	<h1 class="mb-4 text-3xl font-bold tracking-tight text-accent md:text-5xl">
 		Posts
 	</h1>
-	<p class="mb-4 text-gray-600 dark:text-gray-400">
+	<p class="mb-4 text-zinc-900 dark:text-gray-400">
 		In total, I've written {items.length} posts on my blog. Use the search below to
 		filter by title.
 	</p>
@@ -150,40 +150,38 @@
 			on:input={saveURLState}
 			bind:value={filterStr}
 			placeholder="Hit / to search"
-			class="block w-full rounded-md border border-gray-200 bg-white px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-900 dark:bg-gray-800 dark:text-gray-100"
-		/><svg
+			class="block w-full max-w-2xl rounded-md border px-4 py-2
+						border-zinc-400 bg-lime-100 text-gray-900 placeholder:text-zinc-700
+						dark:border-slate-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-zinc-50
+						"
+		/>
+		<svg
 			class="absolute right-3 top-3 h-5 w-5 text-gray-400 dark:text-gray-300"
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
 			viewBox="0 0 24 24"
 			stroke="currentColor"
-			><path
+		>
+			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
 				stroke-width="2"
 				d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-			/></svg
-		>
+			/>
+		</svg>
 	</div>
 	<div class="mb-12 mt-2 flex items-center ">
-		<span class="mr-2 text-gray-900 dark:text-gray-400"> Filter: </span>
-		<span class="relative z-0 grid grid-cols-3 rounded-md shadow-sm sm:grid-cols-6">
-			<!-- <div class="inline-flex items-center text-gray-600 dark:text-gray-400 mr-2 italic px-4">Show:</div> -->
+		<span class="mr-2 text-zinc-900 dark:text-gray-400"> Filter: </span>
+		<span class="relative z-0 grid grid-cols-3 rounded-md sm:grid-cols-6">
 			<button
 				type="button"
 				on:click={() => {
 					saveURLState();
 					recipes = !recipes;
 				}}
-				class:bimodalpurple={recipes}
-				class:mytext={recipes}
+				class:activefilter={recipes}
 				class:font-medium={recipes}
-				class="focus:ring-yellow relative -ml-px inline-flex items-center border border-gray-300
-      px-4 py-2 text-sm leading-5 text-gray-700
-     transition duration-150 ease-in-out
-      focus:z-10 focus:border-blue-300 focus:text-yellow-400 focus:outline-none
-       dark:text-gray-200 sm:ml-0
-      sm:rounded-l-md"
+				class="filter"
 			>
 				Recipes
 			</button>
@@ -193,14 +191,9 @@
 					saveURLState();
 					snippets = !snippets;
 				}}
-				class:bimodalpurple={snippets}
-				class:mytext={snippets}
+				class:activefilter={snippets}
 				class:font-medium={snippets}
-				class="focus:ring-yellow relative -ml-px inline-flex items-center border border-gray-300
-        px-4 py-2 text-sm leading-5 text-gray-700
-       transition duration-150
-        ease-in-out focus:z-10 focus:border-blue-300
-       focus:text-yellow-400 focus:outline-none dark:text-gray-200"
+				class="filter"
 			>
 				Snippets
 			</button>
@@ -210,14 +203,9 @@
 					saveURLState();
 					technical = !technical;
 				}}
-				class:bimodalpurple={technical}
-				class:mytext={technical}
+				class:activefilter={technical}
 				class:font-medium={technical}
-				class="focus:ring-yellow relative -ml-px inline-flex items-center border border-gray-300
-        px-4 py-2 text-sm leading-5 text-gray-700
-       transition duration-150
-        ease-in-out focus:z-10 focus:border-blue-300
-       focus:text-yellow-400 focus:outline-none dark:text-gray-200"
+				class="filter"
 			>
 				Technical
 			</button>
@@ -227,15 +215,9 @@
 					saveURLState();
 					notes = !notes;
 				}}
-				class:bimodalpurple={notes}
-				class:mytext={notes}
+				class:activefilter={notes}
 				class:font-medium={notes}
-				class="
-      focus:ring-yellow relative -ml-px inline-flex items-center border border border-gray-300 px-4
-      py-2 text-sm leading-5 text-gray-700 transition
-     duration-150 ease-in-out
-      focus:z-10 focus:border-blue-300 focus:text-yellow-400
-     focus:outline-none dark:text-gray-200 sm:rounded-r-md"
+				class="filter"
 			>
 				Notes
 			</button>
@@ -266,7 +248,14 @@
 			No posts found for
 			<code>{filterStr}</code>.
 		</div>
-		<button class="p-2 bg-slate-500" on:click={() => (filterStr = '')}>Clear your search</button>
+		<button on:click={() => (filterStr = '')}
+						class="my-4 p-2 rounded-lg font-bold transition-all ease-in-out duration-200
+						text-yellow-800 bg-yellow-400 hover:ring-2 ring-yellow-800
+						dark:ring-yellow-400 dark:bg-yellow-800 dark:text-yellow-100
+						"
+		>
+			Clear your search
+		</button>
 	{:else}
 		<div class="prose dark:prose-invert">Search something else!</div>
 	{/if}
