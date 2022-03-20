@@ -54,7 +54,7 @@
 	{/if}
 </svelte:head>
 
-<a href="/work" class="back-link"> Back </a>
+<a href="/work" class="back-link">Back </a>
 
 <article class="mx-auto mb-16 flex w-full flex-col items-start px-4 sm:px-8 lg:w-2/3">
 	{#if json.data.name}
@@ -70,4 +70,6 @@
 	<div class="prose mt-12 mb-12 w-full max-w-none dark:prose-invert">
 		{@html json.content}
 	</div>
+
+	<a class="footer-link font-bold" href={json.data.url}>View this project live</a>
 </article>

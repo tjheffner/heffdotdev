@@ -1,12 +1,12 @@
 ---
 name: Pinterest Business
-url: https://business.pinterest.com
+url: https://business.pinterest.com/creators
 slug: pinterest
 description: 'react components, protoyping'
 type: professional
 date: 2020-05-01
 ---
 
-just want to see that this works! :)
+For my first project full-time at Instrument, I joined the Pinterest Business team mid-stream and helped prototype & implement new React components to their design system in support of the upcoming Pinterest Creators campaign.
 
-put some explanation about the project here
+This included creating new components from scratch, updating existing components to meet new business requirements, thorough testing including functional, cross-browser visual regression, and accessibility testing, while closely collaborating with internal designers and client developers.

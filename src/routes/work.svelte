@@ -55,9 +55,9 @@
 				{/if}
 			{/each}
 		</ul>
-		<p class="my-8 text-slate-800 dark:text-gray-400"><span class="font-bold text-indigo-700 dark:text-lime-500">Other clients:</span> Epic Games, Autism Speaks, Norweigan Cruise Lines, PGA Tour, Weight Watchers, Urban Institute, Wilson Center</p>
+		<p class="my-8 text-slate-800 dark:text-gray-400"><span class="font-bold text-lg text-indigo-700 dark:text-lime-500">Other clients:</span> Epic Games, Norwegian Cruise Line, PGA Tour, Weight Watchers, Urban Institute, Wilson Center</p>
 
-		<a href="/resume" class="font-bold text-indigo-700 dark:text-lime-500 hover:text-orange-600 dark:hover:text-yellow-400">Resume</a>
+		<a href="/resume" class="font-bold text-lg text-indigo-700 dark:text-lime-500 hover:text-orange-600 dark:hover:text-yellow-400">Resume</a>
 	</Slice>
 
 	<Slice title="Personal" prose={false}>
@@ -70,7 +70,10 @@
 				{/if}
 			{/each}
 
-			<!-- <li><a href="/gallery">Gallery</a></li> -->
+			<!-- <li>
+				<a href="/gallery" class="block font-bold text-lg text-indigo-700 dark:text-lime-500 hover:text-orange-600 dark:hover:text-yellow-400">gallery</a>
+				<p class="mb-2 text-slate-800 dark:text-gray-400">digital art, photography</p>
+			</li> -->
 		</ul>
 	</Slice>
 </section>
