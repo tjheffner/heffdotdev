@@ -1,0 +1,10 @@
+---
+name: Dieter Rothko
+slug: dieter-rothko
+description: 'watercolor, mixed media'
+type: personal
+---
+
+just want to see that this works! :)
+
+put some explanation about the project here

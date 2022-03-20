@@ -1,0 +1,11 @@
+---
+name: Pinterest Business
+url: https://business.pinterest.com
+slug: pinterest
+description: 'react components and protoyping'
+type: professional
+---
+
+just want to see that this works! :)
+
+put some explanation about the project here

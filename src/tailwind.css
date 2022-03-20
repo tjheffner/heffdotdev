@@ -105,7 +105,7 @@
 .activefilter {
 	@apply border-zinc-400 bg-indigo-700 text-sky-200;
 	@apply dark:border-slate-600 dark:bg-sky-300 dark:text-slate-800;
-	@apply ring-yellow-400 dark:ring-yellow-400;
+	@apply ring-yellow-400 dark:ring-yellow-800;
 }
 
 /* Cleanup styles for markdown headers */
@@ -123,6 +123,15 @@
 		@apply absolute -left-6;
 		@apply text-accent;
 		content: '#';
+	}
+}
+
+.back-link {
+	@apply relative font-bold text-accent md:mx-4 lg:mx-12 mb-4;
+	&::before {
+		@apply absolute -left-6;
+		content: '<<';
+		color: currentColor;
 	}
 }
 

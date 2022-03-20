@@ -1,0 +1,11 @@
+---
+name: Al Jazeera
+url: https://www.aljazeera.com/
+slug: aljazeera
+description: 'content modeling, api'
+type: professional
+---
+
+just want to see that this works! :)
+
+put some explanation about the project here

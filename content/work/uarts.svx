@@ -1,0 +1,11 @@
+---
+name: University of the Arts
+url: https://uarts.edu/
+slug: uarts
+description: 'component library, content modeling, vue widgets, drupal theme'
+type: professional
+---
+
+just want to see that this works! :)
+
+put some explanation about the project here

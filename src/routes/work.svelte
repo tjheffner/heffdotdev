@@ -31,49 +31,38 @@
 </svelte:head>
 
 <section>
+	<Slice>
+	  <h1 class="mb-4 text-3xl font-bold tracking-tight text-accent md:text-5xl">
+	    Past work
+	  </h1>
+	  <p class="font-semibold text-xl text-accent">
+	    A collection of previously completed projects, personal and professional.
+	  </p>
+	</Slice>
 
-<Slice>
-  <marquee class="bg-orange-300 w-full p-4">THIS PAGE IS STILL UNDER CONSTRUCTION !</marquee>
-</Slice>
+	<Slice title="Professional">
+	  <ul class="list-none">
+	    {#each items as project}
+				{#if project.data.type === "professional"}
+	      <li>
+	        <ProjectItem item={project} href={project.slug} />
+	      </li>
+				{/if}
+	    {/each}
+	  </ul>
+	</Slice>
 
-<Slice>
-  <h1 class="mb-4 text-3xl font-bold tracking-tight text-accent md:text-5xl">
-    Past work
-  </h1>
-  <p class="font-semibold text-xl text-accent">
-    A collection of previously completed projects, both personal and professional.
-  </p>
-</Slice>
+	<Slice title="Personal">
+		<ul class="list-none">
+	    {#each items as project}
+				{#if project.data.type === "personal"}
+	      <li>
+	        <ProjectItem item={project} href={project.slug} />
+	      </li>
+				{/if}
+	    {/each}
 
-<Slice title="Professional">
-
-  <ul class="list-none">
-    {#each items as project}
-      <li>
-        <ProjectItem item={project} href={project.slug} />
-      </li>
-    {/each}
-  </ul>
-
-  <p> standard list: <p>
-  <ul class="list-disc list-outside">
-    <li>Twitter Brand Studio</li>
-    <li>Google.org</li>
-    <li>Pinterest Business</li>
-    <li>Greenhouse</li>
-    <li>Crohn's & Colitis Foundation</li>
-    <li>Memorial Sloan Kettering Cancer Hospital</li>
-    <li>University of the Arts</li>
-    <li>Arsenal Football Club</li>
-    <li>Al Jazeera</li>
-  </ul>
-</Slice>
-<Slice title="Personal">
-  <ul class="list-disc list-outside">
-    <li>Blink</li>
-    <li>Dieter Rothko</li>
-    <li>File Cabinet Smoker</li>
-    <li>Gallery</li>
-  </ul>
-</Slice>
+			<!-- <li><a href="/gallery">Gallery</a></li> -->
+	  </ul>
+	</Slice>
 </section>

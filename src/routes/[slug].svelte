@@ -62,6 +62,10 @@
 	{/if}
 </svelte:head>
 
+<a href="/blog" class="back-link">
+	Back
+</a>
+
 <article
 	class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8"
 >

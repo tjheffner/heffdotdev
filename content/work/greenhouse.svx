@@ -3,7 +3,10 @@ name: Greenhouse
 url: https://greenhouse.io
 image: '/static/assets/greenhouse.png'
 slug: greenhouse
-description: 'foo bar'
+description: 'component library, content modeling in craft cms, javascript'
+type: professional
 ---
 
 just want to see that this works! :)
+
+put some explanation about the project here

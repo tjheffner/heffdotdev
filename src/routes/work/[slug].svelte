@@ -33,8 +33,6 @@
 </script>
 
 <script>
-	import 'prism-themes/themes/prism-shades-of-purple.min.css';
-
 	/** @type {import('$lib/types').Project} */
 	export let json; // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
 </script>
@@ -59,14 +57,25 @@
 	{/if}
 </svelte:head>
 
+<a href="/work" class="back-link">
+	Back
+</a>
+
 <article
 	class="mx-auto mb-16 flex w-full lg:w-2/3 flex-col items-start px-4 sm:px-8"
 >
 	{#if json.data.name}
-	<h1 class="mb-4 text-3xl font-bold tracking-tight text-accent md:text-5xl">
+	<h1 class="mt-4 text-3xl font-bold tracking-tight text-accent md:text-5xl">
 		{json.data.name}
 	</h1>
 	{/if}
+
+	{#if json.data.image}
+		<img src={json.data.image}
+				 class="mt-4"
+		 />
+	{/if}
+
 	<div class="prose mt-12 mb-12 w-full max-w-none dark:prose-invert">
 		{@html json.content}
 	</div>

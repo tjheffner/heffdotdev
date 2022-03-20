@@ -1,0 +1,10 @@
+---
+name: file cabinet smoker
+slug: file-cabinet-smoker
+description: 'DIY, cooking'
+type: personal
+---
+
+just want to see that this works! :)
+
+put some explanation about the project here
