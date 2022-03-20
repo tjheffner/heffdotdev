@@ -38,7 +38,7 @@
 </script>
 
 <svelte:head>
-	<title>{json.name}</title>
+	<title>{json.data.name}</title>
 	<meta name="description" content="heffdotdev project" />
 
 	<link rel="canonical" href={SITE_URL} />
@@ -51,7 +51,7 @@
 	<meta name="twitter:creator" content={'@' + MY_TWITTER_HANDLE} />
 	<meta name="twitter:title" content={json.data.name} />
 	<meta name="twitter:description" content={json.data.description} />
-	{#if json.image}
+	{#if json.data.image}
 		<meta property="og:image" content={json.image} />
 		<meta name="twitter:image" content={json.image} />
 	{/if}

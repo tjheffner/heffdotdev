@@ -1,7 +1,7 @@
 ---
 name: Greenhouse
 url: https://greenhouse.io
-image: '/static/assets/greenhouse.png'
+# image: '/static/assets/greenhouse.png'
 slug: greenhouse
 description: 'component library, content modeling in craft cms, javascript'
 type: professional

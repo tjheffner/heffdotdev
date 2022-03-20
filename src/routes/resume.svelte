@@ -12,7 +12,6 @@
 	<meta name="description" content={SITE_DESCRIPTION} />
 </svelte:head>
 
-
 <section>
 	<Slice>
 		<h1
