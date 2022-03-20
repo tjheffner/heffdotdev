@@ -60,9 +60,11 @@
 	}
 
 	.text-shadow {
+		@apply text-amber-600;
 		text-shadow: 2px 3px 1px theme('colors.indigo.700');
 	}
 	.dark .text-shadow {
+		@apply text-yellow-400;
 		text-shadow: 2px 3px 1px theme('colors.yellow.700');
 	}
 

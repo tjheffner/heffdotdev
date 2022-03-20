@@ -134,8 +134,8 @@
 
 <svelte:window on:keyup={focusSearch} />
 
-<section class="mx-auto mb-16 flex w-full flex-col items-start px-4 sm:px-8 lg:w-2/3">
-	<h1 class="mb-4 text-3xl font-bold tracking-tight text-accent md:text-5xl">Posts</h1>
+<section class="mx-auto mb-16 flex w-full flex-col items-start p-0 sm:px-8 lg:w-2/3">
+	<h1 class="mb-4 text-3xl font-bold tracking-tight text-shadow md:text-5xl">Posts</h1>
 	<p class="mb-4 text-zinc-900 dark:text-gray-400">
 		In total, I've written {items.length} posts on my blog. Use the search below to filter.
 	</p>
@@ -220,7 +220,7 @@
 		</span>
 	</div>
 
-	<hr class="mb-12 w-full border-t-2 border-indigo-700 dark:border-blue-300" />
+	<hr class="mb-6 md:mb-12 w-full border-t-2 border-indigo-700 dark:border-blue-300" />
 
 	<!-- Results -->
 	{#if list.length}

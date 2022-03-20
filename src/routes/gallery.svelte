@@ -8,8 +8,7 @@
 	</Slice>
 
 	<h1
-		class="text-shadow mb-4 text-3xl font-bold tracking-tight
-             text-lime-500 dark:text-yellow-400 md:text-5xl"
+		class="text-shadow mb-4 text-3xl font-bold tracking-tight md:text-5xl"
 	>
 		Gallery
 	</h1>

@@ -7,7 +7,7 @@
   <meta name="description" content="About this site." />
 </svelte:head>
 
-<h1 class="text-lime-500 dark:text-yellow-400 text-shadow">about</h1>
+<h1 class="text-shadow">about</h1>
 
 ## the site
 this site is the online home of tanner heffner. it's part [blog](/blog) [portfolio](/work) [playground](/gallery) [resume](/resume) and all [digital garden](https://joelhooks.com/digital-garden), using [swyxkit](https://swyxkit.netlify.app/about) as my starting point.

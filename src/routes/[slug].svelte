@@ -68,7 +68,7 @@
 	class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8"
 >
 	<h1
-		class="text-shadow mb-8 text-3xl font-bold tracking-tight text-amber-600 dark:text-yellow-400 md:text-6xl"
+		class="text-shadow mb-8 text-3xl font-bold tracking-tight md:text-6xl"
 	>
 		{json.title}
 	</h1>

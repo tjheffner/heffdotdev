@@ -5,11 +5,11 @@
 	export let item;
 </script>
 
-<a sveltekit:prefetch class="w-full" href={'/' + href}>
-	<div class="grid grid-cols-4 p-4">
-		<h2 class="col-span-3 text-lg font-bold text-accent">{item.title}</h2>
+<a sveltekit:prefetch class="post w-full" href={'/' + href}>
+	<div class="grid grid-cols-4 px-0 pt-4 sm:p-4">
+		<h2 class="col-span-4 sm:col-span-3 text-lg font-bold text-accent">{item.title}</h2>
 
-		<p class="col-span-3 mb-2 text-slate-800 dark:text-gray-400"><slot /></p>
+		<p class="col-span-4 sm:col-span-3 mb-2 text-slate-800 dark:text-gray-400"><slot /></p>
 
 		{#if item.category}
 			<span
@@ -25,15 +25,23 @@
 		{/if}
 
 		<p
-			class="col-span-1 col-start-4 row-start-1 justify-self-end font-semibold text-slate-800 dark:text-gray-400"
+			class="col-span-4 md:col-span-1 md:col-start-4 row-start-1 md:justify-self-end font-semibold text-slate-800 dark:text-gray-400"
 		>
 			{new Date(item.date).toISOString().slice(0, 10)}
 		</p>
 
 		{#if item.ghMetadata && item.ghMetadata.reactions.total_count}
-			<p class="col-span-1 col-start-4 justify-self-end text-accent">
+			<p class="md:col-span-1 md:col-start-4 md:justify-self-end text-accent">
 				{item.ghMetadata.reactions.total_count} ♥
 			</p>
 		{/if}
 	</div>
 </a>
+
+<style>
+	.post:hover {
+		& h2 {
+			@apply text-orange-600 dark:text-yellow-400;
+		}
+	}
+</style>
