@@ -71,5 +71,7 @@
 		{@html json.content}
 	</div>
 
-	<a class="footer-link font-bold" href={json.data.url}>View this project live</a>
+	{#if json.data.url}
+		<a class="footer-link font-bold" href={json.data.url}>View this project live</a>
+	{/if}
 </article>
