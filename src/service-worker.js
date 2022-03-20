@@ -1,6 +1,6 @@
-import { timestamp, build } from '$service-worker';
+import { version, build } from '$service-worker';
 
-const name = `cache-${timestamp}`;
+const name = `cache-${version}`;
 
 self.addEventListener('install', (event) => {
 	// @ts-expect-error
