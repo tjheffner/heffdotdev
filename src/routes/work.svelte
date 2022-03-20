@@ -12,14 +12,14 @@
 		/** @type {import('$lib/types').Project[]} */
 		const items = await res.json();
 
-		let sorted = items.map((item) => {
-			return { ...item, date: new Date(item.data.date) };
-		});
-
-		sorted = sorted.sort((a, b) => Number(b.date) - Number(a.date));
+		// let sorted = items.map((item) => {
+		// 	return { ...item, date: new Date(item.data.date) };
+		// });
+		//
+		// sorted = sorted.sort((a, b) => Number(b.date) - Number(a.date));
 
 		return {
-			props: { sorted },
+			props: { items },
 			maxage: 60 // 1 min
 		};
 	}
@@ -30,7 +30,7 @@
 	import Slice from '../components/Slice.svelte';
 	import ProjectItem from '../components/ProjectItem.svelte';
 
-	export let sorted;
+	export let items;
 </script>
 
 <svelte:head>
@@ -47,7 +47,7 @@
 
 	<Slice title="Professional" prose={false}>
 		<ul class="list-none">
-			{#each sorted as project}
+			{#each items as project}
 				{#if project.data.type === 'professional'}
 					<li>
 						<ProjectItem item={project} href={project.slug} />
@@ -55,14 +55,14 @@
 				{/if}
 			{/each}
 		</ul>
-		<p class="my-8 text-slate-800 dark:text-gray-400"><span class="font-bold text-lg text-indigo-700 dark:text-lime-500">Other clients:</span> Epic Games, Norwegian Cruise Line, PGA Tour, Weight Watchers, Urban Institute, Wilson Center</p>
+		<p class="my-8 text-slate-800 dark:text-gray-400"><span class="font-bold text-lg text-indigo-700 dark:text-lime-500">Other clients:</span> Epic Games, Crossfit, Norwegian Cruise Line, PGA Tour, Weight Watchers, Urban Institute, Wilson Center</p>
 
 		<a href="/resume" class="font-bold text-lg text-indigo-700 dark:text-lime-500 hover:text-orange-600 dark:hover:text-yellow-400">Resume</a>
 	</Slice>
 
 	<Slice title="Personal" prose={false}>
 		<ul class="list-none">
-			{#each sorted as project}
+			{#each items as project}
 				{#if project.data.type === 'personal'}
 					<li>
 						<ProjectItem item={project} href={project.slug} />

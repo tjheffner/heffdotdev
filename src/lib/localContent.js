@@ -39,6 +39,9 @@ export async function listProjects() {
 			name: data.name
 		});
 	}
+
+	_localContent.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()); // use valueOf to make TS happy https://stackoverflow.com/a/60688789/1106414
+
 	localContent = _localContent;
 
 	return _localContent;

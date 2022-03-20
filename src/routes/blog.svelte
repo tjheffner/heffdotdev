@@ -228,7 +228,7 @@
 			class="w-full divide-y divide-dashed divide-indigo-700 dark:divide-blue-300 md:mx-auto md:w-4/5"
 		>
 			{#each list as item}
-				<li class="mb-4">
+				<li class="mb-4 sm:mb-0">
 					<PostItem {item} href={item.slug}>
 						{item.description}
 					</PostItem>
