@@ -1,5 +1,5 @@
 <script context="module">
-	// export const prerender = true; // turned off so it refreshes quickly
+	export const prerender = true; // turned off so it refreshes quickly
 	export async function load({ params, fetch }) {
 		const res = await fetch(`../api/listLocalContent.json`);
 		if (res.status > 400) {
