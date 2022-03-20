@@ -32,8 +32,8 @@
 
 <section class="mx-auto px-4 sm:p-0 mb-16 flex w-full flex-col items-start">
 	<Slice>
-		<h1 class="text-3xl font-bold text-amber-600">
-			some fun intro or cool art thing is going to in this space just wait
+		<h1 class="text-3xl lg:text-5xl font-bold text-shadow">
+			some fun intro or cool art thing is going to live in this space just wait
 		</h1>
 	</Slice>
 

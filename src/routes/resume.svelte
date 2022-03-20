@@ -15,7 +15,7 @@
 <section>
 	<Slice>
 		<h1
-			class="mb-3 text-3xl font-bold tracking-tight text-orange-600 dark:text-blue-300 md:text-5xl"
+			class="mb-3 text-3xl font-bold tracking-tight text-shadow md:text-5xl"
 		>
 			Creative technologist passionate about design systems, responsive web design and
 			accessibility.
