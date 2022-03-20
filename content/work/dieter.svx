@@ -1,5 +1,5 @@
 ---
-name: Dieter Rothko
+name: dieter rothko
 slug: dieter-rothko
 description: 'watercolor, mixed media'
 type: personal
