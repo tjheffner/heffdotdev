@@ -230,7 +230,7 @@
 		<ul class="w-full md:w-4/5 md:mx-auto divide-y divide-dashed divide-indigo-700 dark:divide-blue-300">
 			{#each list as item}
 				<li class="mb-4">
-					<PostItem item={item}>
+					<PostItem item={item} href={item.slug}>
 						{item.description}
 					</PostItem>
 				</li>

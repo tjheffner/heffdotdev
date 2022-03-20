@@ -7,7 +7,7 @@
 
 <a sveltekit:prefetch
 	  class="w-full"
-    href={'/' + item.slug}
+    href={'/' + href}
 >
   <div class="grid grid-cols-4 p-4">
     <h2 class="col-span-3 font-bold text-lg text-accent">{item.title}</h2>

@@ -72,6 +72,7 @@
 
 	{#if json.data.image}
 		<img src={json.data.image}
+				 alt={json.name}
 				 class="mt-4"
 		 />
 	{/if}
