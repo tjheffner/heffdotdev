@@ -116,20 +116,20 @@
 .prose h4 {
 	@apply relative;
 	a {
-		@apply bg-unset font-bold !text-accent;
+		@apply bg-unset font-bold !text-accent p-0;
 	}
 	&::before {
-		@apply absolute -left-6;
+		@apply absolute -left-5;
 		@apply text-accent;
 		content: '#';
 	}
 }
 
 .back-link {
-	@apply relative mb-4 font-bold text-accent md:mx-4 lg:mx-12;
+	@apply relative mb-4 font-bold text-accent mx-4 lg:mx-12;
 	&::before {
-		@apply absolute -left-8;
-		content: '<<';
+		@apply absolute -left-5;
+		content: '<';
 		color: currentColor;
 	}
 }

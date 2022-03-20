@@ -56,18 +56,18 @@
 
 <a href="/work" class="back-link">Back </a>
 
-<article class="mx-auto mb-16 flex w-full flex-col items-start px-4 sm:px-8 lg:w-2/3">
+<article class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8">
 	{#if json.data.name}
-		<h1 class="mt-4 text-3xl font-bold tracking-tight text-lime-500 dark:text-yellow-400 text-shadow md:text-5xl">
+		<h1 class="text-shadow mb-8 text-3xl font-bold tracking-tight text-amber-600 dark:text-yellow-400 md:text-6xl">
 			{json.data.name}
 		</h1>
 	{/if}
 
 	{#if json.data.image}
-		<img src={json.data.image} alt={json.name} class="mt-4" />
+		<img src={json.data.image} alt={json.name} class="mb-4" />
 	{/if}
 
-	<div class="prose mt-12 mb-12 w-full max-w-none dark:prose-invert">
+	<div class="prose mb-12 w-full max-w-none dark:prose-invert">
 		{@html json.content}
 	</div>
 
