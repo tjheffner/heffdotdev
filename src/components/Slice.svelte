@@ -1,5 +1,14 @@
 <script>
 	export let title = false;
+	export let prose = true;
+
+	let slotWrapperClasses = 'w-full md:w-2/3 md:ml-4 lg:ml-12';
+	if (title && prose) {
+		slotWrapperClasses = 'prose prose-lg prose-slate dark:prose-invert'
+	}
+	if (title && !prose) {
+		slotWrapperClasses = 'not-prose'
+	}
 </script>
 
 <div class="slice w-full py-8 md:py-12 mb-6 md:mb-8
@@ -17,7 +26,8 @@
 	</div>
   {/if}
   <div class="{title ? 'col-span-4 md:col-span-3 xl:col-span-2' : 'col-span-4'}">
-  	<p class="{title ? 'prose prose-lg prose-slate dark:prose-invert' : 'w-full md:w-2/3 md:ml-4 lg:ml-12'}">
+		<p class="{slotWrapperClasses}">
+		<!-- <p class="{title ? 'prose prose-lg prose-slate dark:prose-invert' : 'w-full md:w-2/3 md:ml-4 lg:ml-12'}"> -->
   		<slot />
   	</p>
   </div>

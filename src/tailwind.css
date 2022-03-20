@@ -129,7 +129,7 @@
 .back-link {
 	@apply relative font-bold text-accent md:mx-4 lg:mx-12 mb-4;
 	&::before {
-		@apply absolute -left-6;
+		@apply absolute -left-8;
 		content: '<<';
 		color: currentColor;
 	}

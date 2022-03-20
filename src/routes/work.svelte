@@ -39,7 +39,7 @@
 
 <section>
 	<Slice>
-	  <h1 class="mb-4 text-3xl font-bold tracking-tight text-accent md:text-5xl">
+	  <h1 class="mb-6 text-3xl font-bold tracking-tight text-accent md:text-5xl">
 	    Past work
 	  </h1>
 	  <p class="font-semibold text-xl text-accent">
@@ -47,7 +47,7 @@
 	  </p>
 	</Slice>
 
-	<Slice title="Professional">
+	<Slice title="Professional" prose={false}>
 	  <ul class="list-none">
 	    {#each sorted as project}
 				{#if project.data.type === "professional"}
@@ -59,7 +59,7 @@
 	  </ul>
 	</Slice>
 
-	<Slice title="Personal">
+	<Slice title="Personal" prose={false}>
 		<ul class="list-none">
 	    {#each sorted as project}
 				{#if project.data.type === "personal"}
