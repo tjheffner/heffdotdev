@@ -1,5 +1,5 @@
 <script context="module">
-	// export const prerender = true; // you can uncomment to prerender as an optimization
+	export const prerender = true; // you can uncomment to prerender as an optimization
 	export const hydrate = true;
 	import { MY_TWITTER_HANDLE, REPO_URL, SITE_URL } from '$lib/siteConfig';
 	export async function load({ url, params, fetch }) {
