@@ -29,10 +29,15 @@ export async function listProjects() {
 	for await (const _path of getFiles(`content/work`)) {
 		const src = await fs.readFile(_path, 'utf8');
 		const data = grayMatter(src);
+
 		_localContent.push({
 			content: data.content,
 			data: data.data,
-			slug: data.data.slug ?? basename(_path, '.svx')
+			slug: data.data.slug ?? basename(_path, '.svx'),
+			image: data.image,
+			description: data.description,
+			title: data.title ?? data.name,
+			name: data.name,
 		});
 	}
 	localContent = _localContent;

@@ -4,6 +4,7 @@ url: https://arsenal.com
 slug: arsenal
 description: 'design system, multiple drupal themes'
 type: professional
+date: 2018-05-01
 ---
 
 just want to see that this works! :)

@@ -3,6 +3,7 @@ name: file cabinet smoker
 slug: file-cabinet-smoker
 description: 'DIY, cooking'
 type: personal
+date: 2016-07-30
 ---
 
 just want to see that this works! :)

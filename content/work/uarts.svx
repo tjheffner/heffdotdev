@@ -4,6 +4,7 @@ url: https://uarts.edu/
 slug: uarts
 description: 'component library, content modeling, vue widgets, drupal theme'
 type: professional
+date: 2017-05-01
 ---
 
 just want to see that this works! :)

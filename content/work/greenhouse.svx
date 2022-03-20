@@ -5,6 +5,7 @@ image: '/static/assets/greenhouse.png'
 slug: greenhouse
 description: 'component library, content modeling in craft cms, javascript'
 type: professional
+date: 2020-01-02
 ---
 
 just want to see that this works! :)

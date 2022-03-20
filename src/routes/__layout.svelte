@@ -32,8 +32,8 @@
 	<div class="grid grid-cols-4 gap-4 md:gap-8 lg:gap-12 xl:gap-16 md:mx-4 lg:mx-12">
 		<div class="col-span-3 md:col-span-2">
 			<NavLink href="/blog">Posts</NavLink>
-			<NavLink href="/work">Work [coming soon]</NavLink>
-			<NavLink href="/gallery">Gallery [coming soon]</NavLink>
+			<NavLink href="/work">Work</NavLink>
+			<NavLink href="/gallery">Gallery</NavLink>
 			<NavLink href="/about">About</NavLink>
 		</div>
 

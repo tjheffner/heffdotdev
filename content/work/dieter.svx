@@ -3,6 +3,7 @@ name: dieter rothko
 slug: dieter-rothko
 description: 'watercolor, mixed media'
 type: personal
+date: 2013-10-30
 ---
 
 just want to see that this works! :)

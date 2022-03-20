@@ -4,6 +4,7 @@ url: https://www.crohnscolitisfoundation.org/
 slug: ccf
 description: 'component library, vue widgets, drupal theme'
 type: professional
+date: 2019-06-01
 ---
 
 just want to see that this works! :)

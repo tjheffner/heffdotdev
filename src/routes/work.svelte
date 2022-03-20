@@ -11,8 +11,15 @@
 
 		/** @type {import('$lib/types').Project[]} */
 		const items = await res.json();
+
+		let sorted = items.map(item => {
+			return {...item, date: new Date(item.data.date)};
+		});
+
+		sorted = sorted.sort((a, b) => Number(b.date) - Number(a.date));
+
 		return {
-			props: { items },
+			props: { sorted },
 			maxage: 60 // 1 min
 		};
 	}
@@ -23,7 +30,7 @@
   import Slice from '../components/Slice.svelte';
   import ProjectItem from '../components/ProjectItem.svelte';
 
-  export let items;
+  export let sorted;
 </script>
 
 <svelte:head>
@@ -42,7 +49,7 @@
 
 	<Slice title="Professional">
 	  <ul class="list-none">
-	    {#each items as project}
+	    {#each sorted as project}
 				{#if project.data.type === "professional"}
 	      <li>
 	        <ProjectItem item={project} href={project.slug} />
@@ -54,7 +61,7 @@
 
 	<Slice title="Personal">
 		<ul class="list-none">
-	    {#each items as project}
+	    {#each sorted as project}
 				{#if project.data.type === "personal"}
 	      <li>
 	        <ProjectItem item={project} href={project.slug} />

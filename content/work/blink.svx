@@ -3,6 +3,7 @@ name: in the blink of an eye
 slug: blink
 description: 'processing, student project'
 type: personal
+date: 2014-02-28
 ---
 
 just want to see that this works! :)

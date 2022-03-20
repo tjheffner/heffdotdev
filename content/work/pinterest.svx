@@ -4,6 +4,7 @@ url: https://business.pinterest.com
 slug: pinterest
 description: 'react components and protoyping'
 type: professional
+date: 2020-05-01
 ---
 
 just want to see that this works! :)

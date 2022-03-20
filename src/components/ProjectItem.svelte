@@ -3,7 +3,6 @@
 
 	// gimme full item
 	export let item;
-  console.log(item);
 </script>
 
 <a sveltekit:prefetch

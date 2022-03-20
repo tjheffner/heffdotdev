@@ -4,6 +4,7 @@ url: https://www.aljazeera.com/
 slug: aljazeera
 description: 'content modeling, api'
 type: professional
+date: 2015-07-30
 ---
 
 just want to see that this works! :)

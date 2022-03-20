@@ -4,6 +4,7 @@ url: https://twitter-bpt.netlify.app
 slug: twitter
 description: 'rapid prototyping in react'
 type: professional
+date: 2020-08-01
 ---
 
 just want to see that this works! :)
