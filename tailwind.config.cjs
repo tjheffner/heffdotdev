@@ -8,8 +8,8 @@ module.exports = {
 	theme: {
 		extend: {
 			colors: {
-				'accent': 'var(--brand-accent)',
-				'alternate': 'var(--brand-alternate)',
+				accent: 'var(--brand-accent)',
+				alternate: 'var(--brand-alternate)'
 			},
 			typography: (theme) => ({
 				DEFAULT: {
@@ -59,8 +59,8 @@ module.exports = {
 						},
 						// prose fixes
 						tfoot: {
-								borderTopWidth: '1px',
-								borderColor: 'var(--tw-prose-th-borders)'
+							borderTopWidth: '1px',
+							borderColor: 'var(--tw-prose-th-borders)'
 						},
 						mark: {
 							padding: '0.25rem',

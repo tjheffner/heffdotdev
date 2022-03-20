@@ -4,33 +4,37 @@
 
 	let slotWrapperClasses = 'w-full md:w-2/3 md:ml-4 lg:ml-12';
 	if (title && prose) {
-		slotWrapperClasses = 'prose prose-lg prose-slate dark:prose-invert'
+		slotWrapperClasses = 'prose prose-lg prose-slate dark:prose-invert';
 	}
 	if (title && !prose) {
-		slotWrapperClasses = 'not-prose'
+		slotWrapperClasses = 'not-prose';
 	}
 </script>
 
-<div class="slice w-full py-8 md:py-12 mb-6 md:mb-8
-						grid grid-cols-4 gap-4 md:gap-8 lg:gap-12 xl:gap-16
-">
-  {#if title}
-	<div class="col-span-4 md:col-span-1">
-		<h2 class="sticky top-4 mb-2 md:ml-4 lg:ml-12
-							 text-black font-bold dark:text-blue-300 text-xl md:text-2xl
-		">
-			<a href="#{title}" class="slice-title">
-			{title}
-			</a>
-		</h2>
+<div
+	class="slice mb-6 grid w-full grid-cols-4 gap-4
+						py-8 md:mb-8 md:gap-8 md:py-12 lg:gap-12 xl:gap-16
+"
+>
+	{#if title}
+		<div class="col-span-4 md:col-span-1">
+			<h2
+				class="sticky top-4 mb-2 text-xl font-bold
+							 text-black dark:text-blue-300 md:ml-4 md:text-2xl lg:ml-12
+		"
+			>
+				<a href="#{title}" class="slice-title">
+					{title}
+				</a>
+			</h2>
+		</div>
+	{/if}
+	<div class={title ? 'col-span-4 md:col-span-3 xl:col-span-2' : 'col-span-4'}>
+		<p class={slotWrapperClasses}>
+			<!-- <p class="{title ? 'prose prose-lg prose-slate dark:prose-invert' : 'w-full md:w-2/3 md:ml-4 lg:ml-12'}"> -->
+			<slot />
+		</p>
 	</div>
-  {/if}
-  <div class="{title ? 'col-span-4 md:col-span-3 xl:col-span-2' : 'col-span-4'}">
-		<p class="{slotWrapperClasses}">
-		<!-- <p class="{title ? 'prose prose-lg prose-slate dark:prose-invert' : 'w-full md:w-2/3 md:ml-4 lg:ml-12'}"> -->
-  		<slot />
-  	</p>
-  </div>
 </div>
 
 <style>

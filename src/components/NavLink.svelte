@@ -5,11 +5,10 @@
 </script>
 
 <a
-	class="{isActive
-		? 'block w-fit my-4 footer-link font-bold text-sky-200 dark:text-slate-900 bg-[length:4px_50px]'
-		: 'block w-fit my-4 footer-link font-bold'
-	}"
+	class={isActive
+		? 'footer-link my-4 block w-fit bg-[length:4px_50px] font-bold text-sky-200 dark:text-slate-900'
+		: 'footer-link my-4 block w-fit font-bold'}
 	{href}
-	>
+>
 	<slot />
 </a>

@@ -62,14 +62,14 @@
 	{/if}
 </svelte:head>
 
-<a href="/blog" class="back-link">
-	Back
-</a>
+<a href="/blog" class="back-link"> Back </a>
 
 <article
 	class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8"
 >
-	<h1 class="mb-8 text-3xl font-bold tracking-tight md:text-6xl text-shadow text-lime-500 dark:text-yellow-400">
+	<h1
+		class="text-shadow mb-8 text-3xl font-bold tracking-tight text-lime-500 dark:text-yellow-400 md:text-6xl"
+	>
 		{json.title}
 	</h1>
 	<div
@@ -79,14 +79,15 @@
 		<p class="min-w-32 flex items-center text-sm text-gray-600 dark:text-gray-400 md:mt-0">
 			<a href={json.ghMetadata.issueUrl} rel="external" class="no-underline" target="_blank">
 				<span class="mr-4 font-mono text-xs text-gray-700 text-opacity-70 dark:text-gray-300"
-					>{json.ghMetadata.reactions.total_count} {#if json.ghMetadata.reactions.total_count === 1}reaction{:else}reactions{/if}</span
+					>{json.ghMetadata.reactions.total_count}
+					{#if json.ghMetadata.reactions.total_count === 1}reaction{:else}reactions{/if}</span
 				>
 			</a>
 			{new Date(json.date).toISOString().slice(0, 10)}
 		</p>
 	</div>
 
-	<hr class="border-t-2 mt-2 w-full border-indigo-700 dark:border-blue-300" />
+	<hr class="mt-2 w-full border-t-2 border-indigo-700 dark:border-blue-300" />
 
 	<!-- <div
 		class="-mx-4 my-2 flex h-1 w-[100vw] bg-gradient-to-r from-blue-300 via-indigo-700 to-slate-900 sm:mx-0 sm:w-full"
@@ -98,8 +99,10 @@
 </article>
 
 <div class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8">
-<!-- <div class="mx-auto mb-16 w-fit max-w-2xl flex flex-col justify-center px-4 sm:px-8"> -->
-	<div class="p-4 mb-12 border-t-2 border-b-2 border-indigo-700 text-gray-700 dark:text-gray-400 dark:border-blue-300 p-4 w-fit self-center">
+	<!-- <div class="mx-auto mb-16 w-fit max-w-2xl flex flex-col justify-center px-4 sm:px-8"> -->
+	<div
+		class="mb-12 w-fit self-center border-t-2 border-b-2 border-indigo-700 p-4 p-4 text-gray-700 dark:border-blue-300 dark:text-gray-400"
+	>
 		{#if json.ghMetadata.reactions.total_count > 0}
 			Reactions: <Reactions
 				issueUrl={json.ghMetadata.issueUrl}

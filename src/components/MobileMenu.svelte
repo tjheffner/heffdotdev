@@ -60,7 +60,7 @@
 	</button>
 	{#if isOpen}
 		<ul
-			class="menu absolute flex flex-col text-2xl uppercase bg-lime-300 dark:bg-gray-900"
+			class="menu absolute flex flex-col bg-lime-300 text-2xl uppercase dark:bg-gray-900"
 			class:menuRendered={isMenuRendered}
 		>
 			<li
@@ -129,15 +129,15 @@
 				>
 			</li>
 			<li
-			class="border-b border-indigo-700 dark:border-yellow-400 text-gray-900 dark:text-gray-100 font-semibold"
-			style="transition-delay: 325ms;"
-		>
-			<a
-				class="flex w-auto pb-4"
-				on:click={() => setTimeout(() => isOpen = false, 200)}
-				href="https://twitter.com/foodpyramids">Tweets</a
+				class="border-b border-indigo-700 font-semibold text-gray-900 dark:border-yellow-400 dark:text-gray-100"
+				style="transition-delay: 325ms;"
 			>
-		</li>
+				<a
+					class="flex w-auto pb-4"
+					on:click={() => setTimeout(() => (isOpen = false), 200)}
+					href="https://twitter.com/foodpyramids">Tweets</a
+				>
+			</li>
 		</ul>
 	{/if}
 </div>

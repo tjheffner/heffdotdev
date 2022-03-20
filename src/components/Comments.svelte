@@ -10,9 +10,11 @@
 </script>
 
 {#if data.length}
-	<p class="text-accent font-bold my-4">Comments:</p>
+	<p class="my-4 font-bold text-accent">Comments:</p>
 {/if}
-<div class="prose mb-8 dark:prose-invert divide-y divide-dashed divide-indigo-700 dark:divide-blue-300">
+<div
+	class="prose mb-8 divide-y divide-dashed divide-indigo-700 dark:prose-invert dark:divide-blue-300"
+>
 	{#each data as comment}
 		<Comment {comment} />
 	{/each}
@@ -21,9 +23,9 @@
 	href={`${ghMetadata.issueUrl}#issuecomment-new`}
 	rel="external"
 	target="_blank"
-	class="my-4 p-2 rounded-lg font-bold transition-all ease-in-out duration-200
-	text-yellow-800 bg-yellow-400 hover:ring-2 ring-yellow-800
-	dark:ring-yellow-400 dark:bg-yellow-800 dark:text-yellow-100"
+	class="my-4 rounded-lg bg-yellow-400 p-2 font-bold text-yellow-800 ring-yellow-800
+	transition-all duration-200 ease-in-out hover:ring-2
+	dark:bg-yellow-800 dark:text-yellow-100 dark:ring-yellow-400"
 >
 	Leave a new comment!
 </a>

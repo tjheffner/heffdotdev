@@ -12,8 +12,8 @@
 		/** @type {import('$lib/types').Project[]} */
 		const items = await res.json();
 
-		let sorted = items.map(item => {
-			return {...item, date: new Date(item.data.date)};
+		let sorted = items.map((item) => {
+			return { ...item, date: new Date(item.data.date) };
 		});
 
 		sorted = sorted.sort((a, b) => Number(b.date) - Number(a.date));
@@ -26,50 +26,48 @@
 </script>
 
 <script>
-  import { SITE_TITLE } from '$lib/siteConfig';
-  import Slice from '../components/Slice.svelte';
-  import ProjectItem from '../components/ProjectItem.svelte';
+	import { SITE_TITLE } from '$lib/siteConfig';
+	import Slice from '../components/Slice.svelte';
+	import ProjectItem from '../components/ProjectItem.svelte';
 
-  export let sorted;
+	export let sorted;
 </script>
 
 <svelte:head>
-  <title>{SITE_TITLE} | Work</title>
+	<title>{SITE_TITLE} | Work</title>
 </svelte:head>
 
 <section>
 	<Slice>
-	  <h1 class="mb-6 text-3xl font-bold tracking-tight text-accent md:text-5xl">
-	    Past work
-	  </h1>
-	  <p class="font-semibold text-xl text-accent">
-	    A collection of previously completed projects, personal and professional.
-	  </p>
+		<h1 class="mb-6 text-3xl font-bold tracking-tight text-accent md:text-5xl">Past work</h1>
+		<p class="text-xl font-semibold text-accent">
+			A collection of previously completed projects, personal and professional.
+		</p>
 	</Slice>
 
 	<Slice title="Professional" prose={false}>
-	  <ul class="list-none">
-	    {#each sorted as project}
-				{#if project.data.type === "professional"}
-	      <li>
-	        <ProjectItem item={project} href={project.slug} />
-	      </li>
+		<ul class="list-none">
+			{#each sorted as project}
+				{#if project.data.type === 'professional'}
+					<li>
+						<ProjectItem item={project} href={project.slug} />
+					</li>
 				{/if}
-	    {/each}
-	  </ul>
+			{/each}
+		</ul>
 	</Slice>
 
 	<Slice title="Personal" prose={false}>
 		<ul class="list-none">
-	    {#each sorted as project}
-				{#if project.data.type === "personal"}
-	      <li>
-	        <ProjectItem item={project} href={project.slug} />
-	      </li>
+			{#each sorted as project}
+				{#if project.data.type === 'personal'}
+					<li>
+						<ProjectItem item={project} href={project.slug} />
+					</li>
 				{/if}
-	    {/each}
+			{/each}
 
 			<!-- <li><a href="/gallery">Gallery</a></li> -->
-	  </ul>
+		</ul>
 	</Slice>
 </section>

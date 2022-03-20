@@ -32,15 +32,17 @@
 </svelte:head>
 
 <section>
-  <Slice>
-    <h1 class="text-amber-600 font-bold text-3xl">some fun intro or cool art thing is going to in this space just wait</h1>
-  </Slice>
+	<Slice>
+		<h1 class="text-3xl font-bold text-amber-600">
+			some fun intro or cool art thing is going to in this space just wait
+		</h1>
+	</Slice>
 
-  <Slice  title="Featured">
-    <div>
-      <p>under construction but coming along :)</p>
+	<Slice title="Featured">
+		<div>
+			<p>under construction but coming along :)</p>
 
-      <p>thanks for stopping by, check out the links that work</p>
-    </div>
-  </Slice>
+			<p>thanks for stopping by, check out the links that work</p>
+		</div>
+	</Slice>
 </section>

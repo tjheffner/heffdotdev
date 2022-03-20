@@ -1,7 +1,5 @@
 <script>
 	import MobileMenu from './MobileMenu.svelte';
-	import { REPO_URL } from '$lib/siteConfig';
-	import NavLink from './NavLink.svelte';
 	let isDark = false;
 	if (typeof localStorage !== 'undefined') {
 		if (
@@ -24,15 +22,13 @@
 	}
 </script>
 
-<nav
-	class="relative flex justify-between md:mx-4 lg:mx-12"
->
+<nav class="relative flex justify-between md:mx-4 lg:mx-12">
 	<MobileMenu />
-	<h1 class="font-bold text-lg text-accent"><a href="/">heffner.dev</a></h1>
+	<h1 class="text-lg font-bold text-accent"><a href="/">heffner.dev</a></h1>
 	<button
 		aria-label="Toggle Dark Mode"
-		class="ml-1 flex h-9 w-9 items-center justify-center rounded-lg bg-yellow-400 ring-yellow-800 dark:ring-yellow-400
-		transition-all hover:ring-2 dark:bg-yellow-800"
+		class="ml-1 flex h-9 w-9 items-center justify-center rounded-lg bg-yellow-400 ring-yellow-800 transition-all
+		hover:ring-2 dark:bg-yellow-800 dark:ring-yellow-400"
 		on:click={toggleDarkMode}
 	>
 		{#if isDark}

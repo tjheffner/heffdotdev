@@ -36,7 +36,9 @@
 	{#if status === 404}
 		<p class="">There is no post at the slug <code>{url.pathname}</code>.</p>
 		<p><a href={'/blog?filter=' + url.pathname.slice(1)}>Try searching for it here!</a></p>
-		<p class="">If you believe this was a bug, please let me know! Email tannerjheffner [at] gmail.com</p>
+		<p class="">
+			If you believe this was a bug, please let me know! Email tannerjheffner [at] gmail.com
+		</p>
 	{:else}
 		<p class="font-mono">{message}</p>
 	{/if}

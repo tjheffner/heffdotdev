@@ -90,4 +90,4 @@ export type Project = {
 		[key: string]: string;
 	};
 	content: string;
-}
+};

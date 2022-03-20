@@ -12,7 +12,7 @@ self.addEventListener('activate', (event) => {
 	event.waitUntil(
 		caches.keys().then(async (keys) => {
 			for (const key of keys) {
-				if (!key.includes(String(timestamp))) caches.delete(key);
+				if (!key.includes(String(version))) caches.delete(key);
 			}
 		})
 	);

@@ -51,7 +51,7 @@
 					'?' +
 					queryString.stringify(finalState)
 			);
-		};
+		}
 	};
 
 	let recipes = false;
@@ -74,7 +74,7 @@
 	});
 
 	function saveURLState() {
-		showAll = true
+		showAll = true;
 		setTimeout(() => {
 			setURLState({
 				filter: filterStr,
@@ -118,7 +118,7 @@
 			if (filterStr && notIncludes(filterStr, x)) {
 				return false;
 			} else {
-				if ([recipes, technical, snippets, notes].every(v => v === false)) return true;
+				if ([recipes, technical, snippets, notes].every((v) => v === false)) return true;
 				if (recipes && x.category === 'recipe') return true;
 				if (technical && x.category === 'technical') return true;
 				if (snippets && x.category === 'snippet') return true;
@@ -134,13 +134,10 @@
 
 <svelte:window on:keyup={focusSearch} />
 
-<section class="mx-auto mb-16 flex w-full lg:w-2/3 flex-col items-start px-4 sm:px-8">
-	<h1 class="mb-4 text-3xl font-bold tracking-tight text-accent md:text-5xl">
-		Posts
-	</h1>
+<section class="mx-auto mb-16 flex w-full flex-col items-start px-4 sm:px-8 lg:w-2/3">
+	<h1 class="mb-4 text-3xl font-bold tracking-tight text-accent md:text-5xl">Posts</h1>
 	<p class="mb-4 text-zinc-900 dark:text-gray-400">
-		In total, I've written {items.length} posts on my blog. Use the search below to
-		filter.
+		In total, I've written {items.length} posts on my blog. Use the search below to filter.
 	</p>
 
 	<div class="relative w-full">
@@ -151,8 +148,8 @@
 			on:input={saveURLState}
 			bind:value={filterStr}
 			placeholder="Hit / to search"
-			class="block w-full rounded-md border px-4 py-2
-						border-zinc-400 bg-lime-100 text-gray-900 placeholder:text-zinc-700
+			class="block w-full rounded-md border border-zinc-400 bg-lime-100
+						px-4 py-2 text-gray-900 placeholder:text-zinc-700
 						dark:border-slate-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-zinc-50
 						"
 		/>
@@ -173,7 +170,7 @@
 	</div>
 
 	<!-- Filter Buttons -->
-	<div class="my-4 w-full flex items-center">
+	<div class="my-4 flex w-full items-center">
 		<span class="mr-2 text-zinc-900 dark:text-gray-400"> Filter: </span>
 		<span class="">
 			<button
@@ -223,14 +220,16 @@
 		</span>
 	</div>
 
-	<hr class="border-t-2 mb-12 w-full border-indigo-700 dark:border-blue-300" />
+	<hr class="mb-12 w-full border-t-2 border-indigo-700 dark:border-blue-300" />
 
 	<!-- Results -->
 	{#if list.length}
-		<ul class="w-full md:w-4/5 md:mx-auto divide-y divide-dashed divide-indigo-700 dark:divide-blue-300">
+		<ul
+			class="w-full divide-y divide-dashed divide-indigo-700 dark:divide-blue-300 md:mx-auto md:w-4/5"
+		>
 			{#each list as item}
 				<li class="mb-4">
-					<PostItem item={item} href={item.slug}>
+					<PostItem {item} href={item.slug}>
 						{item.description}
 					</PostItem>
 				</li>
@@ -240,9 +239,9 @@
 			<div class="flex justify-center">
 				<button
 					on:click={() => (showAll = true)}
-					class="my-4 p-2 rounded-lg font-bold transition-all ease-in-out duration-200
-					text-yellow-800 bg-yellow-400 hover:ring-2 ring-yellow-800
-					dark:ring-yellow-400 dark:bg-yellow-800 dark:text-yellow-100
+					class="my-4 rounded-lg bg-yellow-400 p-2 font-bold text-yellow-800 ring-yellow-800
+					transition-all duration-200 ease-in-out hover:ring-2
+					dark:bg-yellow-800 dark:text-yellow-100 dark:ring-yellow-400
 					"
 				>
 					See more posts
@@ -254,7 +253,8 @@
 			No posts found for
 			<code>{filterStr}</code>.
 		</div>
-		<button on:click={() => (filterStr = '')}
+		<button
+			on:click={() => (filterStr = '')}
 			class="my-4 p-2 rounded-lg font-bold transition-all ease-in-out duration-200
 			text-yellow-800 bg-yellow-400 hover:ring-2 ring-yellow-800
 			dark:ring-yellow-400 dark:bg-yellow-800 dark:text-yellow-100

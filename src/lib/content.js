@@ -84,19 +84,15 @@ export async function getContent(slug) {
 	// find the blogpost that matches this slug
 	const blogpost = allBlogposts.find((post) => post.slug === slug);
 	if (blogpost) {
-
 		const blogbody = blogpost.content
-			.replace(
-				/\n{% youtube (.*?) %}/g,
-				(_, x) => {
-
-					// https://stackoverflow.com/a/27728417/1106414
-					function youtube_parser(url) {
-						var rx = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
-						return url.match(rx)[1]
-					}
-					const videoId = x.startsWith('https://') ? youtube_parser(x) : x;
-					return `<iframe
+			.replace(/\n{% youtube (.*?) %}/g, (_, x) => {
+				// https://stackoverflow.com/a/27728417/1106414
+				function youtube_parser(url) {
+					var rx = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|&v(?:i)?=))([^#&?]*).*/;
+					return url.match(rx)[1];
+				}
+				const videoId = x.startsWith('https://') ? youtube_parser(x) : x;
+				return `<iframe
 			class="w-full object-contain"
 			src="https://www.youtube.com/embed/${videoId}"
 			title="video123"
@@ -109,19 +105,16 @@ export async function getContent(slug) {
 			width="600"
 			height="400"
 			allowFullScreen
-			aria-hidden="true"></iframe>`}
-			)
-			.replace(
-				/\n{% (tweet|twitter) (.*?) %}/g,
-				(_, _2, x) => {
-					const url = x.startsWith('https://twitter.com/') ? x : `https://twitter.com/x/status/${x}`;
-					return `
+			aria-hidden="true"></iframe>`;
+			})
+			.replace(/\n{% (tweet|twitter) (.*?) %}/g, (_, _2, x) => {
+				const url = x.startsWith('https://twitter.com/') ? x : `https://twitter.com/x/status/${x}`;
+				return `
 					<blockquote class="twitter-tweet" data-lang="en" data-dnt="true" data-theme="dark">
 					<a href="${url}"></a></blockquote>
 					<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-					`
-				}
-			);
+					`;
+			});
 
 		// compile it with mdsvex
 		const content = (
@@ -132,7 +125,7 @@ export async function getContent(slug) {
 		).code
 			// https://github.com/pngwn/MDsveX/issues/392
 			.replace(/>{@html `<code class="language-/g, '><code class="language-')
-			.replace(/<\/code>`}<\/pre>/g, '</code></pre>')
+			.replace(/<\/code>`}<\/pre>/g, '</code></pre>');
 
 		return { ...blogpost, content };
 	} else {

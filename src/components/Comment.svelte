@@ -47,7 +47,7 @@
 	// }
 </script>
 
-<div class="p-4 border-t-2 border-accent comment">
+<div class="comment border-t-2 border-accent p-4">
 	<div>
 		{@html body}
 
@@ -58,7 +58,7 @@
 				src={comment.user.avatar_url}
 			/>
 			<div class="flex flex-col" class:text-green-600={comment.author_association === 'OWNER'}>
-				<a href={comment.html_url} class="no-underline mb-1" rel="external" target="_blank">
+				<a href={comment.html_url} class="mb-1 no-underline" rel="external" target="_blank">
 					<time>{formatDistance(new Date(comment.created_at), new Date())} ago</time>
 				</a>
 				{comment.user.login}
