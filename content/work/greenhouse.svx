@@ -3,6 +3,7 @@ name: Greenhouse
 url: https://greenhouse.io
 image: '/static/assets/greenhouse.png'
 slug: greenhouse
+description: 'foo bar'
 ---
 
 just want to see that this works! :)

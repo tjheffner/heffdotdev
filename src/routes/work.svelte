@@ -21,7 +21,7 @@
 <script>
   import { SITE_TITLE } from '$lib/siteConfig';
   import Slice from '../components/Slice.svelte';
-  import ProjectPopup from '../components/ProjectPopup.svelte';
+  import ProjectItem from '../components/ProjectItem.svelte';
 
   export let items;
 </script>
@@ -32,19 +32,19 @@
 
 <section>
 <Slice>
-  <h1 class="mb-4 text-3xl font-bold tracking-tight text-orange-600 dark:text-blue-300 md:text-5xl">
+  <h1 class="mb-4 text-3xl font-bold tracking-tight text-accent md:text-5xl">
     Past work
   </h1>
-  <p class="font-semibold text-xl text-orange-600 dark:text-blue-300">
+  <p class="font-semibold text-xl text-accent">
     A collection of previously completed projects, both personal and professional.
   </p>
 </Slice>
 <Slice title="Professional">
 
-  <ul class="list-disc list-outside">
+  <ul class="list-none">
     {#each items as project}
       <li>
-        <ProjectPopup project={project} />
+        <ProjectItem item={project} href={project.slug} />
       </li>
     {/each}
   </ul>
