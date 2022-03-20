@@ -1,7 +1,7 @@
 ---
 name: dieter rothko
 slug: dieter-rothko
-description: 'watercolor, mixed media'
+description: 'acrylic paint, found media'
 type: personal
 date: 2013-10-30
 ---
