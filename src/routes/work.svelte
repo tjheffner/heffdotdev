@@ -31,6 +31,11 @@
 </svelte:head>
 
 <section>
+
+<Slice>
+  <marquee class="bg-orange-300 w-full p-4">THIS PAGE IS STILL UNDER CONSTRUCTION !</marquee>
+</Slice>
+
 <Slice>
   <h1 class="mb-4 text-3xl font-bold tracking-tight text-accent md:text-5xl">
     Past work
@@ -39,6 +44,7 @@
     A collection of previously completed projects, both personal and professional.
   </p>
 </Slice>
+
 <Slice title="Professional">
 
   <ul class="list-none">

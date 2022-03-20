@@ -34,8 +34,6 @@
 
 <script>
 	import 'prism-themes/themes/prism-shades-of-purple.min.css';
-	// import Newsletter from '../components/Newsletter.svelte';
-	// import Reactions from '../components/Reactions.svelte';
 
 	/** @type {import('$lib/types').Project} */
 	export let json; // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
@@ -48,13 +46,13 @@
 	<link rel="canonical" href={SITE_URL} />
 	<meta property="og:url" content={SITE_URL} />
 	<meta property="og:type" content="article" />
-	<meta property="og:title" content={json.name} />
-	<meta name="Description" content={json.description} />
-	<meta property="og:description" content={json.description} />
+	<meta property="og:title" content={json.data.name} />
+	<meta name="Description" content={json.data.description} />
+	<meta property="og:description" content={json.data.description} />
 	<meta name="twitter:card" content={json.image ? 'summary_large_image' : 'summary'} />
 	<meta name="twitter:creator" content={'@' + MY_TWITTER_HANDLE} />
-	<meta name="twitter:title" content={json.name} />
-	<meta name="twitter:description" content={json.description} />
+	<meta name="twitter:title" content={json.data.name} />
+	<meta name="twitter:description" content={json.data.description} />
 	{#if json.image}
 		<meta property="og:image" content={json.image} />
 		<meta name="twitter:image" content={json.image} />
@@ -62,9 +60,13 @@
 </svelte:head>
 
 <article
-	class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8"
+	class="mx-auto mb-16 flex w-full lg:w-2/3 flex-col items-start px-4 sm:px-8"
 >
-  <h1>{json.name}</h1>
+	{#if json.data.name}
+	<h1 class="mb-4 text-3xl font-bold tracking-tight text-accent md:text-5xl">
+		{json.data.name}
+	</h1>
+	{/if}
 	<div class="prose mt-12 mb-12 w-full max-w-none dark:prose-invert">
 		{@html json.content}
 	</div>
