@@ -2,7 +2,7 @@
 name: Pinterest Business
 url: https://business.pinterest.com
 slug: pinterest
-description: 'react components and protoyping'
+description: 'react components, protoyping'
 type: professional
 date: 2020-05-01
 ---

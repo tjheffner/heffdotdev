@@ -2,7 +2,7 @@
 name: Twitter Brand Studio
 url: https://twitter-bpt.netlify.app
 slug: twitter
-description: 'rapid prototyping in react'
+description: 'rapid prototyping in react, image generation'
 type: professional
 date: 2020-08-01
 ---

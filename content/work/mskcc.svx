@@ -2,7 +2,7 @@
 name: Memorial Sloan Kettering Cancer Center
 url: https://giving.mskcc.org/
 slug: msk
-description: 'design system powering multiple drupal 8 themes'
+description: 'design system powering multiple drupal 8 sites'
 type: professional
 date: 2018-05-01
 ---

@@ -1,7 +1,7 @@
 <script context="module">
 	export const prerender = true; // you can uncomment to prerender as an optimization
 	export const hydrate = true;
-	import { MY_TWITTER_HANDLE, REPO_URL, SITE_URL } from '$lib/siteConfig';
+	import { MY_TWITTER_HANDLE, SITE_URL } from '$lib/siteConfig';
 	export async function load({ url, params, fetch }) {
 		const slug = params.slug;
 		let res = null;
@@ -17,8 +17,7 @@
 			return {
 				props: {
 					json: await res.json(),
-					slug,
-					REPO_URL
+					slug
 				},
 				maxage: 60 // 1 minute
 			};
@@ -39,21 +38,19 @@
 
 <svelte:head>
 	<title>{json.data.name}</title>
-	<meta name="description" content="heffdotdev project" />
+	<meta name="description" content="heffdotdev | project" />
 
-	<link rel="canonical" href={SITE_URL} />
-	<meta property="og:url" content={SITE_URL} />
 	<meta property="og:type" content="article" />
 	<meta property="og:title" content={json.data.name} />
 	<meta name="Description" content={json.data.description} />
 	<meta property="og:description" content={json.data.description} />
-	<meta name="twitter:card" content={json.image ? 'summary_large_image' : 'summary'} />
+	<meta name="twitter:card" content={json.data.image ? 'summary_large_image' : 'summary'} />
 	<meta name="twitter:creator" content={'@' + MY_TWITTER_HANDLE} />
 	<meta name="twitter:title" content={json.data.name} />
 	<meta name="twitter:description" content={json.data.description} />
 	{#if json.data.image}
-		<meta property="og:image" content={json.image} />
-		<meta name="twitter:image" content={json.image} />
+		<meta property="og:image" content={json.data.image} />
+		<meta name="twitter:image" content={json.data.image} />
 	{/if}
 </svelte:head>
 
@@ -61,7 +58,7 @@
 
 <article class="mx-auto mb-16 flex w-full flex-col items-start px-4 sm:px-8 lg:w-2/3">
 	{#if json.data.name}
-		<h1 class="mt-4 text-3xl font-bold tracking-tight text-accent md:text-5xl">
+		<h1 class="mt-4 text-3xl font-bold tracking-tight text-lime-500 dark:text-yellow-400 text-shadow md:text-5xl">
 			{json.data.name}
 		</h1>
 	{/if}

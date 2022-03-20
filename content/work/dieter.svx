@@ -1,7 +1,7 @@
 ---
 name: dieter rothko
 slug: dieter-rothko
-description: 'acrylic paint, found media'
+description: 'acrylic paint, found media, student project'
 type: personal
 date: 2013-10-30
 ---

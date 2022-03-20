@@ -24,7 +24,7 @@
 
 <nav class="relative flex justify-between md:mx-4 lg:mx-12">
 	<MobileMenu />
-	<h1 class="text-lg font-bold text-accent"><a href="/">heffner.dev</a></h1>
+	<h1 class="text-lg font-bold text-accent hover:scale-110 transition-all ease-in-out duration-200"><a href="/">heffner.dev</a></h1>
 	<button
 		aria-label="Toggle Dark Mode"
 		class="ml-1 flex h-9 w-9 items-center justify-center rounded-lg bg-yellow-400 ring-yellow-800 transition-all

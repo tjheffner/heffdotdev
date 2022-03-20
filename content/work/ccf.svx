@@ -2,7 +2,7 @@
 name: Crohn's and Colitis Foundation
 url: https://www.crohnscolitisfoundation.org/
 slug: ccf
-description: 'component library, vue widgets, drupal theme'
+description: 'component library, vue widgets, personalization, drupal theme'
 type: professional
 date: 2019-06-01
 ---

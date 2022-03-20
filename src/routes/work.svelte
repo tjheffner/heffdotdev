@@ -41,7 +41,7 @@
 	<Slice>
 		<h1 class="mb-6 text-3xl font-bold tracking-tight text-accent md:text-5xl">Past work</h1>
 		<p class="text-xl font-semibold text-accent">
-			A collection of previously completed projects, personal and professional.
+			A selection of previously completed projects, personal and professional.
 		</p>
 	</Slice>
 
@@ -55,6 +55,9 @@
 				{/if}
 			{/each}
 		</ul>
+		<p class="my-8 text-slate-800 dark:text-gray-400"><span class="font-bold text-indigo-700 dark:text-lime-500">Other clients:</span> Epic Games, Autism Speaks, Norweigan Cruise Lines, PGA Tour, Weight Watchers, Urban Institute, Wilson Center</p>
+
+		<a href="/resume" class="font-bold text-indigo-700 dark:text-lime-500 hover:text-orange-600 dark:hover:text-yellow-400">Resume</a>
 	</Slice>
 
 	<Slice title="Personal" prose={false}>

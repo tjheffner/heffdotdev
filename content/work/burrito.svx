@@ -1,0 +1,11 @@
+---
+name: burrito bracket
+slug: burrito
+description: 'field research, student project'
+type: personal
+date: 2012-09-30
+---
+
+just want to see that this works! :)
+
+put some explanation about the project here
