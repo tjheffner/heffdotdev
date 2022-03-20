@@ -88,8 +88,8 @@
 		}, 100);
 	}
 
-	// $: showAll = filterStr.length > 2;
-	$: showAll = true;
+	// $: showAll = filterStr.length > 2
+	$: showAll = false;
 
 	function notIncludes(_filterStr, item) {
 		let res = true;
@@ -113,7 +113,7 @@
 	export let items;
 
 	$: list = items
-		.slice(0, showAll ? items.length : 20)
+		.slice(0, showAll ? items.length : 10) // bump this up when more posts
 		.filter((x) => {
 			if (filterStr && notIncludes(filterStr, x)) {
 				return false;
@@ -172,6 +172,7 @@
 		</svg>
 	</div>
 
+	<!-- Filter Buttons -->
 	<div class="my-4 w-full flex items-center">
 		<span class="mr-2 text-zinc-900 dark:text-gray-400"> Filter: </span>
 		<span class="">
@@ -224,6 +225,7 @@
 
 	<hr class="border-t-2 mb-12 w-full border-indigo-700 dark:border-blue-300" />
 
+	<!-- Results -->
 	{#if list.length}
 		<ul class="w-full md:w-4/5 md:mx-auto divide-y divide-dashed divide-indigo-700 dark:divide-blue-300">
 			{#each list as item}
@@ -253,10 +255,10 @@
 			<code>{filterStr}</code>.
 		</div>
 		<button on:click={() => (filterStr = '')}
-						class="my-4 p-2 rounded-lg font-bold transition-all ease-in-out duration-200
-						text-yellow-800 bg-yellow-400 hover:ring-2 ring-yellow-800
-						dark:ring-yellow-400 dark:bg-yellow-800 dark:text-yellow-100
-						"
+			class="my-4 p-2 rounded-lg font-bold transition-all ease-in-out duration-200
+			text-yellow-800 bg-yellow-400 hover:ring-2 ring-yellow-800
+			dark:ring-yellow-400 dark:bg-yellow-800 dark:text-yellow-100
+			"
 		>
 			Clear your search
 		</button>

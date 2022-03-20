@@ -1,28 +1,21 @@
 
 import { resolve, basename } from 'path';
 import { promises as fs } from 'fs';
+import grayMatter from 'gray-matter';
 // // use this if you want your content in a local '/content' folder rather than github issues
-// export async function listBlogposts() {
-// 	let content = [];
-// 	for await (const _path of getFiles('content')) {
-// 		const src = await fs.readFile(_path, 'utf8');
-// 		const data = grayMatter(src);
-// 		content.push({
-// 			content: data.content,
-// 			data: data.data,
-// 			slug: data.data.slug ?? basename(_path, '.md')
-// 		});
-// 	}
-// 	return content;
-// }
 
-export async function getBlogpost(slug) {
-	const _path = resolve('content', slug + '.md');
-	const src = await fs.readFile(_path, 'utf8');
-	const data = grayMatter(src);
-	// const content = await parseMarkdown({ filePath: _path, markdown: data.content })
-	const content = (await compile(data.content, {})).code;
-	return { content, data: data.data, slug: data.data.slug ?? basename(_path, '.md') };
+export async function listProjects() {
+	let content = [];
+	for await (const _path of getFiles('content/work')) {
+		const src = await fs.readFile(_path, 'utf8');
+		const data = grayMatter(src);
+		content.push({
+			content: data.content,
+			data: data.data,
+			slug: data.data.slug ?? basename(_path, '.md')
+		});
+	}
+	return content;
 }
 
 async function* getFiles(dir) {
