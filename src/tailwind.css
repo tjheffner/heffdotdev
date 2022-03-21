@@ -59,6 +59,11 @@
 		background-color: grey;
 	}
 
+	hr {
+		@apply w-full border-t-2 border-indigo-700 dark:border-blue-300;
+	}
+
+	/* header styles, works best larger font sizes */
 	.text-shadow {
 		@apply text-amber-600;
 		text-shadow: 2px 3px 1px theme('colors.indigo.700');
@@ -66,6 +71,9 @@
 	.dark .text-shadow {
 		@apply text-yellow-400;
 		text-shadow: 2px 3px 1px theme('colors.yellow.700');
+	}
+	.text-unshadow {
+		text-shadow: none !important;
 	}
 
 	/* Links that highlight from bottom */
@@ -125,6 +133,9 @@
 		@apply text-accent;
 		content: '#';
 	}
+}
+.prose-img-dense {
+	@apply !m-0;
 }
 
 .back-link {

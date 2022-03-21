@@ -7,6 +7,12 @@ type: professional
 date: 2020-08-01
 ---
 
-just want to see that this works! :)
+<p class="font-bold">Quick turnaround (one month) for Twitter's internal Brand Studio to prove feasibility of their proposed designs on the web with their current CMS system.</p>
 
-put some explanation about the project here
+Working with designers from Instrument and Twitter, I provided technical consultation on overall approach and created four accessible React components from scratch. Each of the four components had variants for three different levels of brand expression to afford their designers & editors maximum flexibility in page design & prototyping. These were imported into a new Storybook which allowed for simple experimenting across every level of brand expression.
+
+In addition, I built a proof of concept node app for image generation with localized text, to help facilitate creation of dynamic trending topic images with localized hashtags or other stylized text.
+
+You can see some descendants of my work at Twitter's [about](https://about.twitter.com/en), [help](https://help.twitter.com/en), and [business](https://business.twitter.com/) pages.
+
+Due to this being an internal client project, you can't access the Storybook linked below without a password. Email me if you're interested.

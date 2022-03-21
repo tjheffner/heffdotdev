@@ -1,6 +1,6 @@
 <script context="module">
 	import { SITE_DESCRIPTION } from '$lib/siteConfig';
-	// export const prerender = false; // index page is most visited, lets prerender
+	export const prerender = true;
 </script>
 
 <script>
@@ -94,7 +94,7 @@
 		</p>
 
 		<p class="mb-3">
-			After graduating from the University of Oregon with a journalism degree, I continued my
+			After graduating from the University of Oregon with a journalism degree (minor in multimedia art), I continued my
 			education with a four-month programming bootcamp. I've been a professional web developer
 			since 2015, across all parts of the web stack. That means I know just enough SQL to be
 			dangerous, but I'd rather work on the front end. <span role="img" aria-label="winking face"

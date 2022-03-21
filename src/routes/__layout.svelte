@@ -31,7 +31,7 @@
 	<a href="#maincontent" class="font-bold text-accent md:mx-4 lg:mx-12">Back to top</a>
 </main>
 <footer class="flex flex-col justify-center bg-sky-200 px-4 py-12 dark:bg-slate-900 sm:px-8">
-	<hr class="mb-8 w-full border-t-2 border-indigo-700 dark:border-blue-300" />
+	<hr class="mb-8" />
 	<div class="grid grid-cols-4 gap-4 md:mx-4 md:gap-8 lg:mx-12 lg:gap-12 xl:gap-16">
 		<div class="col-span-3 md:col-span-2">
 			<NavLink href="/blog">Posts</NavLink>

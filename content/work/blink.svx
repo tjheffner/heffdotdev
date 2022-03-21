@@ -6,6 +6,26 @@ type: personal
 date: 2014-02-28
 ---
 
-just want to see that this works! :)
+**Background:** This was my final project for one of my favorite classes in my entire academic career, ARTD 252 Interactive Digital Art. That class was my first introduction to coding as a thing you could do far more with than "just" spit html out on a page. It was eye-opening.
 
-put some explanation about the project here
+Below you'll find the prompt, my response, and a recorded video of my code's output (the full code takes a _very_ long time to run to completion). Looking at the code now, I knew absolutely nothing back then. So much extra work that could have been solved much easier with a smattering of functions and loops, but that's learning baby!
+
+<hr>
+
+<p class="font-bold">Prompt: How do you design an interactive visualization that captivates from one data point to over two billion?</p>
+
+I graduate in the summer of 2014. It feels like my college experience went by in the blink of an eye.
+
+How long is a blink? *(330 milliseconds)*
+
+How many blinks was college really? *(approximately 2,096,639,997 blinks, give or take a few)*
+
+Why did they go so fast? *(don’t say time flies when you’re having fun don’t say time flies when you’re*
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/xxruyBiSb3M" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+Each trail spawned represents one ‘blink,’ and new blinks spawn every 330ms.
+
+
+Check the code on [github](https://github.com/tjheffner/blink). Requires [Processing](https://processing.org/) to run.

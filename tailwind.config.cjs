@@ -57,7 +57,6 @@ module.exports = {
 						'ul > li::marker': {
 							color: 'var(--tw-prose-body)'
 						},
-						// prose fixes
 						tfoot: {
 							borderTopWidth: '1px',
 							borderColor: 'var(--tw-prose-th-borders)'

@@ -1,5 +1,5 @@
 ---
-name: Arsenal Football Club
+name: Arsenal
 url: https://arsenal.com
 slug: arsenal
 description: 'design system, multiple drupal themes'

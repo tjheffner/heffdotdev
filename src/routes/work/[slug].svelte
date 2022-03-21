@@ -58,9 +58,12 @@
 
 <article class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8">
 	{#if json.data.name}
-		<h1 class="text-shadow mb-8 text-3xl font-bold tracking-tight text-amber-600 dark:text-yellow-400 md:text-6xl">
-			{json.data.name}
-		</h1>
+		<div class="mb-12">
+			<h1 class="text-shadow text-3xl font-bold tracking-tight text-amber-600 dark:text-yellow-400 md:text-6xl">
+				{json.data.name}
+				<span class="text-base text-unshadow text-slate-500 dark:text-gray-600">({json.data.date.slice(0,4)})</span>
+			</h1>
+		</div>
 	{/if}
 
 	{#if json.data.image}

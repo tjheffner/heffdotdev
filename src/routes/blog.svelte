@@ -220,7 +220,7 @@
 		</span>
 	</div>
 
-	<hr class="mb-6 md:mb-12 w-full border-t-2 border-indigo-700 dark:border-blue-300" />
+	<hr class="mb-6 md:mb-12" />
 
 	<!-- Results -->
 	{#if list.length}
