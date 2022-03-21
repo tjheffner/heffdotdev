@@ -76,6 +76,9 @@ module.exports = {
 						mark: {
 							background: theme('colors.blue.300'),
 							color: theme('colors.slate.900')
+						},
+						hr: {
+							borderColor: theme('colors.accent')
 						}
 					}
 				}

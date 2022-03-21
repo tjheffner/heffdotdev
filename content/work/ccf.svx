@@ -7,6 +7,10 @@ type: professional
 date: 2019-06-01
 ---
 
-just want to see that this works! :)
+**The Crohn's and Colitis Foundation (CCF) needed a website refresh that was responsive and easy to navigate for all users.**
 
-put some explanation about the project here
+Their content serves audiences with a wide range of different needs, like Patients, Caregivers, Clinicians, Donors, Researchers and Volunteers. These different audiences needed a way to get to their relevant content quickly and easily.
+
+To that end, my team implemented a flexible tagging system, overhauled the top-level navigation, and added features for personalization.
+
+I architected a flexible component library with Pattern Lab that also used Vue with data from Drupal and elsewhere for larger widgets. This included the header navigation & search, the main audience flow widget on the homepage, and the Find a Chapter page. All components and widgets are fully responsive and accessible.

@@ -13,6 +13,6 @@ Working with designers from Instrument and Twitter, I provided technical consult
 
 In addition, I built a proof of concept node app for image generation with localized text, to help facilitate creation of dynamic trending topic images with localized hashtags or other stylized text.
 
-You can see some descendants of my work at Twitter's [about](https://about.twitter.com/en), [help](https://help.twitter.com/en), and [business](https://business.twitter.com/) pages.
+You can see some products informed by my work at Twitter's [about](https://about.twitter.com/en), [help](https://help.twitter.com/en), and [business](https://business.twitter.com/) pages.
 
 Due to this being an internal client project, you can't access the Storybook linked below without a password. Email me if you're interested.

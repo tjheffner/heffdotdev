@@ -7,6 +7,9 @@ type: professional
 date: 2017-05-01
 ---
 
-just want to see that this works! :)
+**UArts needed a new website to bring their enrollment numbers up. I helped deliver
+just that-- student enrollment increased by 37% the first semester after launch.**
 
-put some explanation about the project here
+Our team accomplished this by delivering a smooth Drupal 8 experience with a layout that featured lots of large images without sacrificing page load time, simplified navigation for all audiences, and a focus on student stories. The front end was based on Pattern Lab with Vue support for certain widgets, the navigation in particular. Flexible components that could be re-used in a variety of places with minimal extra code. That card component is a workhorse.
+
+The site has been updated slightly in the years since launch, but the foundations I put in place are still acting as the backbone.

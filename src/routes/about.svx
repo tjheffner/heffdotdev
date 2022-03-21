@@ -1,5 +1,6 @@
-<script>
-  import Slice from '../components/Slice.svelte';
+<script context="module">
+	import { SITE_DESCRIPTION } from '$lib/siteConfig';
+	export const prerender = true;
 </script>
 
 <svelte:head>
@@ -10,7 +11,7 @@
 <h1 class="text-shadow">about</h1>
 
 ## the site
-this site is the online home of tanner heffner. it's part [blog](/blog) [portfolio](/work) [playground](/gallery) [resume](/resume) and all [digital garden](https://joelhooks.com/digital-garden), using [swyxkit](https://swyxkit.netlify.app/about) as my starting point.
+this site is the online home of tanner heffner. it's part [blog](/blog) [portfolio](/work) [playground](/gallery) [resume](/resume) and all [digital garden](https://joelhooks.com/digital-garden), using [swyxkit](https://swyxkit.netlify.app/about) as my starting point. [this post](/heffdotdev-technical-details) explains more about the tools i chose and why.
 
 you'll find technical snippets & longer blogs, cooking recipes, old projects both professional and personal, and potentially much more. we're just getting started watering this garden :)
 

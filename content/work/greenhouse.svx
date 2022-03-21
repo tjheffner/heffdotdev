@@ -1,13 +1,17 @@
 ---
 name: Greenhouse
 url: https://greenhouse.io
-image: '/assets/greenhouse.png'
+# image: '/assets/greenhouse.png'
 slug: greenhouse
 description: 'component library, content modeling in craft cms, javascript'
 type: professional
 date: 2020-01-02
 ---
 
-just want to see that this works! :)
+**Bespoke component library and content model from scratch built with Craft CMS, Sass and vanilla ES5 Javascript.**
 
-put some explanation about the project here
+As a freelance front-end developer I joined a small team at Instrument and built Greenhouse's marketing website from the ground up. Collaborating closely with designers, we worked to design an accessible, responsive component library with a wide range of flexibility.
+
+Almost every component can be reversed, and every single page or component slot can be A/B tested, all controlled through the CMS itself, giving Greenhouse's marketing team full control to test optimal user flows to their heart's desire.
+
+In addition to my component work throughout the site, I built the [Integrations](https://www.greenhouse.io/integrations) page, which showcases 400+ integrations that Greenhouse works with and is fully accessible to keyboard and screen-readers.

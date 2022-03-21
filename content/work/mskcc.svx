@@ -7,6 +7,8 @@ type: professional
 date: 2018-06-01
 ---
 
-just want to see that this works! :)
+My team was tasked with maintaining and migrating five separate but similar Drupal 7 sites with five separate but similar-ish themes to one Drupal 8 site that could support the varying business needs the five had covered previously.
 
-put some explanation about the project here
+I architected a design system based on Pattern Lab to suit the wide range of styles needed across brand properties with minimal code.
+
+Certain theme-level choices were connected to CMS fields so that admins could update site or section-specific color schemes without needing a code change in the future.

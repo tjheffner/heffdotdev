@@ -7,6 +7,8 @@ type: professional
 date: 2020-06-03
 ---
 
-just want to see that this works! :)
+As part of a 5-person team, I created re-usable templates and styles and wrote modern TypeScript for Google.org, highlighting the company's many charity & humanitarian efforts worldwide.
 
-put some explanation about the project here
+This website uses several proprietary systems internal to Google and the component templates were written with Jinja2 and SASS to support that. Javascript was required to follow Google's strict internal code quality standards for TypeScript. At one point, those standards changed in-between rounds of client Gerrit reviews, and we were not supplied the updated standards... that was fun.
+
+I wrote a good chunk of the custom templates, styles, and nearly all of the TypeScript found througout the site, including listeners for scroll-based animations, keyboard-accessible modals, slideshows, and filtering.

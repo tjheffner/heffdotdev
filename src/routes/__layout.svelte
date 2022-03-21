@@ -7,6 +7,18 @@
 	import Header from '../components/Header.svelte';
 	import Icon from '../components/Icon.svelte';
 	import NavLink from '../components/NavLink.svelte';
+	import Slice from '../components/Slice.svelte';
+	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
+
+	let showBackToTop = true;
+	let showGetInTouch = false;
+
+	onMount(async () => {
+		console.log($page.url.pathname);
+		if ($page.url.pathname === '/') showBackToTop = !showBackToTop;
+		if ($page.url.pathname === '/about') showGetInTouch = !showGetInTouch;
+	})
 </script>
 
 <svelte:head>
@@ -28,9 +40,29 @@
 >
 	<slot />
 
+{#if showBackToTop}
 	<a href="#maincontent" class="font-bold text-accent md:mx-4 lg:mx-12">Back to top</a>
+{/if}
+
 </main>
 <footer class="flex flex-col justify-center bg-sky-200 px-4 py-12 dark:bg-slate-900 sm:px-8">
+	{#if showGetInTouch}
+		<br> <!-- force slice top-border -->
+		<Slice title="Contact">
+		  <p class="mb-3 text-2xl font-bold">I'm reachable online in a few places</p>
+
+		  <p class="mb-3">
+		    Feel free to send me an <a href="mailto:tannerjheffner@gmail.com">email</a> or connect on
+		    <a href="https://www.linkedin.com/in/tannerheffner/">linkedin</a> with a message or tweet <a href={`https://twitter.com/${MY_TWITTER_HANDLE}`}>@{MY_TWITTER_HANDLE}.</a> Thanks for visiting!
+		  </p>
+
+		  <p class="font-bold">
+		    Please no recruiters. I'm happy where I'm at. <span role="img" aria-label="happy cowboy"
+		      >&#129312;</span
+		    >
+		  </p>
+		</Slice>
+	{/if}
 	<hr class="mb-8" />
 	<div class="grid grid-cols-4 gap-4 md:mx-4 md:gap-8 lg:mx-12 lg:gap-12 xl:gap-16">
 		<div class="col-span-3 md:col-span-2">
