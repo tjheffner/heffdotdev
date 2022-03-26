@@ -55,7 +55,8 @@
 				{/if}
 			{/each}
 		</ul>
-		<p class="my-8 text-slate-800 dark:text-gray-400"><span class="font-bold text-lg text-indigo-700 dark:text-lime-500">Other clients:</span> Epic Games, Crossfit, Norwegian Cruise Line, PGA Tour, Weight Watchers, Urban Institute, Wilson Center</p>
+		<p class="font-bold text-lg text-indigo-700 dark:text-lime-500">Other clients</p>
+		<p class="mb-8 text-slate-800 dark:text-gray-400"> Epic Games, Crossfit, Norwegian Cruise Line, PGA Tour, Weight Watchers, Urban Institute, Wilson Center</p>
 
 		<a href="/resume" class="font-bold text-lg text-indigo-700 dark:text-lime-500 hover:text-orange-600 dark:hover:text-yellow-400">Resume</a>
 	</Slice>
