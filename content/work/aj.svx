@@ -9,7 +9,7 @@ date: 2015-07-30
 
 **My very first Drupal 8 project, and actually, one of the first Drupal 8 projects anywhere.**
 
-As a junior dev, I was part of the team building out the CMS & API for Al Jazeera. The time zone difference between our team and Qatar took some getting used to.
+As a junior dev at Phase2, I was part of the team building out the CMS & API for Al Jazeera. The time zone difference between our team and Qatar took some getting used to.
 
 Al Jazeera's new primary CMS needed to support regionalized versions of content for different countries as well as global stories. I created a number of content types and media configurations for various business requirements, and worked on the API backbone to for those configurations. I also helped migrate thousands of pieces of existing content into the new system. I wrote so many behat tests.
 

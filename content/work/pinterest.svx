@@ -7,7 +7,7 @@ type: professional
 date: 2020-05-01
 ---
 
-Right in the start of the pandemic, I joined the Pinterest Business team mid-stream and helped prototype & implement new React components to their design system in support of the upcoming Pinterest Creators campaign. My first day on the job was actually the day Instrument shut their offices down. I still had meaningful commits merged to prod within the first week.
+Right in the start of the pandemic, I joined the Pinterest Business team mid-stream in support of the upcoming Pinterest Creators campaign. My first day on the job was actually the day Instrument shut their offices down. I still had meaningful commits merged to prod within the first week.
 
 My duties included creating new React components from existing components and from scratch when necessary, updating existing components to meet new business requirements, thorough testing including functional, cross-browser visual regression, and accessibility testing, all while closely collaborating with internal and client teams.
 
