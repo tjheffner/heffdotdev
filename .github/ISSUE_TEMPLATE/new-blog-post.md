@@ -2,7 +2,7 @@
 name: New blog post
 about: Template with front matter for blog posts
 title: ''
-labels: ''
+labels: Published
 assignees: ''
 
 ---
