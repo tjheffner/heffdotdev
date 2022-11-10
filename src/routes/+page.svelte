@@ -1,4 +1,6 @@
-<script context="module">
+<script>
+	import Slice from '../components/Slice.svelte';
+	import Card from '../components/Card.svelte';
 	import {
 		SITE_URL,
 		SITE_TITLE,
@@ -7,11 +9,7 @@
 		MY_TWITTER_HANDLE
 	} from '$lib/siteConfig';
 	export const prerender = false; // index page is most visited, lets prerender
-</script>
-
-<script>
-	import Slice from '../components/Slice.svelte';
-	import Card from '../components/Card.svelte';
+	let showGetInTouch = false;
 </script>
 
 <svelte:head>

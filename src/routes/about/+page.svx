@@ -1,6 +1,5 @@
-<script context="module">
+<script>
 	import { SITE_DESCRIPTION } from '$lib/siteConfig';
-	export const prerender = true;
 </script>
 
 <svelte:head>

@@ -1,5 +1,5 @@
 <script>
-	import Slice from '../components/Slice.svelte';
+	import Slice from '../../components/Slice.svelte';
 </script>
 
 <section class="mx-auto mb-16 flex w-full flex-col items-start px-4 sm:px-8 lg:w-2/3">

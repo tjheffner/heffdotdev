@@ -1,27 +1,10 @@
-<script context="module">
-	// export const prerender = true; // turned off so it refreshes quickly
-	export async function load({ params, fetch }) {
-		const res = await fetch(`/api/listContent.json`);
-		if (res.status > 400) {
-			return {
-				status: res.status,
-				error: await res.text()
-			};
-		}
-
-		/** @type {import('$lib/types').ContentItem[]} */
-		const items = await res.json();
-		return {
-			props: { items },
-			maxage: 60 // 1 min
-		};
-	}
-</script>
-
 <script>
-	import PostItem from '../components/PostItem.svelte';
+	import PostItem from '../../components/PostItem.svelte';
 	import queryString from 'query-string';
 	import { onMount } from 'svelte';
+
+	export let data;
+	let { items } = data;
 
 	let urlState = { filter: '', show: [] };
 	let defaultURLState = { filter: '', show: [] };
@@ -109,8 +92,6 @@
 	function focusSearch(e) {
 		if (e.key === '/' && inputEl) inputEl.select();
 	}
-
-	export let items;
 
 	$: list = items
 		.slice(0, showAll ? items.length : 10) // bump this up when more posts

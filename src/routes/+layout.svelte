@@ -1,7 +1,3 @@
-<script context="module">
-	import { MY_TWITTER_HANDLE, GH_USER, SITE_TITLE } from '$lib/siteConfig';
-</script>
-
 <script>
 	import '../tailwind.css';
 	import Header from '../components/Header.svelte';
@@ -10,6 +6,8 @@
 	import Slice from '../components/Slice.svelte';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
+	import { MY_TWITTER_HANDLE, GH_USER, SITE_TITLE } from '$lib/siteConfig';
+
 
 	let showBackToTop = true;
 	let showGetInTouch = false;

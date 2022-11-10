@@ -1,10 +1,6 @@
-<script context="module">
-	import { SITE_DESCRIPTION } from '$lib/siteConfig';
-	export const prerender = true;
-</script>
-
 <script>
-	import Slice from '../components/Slice.svelte';
+import { SITE_DESCRIPTION } from '$lib/siteConfig';
+	import Slice from '../../components/Slice.svelte';
 </script>
 
 <svelte:head>

@@ -1,36 +1,10 @@
-<script context="module">
-	export const prerender = true; // turned off so it refreshes quickly
-	export async function load({ params, fetch }) {
-		const res = await fetch(`../api/listLocalContent.json`);
-		if (res.status > 400) {
-			return {
-				status: res.status,
-				error: await res.text()
-			};
-		}
-
-		/** @type {import('$lib/types').Project[]} */
-		const items = await res.json();
-
-		// let sorted = items.map((item) => {
-		// 	return { ...item, date: new Date(item.data.date) };
-		// });
-		//
-		// sorted = sorted.sort((a, b) => Number(b.date) - Number(a.date));
-
-		return {
-			props: { items },
-			maxage: 60 // 1 min
-		};
-	}
-</script>
-
 <script>
 	import { SITE_TITLE } from '$lib/siteConfig';
-	import Slice from '../components/Slice.svelte';
-	import ProjectItem from '../components/ProjectItem.svelte';
+	import Slice from '../../components/Slice.svelte';
+	import ProjectItem from '../../components/ProjectItem.svelte';
 
-	export let items;
+	export let data;
+	let { items } = data;
 </script>
 
 <svelte:head>

@@ -1,12 +1,12 @@
+import { json } from '@sveltejs/kit';
 import { listProjects } from '$lib/localContent';
 
 /**
  * @type {import('@sveltejs/kit').RequestHandler}
  */
-export async function get() {
+export async function GET() {
 	const list = await listProjects();
-	return {
-		body: list,
+	return json(list, {
 		// .map(item => {
 		// 	delete item.content // so that you dont send so much over the wire
 		// 	// this is an ok strategy until you get to thousands of content,
@@ -16,5 +16,5 @@ export async function get() {
 		headers: {
 			'Cache-Control': `max-age=0, s-maxage=${60}` // 1 minute.. for now
 		}
-	};
+	});
 }

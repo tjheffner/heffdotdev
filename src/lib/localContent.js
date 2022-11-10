@@ -1,7 +1,7 @@
 import { compile } from 'mdsvex';
 import { resolve, basename } from 'path';
 import { promises as fs } from 'fs';
-import { dev } from '$app/env';
+import { dev } from '$app/environment';
 import grayMatter from 'gray-matter';
 
 import rehypeStringify from 'rehype-stringify';

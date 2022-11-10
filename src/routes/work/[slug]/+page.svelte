@@ -1,39 +1,9 @@
-<script context="module">
-	export const prerender = true; // you can uncomment to prerender as an optimization
-	export const hydrate = true;
-	import { MY_TWITTER_HANDLE, SITE_URL } from '$lib/siteConfig';
-	export async function load({ url, params, fetch }) {
-		const slug = params.slug;
-		let res = null;
-		try {
-			res = await fetch(`/api/work/${slug}.json`);
-			if (res.status > 400) {
-				return {
-					status: res.status,
-					error: await res.text()
-				};
-			}
-
-			return {
-				props: {
-					json: await res.json(),
-					slug
-				},
-				maxage: 60 // 1 minute
-			};
-		} catch (err) {
-			console.error('error fetching project at [slug].svelte: ' + slug, res, err);
-			return {
-				status: 500,
-				error: new Error('error fetching project at [slug].svelte: ' + slug + ': ' + res)
-			};
-		}
-	}
-</script>
-
 <script>
 	/** @type {import('$lib/types').Project} */
-	export let json; // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
+	export let data;
+	let { json } = data;
+
+	import { MY_TWITTER_HANDLE, SITE_URL } from '$lib/siteConfig';
 </script>
 
 <svelte:head>
