@@ -69,7 +69,7 @@
 			>
 				<a
 					class="flex w-auto pb-4"
-					sveltekit:prefetch
+					data-sveltekit-prefetch
 					on:click={() => setTimeout(() => (isOpen = false), 300)}
 					href="/">Home</a
 				>
@@ -80,7 +80,7 @@
 			>
 				<a
 					class="flex w-auto pb-4"
-					sveltekit:prefetch
+					data-sveltekit-prefetch
 					on:click={() => setTimeout(() => (isOpen = false), 300)}
 					href="/blog">Posts</a
 				>
@@ -91,7 +91,7 @@
 			>
 				<a
 					class="flex w-auto pb-4"
-					sveltekit:prefetch
+					data-sveltekit-prefetch
 					on:click={() => setTimeout(() => (isOpen = false), 300)}
 					href="/work">Work</a
 				>
@@ -102,7 +102,7 @@
 			>
 				<a
 					class="flex w-auto pb-4"
-					sveltekit:prefetch
+					data-sveltekit-prefetch
 					on:click={() => setTimeout(() => (isOpen = false), 300)}
 					href="/gallery">Gallery</a
 				>
@@ -113,7 +113,7 @@
 			>
 				<a
 					class="flex w-auto pb-4"
-					sveltekit:prefetch
+					data-sveltekit-prefetch
 					on:click={() => setTimeout(() => (isOpen = false), 300)}
 					href="/about">About</a
 				>

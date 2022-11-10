@@ -6,7 +6,7 @@
 </script>
 
 <a
-	sveltekit:prefetch
+	data-sveltekit-prefetch
 	class="project !bg-unset mb-8 block w-full no-underline"
 	href={'/work/' + href}
 >

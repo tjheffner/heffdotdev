@@ -5,7 +5,7 @@
 	export let item;
 </script>
 
-<a sveltekit:prefetch class="post w-full" href={'/' + href}>
+<a data-sveltekit-prefetch class="post w-full" href={'/' + href}>
 	<div class="grid grid-cols-4 px-0 pt-4 sm:p-4">
 		<h2 class="col-span-4 sm:col-span-3 text-lg font-bold text-accent">{item.title}</h2>
 
