@@ -1,4 +1,5 @@
 import { getContent } from '$lib/content';
+import { error } from '@sveltejs/kit';
 
 /**
  * @type {import('@sveltejs/kit').RequestHandler}
@@ -14,8 +15,6 @@ export async function GET({ params }) {
 			}
 		});
 	} catch (err) {
-		// Suggestion (check for correctness before using):
-		// return new Response(err.message, { status: 404 });
-		return new Response(err.message, { status: 404 });
-	};
+		throw error(404, err.message);
+	}
 }

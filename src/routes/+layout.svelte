@@ -8,12 +8,10 @@
 	import { onMount } from 'svelte';
 	import { MY_TWITTER_HANDLE, GH_USER, SITE_TITLE } from '$lib/siteConfig';
 
-
 	let showBackToTop = true;
 	let showGetInTouch = false;
 
 	onMount(async () => {
-		console.log($page.url.pathname);
 		if ($page.url.pathname === '/') showBackToTop = !showBackToTop;
 		if ($page.url.pathname === '/about') showGetInTouch = !showGetInTouch;
 	})
