@@ -3,7 +3,7 @@
 
 @layer components {
 	body {
-		--brand-accent: theme('colors.red.600');
+		--brand-accent: theme('colors.sky.600');
 		--brand-alternate: theme('colors.orange.300');
 
 		/* https://ishadeed.com/article/defensive-css */
@@ -60,7 +60,7 @@
 	}
 
 	hr {
-		@apply w-full border-t-2 border-red-600 dark:border-blue-300;
+		@apply w-full border-t-2 border-sky-600 dark:border-blue-300;
 	}
 
 	/* header styles, works best larger font sizes */
@@ -152,10 +152,10 @@
   - https://css-tricks.com/strut-your-stuff-with-a-custom-scrollbar/
   */
 body {
-	--sb-primary-color: theme('colors.yellow.400');
-	--sb-accent-color: theme('colors.orange.500');
-	--sb-track-1: theme('colors.sky.900');
-	--sb-track-2: theme('colors.blue.500');
+	--sb-primary-color: theme('colors.amber.400');
+	--sb-accent-color: theme('colors.red.500');
+	--sb-track-1: theme('colors.sky.600');
+	--sb-track-2: theme('colors.blue.300');
 }
 .dark body {
 	--sb-primary-color: theme('colors.yellow.600');

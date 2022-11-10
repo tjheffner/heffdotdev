@@ -11,6 +11,7 @@
 
 <script>
 	import Slice from '../components/Slice.svelte';
+	import Card from '../components/Card.svelte';
 </script>
 
 <svelte:head>
@@ -30,18 +31,48 @@
 	<meta name="twitter:image" content={DEFAULT_OG_IMAGE} />
 </svelte:head>
 
-<section class="mx-auto px-4 sm:p-0 mb-16 flex w-full flex-col items-start">
+<section class="mx-auto px-4 sm:p-0 flex w-full flex-col items-start">
 	<Slice>
 		<h1 class="text-3xl lg:text-5xl font-bold text-shadow">
-			some fun intro or cool art thing is going to live in this space just wait
+			~welcome to my page~
 		</h1>
 	</Slice>
 
-	<Slice title="Featured">
-		<div>
-			<p>under construction but coming along :)</p>
+	<Slice title="Hello!">
+			<p>this site is under construction but coming along :)</p>
+
+			<p>it's mostly a reminder of past work and a place for me to post recipes I like, with the occasional technical post or personal blog.<p>
 
 			<p>thanks for stopping by, check out the links that work</p>
+	</Slice>
+
+	<Slice title="Currently">
+			<p class="font-bold">Listening:</p>
+			<ul>
+				<li>Smino - Luv 4 Rent</li>
+				<li>Danger Mouse & Black Thought - Cheat Codes</li>
+			</ul>
+
+			<p class="font-bold">Reading:</p>
+			<ul>
+				<li>Automate the Boring Stuff with Python - Sweigart</li>
+				<li>Etiquette Guide to Japan - De Mente</li>
+				<li>Ramayana</li>
+			</ul>
+
+			<p class="font-bold">Watching:</p>
+			<ul>
+				<li>The Bear</li>
+				<li>I Think You Should Leave</li>
+			</ul>
+
+	</Slice>
+
+	<Slice title="Fav Recipes 😋">
+		<div class="grid w-full grid-cols-3 gap-4 align-middle">
+			<Card title="Caper Butter" href={'/dill-and-caper-compound-butter'} />
+			<Card title="Pizza Dough" href={'/pizza-dough'}/>
+			<Card title="Chicken & Bean Stew" href={'/southwest-chicken-and-bean-stew'}/>
 		</div>
 	</Slice>
 </section>
