@@ -5,6 +5,7 @@ export async function load({ params, fetch, setHeaders }) {
 	let res = null;
 
 	res = await fetch(`/api/work/${slug}.json`);
+	console.log(res);
 	if (res.status > 400) {
 		throw error(res.status, await res.text());
 	}
