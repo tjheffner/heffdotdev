@@ -11,7 +11,7 @@ export async function load({ setHeaders, fetch }) {
 	/** @type {import('$lib/types').ContentItem[]} */
 	const items = await res.json();
 	setHeaders({
-		'cache-control': 'public, max-age=60' // 1 minute
+		'Cache-Control': 'public, max-age=60' // 1 minute
 	})
 	return {items}
 }
