@@ -25,7 +25,7 @@ let localContent = [];
 // for projects in content/
 export async function listProjects() {
 	let _localContent = [];
-	for await (const _path of getFiles(`content/work`)) {
+	for await (const _path of getFiles(`src/content/work`)) {
 		const src = await fs.readFile(_path, 'utf8');
 		const data = grayMatter(src);
 
