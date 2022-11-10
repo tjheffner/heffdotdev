@@ -21,7 +21,7 @@
 </div>
 <a
 	href={`${ghMetadata.issueUrl}#issuecomment-new`}
-	rel="external"
+	rel="external noopener noreferrer"
 	target="_blank"
 	class="my-4 rounded-lg bg-sky-600 p-2 font-bold text-orange-100 ring-red-600
 	transition-all duration-200 ease-in-out hover:ring-2

@@ -1,6 +1,9 @@
+import { error } from '@sveltejs/kit';
+
 export async function load({ params, fetch }) {
 	const res = await fetch(`../api/listLocalContent.json`);
 	if (res.status > 400) {
+		console.log(res)
 		throw error(400, 'not found')
 	}
 
