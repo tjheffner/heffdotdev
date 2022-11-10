@@ -1,5 +1,4 @@
 import { error } from '@sveltejs/kit';
-export const prerender = true; // you can uncomment to prerender as an optimization
 export const csr = true;
 export async function load({ url, params, fetch }) {
 	const slug = params.slug;
