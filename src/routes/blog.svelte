@@ -148,7 +148,7 @@
 			on:input={saveURLState}
 			bind:value={filterStr}
 			placeholder="Hit / to search"
-			class="block w-full rounded-md border border-zinc-400 bg-lime-100
+			class="block w-full rounded-md border border-zinc-400 bg-gray-200
 						px-4 py-2 text-gray-900 placeholder:text-zinc-700
 						dark:border-slate-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-zinc-50
 						"
@@ -225,7 +225,7 @@
 	<!-- Results -->
 	{#if list.length}
 		<ul
-			class="w-full divide-y divide-dashed divide-indigo-700 dark:divide-blue-300 md:mx-auto md:w-4/5"
+			class="w-full divide-y divide-dashed divide-sky-600 dark:divide-blue-300 md:mx-auto md:w-4/5"
 		>
 			{#each list as item}
 				<li class="mb-4 sm:mb-0">
@@ -239,7 +239,7 @@
 			<div class="flex justify-center">
 				<button
 					on:click={() => (showAll = true)}
-					class="my-4 rounded-lg bg-yellow-400 p-2 font-bold text-yellow-800 ring-yellow-800
+					class="my-4 rounded-lg bg-sky-600 p-2 font-bold text-orange-100 ring-red-600
 					transition-all duration-200 ease-in-out hover:ring-2
 					dark:bg-yellow-800 dark:text-yellow-100 dark:ring-yellow-400
 					"

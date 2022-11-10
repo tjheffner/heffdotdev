@@ -15,8 +15,8 @@
 			<span
 				class="col-span-1 col-start-1 mr-1 mb-2 inline-block
         w-fit rounded-full
-        bg-amber-600 px-2
-        py-1 text-xs
+        bg-orange-300 text-red-600
+				px-2 py-1 text-xs
         font-bold text-white dark:bg-lime-600 dark:text-gray-900 md:mr-2 md:px-4
     "
 			>
@@ -41,7 +41,7 @@
 <style>
 	.post:hover {
 		& h2 {
-			@apply text-orange-600 dark:text-yellow-400;
+			@apply text-sky-600 dark:text-yellow-400;
 		}
 	}
 </style>

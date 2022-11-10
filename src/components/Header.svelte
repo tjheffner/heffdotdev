@@ -27,7 +27,7 @@
 	<h1 class="text-lg font-bold text-accent hover:scale-110 transition-all ease-in-out duration-200"><a href="/">heffner.dev</a></h1>
 	<button
 		aria-label="Toggle Dark Mode"
-		class="ml-1 flex h-9 w-9 items-center justify-center rounded-lg bg-yellow-400 ring-yellow-800 transition-all
+		class="ml-1 flex h-9 w-9 items-center justify-center rounded-lg bg-sky-600 ring-red-600 transition-all
 		hover:ring-2 dark:bg-yellow-800 dark:ring-yellow-400"
 		on:click={toggleDarkMode}
 	>
@@ -53,7 +53,7 @@
 				viewBox="0 0 24 24"
 				fill="none"
 				stroke="currentColor"
-				class="w-5 h-5 text-gray-800 dark:text-gray-200"
+				class="w-5 h-5 text-orange-100 dark:text-gray-200"
 			>
 				<path
 					stroke-linecap="round"

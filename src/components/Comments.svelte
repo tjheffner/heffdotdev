@@ -13,7 +13,7 @@
 	<p class="my-4 font-bold text-accent">Comments:</p>
 {/if}
 <div
-	class="prose mb-8 divide-y divide-dashed divide-indigo-700 dark:prose-invert dark:divide-blue-300"
+	class="prose mb-8 divide-y divide-dashed divide-sky-600 dark:prose-invert dark:divide-blue-300"
 >
 	{#each data as comment}
 		<Comment {comment} />
@@ -23,7 +23,7 @@
 	href={`${ghMetadata.issueUrl}#issuecomment-new`}
 	rel="external"
 	target="_blank"
-	class="my-4 rounded-lg bg-yellow-400 p-2 font-bold text-yellow-800 ring-yellow-800
+	class="my-4 rounded-lg bg-sky-600 p-2 font-bold text-orange-100 ring-red-600
 	transition-all duration-200 ease-in-out hover:ring-2
 	dark:bg-yellow-800 dark:text-yellow-100 dark:ring-yellow-400"
 >

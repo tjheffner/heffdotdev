@@ -87,7 +87,7 @@
 		</p>
 	</div>
 
-	<hr class="mt-2 w-full border-t-2 border-indigo-700 dark:border-blue-300" />
+	<hr class="mt-2 w-full border-t-2 border-red-600 dark:border-blue-300" />
 
 	<!-- <div
 		class="-mx-4 my-2 flex h-1 w-[100vw] bg-gradient-to-r from-blue-300 via-indigo-700 to-slate-900 sm:mx-0 sm:w-full"
@@ -101,7 +101,7 @@
 <div class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8">
 	<!-- <div class="mx-auto mb-16 w-fit max-w-2xl flex flex-col justify-center px-4 sm:px-8"> -->
 	<div
-		class="mb-12 w-fit self-center border-t-2 border-b-2 border-indigo-700 p-4 p-4 text-gray-700 dark:border-blue-300 dark:text-gray-400"
+		class="mb-12 w-fit self-center border-t-2 border-b-2 border-red-600 p-4 p-4 text-gray-700 dark:border-blue-300 dark:text-gray-400"
 	>
 		{#if json.ghMetadata.reactions.total_count > 0}
 			Reactions: <Reactions

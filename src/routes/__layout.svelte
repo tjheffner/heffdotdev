@@ -30,13 +30,13 @@
 	/>
 </svelte:head>
 
-<div class="flex flex-col justify-center bg-sky-200 px-4 py-12 dark:bg-slate-900 sm:px-8">
+<div class="flex flex-col justify-center bg-orange-100 px-4 py-12 dark:bg-slate-900 sm:px-8">
 	<Header />
 </div>
 <!-- for skip link -->
 <main
 	id="maincontent"
-	class="flex flex-col justify-center bg-sky-200 px-4 dark:bg-slate-900 sm:px-8"
+	class="flex flex-col justify-center bg-orange-100 px-4 dark:bg-slate-900 sm:px-8"
 >
 	<slot />
 
@@ -45,7 +45,7 @@
 {/if}
 
 </main>
-<footer class="flex flex-col justify-center bg-sky-200 px-4 py-12 dark:bg-slate-900 sm:px-8">
+<footer class="flex flex-col justify-center bg-orange-100 px-4 py-12 dark:bg-slate-900 sm:px-8">
 	{#if showGetInTouch}
 		<br> <!-- force slice top-border -->
 		<Slice title="Contact">
@@ -68,7 +68,7 @@
 		<div class="col-span-3 md:col-span-2">
 			<NavLink href="/blog">Posts</NavLink>
 			<NavLink href="/work">Work</NavLink>
-			<NavLink href="/gallery">Gallery</NavLink>
+			<!-- <NavLink href="/gallery">Gallery</NavLink> -->
 			<NavLink href="/about">About</NavLink>
 		</div>
 
