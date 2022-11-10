@@ -9,8 +9,6 @@ export async function GET({ params }) {
 	let data;
 	data = await getLocalContent(slug).catch(err => new Response(err.message, { status: 404 }));
 
-	console.log(data);
-
 	return new Response(JSON.stringify(data), {
 		headers: {
 			'Cache-Control': `max-age=0, s-maxage=${60}` // 1 minute.. for now

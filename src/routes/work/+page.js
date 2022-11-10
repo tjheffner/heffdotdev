@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 
-export async function load({ params, fetch }) {
+export async function load({ setHeaders, fetch }) {
 	const res = await fetch(`/api/listLocalContent.json`);
 
 	if (res.status > 400) {
@@ -9,12 +9,8 @@ export async function load({ params, fetch }) {
 
 	/** @type {import('$lib/types').Project[]} */
 	const items = await res.json();
-
-	// let sorted = items.map((item) => {
-	// 	return { ...item, date: new Date(item.data.date) };
-	// });
-	//
-	// sorted = sorted.sort((a, b) => Number(b.date) - Number(a.date));
-
+	setHeaders({
+		'Cache-Control': 'public, max-age=60' // 1 minute
+	})
 	return { items };
 }
