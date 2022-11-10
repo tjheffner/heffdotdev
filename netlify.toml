@@ -7,6 +7,7 @@
   directory = "functions"
   node_bundler = "esbuild"
   external_node_modules = ["mdsvex", "heffnerdotdev"]
+  included_files = ["content/**"]
 
 [build.environment]
   NODE_VERSION = "16"
