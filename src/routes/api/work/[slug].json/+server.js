@@ -1,3 +1,4 @@
+import { error } from '@sveltejs/kit';
 import { getLocalContent } from '$lib/localContent';
 
 /**
@@ -14,12 +15,6 @@ export async function GET({ params }) {
 			}
 		});
 	} catch (err) {
-		throw new Error("@migration task: Migrate this return statement (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292701)");
-		// Suggestion (check for correctness before using):
-		// return new Response(err.message, { status: 404 });
-		return {
-			status: 404,
-			body: err.message
-		};
+		return new Response(err.message, { status: 404 });
 	}
 }
