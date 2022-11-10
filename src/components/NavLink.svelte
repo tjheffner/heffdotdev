@@ -6,7 +6,7 @@
 
 <a
 	class={isActive
-		? 'footer-link my-4 block w-fit bg-[length:4px_50px] font-bold text-sky-200 dark:text-slate-900'
+		? 'footer-link my-4 block w-fit bg-[length:4px_50px] font-bold text-orange-100 dark:text-slate-900'
 		: 'footer-link my-4 block w-fit font-bold'}
 	{href}
 >

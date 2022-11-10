@@ -55,10 +55,10 @@
 				{/if}
 			{/each}
 		</ul>
-		<p class="font-bold text-lg text-indigo-700 dark:text-lime-500">Other clients</p>
-		<p class="mb-8 text-slate-800 dark:text-gray-400"> Epic Games, Crossfit, Norwegian Cruise Line, PGA Tour, Weight Watchers, Urban Institute, Wilson Center</p>
+		<p class="font-bold text-lg text-sky-600 dark:text-lime-500">Other clients</p>
+		<p class="mb-8 text-slate-800 dark:text-gray-400"> Department of Veterans Affairs, Epic Games, Crossfit, Norwegian Cruise Line, PGA Tour, Weight Watchers, Urban Institute, Wilson Center</p>
 
-		<a href="/resume" class="font-bold text-lg text-indigo-700 dark:text-lime-500 hover:text-orange-600 dark:hover:text-yellow-400">Resume</a>
+		<a href="/resume" class="font-bold text-lg text-sky-600 dark:text-lime-500 hover:text-orange-600 dark:hover:text-yellow-400">Resume</a>
 	</Slice>
 
 	<Slice title="Personal" prose={false}>
