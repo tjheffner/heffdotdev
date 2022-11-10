@@ -6,7 +6,7 @@ export async function load({ url, params, fetch }) {
 
 	res = await fetch(`/api/work/${slug}.json`);
 	if (res.status > 400) {
-		throw error(400, 'not found')
+		throw error(res.status, res.message)
 	}
 
 	return {

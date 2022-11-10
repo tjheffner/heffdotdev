@@ -2,6 +2,7 @@ import { error } from '@sveltejs/kit';
 
 export async function load({ params, fetch }) {
 	const res = await fetch(`/api/listLocalContent.json`);
+
 	if (res.status > 400) {
 		throw error(res.status, await res.text())
 	}

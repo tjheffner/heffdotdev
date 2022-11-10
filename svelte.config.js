@@ -42,6 +42,7 @@ const config = {
 			postcss: true
 		})
 	],
+	outDir: 'public',
 
 	kit: {
 		adapter: adapter({
