@@ -1,27 +1,5 @@
 import { dev } from '$app/environment';
 
-import { promises as fs } from 'fs';
-import { resolve, basename } from 'path';
-import grayMatter from 'gray-matter';
-
-import rehypeStringify from 'rehype-stringify';
-import rehypeSlug from 'rehype-slug';
-import rehypeAutoLink from 'rehype-autolink-headings';
-
-// markdown formatting
-const remarkPlugins = undefined;
-const rehypePlugins = [
-	rehypeStringify,
-	rehypeSlug,
-	[
-		rehypeAutoLink,
-		{
-			behavior: 'wrap',
-			properties: { class: 'hover:text-yellow-100 no-underline' }
-		}
-	]
-];
-
 let localContent = []
 
 // fetch all markdown posts and shape into item with metadata
