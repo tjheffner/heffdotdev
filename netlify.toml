@@ -6,7 +6,7 @@
 [functions]
   directory = "functions"
   node_bundler = "esbuild"
-  external_node_modules = ["mdsvex", "heffnerdotdev", "gray-matter"]
+  external_node_modules = ["mdsvex", "heffnerdotdev", "gray-matter", "node-fetch"]
 
 [build.environment]
   NODE_VERSION = "16"
