@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { getLocalContent } from '$lib/localContent';
+import { fetchMarkdownPost } from '$lib/localContent';
 
 /**
  * @type {import('@sveltejs/kit').RequestHandler}
@@ -7,7 +7,7 @@ import { getLocalContent } from '$lib/localContent';
 export async function GET({ params }) {
 	const { slug } = params;
 	let data;
-	data = await getLocalContent(slug).catch(err => new Response(err.message, { status: 404 }));
+	data = await fetchMarkdownPost(slug).catch(err => new Response(err.message, { status: 404 }));
 
 	return new Response(JSON.stringify(data), {
 		headers: {
