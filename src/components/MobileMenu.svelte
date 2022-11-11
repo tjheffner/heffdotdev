@@ -98,17 +98,6 @@
 			</li>
 			<li
 				class="border-b border-indigo-700 font-semibold text-gray-900 dark:border-yellow-400 dark:text-gray-100"
-				style="transition-delay: 250ms;"
-			>
-				<a
-					class="flex w-auto pb-4"
-					data-sveltekit-prefetch
-					on:click={() => setTimeout(() => (isOpen = false), 300)}
-					href="/gallery">Gallery</a
-				>
-			</li>
-			<li
-				class="border-b border-indigo-700 font-semibold text-gray-900 dark:border-yellow-400 dark:text-gray-100"
 				style="transition-delay: 350ms;"
 			>
 				<a

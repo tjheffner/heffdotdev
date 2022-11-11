@@ -4,7 +4,6 @@
 	import ProjectItem from '../../components/ProjectItem.svelte';
 
 	export let data;
-	let { items } = data;
 </script>
 
 <svelte:head>
@@ -21,10 +20,10 @@
 
 	<Slice title="Professional" prose={false}>
 		<ul class="list-none">
-			{#each items as project}
-				{#if project.data.type === 'professional'}
+			{#each data.items as project}
+				{#if project.type === 'professional'}
 					<li>
-						<ProjectItem item={project} href={project.slug} />
+						<ProjectItem item={project} />
 					</li>
 				{/if}
 			{/each}
@@ -37,18 +36,14 @@
 
 	<Slice title="Personal" prose={false}>
 		<ul class="list-none">
-			{#each items as project}
-				{#if project.data.type === 'personal'}
+			{#each data.items as project}
+				{#if project.type === 'personal'}
 					<li>
-						<ProjectItem item={project} href={project.slug} />
+						<ProjectItem item={project} />
 					</li>
 				{/if}
 			{/each}
 
-			<!-- <li>
-				<a href="/gallery" class="block font-bold text-lg text-indigo-700 dark:text-lime-500 hover:text-orange-600 dark:hover:text-yellow-400">gallery</a>
-				<p class="mb-2 text-slate-800 dark:text-gray-400">digital art, photography</p>
-			</li> -->
 		</ul>
 	</Slice>
 </section>
