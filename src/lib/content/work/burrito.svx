@@ -36,7 +36,7 @@ Simple. And delicious.
 
 
 
-<img src="https://user-images.githubusercontent.com/11279744/159189849-13d465a7-1c90-44cc-a07e-fb99ed3c962c.png" alt="picture burrito bracket, in a radial bracket form. The top 4 were El Super Burrito, El Pato Verde, Burrito Boy, and Tacqueria Mi Tienda. Tacqueria Mi Tienda was the winner.">
+<img src="https://user-images.githubusercontent.com/11279744/159189849-13d465a7-1c90-44cc-a07e-fb99ed3c962c.png" alt="The burrito bracket, in a radial bracket form. The top 4 were El Super Burrito, El Pato Verde, Burrito Boy, and Tacqueria Mi Tienda. Tacqueria Mi Tienda was the winner.">
 
 If you haven't seen a radial bracket before, rounds between options are indicated by the white connectors. Winner of a round advances inwards in the circle. The overall winner takes the center.
 
@@ -49,7 +49,7 @@ PDF includes a short review of each option. Clicking a color will take you to th
 
 A good deal of multimedia content was pushed out to the internet as part of this project. Unfortunately (perhaps fortunately), many platforms have gone offline since then. Always back up your stuff!
 
-<img src="https://user-images.githubusercontent.com/11279744/159191501-65f43fe8-0c4e-4275-be98-4e20c14f4dad.jpeg" alt="Screenshot of text message. Message reads: What were number 1,2,and3 best burritos in Eugene"/>
+<img src="https://user-images.githubusercontent.com/11279744/159191501-65f43fe8-0c4e-4275-be98-4e20c14f4dad.jpeg" alt="Text message from a friend. Message reads: What were number 1,2,and3 best burritos in Eugene"/>
 
 [Tweets chronicling the \#burritobreakdown experience](https://twitter.com/search?q=from%3A%40its_tanner%20%23burritobreakdown&src=typed_query)
 

@@ -19,11 +19,11 @@ date: 2013-10-30
 *approx. 3.25’’ x 3.25’’ x 0.4’‘*
 
 <img src="https://user-images.githubusercontent.com/11279744/159189093-fbcac163-254e-4336-b964-bdaf36857a68.png"
-     alt="Cover photo of artist's book. Outside cover is a portion of a Rolling Rock case."
+     alt="Cover of artist's book. Outside cover is a portion of a Rolling Rock case."
      class="prose-img-dense"
 />
 <img src="https://user-images.githubusercontent.com/11279744/159189099-61a7934e-1703-4ab0-9a12-bdbb3bee60ce.jpg"
-     alt="Photo shows book standing upright, hinting at colorful pages within."
+     alt="Book standing upright, hinting at colorful pages within."
     class="prose-img-dense"
 />
 <img src="https://user-images.githubusercontent.com/11279744/159189100-3f9feb5d-c7b8-4242-b9a2-9a909c55cd26.png"
@@ -31,10 +31,10 @@ date: 2013-10-30
      class="prose-img-dense"
 />
 <img src="https://user-images.githubusercontent.com/11279744/159189101-fdb84b4b-ef20-486e-bd6f-a615e3d55d25.png"
-     alt="Another photo showing more pages pre-binding. As in the previous image, many text elements have been blocked out with big fields of color"
+     alt="More pages in a pre-bound state. As in the previous shot, many text elements have been blocked out with big fields of color"
      class="prose-img-dense"
 />
 <img src="https://user-images.githubusercontent.com/11279744/159189102-68ead161-a325-43ce-999c-aa6ee7a5de99.png"
-     alt="Final photo showing more pages pre-binding. One sneaks in here looking more like a Pollock than a Rothko."
+     alt="Showing more pages pre-binding. One sneaks in here looking more like a Pollock than a Rothko."
      class="prose-img-dense"
 />
