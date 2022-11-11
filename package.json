@@ -61,8 +61,8 @@
 		"node-fetch": "^2.6.6",
 		"parse-link-header": "^2.0.0",
 		"prism-themes": "^1.9.0",
+		"remark": "^14.0.2",
 		"shiki": "^0.10.0",
-		"slugify": "^1.6.5",
 		"snarkdown": "^2.0.0"
 	}
 }
