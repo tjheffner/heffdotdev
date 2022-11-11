@@ -8,8 +8,12 @@
 	import { onMount } from 'svelte';
 	import { MY_TWITTER_HANDLE, GH_USER, SITE_TITLE } from '$lib/siteConfig';
 
+	import { fade } from 'svelte/transition'
+
 	let showBackToTop = true;
 	let showGetInTouch = false;
+
+	export let data
 
 	onMount(async () => {
 		if ($page.url.pathname === '/') showBackToTop = !showBackToTop;
@@ -30,7 +34,10 @@
 	<Header />
 </div>
 <!-- for skip link -->
+
+{#key data.currentRoute}
 <main
+	in:fade={{ duration: 150, delay: 150 }} out:fade={{ duration: 150 }}
 	id="maincontent"
 	class="flex flex-col justify-center bg-orange-100 px-4 dark:bg-slate-900 sm:px-8"
 >
@@ -41,6 +48,7 @@
 {/if}
 
 </main>
+
 <footer class="flex flex-col justify-center bg-orange-100 px-4 py-12 dark:bg-slate-900 sm:px-8">
 	{#if showGetInTouch}
 		<br> <!-- force slice top-border -->
@@ -104,3 +112,4 @@
 		</div>
 	</div>
 </footer>
+{/key}
