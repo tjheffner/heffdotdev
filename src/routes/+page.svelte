@@ -69,7 +69,7 @@
 		<div class="grid w-full grid-cols-1 md:grid-cols-3 gap-4 align-middle">
 			<Card title="Caper Butter" href={'/dill-and-caper-compound-butter'} />
 			<Card title="Pizza Dough" href={'/pizza-dough'}/>
-			<Card title="Chicken & Bean Stew" href={'/southwest-chicken-and-bean-stew'}/>
+			<Card title="Chicken & Bean Stew" href={'/southwest-chicken-bean-stew'}/>
 		</div>
 	</Slice>
 </section>
