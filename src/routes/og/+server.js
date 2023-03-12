@@ -1,11 +1,12 @@
+// see https://geoffrich.net/posts/svelte-social-image/
 import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
 import PTSerif from '$lib/font/PTSerif-Regular.ttf';
 import { html as toReactNode } from 'satori-html';
 import Og from '../../components/Og.svelte';
 
-const height = 630;
-const width = 1200;
+const height = 400;
+const width = 800;
 
 /** @type {import('./$types').RequestHandler} */
 export const GET = async ({ url }) => {
