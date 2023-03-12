@@ -16,16 +16,12 @@ npm install
 npm run start
 ```
 
-## Optimizations to try after you are done deploying
-
-- Customize your JSON+LD for [FAQ pages](https://rodneylab.com/sveltekit-faq-page-seo/), [organization, or products](https://navillus.dev/blog/json-ld-in-sveltekit). There is a schema for blogposts, but it is so dead simple that swyxkit does not include it.
-
 ## Acknowledgements
 
 - Homepage design inspired by Rene Stalder: https://renestalder.me/en/
 - swyxkit & swyx.io for so many decisions, but especially github as cms + blog filtering
+- Geoff Rich for dynamic og images https://geoffrich.net/posts/svelte-social-image/
 
 ## Todos
 
 - customize json+ld
-- ogimage for unfurls

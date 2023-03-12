@@ -10,7 +10,7 @@ export const fetchMarkdownPosts = async () => {
   const allPosts = await Promise.all(
     iterablePostFiles.map(async ([path, resolver]) => {
       const post = await resolver()
-      const { name, url, slug, description, type, date } = post.metadata
+      const { name, url, slug, description, type, date, image } = post.metadata
 
       const project = {
 				content: post.default.render().html,
@@ -20,6 +20,7 @@ export const fetchMarkdownPosts = async () => {
         description,
         type,
         date,
+        image,
         path
       }
 

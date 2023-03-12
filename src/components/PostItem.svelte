@@ -41,7 +41,7 @@
 <style>
 	.post:hover {
 		& h2 {
-			@apply text-sky-600 dark:text-yellow-400;
+			@apply text-orange-600 dark:text-yellow-400;
 		}
 	}
 </style>
