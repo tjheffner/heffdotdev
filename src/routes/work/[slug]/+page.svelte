@@ -22,6 +22,9 @@
 	{#if image}
 		<meta property="og:image" content={image} />
 		<meta name="twitter:image" content={image} />
+	{:else}
+   	<meta content={`https://heffner.dev/og?message=heffner.dev | ${name}`} property="og:image">
+		<meta name="twitter:image" content={`https://heffner.dev/og?message=heffner.dev | ${name}`} />
 	{/if}
 </svelte:head>
 
