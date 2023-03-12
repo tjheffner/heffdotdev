@@ -51,9 +51,9 @@
 		</div>
 	</Slice>
 
-	<Slice title="Latest Tech Posts">
+	<!-- <Slice title="Latest Tech Posts">
 		<div class="grid w-full grid-cols-1 md:grid-cols-3 gap-4 align-middle">
 			pull the latest 3 posts that have `technical` or `snippet` category here
 		</div>
-	</Slice>
+	</Slice> -->
 </section>
