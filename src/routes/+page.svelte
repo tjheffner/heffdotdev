@@ -31,45 +31,29 @@
 <section class="mx-auto px-4 sm:p-0 flex w-full flex-col items-start">
 	<Slice>
 		<h1 class="text-3xl lg:text-5xl font-bold text-shadow">
-			~welcome to my page~
+			welcome to my page
 		</h1>
 	</Slice>
 
 	<Slice title="Hello!">
-			<p>this site is under construction but coming along :)</p>
+			<p>this site is perpetually under construction but coming along :)</p>
 
-			<p>it's mostly a reminder of past work and a place for me to post recipes I like, with the occasional technical post or personal blog.<p>
+			<p>it's mostly a reminder of past work and a place for me to post recipes I like, with the occasional technical post or personal blog mixed in.<p>
 
 			<p>thanks for stopping by, check out the links that work</p>
 	</Slice>
 
-	<Slice title="Currently">
-			<p class="font-bold">Listening:</p>
-			<ul>
-				<li>Smino - Luv 4 Rent</li>
-				<li>Danger Mouse & Black Thought - Cheat Codes</li>
-			</ul>
-
-			<p class="font-bold">Reading:</p>
-			<ul>
-				<li>Automate the Boring Stuff with Python - Sweigart</li>
-				<li>Etiquette Guide to Japan - De Mente</li>
-				<li>Ramayana</li>
-			</ul>
-
-			<p class="font-bold">Watching:</p>
-			<ul>
-				<li>The Bear</li>
-				<li>I Think You Should Leave</li>
-			</ul>
-
-	</Slice>
-
-	<Slice title="Fav Recipes 😋">
+	<Slice title="Fav Recipes">
 		<div class="grid w-full grid-cols-1 md:grid-cols-3 gap-4 align-middle">
 			<Card title="Caper Butter" href={'/dill-caper-compound-butter'} />
 			<Card title="Pizza Dough" href={'/pizza-dough'}/>
 			<Card title="Chicken & Bean Stew" href={'/southwest-chicken-bean-stew'}/>
+		</div>
+	</Slice>
+
+	<Slice title="Latest Tech Posts">
+		<div class="grid w-full grid-cols-1 md:grid-cols-3 gap-4 align-middle">
+			pull the latest 3 posts that have `technical` or `snippet` category here
 		</div>
 	</Slice>
 </section>
