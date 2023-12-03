@@ -1,9 +1,9 @@
 <script>
-	import '../tailwind.css';
-	import Header from '../components/Header.svelte';
-	import Icon from '../components/Icon.svelte';
-	import NavLink from '../components/NavLink.svelte';
-	import Slice from '../components/Slice.svelte';
+	import '../../tailwind.css';
+	import Header from '$lib/components/Header.svelte';
+	import Icon from '$lib/components/Icon.svelte';
+	import NavLink from '$lib/components/NavLink.svelte';
+	import Slice from '$lib/components/Slice.svelte';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import { MY_TWITTER_HANDLE, GH_USER, SITE_TITLE } from '$lib/siteConfig';

@@ -1,9 +1,9 @@
 <script>
 import { MY_TWITTER_HANDLE, SITE_URL } from '$lib/siteConfig';
-import Comments from '../../components/Comments.svelte';
+import Comments from '$lib/components/Comments.svelte';
 
 import 'prism-themes/themes/prism-shades-of-purple.min.css';
-import Reactions from '../../components/Reactions.svelte';
+import Reactions from '$lib/components/Reactions.svelte';
 import { page } from '$app/stores';
 
 /** @type {import('./$types').PageData} */

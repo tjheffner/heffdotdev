@@ -1,6 +1,6 @@
 <script>
-	import Slice from '../components/Slice.svelte';
-	import Card from '../components/Card.svelte';
+	import Slice from '$lib/components/Slice.svelte';
+	import Card from '$lib/components/Card.svelte';
 	import {
 		SITE_URL,
 		SITE_TITLE,

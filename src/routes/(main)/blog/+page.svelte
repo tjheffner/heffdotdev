@@ -1,5 +1,5 @@
 <script>
-	import PostItem from '../../components/PostItem.svelte';
+	import PostItem from '$lib/components/PostItem.svelte';
 	import queryString from 'query-string';
 	import { onMount } from 'svelte';
 

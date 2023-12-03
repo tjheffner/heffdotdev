@@ -3,7 +3,7 @@ import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
 import PTSerif from '$lib/font/PTSerif-Regular.ttf';
 import { html as toReactNode } from 'satori-html';
-import Og from '../../components/Og.svelte';
+import Og from '$lib/components/Og.svelte';
 
 const height = 400;
 const width = 800;

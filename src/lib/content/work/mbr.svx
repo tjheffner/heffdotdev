@@ -1,0 +1,16 @@
+---
+name: Medical Bill Rights
+url: https://www.cms.gov/medical-bill-rights
+slug: medical-bill-rights
+description: 'react forms, drupal, salesforce, internationalization'
+type: professional
+date: 2023-06-01
+---
+
+The No Surprises Act is a federal law that went into effect on January 1, 2022.
+
+The Medical Bill Rights sub-site for https://cms.gov is a collection of resources to inform and assist every American their rights as enshrined by the No Surprises Act. This law provides protections against "surprise medical bills", which can be any bill that has greater than $400 difference than what you were initially told.
+
+The MBR site contains two React apps and 30 additional pages of informational content, initially available in English and Spanish. I architected both React apps and consulted on the Drupal implementation of content. The main React app is a human-friendly form for American consumers to register complaints related to surprise medical bills. This form submits data to Salesforce, where a government team can review and responds to every complaint submitted. The second React app is a short question flow to direct users to the appropriate resource page for their situation.
+
+This sub-site was built in about four months, launching smoothly after numerous pivots and unexpected challenges along the way.
