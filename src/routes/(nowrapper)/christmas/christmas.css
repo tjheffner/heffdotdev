@@ -1,7 +1,17 @@
 body::-webkit-scrollbar-thumb {
-  background: repeating-linear-gradient(60deg, red 0 9%, white 10% 18%);
-  border-radius: 100vw;
-  margin-block: 10px;
+  background: repeating-linear-gradient(60deg, red 0 9%, white 10% 18%) !important;
+  border-radius: 100vw !important;
+  margin-block: 10px !important;
+}
+body::-webkit-scrollbar-track {
+	background: powderblue !important;
+}
+
+.serif {
+  font-family: 'Gloock', serif;
+}
+.sans {
+  font-family: 'Pragati Narrow', sans-serif;
 }
 
 #snow {

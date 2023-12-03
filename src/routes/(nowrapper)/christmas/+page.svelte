@@ -108,6 +108,10 @@
   });
 </script>
 
+<svelte:head>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Pragati+Narrow">
+</svelte:head>
+
 <canvas id="snow"></canvas>
 
 
@@ -116,26 +120,30 @@
   <img src="/assets/holly-clipart-corner-11.png" class="holly right"/>
 </div>
 
-<section class="pt-[10rem] h-full text-center text-white">
-  <h1>{data.title}</h1>
-  <p>{data.where}<p>
-  <p>{data.when}</p>
+<section class="pt-[10rem] h-full text-center text-white serif">
+  <h1 class="">{data.title}</h1>
+  <p class="">{data.where}<p>
+  <p class="">{data.when}</p>
 
+  <ul class="list-none">
   {#each data.agenda as {event, time}}
-    <li>{event} - {time}</li>
+    <li class="">{event} - {time}</li>
   {/each}
+  </ul>
 
 
   <p> For dinner... </p>
 
+  <ul class="list-none">
   {#each data.menu as {name, ingredients}}
-    <li>
-      <p>{name}</p>
-      <p>{ingredients}</p>
+    <li class="">
+      <p class="">{name}</p>
+      <p class="sans">{ingredients}</p>
     </li>
   {/each}
+  </ul>
 
-  <p>{data.disclaimer}</p>
+  <p class="">{data.disclaimer}</p>
 
 </section>
 
