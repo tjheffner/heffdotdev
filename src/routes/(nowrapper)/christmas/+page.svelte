@@ -116,8 +116,8 @@
 
 
 <div class="holly-container">
-  <img src="/assets/holly-clipart-corner-11.png" class="holly left"/>
-  <img src="/assets/holly-clipart-corner-11.png" class="holly right"/>
+  <img src="/assets/holly-clipart-corner-11.png" alt="" class="holly left"/>
+  <img src="/assets/holly-clipart-corner-11.png" alt="" class="holly right"/>
 </div>
 
 <section class="pt-[10rem] h-full text-center text-white serif">
@@ -154,6 +154,6 @@
 </section>
 
 <div class="holly-container">
-  <img src="/assets/holly-clipart-corner-11.png" class="holly bottom left"/>
-  <img src="/assets/holly-clipart-corner-11.png" class="holly bottom right"/>
+  <img src="/assets/holly-clipart-corner-11.png" alt="" class="holly bottom left"/>
+  <img src="/assets/holly-clipart-corner-11.png" alt="" class="holly bottom right"/>
 </div>
