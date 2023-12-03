@@ -1,0 +1,37 @@
+body::-webkit-scrollbar-thumb {
+  background: repeating-linear-gradient(60deg, red 0 9%, white 10% 18%);
+  border-radius: 100vw;
+  margin-block: 10px;
+}
+
+#snow {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.holly-container {
+  position: relative;
+}
+.holly {
+  position: absolute;
+  top: 0;
+  background: none;
+  width: 20%;
+}
+.left {
+  left: 0;
+}
+.right {
+  right: 0;
+  transform: scaleX(-1);
+}
+.bottom {
+  transform: scaleY(-1);
+}
+.bottom.right {
+  transform: scaleX(-1) scaleY(-1);
+}
