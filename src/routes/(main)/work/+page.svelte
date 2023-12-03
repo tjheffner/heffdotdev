@@ -1,7 +1,7 @@
 <script>
 	import { SITE_TITLE } from '$lib/siteConfig';
-	import Slice from '../../components/Slice.svelte';
-	import ProjectItem from '../../components/ProjectItem.svelte';
+	import Slice from '$lib/components/Slice.svelte';
+	import ProjectItem from '$lib/components/ProjectItem.svelte';
 
 	export let data;
 </script>

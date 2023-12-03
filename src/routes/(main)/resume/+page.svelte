@@ -1,6 +1,6 @@
 <script>
 import { SITE_DESCRIPTION } from '$lib/siteConfig';
-	import Slice from '../../components/Slice.svelte';
+	import Slice from '$lib/components/Slice.svelte';
 </script>
 
 <svelte:head>
