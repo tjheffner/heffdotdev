@@ -121,29 +121,35 @@
 </div>
 
 <section class="pt-[10rem] h-full text-center text-white serif">
-  <h1 class="">{data.title}</h1>
-  <p class="">{data.where}<p>
-  <p class="">{data.when}</p>
+  <h1 class="text-6xl mb-10 text-shadow">{data.title}</h1>
+  <p>at</p>
+  <p class="text-3xl mt-6 mb-12 text-shadow">{data.where} | <span class="sans">{data.when}</span><p>
+  <!-- <p class="text-4xl sans">{data.when}</p>
+  <p class="text-4xl my-6">at {data.where}<p> -->
 
+
+  <h2 class="text-2xl mt-20 mb-6 underline underline-offset-4">Schedule</h2>
   <ul class="list-none">
   {#each data.agenda as {event, time}}
-    <li class="">{event} - {time}</li>
+    <li class="my-2">
+      <p class="text-lg">{event} - <span class="sans">{time}<span></p>
+    </li>
   {/each}
   </ul>
 
 
-  <p> For dinner... </p>
+  <h2 class="text-2xl mt-20 mb-6 underline underline-offset-4"> Menu </h2>
 
   <ul class="list-none">
   {#each data.menu as {name, ingredients}}
-    <li class="">
-      <p class="">{name}</p>
+    <li class="my-6">
+      <p class="text-lg">{name}</p>
       <p class="sans">{ingredients}</p>
     </li>
   {/each}
   </ul>
 
-  <p class="">{data.disclaimer}</p>
+  <p class="mt-12 text-md">{data.disclaimer}</p>
 
 </section>
 

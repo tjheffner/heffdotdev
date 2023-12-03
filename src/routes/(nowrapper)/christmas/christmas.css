@@ -1,3 +1,6 @@
+body {
+  background-color: rgb(17 24 39 / var(--tw-bg-opacity)) !important;
+}
 body::-webkit-scrollbar-thumb {
   background: repeating-linear-gradient(60deg, red 0 9%, white 10% 18%) !important;
   border-radius: 100vw !important;
@@ -15,9 +18,9 @@ body::-webkit-scrollbar-track {
 }
 
 #snow {
+  position: fixed;
   height: 100%;
   left: 0;
-  position: absolute;
   top: 0;
   width: 100%;
   z-index: 1;
