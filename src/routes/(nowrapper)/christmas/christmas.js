@@ -5,15 +5,15 @@ export const json = {
   "agenda": [
     {
       "event": "cocktails",
-      "time": "first"
+      "time": "1pm onwards"
     },
     {
       "event": "dinner",
-      "time": "next"
+      "time": "around 3"
     },
     {
       "event": "presents",
-      "time": "eventually"
+      "time": "4"
     },
     {
       "event": "fun & games",
@@ -23,19 +23,19 @@ export const json = {
   "menu": [
     {
       "name": "baked potato soup",
-      "ingredients": "yukon gold potatoes, cream, roasted pork belly, chives, cheese"
+      "ingredients": "yukon gold potatoes, cream, bacon, chives, cheese"
     },
     {
       "name": "winter salad",
-      "ingredients": "mixed greens, apples, cranberries, walnuts, cranberry vinaigrette",
+      "ingredients": "mixed greens, apple, cranberry, walnut, cranberry vinaigrette",
     },
     {
       "name": "duck a l'orange",
-      "ingredients": "roasted duck breast, orange pan sauce, porcini mushroom risotto, baked vegetables",
+      "ingredients": "roast duck, orange pan sauce, porcini mushroom risotto, baked vegetables",
     },
     {
       "name": "dessert",
-      "ingredients": "creme brulee, assorted cookies, mousse"
+      "ingredients": "creme brulee, assorted treats"
     }
   ],
   "disclaimer": "all items are gluten-free, however some may contain dairy products"
