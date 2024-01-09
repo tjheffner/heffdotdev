@@ -8,6 +8,7 @@ import {
 	GH_PUBLISHED_TAGS,
 	REPO_OWNER
 } from './siteConfig';
+import { slugify, readingTime } from './utils'
 import parse from 'parse-link-header';
 import { remark } from 'remark';
 import remarkParse from 'remark-parse';
@@ -31,31 +32,6 @@ const rehypePlugins = [
 
 let allBlogposts = [];
 // let etag = null // todo - implmement etag header
-
-/**
- * @param {string | number} text
- * @returns {string}
- */
-function slugify(text) {
-    return text
-        .toString()                 // Cast to string (optional)
-        .normalize('NFKD')          // The normalize() using NFKD method returns the Unicode Normalization Form of a given string.
-        .toLowerCase()              // Convert the string to lowercase letters
-        .trim()                     // Remove whitespace from both sides of a string (optional)
-        .replace(/\s+/g, '-')       // Replace spaces with hyphen
-		.replace(/[^\w-]+/g, '')   // Remove all non-word chars
-		.replace(/--+/g, '-')     // Replace multiple hyphen with single hyphen
-		.replace(/(^-|-$)/g, ''); // Remove leading or trailing hyphen
-}
-
-/**
- * @param {string} text
- * @returns {string}
- */
-function readingTime(text) {
-	let minutes = Math.ceil(text.trim().split(' ').length / 225);
-	return minutes > 1 ? `${minutes} minutes` : `${minutes} minute`;
-}
 
 export async function listContent() {
 	// use a diff var so as to not have race conditions while fetching
@@ -243,6 +219,7 @@ function parseIssue(issue) {
 
 	return {
 		type: 'blog', // futureproof in case you want to add other types of content
+		issueNumber: issue.number,
 		content,
 		frontmatter: data,
 		title,
