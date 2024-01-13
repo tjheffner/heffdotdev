@@ -28,45 +28,33 @@ const sitemap = (posts, projects, pages) => `<?xml version="1.0" encoding="UTF-8
   >
     <url>
       <loc>${SITE_URL}</loc>
-      <changefreq>daily</changefreq>
-      <priority>1.0</priority>
     </url>
     ${pages
-			.map(
-				(page) => `
-    <url>
-      <loc>${SITE_URL}/${page}</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.9</priority>
-    </url>
-    `
-			)
-			.join('')}
+			.map((page) => `
+        <url>
+          <loc>${SITE_URL}/${page}</loc>
+        </url>
+        `
+			).join('')}
     ${posts
 			.map((post) =>
 				post.isPrivate
 					? null
 					: `
-    <url>
-      <loc>${SITE_URL}/${post.slug}</loc>
-      <changefreq>daily</changefreq>
-      <priority>0.7</priority>
-      <lastmod>${post.ghMetadata.updated_at ? post.ghMetadata.updated_at : post.ghMetadata.created_at}</lastmod>
-    </url>
-    `
-			)
-			.join('')}
+        <url>
+          <loc>${SITE_URL}/${post.slug}</loc>
+          <lastmod>${post.ghMetadata.updated_at ? post.ghMetadata.updated_at.substring(0, 10) : post.ghMetadata.created_at.substring(0, 10)}</lastmod>
+        </url>
+        `
+			).join('')}
     ${projects
 			.map((project) =>
 				project.isPrivate
 					? null
 					: `
-    <url>
-      <loc>${SITE_URL}/work/${project.slug}</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.8</priority>
-    </url>
-    `
-			)
-			.join('')}
+        <url>
+          <loc>${SITE_URL}/work/${project.slug}</loc>
+        </url>
+        `
+			).join('')}
   </urlset>`;

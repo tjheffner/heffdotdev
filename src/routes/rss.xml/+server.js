@@ -28,11 +28,15 @@ export async function GET({ fetch }) {
 		});
 	});
 
-	// Suggestion (check for correctness before using):
-	return new Response(feed.xml({ indent: true }), {
+	// inject our custom rss stylesheet
+	return new Response(feed.xml({ indent: true }).replace(
+    `<?xml version="1.0" encoding="UTF-8"?>`,
+    `<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet href="/assets/xml/rss.xsl" type="text/xsl"?>`
+	), {
 		headers: {
 			'Cache-Control': `public, max-age=${86400}`, // 24 hours
-			'Content-Type': 'application/rss+xml'
+			'Content-Type': 'application/xml; charset=utf-8',  // not application/rss+xml
+			'x-content-type-options': 'nosniff'
 		}
 	});
 }
