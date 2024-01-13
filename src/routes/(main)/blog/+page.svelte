@@ -249,4 +249,8 @@
 	{:else}
 		<div class="prose dark:prose-invert">Search something else!</div>
 	{/if}
+
+	<div class="my-4 prose">
+		<a href="/api/rss.xml">RSS feed available.</a>
+	</div>
 </section>
