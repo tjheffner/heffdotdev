@@ -5,6 +5,9 @@
 <svelte:head>
   <title>heffner.dev | about</title>
   <meta name="description" content="About this site." />
+	<meta property="og:image" content={`https://heffner.dev/og?message=about`}>
+	<meta name="twitter:card" content={`https://heffner.dev/og?message=about` ? 'summary_large_image' : 'summary'} />
+	<meta name="twitter:image" content={`https://heffner.dev/og?message=about`} />
 </svelte:head>
 
 <h1 class="text-shadow">about</h1>

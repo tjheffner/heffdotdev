@@ -3,7 +3,6 @@ import { MY_TWITTER_HANDLE, SITE_URL } from '$lib/siteConfig';
 import Comments from '$lib/components/Comments.svelte';
 
 import 'prism-themes/themes/prism-shades-of-purple.min.css';
-import Reactions from '$lib/components/Reactions.svelte';
 import { page } from '$app/stores';
 
 /** @type {import('./$types').PageData} */
@@ -55,12 +54,14 @@ $: canonical = SITE_URL + $page.url.pathname;
 	>
 		<p class="flex items-center text-sm text-gray-700 dark:text-gray-300">tjheffner</p>
 		<p class="min-w-32 flex items-center text-sm text-gray-600 dark:text-gray-400 md:mt-0">
-			<a href={json.ghMetadata.issueUrl} rel="external noreferrer noopener" class="no-underline" target="_blank">
-				<span class="mr-4 font-mono text-xs text-gray-700 text-opacity-70 dark:text-gray-300"
-					>{json.ghMetadata.reactions.total_count}
-					{#if json.ghMetadata.reactions.total_count === 1}reaction{:else}reactions{/if}</span
-				>
-			</a>
+			{#if json.ghMetadata.reactions.total_count > 0}
+				<a href={json.ghMetadata.issueUrl} rel="external noreferrer noopener" class="no-underline" target="_blank">
+					<span class="mr-4 font-mono text-xs text-gray-700 text-opacity-70 dark:text-gray-300"
+						>{json.ghMetadata.reactions.total_count}
+						{#if json.ghMetadata.reactions.total_count === 1}reaction{:else}reactions{/if}</span
+					>
+				</a>
+			{/if}
 			{new Date(json.date).toISOString().slice(0, 10)}
 		</p>
 	</div>

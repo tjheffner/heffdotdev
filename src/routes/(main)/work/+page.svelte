@@ -8,6 +8,9 @@
 
 <svelte:head>
 	<title>{SITE_TITLE} | Work</title>
+	<meta property="og:image" content={`https://heffner.dev/og?message=heffner.dev%20|%20work`}>
+	<meta name="twitter:card" content={`https://heffner.dev/og?message=heffner.dev%20|%20work` ? 'summary_large_image' : 'summary'} />
+	<meta name="twitter:image" content={`https://heffner.dev/og?message=heffner.dev%20|%20work`} />
 </svelte:head>
 
 <section class="mx-auto px-4 sm:p-0 flex w-full flex-col items-start">

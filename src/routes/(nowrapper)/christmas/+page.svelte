@@ -110,6 +110,10 @@
 
 <svelte:head>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Pragati+Narrow">
+  <meta name="description" content="christmas dinner 2023" />
+  <meta property="og:image" content={`https://heffner.dev/og?message=christmas%20dinner!`}>
+  <meta name="twitter:card" content={`https://heffner.dev/og?message=christmas%20dinner!` ? 'summary_large_image' : 'summary'} />
+  <meta name="twitter:image" content={`https://heffner.dev/og?message=christmas%20dinner!`} />
 </svelte:head>
 
 <canvas id="snow"></canvas>

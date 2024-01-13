@@ -111,6 +111,9 @@
 <svelte:head>
 	<title>heffner.dev | posts</title>
 	<meta name="description" content="Latest musings fit to print." />
+	<meta property="og:image" content={`https://heffner.dev/og?message=posts`}>
+	<meta name="twitter:card" content={`https://heffner.dev/og?message=posts` ? 'summary_large_image' : 'summary'} />
+	<meta name="twitter:image" content={`https://heffner.dev/og?message=posts`} />
 </svelte:head>
 
 <svelte:window on:keyup={focusSearch} />
