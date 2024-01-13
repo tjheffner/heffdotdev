@@ -45,7 +45,7 @@
 		"remark-slug": "^6.1.0",
 		"remark-toc": "^9.0.0",
 		"rss": "^1.2.2",
-		"satori": "^0.4.2",
+		"satori": "^0.10.11",
 		"satori-html": "^0.3.2",
 		"svelte": "^3.50.1",
 		"svelte-check": "^2.9.1",
