@@ -35,25 +35,32 @@
 		</h1>
 	</Slice>
 
-	<Slice title="Hello!">
-			<p>this site is perpetually under construction but coming along :)</p>
+	<Slice title="Hello World!">
+			<p>This site is perpetually under construction but coming along :)</p>
 
-			<p>it's mostly a reminder of past work and a place for me to post recipes I like, with the occasional technical post or personal blog mixed in.<p>
+			<p>It's mostly a place for me to post recipes I like, with the occasional technical post or personal blog mixed in. Some work-related stuff can be found here too, but that's not what I want to talk about.<p>
 
-			<p>thanks for stopping by, check out the links that work</p>
+			<p>Thanks for stopping by, check out the links that work ✌️</p>
 	</Slice>
 
-	<Slice title="Fav Recipes">
+
+	<Slice title="Currently...">
+		<p><span class="text-3xl">🎶</span> - Stove God Cooks, Nujabes, Fleetwood Mac</p>
+		<p><span class="text-3xl">🍿</span> - The Righteous Gemstones, Saltburn</p>
+		<p><span class="text-3xl">📚</span> - Thinking, Fast And Slow by Daniel Kahneman</p>
+		<p><span class="text-3xl">🎮</span> - Baldur's Gate 3, Monster Train, RDR2</p>
+
+		<p class="text-xs">Last updated: Jan 12, 2024</p>
+	</Slice>
+
+	<Slice title="Top Recipes">
+		<p>In no particular order...</p>
 		<div class="grid w-full grid-cols-1 md:grid-cols-3 gap-4 align-middle">
+			<Card title="Creme Brulee" href={'/creme-brulee'}/>
 			<Card title="Caper Butter" href={'/dill-caper-compound-butter'} />
+			<Card title="Preserved Lemons" href={'/preserved-lemons'}/>
 			<Card title="Pizza Dough" href={'/pizza-dough'}/>
 			<Card title="Chicken & Bean Stew" href={'/southwest-chicken-bean-stew'}/>
 		</div>
 	</Slice>
-
-	<!-- <Slice title="Latest Tech Posts">
-		<div class="grid w-full grid-cols-1 md:grid-cols-3 gap-4 align-middle">
-			pull the latest 3 posts that have `technical` or `snippet` category here
-		</div>
-	</Slice> -->
 </section>

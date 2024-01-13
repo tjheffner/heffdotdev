@@ -38,7 +38,6 @@
 	};
 
 	let recipes = false;
-	let snippets = false;
 	let technical = false;
 	let notes = false;
 
@@ -50,7 +49,6 @@
 		if (!Array.isArray(givenstate.show)) givenstate.show = [givenstate.show];
 		if (!givenstate.show.includes('Recipes')) recipes = false;
 		if (!givenstate.show.includes('Technical')) technical = false;
-		if (!givenstate.show.includes('Snippets')) snippets = false;
 		if (!givenstate.show.includes('Notes')) notes = false;
 		if (givenstate.filter) filterStr = givenstate.filter;
 		urlState = { ...defaultURLState, ...givenstate };
@@ -63,7 +61,6 @@
 				filter: filterStr,
 				show: [
 					recipes && 'Recipes',
-					snippets && 'Snippets',
 					technical && 'Technical',
 					notes && 'Notes'
 				].filter(Boolean)
@@ -99,10 +96,9 @@
 			if (filterStr && notIncludes(filterStr, x)) {
 				return false;
 			} else {
-				if ([recipes, technical, snippets, notes].every((v) => v === false)) return true;
+				if ([recipes, technical, notes].every((v) => v === false)) return true;
 				if (recipes && x.category === 'recipe') return true;
 				if (technical && x.category === 'technical') return true;
-				if (snippets && x.category === 'snippet') return true;
 				if (notes && x.category === 'note') return true;
 			}
 		});
@@ -167,17 +163,6 @@
 				class="filter"
 			>
 				Recipes
-			</button>
-			<button
-				type="button"
-				on:click={() => {
-					saveURLState();
-					snippets = !snippets;
-				}}
-				class:activefilter={snippets}
-				class="filter"
-			>
-				Snippets
 			</button>
 			<button
 				type="button"
