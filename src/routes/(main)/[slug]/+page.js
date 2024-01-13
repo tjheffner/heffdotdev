@@ -5,7 +5,7 @@ export const csr = true; // https://github.com/sveltejs/kit/pull/6446
 export async function load({ params, fetch, setHeaders }) {
 	const slug = params.slug;
 
-	if (slug === 'feed' || slug === 'rss') {
+	if (slug === 'feed' || slug === 'rss' || slug === 'rss.xml') {
 		throw redirect(308, '/rss.xml')
 	}
 
