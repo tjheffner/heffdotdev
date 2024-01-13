@@ -8,7 +8,6 @@
 		DEFAULT_OG_IMAGE,
 		MY_TWITTER_HANDLE
 	} from '$lib/siteConfig';
-	export const prerender = false; // index page is most visited, lets prerender
 </script>
 
 <svelte:head>
