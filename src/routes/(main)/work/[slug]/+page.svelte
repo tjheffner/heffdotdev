@@ -5,6 +5,7 @@
 	const { content, name, date, description, image, url } = data
 
 	import { MY_TWITTER_HANDLE, SITE_URL } from '$lib/siteConfig';
+	import GetInTouch from '$lib/components/GetInTouch.svelte';
 </script>
 
 <svelte:head>
@@ -52,3 +53,5 @@
 		<a class="footer-link font-bold" href={url}>View this project live</a>
 	{/if}
 </article>
+
+<GetInTouch />

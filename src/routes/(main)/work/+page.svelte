@@ -2,6 +2,7 @@
 	import { SITE_TITLE } from '$lib/siteConfig';
 	import Slice from '$lib/components/Slice.svelte';
 	import ProjectItem from '$lib/components/ProjectItem.svelte';
+	import GetInTouch from '$lib/components/GetInTouch.svelte';
 
 	export let data;
 </script>
@@ -49,4 +50,6 @@
 
 		</ul>
 	</Slice>
+
+	<GetInTouch />
 </section>

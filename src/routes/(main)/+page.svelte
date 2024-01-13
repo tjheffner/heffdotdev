@@ -37,9 +37,9 @@
 	<Slice title="Hello World!">
 			<p>This site is perpetually under construction but coming along :)</p>
 
-			<p>It's mostly a place for me to post recipes I like, with the occasional technical post or personal blog mixed in. Some work-related stuff can be found here too, but that's not what I want to talk about.<p>
+			<p>It's mostly a place for me to <a href="/blog?show=Recipes">post recipes</a> I like, with the occasional technical post or personal blog mixed in. Some <a href="/work">work-related</a> <a href="/resume">stuff</a> can be found here too, but that's not what I want to talk <a href="/about">about.</a><p>
 
-			<p>Thanks for stopping by, check out the links that work ✌️</p>
+			<p>Thanks for stopping by, check out the links that work. ✌️</p>
 	</Slice>
 
 
