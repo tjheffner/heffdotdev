@@ -1,4 +1,5 @@
 /feed /rss.xml
 /rss /rss.xml
+/api/rss.xml /rss.xml
 
 # read docs for more https://docs.netlify.com/routing/redirects/

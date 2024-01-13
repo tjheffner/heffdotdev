@@ -236,6 +236,6 @@
 	{/if}
 
 	<div class="my-4 prose">
-		<a href="/rss.xml">RSS feed available.</a>
+		<a href="/feed">RSS feed available.</a>
 	</div>
 </section>
