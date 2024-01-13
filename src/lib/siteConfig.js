@@ -1,4 +1,5 @@
-export const SITE_URL = 'https://heffner.netlify.app';
+// export const SITE_URL = 'https://heffner.netlify.app';
+export const SITE_URL = 'https://heffner.dev';
 export const GH_USER = 'tjheffner';
 export const GH_USER_REPO = 'tjheffner/heffdotdev'; // used for pulling github issues and offering comments
 export const SITE_TITLE = 'heffner.dev';

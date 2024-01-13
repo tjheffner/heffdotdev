@@ -29,12 +29,6 @@
 		>
 			{new Date(item.date).toISOString().slice(0, 10)}
 		</p>
-
-		{#if item.ghMetadata && item.ghMetadata.reactions.total_count}
-			<p class="md:col-span-1 md:col-start-4 md:justify-self-end text-accent">
-				{item.ghMetadata.reactions.total_count} ♥
-			</p>
-		{/if}
 	</div>
 </a>
 

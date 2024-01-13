@@ -1,0 +1,15 @@
+<svelte:head>
+  <title>heffner.dev | blogroll</title>
+  <meta name="description" content="other neat websites" />
+	<meta property="og:image" content={`https://heffner.dev/og?message=blogroll`}>
+	<meta name="twitter:card" content={`https://heffner.dev/og?message=blogroll` ? 'summary_large_image' : 'summary'} />
+	<meta name="twitter:image" content={`https://heffner.dev/og?message=blogroll`} />
+</svelte:head>
+
+<h1 class="text-shadow">blogroll</h1>
+
+- [randi bolt](https://www.rbolt.me/)
+- [nug doug](https://darkdell.net)
+- [defector](https://defector.com)
+- [bright side](https://www.brightsideofthesun.com/)
+- [fujichia](https://www.fujichia.com/)

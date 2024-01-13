@@ -3,7 +3,6 @@ import { MY_TWITTER_HANDLE, SITE_URL } from '$lib/siteConfig';
 import Comments from '$lib/components/Comments.svelte';
 
 import 'prism-themes/themes/prism-shades-of-purple.min.css';
-import Reactions from '$lib/components/Reactions.svelte';
 import { page } from '$app/stores';
 
 /** @type {import('./$types').PageData} */
@@ -55,12 +54,14 @@ $: canonical = SITE_URL + $page.url.pathname;
 	>
 		<p class="flex items-center text-sm text-gray-700 dark:text-gray-300">tjheffner</p>
 		<p class="min-w-32 flex items-center text-sm text-gray-600 dark:text-gray-400 md:mt-0">
-			<a href={json.ghMetadata.issueUrl} rel="external noreferrer noopener" class="no-underline" target="_blank">
-				<span class="mr-4 font-mono text-xs text-gray-700 text-opacity-70 dark:text-gray-300"
-					>{json.ghMetadata.reactions.total_count}
-					{#if json.ghMetadata.reactions.total_count === 1}reaction{:else}reactions{/if}</span
-				>
-			</a>
+			{#if json.ghMetadata.reactions.total_count > 0}
+				<a href={json.ghMetadata.issueUrl} rel="external noreferrer noopener" class="no-underline" target="_blank">
+					<span class="mr-4 font-mono text-xs text-gray-700 text-opacity-70 dark:text-gray-300"
+						>{json.ghMetadata.reactions.total_count}
+						{#if json.ghMetadata.reactions.total_count === 1}reaction{:else}reactions{/if}</span
+					>
+				</a>
+			{/if}
 			{new Date(json.date).toISOString().slice(0, 10)}
 		</p>
 	</div>
@@ -77,23 +78,9 @@ $: canonical = SITE_URL + $page.url.pathname;
 </article>
 
 <div class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8">
-	<!-- <div class="mx-auto mb-16 w-fit max-w-2xl flex flex-col justify-center px-4 sm:px-8"> -->
-	<div
-		class="mb-12 w-fit self-center border-t-2 border-b-2 border-red-600 p-4 p-4 text-gray-700 dark:border-blue-300 dark:text-gray-400"
-	>
-		{#if json.ghMetadata.reactions.total_count > 0}
-			Reactions: <Reactions
-				issueUrl={json.ghMetadata.issueUrl}
-				reactions={json.ghMetadata.reactions}
-			/>
-		{:else}
-			<a class="gh-link" href={json.ghMetadata.issueUrl}>Leave a reaction </a>
-			if you liked this post! 🧡
-		{/if}
-	</div>
-	<div class="mb-8 w-full">
-		<Comments ghMetadata={json.ghMetadata} />
-	</div>
+<hr class="mt-2 w-full border-t-2 border-red-600 dark:border-blue-300" />
 
-	<!-- <Newsletter /> -->
+	<div class="mb-8 w-full">
+		<Comments issueNumber={json.issueNumber} />
+	</div>
 </div>

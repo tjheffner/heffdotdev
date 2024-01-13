@@ -1,41 +1,40 @@
 import RSS from 'rss';
 import { SITE_TITLE, SITE_URL } from '$lib/siteConfig';
+import { remark } from 'remark';
+import remarkHTML from 'remark-html';
 import { listContent } from '$lib/content';
 
 // Reference: https://github.com/sveltejs/kit/blob/master/examples/hn.svelte.dev/src/routes/%5Blist%5D/rss.js
 /** @type {import('@sveltejs/kit').RequestHandler} */
-export async function GET() {
+export async function GET({ fetch }) {
 	const feed = new RSS({
 		title: SITE_TITLE + ' RSS Feed',
 		site_url: SITE_URL,
 		feed_url: SITE_URL + '/api/rss.xml'
 	});
 
-	const allBlogs = await listContent();
+	const allBlogs = await listContent(fetch);
 	allBlogs.forEach((post) => {
+		// extract HTML from markdown
+		const htmlDescription = remark()
+			.use(remarkHTML)
+			.processSync(post.description)
+
 		feed.item({
 			title: post.title,
 			url: SITE_URL + `/${post.slug}`,
 			date: post.date,
-			description: post.description
+			description: htmlDescription.toString()
 		});
 	});
 
-	throw new Error("@migration task: Migrate this return statement (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292701)");
 	// Suggestion (check for correctness before using):
-	// return new Response(feed.xml({ indent: true }), {
-	// 	headers: {
-	// 		'Cache-Control': `max-age=0, s-maxage=${600}`, // 10 minutes
-	// 		'Content-Type': 'application/rss+xml'
-	// 	}
-	// });
-	return {
-		body: feed.xml({ indent: true }), // todo - nonindent if not human
+	return new Response(feed.xml({ indent: true }), {
 		headers: {
-			'Cache-Control': `max-age=0, s-maxage=${600}`, // 10 minutes
+			'Cache-Control': `public, max-age=${86400}`, // 24 hours
 			'Content-Type': 'application/rss+xml'
 		}
-	};
+	});
 }
 
 // misc notes for future users
