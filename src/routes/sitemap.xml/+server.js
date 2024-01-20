@@ -2,6 +2,8 @@ import { SITE_URL } from '$lib/siteConfig'
 import { listContentFromIssues } from '$lib/content'
 import { fetchMarkdownPosts } from '$lib/localContent'
 
+export const prerender = true
+
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function GET({ fetch }) {
   const posts = await listContentFromIssues(fetch, 'Published')
