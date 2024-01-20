@@ -8,9 +8,10 @@
 
 <h1 class="text-shadow">blogroll</h1>
 
-- [randi bolt](https://www.rbolt.me/)
+here's some other cool blogs
+
 - [nug doug](https://darkdell.net)
 - [mike crittenden](https://critter.blog)
 - [defector](https://defector.com)
-- [bright side](https://www.brightsideofthesun.com/)
+- [bright side of the sun](https://www.brightsideofthesun.com/)
 - [fujichia](https://www.fujichia.com/)

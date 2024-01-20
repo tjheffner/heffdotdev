@@ -12,6 +12,41 @@
 			}, 300);
 		}
 	}
+
+	export const links = [
+		{
+			name: 'Home',
+			href: '/'
+		},
+		{
+			name: 'Posts',
+			href: '/blog'
+		},
+		{
+			name: 'Work',
+			href: '/work'
+		},
+		{
+			name: 'Gallery',
+			href: '/gallery'
+		},
+		{
+			name: 'Blogroll',
+			href: '/blogroll'
+		},
+		{
+			name: 'About',
+			href: '/about'
+		},
+		{
+			name: 'Github',
+			href: 'https://github.com/tjheffner'
+		},
+		{
+			name: 'Tweets',
+			href: 'https://twitter.com/foodpyramids'
+		},
+	]
 </script>
 
 <div class="ml-[-0.60rem] md:hidden">
@@ -60,73 +95,22 @@
 	</button>
 	{#if isOpen}
 		<ul
-			class="menu absolute flex flex-col bg-lime-300 text-2xl uppercase dark:bg-gray-900"
+			class="menu absolute flex flex-col bg-red-300 text-2xl uppercase dark:bg-orange-900"
 			class:menuRendered={isMenuRendered}
 		>
+			{#each links as link, index}
 			<li
 				class="border-b border-indigo-700 font-semibold text-gray-900 dark:border-yellow-400 dark:text-gray-100"
-				style="transition-delay: 150ms;"
+				style="transition-delay: {(index * 50) + 50}ms"
 			>
 				<a
 					class="flex w-auto pb-4"
 					data-sveltekit-prefetch
 					on:click={() => setTimeout(() => (isOpen = false), 300)}
-					href="/">Home</a
+					href={link.href}>{link.name}</a
 				>
 			</li>
-			<li
-				class="border-b border-indigo-700 font-semibold text-gray-900 dark:border-yellow-400 dark:text-gray-100"
-				style="transition-delay: 250ms;"
-			>
-				<a
-					class="flex w-auto pb-4"
-					data-sveltekit-prefetch
-					on:click={() => setTimeout(() => (isOpen = false), 300)}
-					href="/blog">Posts</a
-				>
-			</li>
-			<li
-				class="border-b border-indigo-700 font-semibold text-gray-900 dark:border-yellow-400 dark:text-gray-100"
-				style="transition-delay: 250ms;"
-			>
-				<a
-					class="flex w-auto pb-4"
-					data-sveltekit-prefetch
-					on:click={() => setTimeout(() => (isOpen = false), 300)}
-					href="/work">Work</a
-				>
-			</li>
-			<li
-				class="border-b border-indigo-700 font-semibold text-gray-900 dark:border-yellow-400 dark:text-gray-100"
-				style="transition-delay: 350ms;"
-			>
-				<a
-					class="flex w-auto pb-4"
-					data-sveltekit-prefetch
-					on:click={() => setTimeout(() => (isOpen = false), 300)}
-					href="/about">About</a
-				>
-			</li>
-			<li
-				class="border-b border-indigo-700 font-semibold text-gray-900 dark:border-yellow-400 dark:text-gray-100"
-				style="transition-delay: 400ms;"
-			>
-				<a
-					class="flex w-auto pb-4"
-					on:click={() => setTimeout(() => (isOpen = false), 300)}
-					href="https://github.com/tjheffner">GitHub</a
-				>
-			</li>
-			<li
-				class="border-b border-indigo-700 font-semibold text-gray-900 dark:border-yellow-400 dark:text-gray-100"
-				style="transition-delay: 325ms;"
-			>
-				<a
-					class="flex w-auto pb-4"
-					on:click={() => setTimeout(() => (isOpen = false), 200)}
-					href="https://twitter.com/foodpyramids">Tweets</a
-				>
-			</li>
+			{/each}
 		</ul>
 	{/if}
 </div>
