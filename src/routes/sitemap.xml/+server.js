@@ -8,7 +8,7 @@ export async function GET({ fetch }) {
   const galleries = await listContentFromIssues('Gallery');
   const projects = await fetchMarkdownPosts()
 	const pages = ['about', 'resume', 'blogroll', 'christmas', 'blog', 'work'];
-	const body = sitemap(posts, projects, pages);
+	const body = sitemap(posts, projects, pages, galleries);
 
 	return new Response(body, {
 		headers: {
@@ -18,7 +18,7 @@ export async function GET({ fetch }) {
 	});
 }
 
-const sitemap = (posts, projects, pages) => `<?xml version="1.0" encoding="UTF-8" ?>
+const sitemap = (posts, projects, pages, galleries) => `<?xml version="1.0" encoding="UTF-8" ?>
   <urlset
     xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:news="https://www.google.com/schemas/sitemap-news/0.9"
@@ -50,7 +50,7 @@ const sitemap = (posts, projects, pages) => `<?xml version="1.0" encoding="UTF-8
 			).join('')}
     ${galleries
       .map((gallery) =>
-        post.isPrivate
+        gallery.isPrivate
           ? null
           : `
         <url>
