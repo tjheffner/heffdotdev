@@ -2,7 +2,7 @@ import RSS from 'rss';
 import { SITE_TITLE, SITE_URL } from '$lib/siteConfig';
 import { remark } from 'remark';
 import remarkHTML from 'remark-html';
-import { listContent } from '$lib/content';
+import { listContentFromIssues } from '$lib/content';
 
 // Reference: https://github.com/sveltejs/kit/blob/master/examples/hn.svelte.dev/src/routes/%5Blist%5D/rss.js
 /** @type {import('@sveltejs/kit').RequestHandler} */
@@ -13,7 +13,7 @@ export async function GET({ fetch }) {
 		feed_url: SITE_URL + '/rss.xml'
 	});
 
-	const allBlogs = await listContent(fetch);
+	const allBlogs = await listContentFromIssues('Published');
 	allBlogs.forEach((post) => {
 		// extract HTML from markdown
 		const htmlDescription = remark()

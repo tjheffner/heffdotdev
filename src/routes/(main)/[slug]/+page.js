@@ -10,15 +10,22 @@ export async function load({ params, fetch, setHeaders }) {
 	}
 
 	let res = null;
-	res = await fetch(`/api/blog/${slug}.json`);
+	res = await fetch(`/api/getContent/${slug}.json`);
 	if (res.status > 400) {
 		throw error(res.status, await res.text());
 	}
+	const json = await res.json()
+
+	// because [slug] is a catchall, it gets the gallery pages too. redirect them.
+	if (json.type === 'gallery') {
+		throw redirect(308, `/gallery/${json.slug}`)
+	}
+
 	setHeaders({
 		'Cache-Control': 'public, max-age=60'
 	});
 	return {
-		json: await res.json(),
+		json,
 		slug,
 		REPO_URL
 	};

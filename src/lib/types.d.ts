@@ -1,5 +1,4 @@
-export type ContentItem = {
-	type: 'blog';
+export type BaseContentItem = {
 	content: string;
 	frontmatter: {
 		[key: string]: string;
@@ -7,14 +6,30 @@ export type ContentItem = {
 	title: string;
 	subtitle: string;
 	description: string;
-	category: string;
-	tags: string[];
-	image: string;
 	canonical: string;
 	slug: string;
 	date: Date;
 	ghMetadata: GHMetadata;
+	image: string;
+}
+
+export type BlogItem = BaseContentItem & {
+	type: 'blog';
+	category: string;
+	tags: string[];
+	readingTime: string;
 };
+
+export type GalleryItem = BaseContentItem & {
+	type: 'gallery';
+	images: GalleryImage[]
+}
+
+export type GalleryImage = {
+	src: string;
+	alt: string;
+	size: string;
+}
 
 export type GHMetadata = {
 	issueUrl: string;
