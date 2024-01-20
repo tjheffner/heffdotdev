@@ -5,8 +5,12 @@ export const csr = true; // https://github.com/sveltejs/kit/pull/6446
 export async function load({ params, fetch, setHeaders }) {
 	const slug = params.slug;
 
+	// redirect these slugs to appropriate routes
 	if (slug === 'feed' || slug === 'rss' || slug === 'rss.xml') {
 		throw redirect(308, '/rss.xml')
+	}
+	if (slug === 'sitemap' || slug === 'sitemap.xml') {
+		throw redirect(308, '/sitemap.xml')
 	}
 
 	let res = null;
@@ -16,7 +20,8 @@ export async function load({ params, fetch, setHeaders }) {
 	}
 	const json = await res.json()
 
-	// because [slug] is a catchall, it gets the gallery pages too. redirect them.
+	// because [slug] is a catchall, it gets gallery slugs too. redirect them. 
+	// e.g. /japan -> /gallery/japan
 	if (json.type === 'gallery') {
 		throw redirect(308, `/gallery/${json.slug}`)
 	}

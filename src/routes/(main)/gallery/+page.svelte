@@ -6,8 +6,8 @@
 </script>
 
 <svelte:head>
-	<title>heffner.dev | adventures</title>
-	<meta name="description" content="part photo gallery, part trip report" />
+	<title>heffner.dev | gallery</title>
+	<meta name="description" content="part photo gallery, part adventure log" />
 	<meta property="og:image" content={`https://heffner.dev/og?message=adventure%20log`}>
 	<meta name="twitter:card" content={`https://heffner.dev/og?message=adventure%20log` ? 'summary_large_image' : 'summary'} />
 	<meta name="twitter:image" content={`https://heffner.dev/og?message=adventure%20log`} />
