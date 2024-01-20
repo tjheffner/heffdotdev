@@ -102,7 +102,8 @@ export async function formatContent(content) {
     .replace(/\n{% youtube (.*?) %}/g, (_, x) => {
       // https://stackoverflow.com/a/27728417/1106414
       function youtube_parser(url) {
-        var rx = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|&v(?:i)?=))([^#&?]*).*/
+        var rx =
+          /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|&v(?:i)?=))([^#&?]*).*/
         return url.match(rx)[1]
       }
       const videoId = x.startsWith('https://') ? youtube_parser(x) : x
