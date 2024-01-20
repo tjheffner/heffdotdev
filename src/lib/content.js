@@ -1,5 +1,4 @@
 import { dev } from '$app/environment'
-import fetch from 'node-fetch'
 import {
   GH_USER_REPO,
   APPROVED_POSTERS_GH_USERNAME,
@@ -20,7 +19,7 @@ let allPosts = []
  * Blog posts: 'Published'
  * Gallery pages: 'Gallery'
  */
-export async function listContentFromIssues(label) {
+export async function listContentFromIssues(fetch, label) {
   let allContentWithLabel = []
   let next = null
 
@@ -69,12 +68,12 @@ export async function listContentFromIssues(label) {
 }
 
 // searches the list of content returned and matches based on slug
-export async function getContent(slug) {
+export async function getContent(fetch, slug) {
   // get all posts if not already done - or in development
   if (dev || allPosts.length === 0) {
     console.log('loading allPosts')
-    allBlogposts = await listContentFromIssues('Published')
-    allGalleries = await listContentFromIssues('Gallery')
+    allBlogposts = await listContentFromIssues(fetch, 'Published')
+    allGalleries = await listContentFromIssues(fetch, 'Gallery')
     allPosts = [...allBlogposts, ...allGalleries]
     console.log('loaded ' + allBlogposts.length + ' blogposts')
     console.log('loaded ' + allGalleries.length + ' galleries')

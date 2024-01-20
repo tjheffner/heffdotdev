@@ -4,8 +4,8 @@ import { fetchMarkdownPosts } from '$lib/localContent'
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function GET({ fetch }) {
-  const posts = await listContentFromIssues('Published')
-  const galleries = await listContentFromIssues('Gallery')
+  const posts = await listContentFromIssues(fetch, 'Published')
+  const galleries = await listContentFromIssues(fetch, 'Gallery')
   const projects = await fetchMarkdownPosts()
   const pages = ['about', 'resume', 'blogroll', 'christmas', 'blog', 'work']
   const body = sitemap(posts, projects, pages, galleries)

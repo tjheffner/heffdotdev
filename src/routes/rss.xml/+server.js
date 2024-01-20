@@ -13,7 +13,7 @@ export async function GET({ fetch }) {
     feed_url: SITE_URL + '/rss.xml',
   })
 
-  const allBlogs = await listContentFromIssues('Published')
+  const allBlogs = await listContentFromIssues(fetch, 'Published')
   allBlogs.forEach((post) => {
     // extract HTML from markdown
     const htmlDescription = remark()
