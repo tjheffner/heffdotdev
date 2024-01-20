@@ -1,6 +1,5 @@
 <script>
 	import { SITE_DESCRIPTION } from '$lib/siteConfig';
-	import GetInTouch from '$lib/components/GetInTouch.svelte';
 </script>
 
 <svelte:head>

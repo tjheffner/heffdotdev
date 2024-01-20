@@ -1,12 +1,13 @@
 import { SITE_URL } from '$lib/siteConfig';
-import { listContent } from '$lib/content';
+import { listContentFromIssues } from '$lib/content';
 import { fetchMarkdownPosts } from '$lib/localContent'
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function GET({ fetch }) {
-  const posts = await listContent(fetch);
+  const posts = await listContentFromIssues('Published');
+  const galleries = await listContentFromIssues('Gallery');
   const projects = await fetchMarkdownPosts()
-	const pages = [`about`, 'resume', 'blogroll', 'christmas', 'blog', 'work'];
+	const pages = ['about', 'resume', 'blogroll', 'christmas', 'blog', 'work'];
 	const body = sitemap(posts, projects, pages);
 
 	return new Response(body, {
@@ -47,6 +48,17 @@ const sitemap = (posts, projects, pages) => `<?xml version="1.0" encoding="UTF-8
         </url>
         `
 			).join('')}
+    ${galleries
+      .map((gallery) =>
+        post.isPrivate
+          ? null
+          : `
+        <url>
+          <loc>${SITE_URL}/gallery/${gallery.slug}</loc>
+          <lastmod>${gallery.ghMetadata.updated_at ? gallery.ghMetadata.updated_at.substring(0, 10) : gallery.ghMetadata.created_at.substring(0, 10)}</lastmod>
+        </url>
+        `
+      ).join('')}
     ${projects
 			.map((project) =>
 				project.isPrivate
