@@ -9,8 +9,8 @@
   external_node_modules = ["mdsvex", "heffnerdotdev", "@resvg/resvg-js"]
 
 [build.environment]
-  NODE_VERSION = "16"
-  ## https://github.com/sveltejs/kit/issues/2687
+  NODE_VERSION = "20"
+  NPM_FLAGS = "-f" # force install for legacy peer deps
 
 [[headers]]
   ## https://answers.netlify.com/t/content-type-header-not-working-in-netlify-toml/7718

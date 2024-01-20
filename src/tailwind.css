@@ -35,7 +35,12 @@
     color: var(--brand-accent);
   }
 
-  :is(::-webkit-calendar-picker-indicator, ::-webkit-clear-button, ::-webkit-inner-spin-button, ::-webkit-outer-spin-button) {
+  :is(
+      ::-webkit-calendar-picker-indicator,
+      ::-webkit-clear-button,
+      ::-webkit-inner-spin-button,
+      ::-webkit-outer-spin-button
+    ) {
     color: var(--brand-accent);
   }
 
@@ -180,7 +185,8 @@ body::-webkit-scrollbar-thumb {
     var(--sb-primary-color)
   );
   border-radius: 2px;
-  box-shadow: inset 2px 2px 2px var(--sb-primary-color),
+  box-shadow:
+    inset 2px 2px 2px var(--sb-primary-color),
     inset -1px -1px 1px var(--sb-track-1);
 }
 
