@@ -4,7 +4,6 @@ about: Template with front matter for blog posts
 title: ''
 labels: Published
 assignees: ''
-
 ---
 
 *** swap these for dashes for front matter

@@ -1,4 +1,4 @@
-import { dev } from '$app/environment';
+import { dev } from '$app/environment'
 
 let localContent = []
 
@@ -13,7 +13,7 @@ export const fetchMarkdownPosts = async () => {
       const { name, url, slug, description, type, date, image } = post.metadata
 
       const project = {
-				content: post.default.render().html,
+        content: post.default.render().html,
         name,
         url,
         slug,
@@ -21,14 +21,14 @@ export const fetchMarkdownPosts = async () => {
         type,
         date,
         image,
-        path
+        path,
       }
 
       return { ...project }
     })
   )
 
-  localContent = allPosts;
+  localContent = allPosts
 
   return allPosts
 }
@@ -36,15 +36,16 @@ export const fetchMarkdownPosts = async () => {
 // fetch single markdown post and format it for display
 export async function fetchMarkdownPost(slug) {
   if (dev || localContent.length === 0) {
-		console.log('loading allProjects');
-		localContent = await fetchMarkdownPosts();
-		console.log('loaded ' + localContent.length + ' projects');
-		if (!localContent.length) throw new Error('failed to load projects for some reason.');
-	}
+    console.log('loading allProjects')
+    localContent = await fetchMarkdownPosts()
+    console.log('loaded ' + localContent.length + ' projects')
+    if (!localContent.length)
+      throw new Error('failed to load projects for some reason.')
+  }
 
-  const project = localContent.find((p) => p.slug === slug);
+  const project = localContent.find((p) => p.slug === slug)
 
   return {
-    ...project
+    ...project,
   }
 }

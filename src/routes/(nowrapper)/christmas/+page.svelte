@@ -16,7 +16,7 @@
     function init() {
       snowflakes = []
       resize()
-      render(lastNow = performance.now())
+      render((lastNow = performance.now()))
     }
 
     function render(now) {
@@ -26,12 +26,11 @@
       lastNow = now
 
       ctx.clearRect(0, 0, width, height)
-      if (snowflakes.length < maxSnowflakes)
-        snowflakes.push(new Snowflake())
+      if (snowflakes.length < maxSnowflakes) snowflakes.push(new Snowflake())
 
       ctx.fillStyle = ctx.strokeStyle = '#fff'
 
-      snowflakes.forEach(snowflake => snowflake.update(elapsed, now))
+      snowflakes.forEach((snowflake) => snowflake.update(elapsed, now))
     }
 
     function pause() {
@@ -42,7 +41,6 @@
       requestAnimationFrame(render)
     }
 
-
     class Snowflake {
       constructor() {
         this.spawn()
@@ -50,21 +48,19 @@
 
       spawn(anyY = false) {
         this.x = rand(0, width)
-        this.y = anyY === true
-          ? rand(-50, height + 50)
-          : rand(-50, -10)
-        this.xVel = rand(-.05, .05)
-        this.yVel = rand(.02, .1)
+        this.y = anyY === true ? rand(-50, height + 50) : rand(-50, -10)
+        this.xVel = rand(-0.05, 0.05)
+        this.yVel = rand(0.02, 0.1)
         this.angle = rand(0, Math.PI * 2)
-        this.angleVel = rand(-.001, .001)
+        this.angleVel = rand(-0.001, 0.001)
         this.size = rand(7, 12)
-        this.sizeOsc = rand(.01, .5)
+        this.sizeOsc = rand(0.01, 0.5)
       }
 
       update(elapsed, now) {
-        const xForce = rand(-.001, .001);
+        const xForce = rand(-0.001, 0.001)
 
-        if (Math.abs(this.xVel + xForce) < .075) {
+        if (Math.abs(this.xVel + xForce) < 0.075) {
           this.xVel += xForce
         }
 
@@ -105,59 +101,82 @@
     window.addEventListener('blur', pause)
     window.addEventListener('focus', resume)
     init()
-  });
+  })
 </script>
 
 <svelte:head>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Pragati+Narrow">
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Gloock&family=Pragati+Narrow"
+  />
   <meta name="description" content="christmas dinner 2023" />
-  <meta property="og:image" content={`https://heffner.dev/og?message=christmas%20dinner!`}>
-  <meta name="twitter:card" content={`https://heffner.dev/og?message=christmas%20dinner!` ? 'summary_large_image' : 'summary'} />
-  <meta name="twitter:image" content={`https://heffner.dev/og?message=christmas%20dinner!`} />
+  <meta
+    property="og:image"
+    content={`https://heffner.dev/og?message=christmas%20dinner!`}
+  />
+  <meta
+    name="twitter:card"
+    content={`https://heffner.dev/og?message=christmas%20dinner!`
+      ? 'summary_large_image'
+      : 'summary'}
+  />
+  <meta
+    name="twitter:image"
+    content={`https://heffner.dev/og?message=christmas%20dinner!`}
+  />
 </svelte:head>
 
-<canvas id="snow"></canvas>
-
+<canvas id="snow" />
 
 <div class="holly-container">
-  <img src="/assets/holly-clipart-corner-11.png" alt="" class="holly left"/>
-  <img src="/assets/holly-clipart-corner-11.png" alt="" class="holly right"/>
+  <img src="/assets/holly-clipart-corner-11.png" alt="" class="holly left" />
+  <img src="/assets/holly-clipart-corner-11.png" alt="" class="holly right" />
 </div>
 
-<section class="pt-[10rem] h-full text-center text-white serif">
-  <h1 class="text-6xl mb-10 text-shadow">{data.title}</h1>
+<section class="serif h-full pt-[10rem] text-center text-white">
+  <h1 class="text-shadow mb-10 text-6xl">{data.title}</h1>
   <p>at</p>
-  <p class="text-3xl mt-6 mb-12 text-shadow">{data.where} | <span class="sans">{data.when}</span><p>
-  <!-- <p class="text-4xl sans">{data.when}</p>
+  <p class="text-shadow mb-12 mt-6 text-3xl">
+    {data.where} | <span class="sans">{data.when}</span>
+  </p>
+  <p>
+    <!-- <p class="text-4xl sans">{data.when}</p>
   <p class="text-4xl my-6">at {data.where}<p> -->
-
-
-  <h2 class="text-2xl mt-20 mb-6 underline underline-offset-4">Schedule</h2>
+  </p>
+  <h2 class="mb-6 mt-20 text-2xl underline underline-offset-4">Schedule</h2>
   <ul class="list-none">
-  {#each data.agenda as {event, time}}
-    <li class="my-2">
-      <p class="text-lg">{event} - <span class="sans">{time}<span></p>
-    </li>
-  {/each}
+    {#each data.agenda as { event, time }}
+      <li class="my-2">
+        <p class="text-lg">
+          {event} - <span class="sans">{time}<span /></span>
+        </p>
+      </li>
+    {/each}
   </ul>
 
-
-  <h2 class="text-2xl mt-20 mb-6 underline underline-offset-4"> Menu </h2>
+  <h2 class="mb-6 mt-20 text-2xl underline underline-offset-4">Menu</h2>
 
   <ul class="list-none">
-  {#each data.menu as {name, ingredients}}
-    <li class="my-6">
-      <p class="text-lg">{name}</p>
-      <p class="sans">{ingredients}</p>
-    </li>
-  {/each}
+    {#each data.menu as { name, ingredients }}
+      <li class="my-6">
+        <p class="text-lg">{name}</p>
+        <p class="sans">{ingredients}</p>
+      </li>
+    {/each}
   </ul>
 
-  <p class="mt-12 text-md">{data.disclaimer}</p>
-
+  <p class="text-md mt-12">{data.disclaimer}</p>
 </section>
 
 <div class="holly-container">
-  <img src="/assets/holly-clipart-corner-11.png" alt="" class="holly bottom left"/>
-  <img src="/assets/holly-clipart-corner-11.png" alt="" class="holly bottom right"/>
+  <img
+    src="/assets/holly-clipart-corner-11.png"
+    alt=""
+    class="holly bottom left"
+  />
+  <img
+    src="/assets/holly-clipart-corner-11.png"
+    alt=""
+    class="holly bottom right"
+  />
 </div>

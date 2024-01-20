@@ -4,7 +4,6 @@ about: Template with front matter for gallery posts
 title: ''
 labels: Gallery
 assignees: ''
-
 ---
 
 *** swap these for dashes for front matter

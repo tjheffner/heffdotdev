@@ -1,24 +1,26 @@
 <script>
-	// gimme full item
-	export let item;
+  // gimme full item
+  export let item
 </script>
 
 <a
-	data-sveltekit-prefetch
-	class="project !bg-unset mb-8 block w-full no-underline"
-	href={'/work/' + item.slug}
+  data-sveltekit-prefetch
+  class="project !bg-unset mb-8 block w-full no-underline"
+  href={'/work/' + item.slug}
 >
-	<div>
-		<p class="text-lg font-bold text-orange-600 dark:text-lime-500">{item.name}</p>
+  <div>
+    <p class="text-lg font-bold text-orange-600 dark:text-lime-500">
+      {item.name}
+    </p>
 
-		<p class="mb-2 text-slate-800 dark:text-gray-400">{item.description}</p>
-	</div>
+    <p class="mb-2 text-slate-800 dark:text-gray-400">{item.description}</p>
+  </div>
 </a>
 
 <style>
-	.project:hover {
-		& p {
-			@apply text-red-600 dark:text-yellow-400;
-		}
-	}
+  .project:hover {
+    & p {
+      @apply text-red-600 dark:text-yellow-400;
+    }
+  }
 </style>

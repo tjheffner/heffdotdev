@@ -1,44 +1,49 @@
-import RSS from 'rss';
-import { SITE_TITLE, SITE_URL } from '$lib/siteConfig';
-import { remark } from 'remark';
-import remarkHTML from 'remark-html';
-import { listContentFromIssues } from '$lib/content';
+import RSS from 'rss'
+import { SITE_TITLE, SITE_URL } from '$lib/siteConfig'
+import { remark } from 'remark'
+import remarkHTML from 'remark-html'
+import { listContentFromIssues } from '$lib/content'
 
 // Reference: https://github.com/sveltejs/kit/blob/master/examples/hn.svelte.dev/src/routes/%5Blist%5D/rss.js
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function GET({ fetch }) {
-	const feed = new RSS({
-		title: SITE_TITLE + ' RSS Feed',
-		site_url: SITE_URL,
-		feed_url: SITE_URL + '/rss.xml'
-	});
+  const feed = new RSS({
+    title: SITE_TITLE + ' RSS Feed',
+    site_url: SITE_URL,
+    feed_url: SITE_URL + '/rss.xml',
+  })
 
-	const allBlogs = await listContentFromIssues('Published');
-	allBlogs.forEach((post) => {
-		// extract HTML from markdown
-		const htmlDescription = remark()
-			.use(remarkHTML)
-			.processSync(post.description)
+  const allBlogs = await listContentFromIssues('Published')
+  allBlogs.forEach((post) => {
+    // extract HTML from markdown
+    const htmlDescription = remark()
+      .use(remarkHTML)
+      .processSync(post.description)
 
-		feed.item({
-			title: post.title,
-			url: SITE_URL + `/${post.slug}`,
-			date: post.date,
-			description: htmlDescription.toString()
-		});
-	});
+    feed.item({
+      title: post.title,
+      url: SITE_URL + `/${post.slug}`,
+      date: post.date,
+      description: htmlDescription.toString(),
+    })
+  })
 
-	// inject our custom rss stylesheet
-	return new Response(feed.xml({ indent: true }).replace(
-    `<?xml version="1.0" encoding="UTF-8"?>`,
-    `<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet href="/assets/xml/rss.xsl" type="text/xsl"?>`
-	), {
-		headers: {
-			'Cache-Control': `public, max-age=${86400}`, // 24 hours
-			'Content-Type': 'application/xml; charset=utf-8',  // not application/rss+xml
-			'x-content-type-options': 'nosniff'
-		}
-	});
+  // inject our custom rss stylesheet
+  return new Response(
+    feed
+      .xml({ indent: true })
+      .replace(
+        `<?xml version="1.0" encoding="UTF-8"?>`,
+        `<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet href="/assets/xml/rss.xsl" type="text/xsl"?>`
+      ),
+    {
+      headers: {
+        'Cache-Control': `public, max-age=${86400}`, // 24 hours
+        'Content-Type': 'application/xml; charset=utf-8', // not application/rss+xml
+        'x-content-type-options': 'nosniff',
+      },
+    }
+  )
 }
 
 // misc notes for future users

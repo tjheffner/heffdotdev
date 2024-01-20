@@ -1,32 +1,32 @@
-import grayMatter from 'gray-matter';
-import { compile } from 'mdsvex';
-import { remark } from 'remark';
-import remarkParse from 'remark-parse';
-import remarkStringify from 'remark-stringify';
-import rehypeStringify from 'rehype-stringify';
-import rehypeSlug from 'rehype-slug';
-import rehypeAutoLink from 'rehype-autolink-headings';
+import grayMatter from 'gray-matter'
+import { compile } from 'mdsvex'
+import { remark } from 'remark'
+import remarkParse from 'remark-parse'
+import remarkStringify from 'remark-stringify'
+import rehypeStringify from 'rehype-stringify'
+import rehypeSlug from 'rehype-slug'
+import rehypeAutoLink from 'rehype-autolink-headings'
 
-const remarkPlugins = undefined;
+const remarkPlugins = undefined
 const rehypePlugins = [
-	rehypeStringify,
-	rehypeSlug,
-	[
-		rehypeAutoLink,
-		{
-			behavior: 'wrap',
-			properties: { class: 'hover:text-yellow-100 no-underline' }
-		}
-	]
-];
+  rehypeStringify,
+  rehypeSlug,
+  [
+    rehypeAutoLink,
+    {
+      behavior: 'wrap',
+      properties: { class: 'hover:text-yellow-100 no-underline' },
+    },
+  ],
+]
 
 /**
  * @param {string} text
  * @returns {string}
  */
 export function readingTime(text) {
-	let minutes = Math.ceil(text.trim().split(' ').length / 225);
-	return minutes > 1 ? `${minutes} minutes` : `${minutes} minute`;
+  let minutes = Math.ceil(text.trim().split(' ').length / 225)
+  return minutes > 1 ? `${minutes} minutes` : `${minutes} minute`
 }
 
 /**
@@ -34,17 +34,16 @@ export function readingTime(text) {
  * @returns {string}
  */
 export function slugify(text) {
-    return text
-        .toString()                 // Cast to string (optional)
-        .normalize('NFKD')          // The normalize() using NFKD method returns the Unicode Normalization Form of a given string.
-        .toLowerCase()              // Convert the string to lowercase letters
-        .trim()                     // Remove whitespace from both sides of a string (optional)
-        .replace(/\s+/g, '-')       // Replace spaces with hyphen
-		.replace(/[^\w-]+/g, '')   // Remove all non-word chars
-		.replace(/--+/g, '-')     // Replace multiple hyphen with single hyphen
-		.replace(/(^-|-$)/g, ''); // Remove leading or trailing hyphen
+  return text
+    .toString() // Cast to string (optional)
+    .normalize('NFKD') // The normalize() using NFKD method returns the Unicode Normalization Form of a given string.
+    .toLowerCase() // Convert the string to lowercase letters
+    .trim() // Remove whitespace from both sides of a string (optional)
+    .replace(/\s+/g, '-') // Replace spaces with hyphen
+    .replace(/[^\w-]+/g, '') // Remove all non-word chars
+    .replace(/--+/g, '-') // Replace multiple hyphen with single hyphen
+    .replace(/(^-|-$)/g, '') // Remove leading or trailing hyphen
 }
-
 
 /**
  * All pages built from github issue should contain this data at minimum
@@ -53,62 +52,61 @@ export function slugify(text) {
  * @returns {import('./types').BaseContentItem}
  */
 export function baseIssueContent(issue) {
-	const src = issue.body;
-	const { content, data } = grayMatter(src);
-	let title = data.title ?? issue.title;
-	let slug;
-	if (data.slug) {
-		slug = data.slug;
-	} else {
-		slug = slugify(title);
-	}
+  const src = issue.body
+  const { content, data } = grayMatter(src)
+  let title = data.title ?? issue.title
+  let slug
+  if (data.slug) {
+    slug = data.slug
+  } else {
+    slug = slugify(title)
+  }
 
-	let description = data.description ?? content.trim().split('\n')[0];
-	// extract plain text from markdown
-	description = remark()
-		.use(remarkParse)
-		.use(remarkStringify)
-		.processSync(description)
-		.toString();
-	description = description.replace(/\n/g, ' ');
-	// strip html
-	description = description.replace(/<[^>]*>?/gm, '');
-	// strip markdown
-	description = description.replace(/[[\]]/gm, '');
-	// strip markdown
-	description = description.replace(/[[\]]/gm, '');
+  let description = data.description ?? content.trim().split('\n')[0]
+  // extract plain text from markdown
+  description = remark()
+    .use(remarkParse)
+    .use(remarkStringify)
+    .processSync(description)
+    .toString()
+  description = description.replace(/\n/g, ' ')
+  // strip html
+  description = description.replace(/<[^>]*>?/gm, '')
+  // strip markdown
+  description = description.replace(/[[\]]/gm, '')
+  // strip markdown
+  description = description.replace(/[[\]]/gm, '')
 
-	return {
-		frontmatter: data,
-		issueNumber: issue.number,
-		slug: slug,
-		title,
-		description,
-		content,
-		image: data.image ?? data.cover_image,
-		date: new Date(data.date ?? issue.created_at),
-		ghMetadata: {
-			issueUrl: issue.html_url,
-			commentsUrl: issue.comments_url,
-			title: issue.title,
-			created_at: issue.created_at,
-			updated_at: issue.updated_at,
-			reactions: issue.reactions
-		}
-	}
+  return {
+    frontmatter: data,
+    issueNumber: issue.number,
+    slug: slug,
+    title,
+    description,
+    content,
+    image: data.image ?? data.cover_image,
+    date: new Date(data.date ?? issue.created_at),
+    ghMetadata: {
+      issueUrl: issue.html_url,
+      commentsUrl: issue.comments_url,
+      title: issue.title,
+      created_at: issue.created_at,
+      updated_at: issue.updated_at,
+      reactions: issue.reactions,
+    },
+  }
 }
 
 export async function formatContent(content) {
-	const formatted = content
-		.replace(/\n{% youtube (.*?) %}/g, (_, x) => {
-			// https://stackoverflow.com/a/27728417/1106414
-			function youtube_parser(url) {
-				var rx =
-					/^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|&v(?:i)?=))([^#&?]*).*/;
-				return url.match(rx)[1];
-			}
-			const videoId = x.startsWith('https://') ? youtube_parser(x) : x;
-			return `<iframe
+  const formatted = content
+    .replace(/\n{% youtube (.*?) %}/g, (_, x) => {
+      // https://stackoverflow.com/a/27728417/1106414
+      function youtube_parser(url) {
+        var rx = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|&v(?:i)?=))([^#&?]*).*/
+        return url.match(rx)[1]
+      }
+      const videoId = x.startsWith('https://') ? youtube_parser(x) : x
+      return `<iframe
 		class="w-full object-contain"
 		srcdoc="
 			<style>
@@ -151,28 +149,30 @@ export async function formatContent(content) {
 		width="600"
 		height="400"
 		allowFullScreen
-		aria-hidden="true"></iframe>`;
-		})
-		.replace(/\n{% (tweet|twitter) (.*?) %}/g, (_, _2, x) => {
-			const url = x.startsWith('https://twitter.com/') ? x : `https://twitter.com/x/status/${x}`;
-			return `
+		aria-hidden="true"></iframe>`
+    })
+    .replace(/\n{% (tweet|twitter) (.*?) %}/g, (_, _2, x) => {
+      const url = x.startsWith('https://twitter.com/')
+        ? x
+        : `https://twitter.com/x/status/${x}`
+      return `
 				<blockquote class="twitter-tweet" data-lang="en" data-dnt="true" data-theme="dark">
 				<a href="${url}"></a></blockquote>
 				<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-				`;
-		});
+				`
+    })
 
-	// compile it with mdsvex
-	const output = (
-		await compile(formatted, {
-			remarkPlugins,
-			// @ts-ignore
-			rehypePlugins
-		})
-	).code
-		// https://github.com/pngwn/MDsveX/issues/392
-		.replace(/>{@html `<code class="language-/g, '><code class="language-')
-		.replace(/<\/code>`}<\/pre>/g, '</code></pre>');
+  // compile it with mdsvex
+  const output = (
+    await compile(formatted, {
+      remarkPlugins,
+      // @ts-ignore
+      rehypePlugins,
+    })
+  ).code
+    // https://github.com/pngwn/MDsveX/issues/392
+    .replace(/>{@html `<code class="language-/g, '><code class="language-')
+    .replace(/<\/code>`}<\/pre>/g, '</code></pre>')
 
-	return output
+  return output
 }

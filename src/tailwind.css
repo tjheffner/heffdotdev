@@ -2,149 +2,153 @@
 @tailwind components;
 
 @layer components {
-	body {
-		--brand-accent: theme('colors.sky.600');
-		--brand-alternate: theme('colors.orange.300');
+  body {
+    --brand-accent: theme('colors.sky.600');
+    --brand-alternate: theme('colors.orange.300');
 
-		/* https://ishadeed.com/article/defensive-css */
-		overflow-wrap: break-word;
-		overflow-y: auto;
-		scrollbar-gutter: stable;
-	}
-	.dark body {
-		--brand-accent: theme('colors.blue.300');
-		--brand-alternate: theme('colors.indigo.700');
-	}
-	:root {
-		accent-color: var(--brand-accent);
-	}
-	:focus-visible {
-		outline-color: var(--brand-accent);
-	}
-	::selection {
-		color: theme('colors.sky.200');
-		background-color: var(--brand-accent);
-	}
-	.dark ::selection {
-		color: theme('colors.slate.900');
-	}
-	::marker {
-		color: var(--brand-accent);
-	}
-	.text-accent {
-		color: var(--brand-accent);
-	}
+    /* https://ishadeed.com/article/defensive-css */
+    overflow-wrap: break-word;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+  }
+  .dark body {
+    --brand-accent: theme('colors.blue.300');
+    --brand-alternate: theme('colors.indigo.700');
+  }
+  :root {
+    accent-color: var(--brand-accent);
+  }
+  :focus-visible {
+    outline-color: var(--brand-accent);
+  }
+  ::selection {
+    color: theme('colors.sky.200');
+    background-color: var(--brand-accent);
+  }
+  .dark ::selection {
+    color: theme('colors.slate.900');
+  }
+  ::marker {
+    color: var(--brand-accent);
+  }
+  .text-accent {
+    color: var(--brand-accent);
+  }
 
-	:is(::-webkit-calendar-picker-indicator, ::-webkit-clear-button, ::-webkit-inner-spin-button, ::-webkit-outer-spin-button) {
-		color: var(--brand-accent);
-	}
+  :is(::-webkit-calendar-picker-indicator, ::-webkit-clear-button, ::-webkit-inner-spin-button, ::-webkit-outer-spin-button) {
+    color: var(--brand-accent);
+  }
 
-	/* https://css-tricks.com/two-issues-styling-the-details-element-and-how-to-solve-them/ */
-	details {
-		border: 2px solid var(--brand-accent);
-		padding: 0.5rem 1rem;
-	}
-	details > summary {
-		cursor: pointer;
-	}
+  /* https://css-tricks.com/two-issues-styling-the-details-element-and-how-to-solve-them/ */
+  details {
+    border: 2px solid var(--brand-accent);
+    padding: 0.5rem 1rem;
+  }
+  details > summary {
+    cursor: pointer;
+  }
 
-	details > summary > *:first-child {
-		display: inline;
-	}
+  details > summary > *:first-child {
+    display: inline;
+  }
 
-	img {
-		/* https://ishadeed.com/article/defensive-css */
-		max-width: 100%;
-		object-fit: cover;
-		background-color: grey;
-	}
+  img {
+    /* https://ishadeed.com/article/defensive-css */
+    max-width: 100%;
+    object-fit: cover;
+    background-color: grey;
+  }
 
-	hr {
-		@apply w-full border-t-2 border-sky-600 dark:border-blue-300;
-	}
+  hr {
+    @apply w-full border-t-2 border-sky-600 dark:border-blue-300;
+  }
 
-	/* header styles, works best larger font sizes */
-	.text-shadow {
-		@apply text-red-600;
-		text-shadow: 2px 3px 1px theme('colors.sky.600');
-	}
-	.dark .text-shadow {
-		@apply text-yellow-400;
-		text-shadow: 2px 3px 1px theme('colors.yellow.700');
-	}
-	.text-unshadow {
-		text-shadow: none !important;
-	}
+  /* header styles, works best larger font sizes */
+  .text-shadow {
+    @apply text-red-600;
+    text-shadow: 2px 3px 1px theme('colors.sky.600');
+  }
+  .dark .text-shadow {
+    @apply text-yellow-400;
+    text-shadow: 2px 3px 1px theme('colors.yellow.700');
+  }
+  .text-unshadow {
+    text-shadow: none !important;
+  }
 
-	/* Links that highlight from bottom */
-	.gh-link,
-	.footer-link,
-	.prose a {
-		@apply from-red-600 to-red-600 dark:from-yellow-400 dark:to-yellow-400;
-		@apply text-red-600 hover:text-sky-200 dark:text-yellow-400 dark:hover:text-slate-900;
+  /* Links that highlight from bottom */
+  .gh-link,
+  .footer-link,
+  .prose a {
+    @apply from-red-600 to-red-600 dark:from-yellow-400 dark:to-yellow-400;
+    @apply text-red-600 hover:text-sky-200 dark:text-yellow-400 dark:hover:text-slate-900;
 
-		cursor: pointer;
-		text-decoration: none;
-		padding: 1px 4px;
-		background: linear-gradient(to bottom, var(--tw-gradient-from) 0%, var(--tw-gradient-to) 100%);
-		background-position: 0 100%;
-		background-repeat: repeat-x;
-		background-size: 4px 2px;
-		transition: all 0.3s linear;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 1px 4px;
+    background: linear-gradient(
+      to bottom,
+      var(--tw-gradient-from) 0%,
+      var(--tw-gradient-to) 100%
+    );
+    background-position: 0 100%;
+    background-repeat: repeat-x;
+    background-size: 4px 2px;
+    transition: all 0.3s linear;
 
-		&:hover {
-			background-size: 4px 50px;
-		}
-	}
+    &:hover {
+      background-size: 4px 50px;
+    }
+  }
 
-	/* to undo above */
-	.bg-unset {
-		background: unset;
-		color: currentColor;
-	}
+  /* to undo above */
+  .bg-unset {
+    background: unset;
+    color: currentColor;
+  }
 }
 
 /* filters on /blog page */
 .filter {
-	@apply m-1 inline-block whitespace-nowrap rounded rounded-md px-4 py-2;
-	@apply border-red-600 bg-sky-600 font-bold text-orange-100;
-	@apply dark:border-slate-600 dark:bg-gray-800 dark:text-gray-100;
-	@apply ring-sky-600 transition-all duration-200 ease-in-out hover:ring-2 dark:ring-lime-700;
+  @apply m-1 inline-block whitespace-nowrap rounded rounded-md px-4 py-2;
+  @apply border-red-600 bg-sky-600 font-bold text-orange-100;
+  @apply dark:border-slate-600 dark:bg-gray-800 dark:text-gray-100;
+  @apply ring-sky-600 transition-all duration-200 ease-in-out hover:ring-2 dark:ring-lime-700;
 }
 .activefilter {
-	@apply border-red-600 bg-orange-300 text-red-600;
-	@apply dark:border-slate-600 dark:bg-blue-300 dark:text-slate-800;
-	@apply ring-yellow-400 dark:ring-yellow-800;
+  @apply border-red-600 bg-orange-300 text-red-600;
+  @apply dark:border-slate-600 dark:bg-blue-300 dark:text-slate-800;
+  @apply ring-yellow-400 dark:ring-yellow-800;
 }
 
 /* Cleanup styles for markdown headers */
 .prose h1 a {
-	@apply bg-unset text-lime-800 hover:text-lime-800 dark:text-yellow-400 dark:hover:text-yellow-400;
+  @apply bg-unset text-lime-800 hover:text-lime-800 dark:text-yellow-400 dark:hover:text-yellow-400;
 }
 .prose h2,
 .prose h3,
 .prose h4 {
-	@apply relative;
-	a {
-		@apply bg-unset font-bold !text-accent p-0;
-	}
-	&::before {
-		@apply absolute -left-5;
-		@apply text-accent;
-		content: '#';
-	}
+  @apply relative;
+  a {
+    @apply bg-unset p-0 font-bold !text-accent;
+  }
+  &::before {
+    @apply absolute -left-5;
+    @apply text-accent;
+    content: '#';
+  }
 }
 .prose-img-dense {
-	@apply !m-0;
+  @apply !m-0;
 }
 
 .back-link {
-	@apply relative mb-4 font-bold text-accent mx-4 lg:mx-12;
-	&::before {
-		@apply absolute -left-5;
-		content: '<';
-		color: currentColor;
-	}
+  @apply relative mx-4 mb-4 font-bold text-accent lg:mx-12;
+  &::before {
+    @apply absolute -left-5;
+    content: '<';
+    color: currentColor;
+  }
 }
 
 /*
@@ -152,37 +156,42 @@
   - https://css-tricks.com/strut-your-stuff-with-a-custom-scrollbar/
   */
 body {
-	--sb-primary-color: theme('colors.amber.400');
-	--sb-accent-color: theme('colors.red.500');
-	--sb-track-1: theme('colors.sky.600');
-	--sb-track-2: theme('colors.blue.300');
+  --sb-primary-color: theme('colors.amber.400');
+  --sb-accent-color: theme('colors.red.500');
+  --sb-track-1: theme('colors.sky.600');
+  --sb-track-2: theme('colors.blue.300');
 }
 .dark body {
-	--sb-primary-color: theme('colors.yellow.600');
-	--sb-accent-color: theme('colors.amber.900');
-	--sb-track-1: theme('colors.sky.900');
-	--sb-track-2: theme('colors.slate.800');
+  --sb-primary-color: theme('colors.yellow.600');
+  --sb-accent-color: theme('colors.amber.900');
+  --sb-track-1: theme('colors.sky.900');
+  --sb-track-2: theme('colors.slate.800');
 }
 
 body::-webkit-scrollbar {
-	width: 1rem;
-	height: 1rem;
+  width: 1rem;
+  height: 1rem;
 }
 
 body::-webkit-scrollbar-thumb {
-	background: linear-gradient(270deg, var(--sb-accent-color), var(--sb-primary-color));
-	border-radius: 2px;
-	box-shadow: inset 2px 2px 2px var(--sb-primary-color), inset -1px -1px 1px var(--sb-track-1);
+  background: linear-gradient(
+    270deg,
+    var(--sb-accent-color),
+    var(--sb-primary-color)
+  );
+  border-radius: 2px;
+  box-shadow: inset 2px 2px 2px var(--sb-primary-color),
+    inset -1px -1px 1px var(--sb-track-1);
 }
 
 body::-webkit-scrollbar-track {
-	background: linear-gradient(
-		90deg,
-		var(--sb-track-2),
-		var(--sb-track-2) 1px,
-		var(--sb-track-1) 0,
-		var(--sb-track-1)
-	);
+  background: linear-gradient(
+    90deg,
+    var(--sb-track-2),
+    var(--sb-track-2) 1px,
+    var(--sb-track-1) 0,
+    var(--sb-track-1)
+  );
 }
 
 @tailwind utilities;
