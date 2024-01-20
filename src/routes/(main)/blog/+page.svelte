@@ -59,11 +59,7 @@
 		setTimeout(() => {
 			setURLState({
 				filter: filterStr,
-				show: [
-					recipes && 'Recipes',
-					technical && 'Technical',
-					notes && 'Notes'
-				].filter(Boolean)
+				show: [recipes && 'Recipes', technical && 'Technical', notes && 'Notes'].filter(Boolean)
 			});
 		}, 100);
 	}
@@ -107,15 +103,18 @@
 <svelte:head>
 	<title>heffner.dev | posts</title>
 	<meta name="description" content="Latest musings fit to print." />
-	<meta property="og:image" content={`https://heffner.dev/og?message=posts`}>
-	<meta name="twitter:card" content={`https://heffner.dev/og?message=posts` ? 'summary_large_image' : 'summary'} />
+	<meta property="og:image" content={`https://heffner.dev/og?message=posts`} />
+	<meta
+		name="twitter:card"
+		content={`https://heffner.dev/og?message=posts` ? 'summary_large_image' : 'summary'}
+	/>
 	<meta name="twitter:image" content={`https://heffner.dev/og?message=posts`} />
 </svelte:head>
 
 <svelte:window on:keyup={focusSearch} />
 
 <section class="mx-auto mb-16 flex w-full flex-col items-start p-0 sm:px-8 lg:w-2/3">
-	<h1 class="mb-4 text-3xl font-bold tracking-tight text-shadow md:text-5xl">Posts</h1>
+	<h1 class="text-shadow mb-4 text-3xl font-bold tracking-tight md:text-5xl">Posts</h1>
 	<p class="mb-4 text-zinc-900 dark:text-gray-400">
 		In total, I've written {items.length} posts on my blog. Use the search below to filter.
 	</p>
@@ -194,7 +193,7 @@
 	<!-- Results -->
 	{#if list.length}
 		<ul
-			class="w-full divide-y divide-dashed divide-sky-600 dark:divide-blue-300 md:mx-auto md:w-4/5"
+			class="w-full divide-y divide-dashed divide-sky-600 md:mx-auto md:w-4/5 dark:divide-blue-300"
 		>
 			{#each list as item}
 				<li class="mb-4 sm:mb-0">
@@ -224,9 +223,9 @@
 		</div>
 		<button
 			on:click={() => (filterStr = '')}
-			class="my-4 p-2 rounded-lg font-bold transition-all ease-in-out duration-200
-			text-yellow-800 bg-yellow-400 hover:ring-2 ring-yellow-800
-			dark:ring-yellow-400 dark:bg-yellow-800 dark:text-yellow-100
+			class="my-4 rounded-lg bg-yellow-400 p-2 font-bold text-yellow-800 ring-yellow-800
+			transition-all duration-200 ease-in-out hover:ring-2
+			dark:bg-yellow-800 dark:text-yellow-100 dark:ring-yellow-400
 			"
 		>
 			Clear your search
@@ -235,7 +234,7 @@
 		<div class="prose dark:prose-invert">Search something else!</div>
 	{/if}
 
-	<div class="my-4 prose">
+	<div class="prose my-4">
 		<a href="/feed">RSS feed available.</a>
 	</div>
 </section>

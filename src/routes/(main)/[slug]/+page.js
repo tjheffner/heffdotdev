@@ -7,10 +7,10 @@ export async function load({ params, fetch, setHeaders }) {
 
 	// redirect these slugs to appropriate routes
 	if (slug === 'feed' || slug === 'rss' || slug === 'rss.xml') {
-		throw redirect(308, '/rss.xml')
+		throw redirect(308, '/rss.xml');
 	}
 	if (slug === 'sitemap' || slug === 'sitemap.xml') {
-		throw redirect(308, '/sitemap.xml')
+		throw redirect(308, '/sitemap.xml');
 	}
 
 	let res = null;
@@ -18,12 +18,12 @@ export async function load({ params, fetch, setHeaders }) {
 	if (res.status > 400) {
 		throw error(res.status, await res.text());
 	}
-	const json = await res.json()
+	const json = await res.json();
 
-	// because [slug] is a catchall, it gets gallery slugs too. redirect them. 
+	// because [slug] is a catchall, it gets gallery slugs too. redirect them.
 	// e.g. /japan -> /gallery/japan
 	if (json.type === 'gallery') {
-		throw redirect(308, `/gallery/${json.slug}`)
+		throw redirect(308, `/gallery/${json.slug}`);
 	}
 
 	setHeaders({

@@ -16,9 +16,7 @@ export async function GET({ fetch }) {
 	const allBlogs = await listContentFromIssues('Published');
 	allBlogs.forEach((post) => {
 		// extract HTML from markdown
-		const htmlDescription = remark()
-			.use(remarkHTML)
-			.processSync(post.description)
+		const htmlDescription = remark().use(remarkHTML).processSync(post.description);
 
 		feed.item({
 			title: post.title,
@@ -29,16 +27,21 @@ export async function GET({ fetch }) {
 	});
 
 	// inject our custom rss stylesheet
-	return new Response(feed.xml({ indent: true }).replace(
-    `<?xml version="1.0" encoding="UTF-8"?>`,
-    `<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet href="/assets/xml/rss.xsl" type="text/xsl"?>`
-	), {
-		headers: {
-			'Cache-Control': `public, max-age=${86400}`, // 24 hours
-			'Content-Type': 'application/xml; charset=utf-8',  // not application/rss+xml
-			'x-content-type-options': 'nosniff'
+	return new Response(
+		feed
+			.xml({ indent: true })
+			.replace(
+				`<?xml version="1.0" encoding="UTF-8"?>`,
+				`<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet href="/assets/xml/rss.xsl" type="text/xsl"?>`
+			),
+		{
+			headers: {
+				'Cache-Control': `public, max-age=${86400}`, // 24 hours
+				'Content-Type': 'application/xml; charset=utf-8', // not application/rss+xml
+				'x-content-type-options': 'nosniff'
+			}
 		}
-	});
+	);
 }
 
 // misc notes for future users

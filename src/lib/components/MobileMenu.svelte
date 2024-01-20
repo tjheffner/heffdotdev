@@ -45,8 +45,8 @@
 		{
 			name: 'Tweets',
 			href: 'https://twitter.com/foodpyramids'
-		},
-	]
+		}
+	];
 </script>
 
 <div class="ml-[-0.60rem] md:hidden">
@@ -79,7 +79,7 @@
 			>
 		{:else}
 			<svg
-				class="h-5 w-5 absolute text-gray-900 dark:text-gray-100"
+				class="absolute h-5 w-5 text-gray-900 dark:text-gray-100"
 				viewBox="0 0 24 24"
 				width="24"
 				height="24"
@@ -99,17 +99,17 @@
 			class:menuRendered={isMenuRendered}
 		>
 			{#each links as link, index}
-			<li
-				class="border-b border-indigo-700 font-semibold text-gray-900 dark:border-yellow-400 dark:text-gray-100"
-				style="transition-delay: {(index * 50) + 50}ms"
-			>
-				<a
-					class="flex w-auto pb-4"
-					data-sveltekit-prefetch
-					on:click={() => setTimeout(() => (isOpen = false), 300)}
-					href={link.href}>{link.name}</a
+				<li
+					class="border-b border-indigo-700 font-semibold text-gray-900 dark:border-yellow-400 dark:text-gray-100"
+					style="transition-delay: {index * 50 + 50}ms"
 				>
-			</li>
+					<a
+						class="flex w-auto pb-4"
+						data-sveltekit-prefetch
+						on:click={() => setTimeout(() => (isOpen = false), 300)}
+						href={link.href}>{link.name}</a
+					>
+				</li>
 			{/each}
 		</ul>
 	{/if}

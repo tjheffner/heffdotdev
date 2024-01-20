@@ -6,7 +6,7 @@ import {
 	GH_PUBLISHED_TAGS,
 	REPO_OWNER
 } from './siteConfig';
-import { slugify, readingTime, baseIssueContent, formatContent } from './utils'
+import { slugify, readingTime, baseIssueContent, formatContent } from './utils';
 import parse from 'parse-link-header';
 
 let allBlogposts = [];
@@ -21,7 +21,7 @@ let allPosts = [];
  * Gallery pages: 'Gallery'
  */
 export async function listContentFromIssues(label) {
-	let allContentWithLabel = []
+	let allContentWithLabel = [];
 	let next = null;
 
 	const authheader = process.env.GH_TOKEN && {
@@ -33,7 +33,7 @@ export async function listContentFromIssues(label) {
 		new URLSearchParams({
 			state: 'all',
 			labels: label,
-			per_page: '100',
+			per_page: '100'
 		});
 
 	// pull issues created by owner only if allowed author = repo owner
@@ -52,22 +52,22 @@ export async function listContentFromIssues(label) {
 
 		issues.forEach((issue) => {
 			if (APPROVED_POSTERS_GH_USERNAME.includes(issue.user.login)) {
-				allContentWithLabel.push(parseIssue(issue, label))
+				allContentWithLabel.push(parseIssue(issue, label));
 			}
 		});
 		const headers = parse(res.headers.get('Link'));
 		next = headers && headers.next;
-	} while (next)
+	} while (next);
 
 	allContentWithLabel.sort((a, b) => b.date.valueOf() - a.date.valueOf()); // use valueOf to make TS happy https://stackoverflow.com/a/60688789/1106414
-	return allContentWithLabel
+	return allContentWithLabel;
 }
 
 // searches the list of content returned and matches based on slug
 export async function getContent(slug) {
 	// get all posts if not already done - or in development
 	if (dev || allPosts.length === 0) {
-		console.log('loading allBlogposts');
+		console.log('loading allPosts');
 		allBlogposts = await listContentFromIssues('Published');
 		allGalleries = await listContentFromIssues('Gallery');
 		allPosts = [...allBlogposts, ...allGalleries];
@@ -77,7 +77,8 @@ export async function getContent(slug) {
 
 		if (!allPosts.length)
 			throw new Error(
-				'failed to load posts from github issues for some reason. check token' + process.env.GH_TOKEN
+				'failed to load posts from github issues for some reason. check token' +
+					process.env.GH_TOKEN
 			);
 	}
 	if (!allPosts.length) throw new Error('no posts');
@@ -105,8 +106,8 @@ function parseIssue(issue, label) {
 			post = {
 				type: 'gallery',
 				...base,
-				alt: data.alt,
-			}
+				alt: data.alt
+			};
 			break;
 		case 'Published':
 		default:
@@ -119,11 +120,11 @@ function parseIssue(issue, label) {
 				...base,
 				category: data.category?.toLowerCase() || 'note',
 				tags,
-				readingTime: readingTime(base.content),
-			}
+				readingTime: readingTime(base.content)
+			};
 
 			break;
 	}
 
-	return post
+	return post;
 }

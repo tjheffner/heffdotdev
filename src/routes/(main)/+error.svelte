@@ -25,7 +25,9 @@
 		<p class="">There is no post at the slug <code>{$page.url.pathname}</code>.</p>
 		<p><a href={'/blog?filter=' + $page.url.pathname.slice(1)}>Try searching for it here!</a></p>
 		<p class="">
-			If you believe this was a bug, please let me know! <a href="https://github.com/tjheffner/heffdotdev/issues">Open an issue here.</a>
+			If you believe this was a bug, please let me know! <a
+				href="https://github.com/tjheffner/heffdotdev/issues">Open an issue here.</a
+			>
 		</p>
 	{:else}
 		<p class="font-mono">{message}</p>

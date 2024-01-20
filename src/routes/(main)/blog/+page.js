@@ -4,13 +4,13 @@ export async function load({ setHeaders, fetch }) {
 	const res = await fetch(`/api/listContent.json`);
 
 	if (res.status > 400) {
-		throw error(res.status, await res.text())
+		throw error(res.status, await res.text());
 	}
 
 	/** @type {import('$lib/types').ContentItem[]} */
 	const items = await res.json();
 	setHeaders({
 		'Cache-Control': 'public, max-age=60' // 1 minute
-	})
-	return {items}
+	});
+	return { items };
 }

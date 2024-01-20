@@ -11,7 +11,7 @@ export type BaseContentItem = {
 	date: Date;
 	ghMetadata: GHMetadata;
 	image: string;
-}
+};
 
 export type BlogItem = BaseContentItem & {
 	type: 'blog';
@@ -22,14 +22,14 @@ export type BlogItem = BaseContentItem & {
 
 export type GalleryItem = BaseContentItem & {
 	type: 'gallery';
-	images: GalleryImage[]
-}
+	images: GalleryImage[];
+};
 
 export type GalleryImage = {
 	src: string;
 	alt: string;
 	size: string;
-}
+};
 
 export type GHMetadata = {
 	issueUrl: string;

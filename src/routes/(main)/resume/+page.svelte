@@ -6,16 +6,17 @@
 <svelte:head>
 	<title>Tanner Heffner's Resume</title>
 	<meta name="description" content="digital resume of tanner heffner" />
-	<meta property="og:image" content={`https://heffner.dev/og?message=resume`}>
-	<meta name="twitter:card" content={`https://heffner.dev/og?message=resume` ? 'summary_large_image' : 'summary'} />
+	<meta property="og:image" content={`https://heffner.dev/og?message=resume`} />
+	<meta
+		name="twitter:card"
+		content={`https://heffner.dev/og?message=resume` ? 'summary_large_image' : 'summary'}
+	/>
 	<meta name="twitter:image" content={`https://heffner.dev/og?message=resume`} />
 </svelte:head>
 
 <section>
 	<Slice>
-		<h1
-			class="mb-3 text-3xl font-bold tracking-tight text-shadow md:text-5xl"
-		>
+		<h1 class="text-shadow mb-3 text-3xl font-bold tracking-tight md:text-5xl">
 			Creative technologist passionate about design systems, responsive web design and
 			accessibility.
 		</h1>
@@ -27,12 +28,12 @@
 
 		<ul>
 			<li>
-				Load quickly with minimal page bloat and disruption (no unnecessary tracking, excessive
-				and obtrusive advertisements, autoplaying videos etc.)
+				Load quickly with minimal page bloat and disruption (no unnecessary tracking, excessive and
+				obtrusive advertisements, autoplaying videos etc.)
 			</li>
 			<li>
-				Be functional for all users regardless of their manner of access (sighted or
-				screenreaders, navigable by keyboard, mouse or touch, etc.)
+				Be functional for all users regardless of their manner of access (sighted or screenreaders,
+				navigable by keyboard, mouse or touch, etc.)
 			</li>
 			<li>At the bare minimum, pass WCAG-AA accessibility guidelines</li>
 		</ul>
@@ -42,8 +43,9 @@
 
 	<Slice title="Expertise & Skillset">
 		<p class="mb-3 text-2xl font-bold">
-			Working across the web tech stack, I've consulted, architected, and delivered <a href="/work">numerous
-			projects</a> for clients big and small with all sorts of use cases.
+			Working across the web tech stack, I've consulted, architected, and delivered <a href="/work"
+				>numerous projects</a
+			> for clients big and small with all sorts of use cases.
 		</p>
 
 		<p class="mb-3">
@@ -54,8 +56,8 @@
 		</p>
 
 		<p class="mb-3">
-			I'm comfortable working in and with a number of languages and technologies, but have a
-			strong preference towards modern Javascript and CSS. I've been a mostly off-and-on <a
+			I'm comfortable working in and with a number of languages and technologies, but have a strong
+			preference towards modern Javascript and CSS. I've been a mostly off-and-on <a
 				href="https://www.drupal.org/u/tjh">contributor to the Drupal ecosystem</a
 			>
 			for eight+ years. A long time ago (read: 2015), I dove into node and an early edition of
@@ -73,24 +75,25 @@
 		<p class="mb-3 text-2xl font-bold">Designing for the web since '05.</p>
 
 		<p class="mb-3">
-			I hacked together my first CSS file at age 12 customizing a phpBB forum theme. Years later
-			in a college art class, I was exposed to the <a href="https://processing.org/">Processing</a
-			> language and rediscovered how magical that feeling of creation through code was.
+			I hacked together my first CSS file at age 12 customizing a phpBB forum theme. Years later in
+			a college art class, I was exposed to the <a href="https://processing.org/">Processing</a> language
+			and rediscovered how magical that feeling of creation through code was.
 		</p>
 
 		<p class="mb-3">
-			After graduating from the University of Oregon with a journalism degree (minor in multimedia art), I continued my
-			education with a four-month programming bootcamp. I've been a professional web developer
-			since 2015, across all parts of the web stack. That means I know just enough SQL to be
-			dangerous, but I'd rather work on the front end. <span role="img" aria-label="winking face"
-				>&#128521;</span
+			After graduating from the University of Oregon with a journalism degree (minor in multimedia
+			art), I continued my education with a four-month programming bootcamp. I've been a
+			professional web developer since 2015, across all parts of the web stack. That means I know
+			just enough SQL to be dangerous, but I'd rather work on the front end. <span
+				role="img"
+				aria-label="winking face">&#128521;</span
 			>
 		</p>
 
 		<p class="mb-3">
 			Currently, I'm a senior software developer at <a href="https://agile6.com/">Agile6</a>,
-			working on the modernization effort for <a href="https://va.gov">VA.gov</a> serving millions
-			of veterans nationwide.
+			working on the modernization effort for <a href="https://va.gov">VA.gov</a> serving millions of
+			veterans nationwide.
 		</p>
 
 		<p>

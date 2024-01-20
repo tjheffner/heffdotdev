@@ -20,7 +20,7 @@
 		<div class="col-span-4 md:col-span-1">
 			<h2
 				class="sticky top-4 mb-2 text-xl font-bold
-							 text-black dark:text-blue-300 md:ml-4 md:text-2xl lg:ml-12
+							 text-black md:ml-4 md:text-2xl lg:ml-12 dark:text-blue-300
 		"
 			>
 				<a href="#{title}" class="slice-title">

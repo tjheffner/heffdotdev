@@ -34,17 +34,16 @@ export function readingTime(text) {
  * @returns {string}
  */
 export function slugify(text) {
-    return text
-        .toString()                 // Cast to string (optional)
-        .normalize('NFKD')          // The normalize() using NFKD method returns the Unicode Normalization Form of a given string.
-        .toLowerCase()              // Convert the string to lowercase letters
-        .trim()                     // Remove whitespace from both sides of a string (optional)
-        .replace(/\s+/g, '-')       // Replace spaces with hyphen
-		.replace(/[^\w-]+/g, '')   // Remove all non-word chars
-		.replace(/--+/g, '-')     // Replace multiple hyphen with single hyphen
+	return text
+		.toString() // Cast to string (optional)
+		.normalize('NFKD') // The normalize() using NFKD method returns the Unicode Normalization Form of a given string.
+		.toLowerCase() // Convert the string to lowercase letters
+		.trim() // Remove whitespace from both sides of a string (optional)
+		.replace(/\s+/g, '-') // Replace spaces with hyphen
+		.replace(/[^\w-]+/g, '') // Remove all non-word chars
+		.replace(/--+/g, '-') // Replace multiple hyphen with single hyphen
 		.replace(/(^-|-$)/g, ''); // Remove leading or trailing hyphen
 }
-
 
 /**
  * All pages built from github issue should contain this data at minimum
@@ -65,11 +64,7 @@ export function baseIssueContent(issue) {
 
 	let description = data.description ?? content.trim().split('\n')[0];
 	// extract plain text from markdown
-	description = remark()
-		.use(remarkParse)
-		.use(remarkStringify)
-		.processSync(description)
-		.toString();
+	description = remark().use(remarkParse).use(remarkStringify).processSync(description).toString();
 	description = description.replace(/\n/g, ' ');
 	// strip html
 	description = description.replace(/<[^>]*>?/gm, '');
@@ -95,7 +90,7 @@ export function baseIssueContent(issue) {
 			updated_at: issue.updated_at,
 			reactions: issue.reactions
 		}
-	}
+	};
 }
 
 export async function formatContent(content) {
@@ -103,8 +98,7 @@ export async function formatContent(content) {
 		.replace(/\n{% youtube (.*?) %}/g, (_, x) => {
 			// https://stackoverflow.com/a/27728417/1106414
 			function youtube_parser(url) {
-				var rx =
-					/^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|&v(?:i)?=))([^#&?]*).*/;
+				var rx = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|&v(?:i)?=))([^#&?]*).*/;
 				return url.match(rx)[1];
 			}
 			const videoId = x.startsWith('https://') ? youtube_parser(x) : x;
@@ -174,5 +168,5 @@ export async function formatContent(content) {
 		.replace(/>{@html `<code class="language-/g, '><code class="language-')
 		.replace(/<\/code>`}<\/pre>/g, '</code></pre>');
 
-	return output
+	return output;
 }

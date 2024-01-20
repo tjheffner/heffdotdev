@@ -2,7 +2,7 @@
 	/** @type {import('$lib/types').Project} */
 	export let data;
 
-	const { content, name, date, description, image, url } = data
+	const { content, name, date, description, image, url } = data;
 
 	import { MY_TWITTER_HANDLE, SITE_URL } from '$lib/siteConfig';
 	import GetInTouch from '$lib/components/GetInTouch.svelte';
@@ -24,19 +24,25 @@
 		<meta property="og:image" content={image} />
 		<meta name="twitter:image" content={image} />
 	{:else}
-   	<meta content={`https://heffner.dev/og?message=heffner.dev | ${name}`} property="og:image">
+		<meta content={`https://heffner.dev/og?message=heffner.dev | ${name}`} property="og:image" />
 		<meta name="twitter:image" content={`https://heffner.dev/og?message=heffner.dev | ${name}`} />
 	{/if}
 </svelte:head>
 
 <a href="/work" class="back-link">Back </a>
 
-<article class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8">
+<article
+	class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8"
+>
 	{#if name}
 		<div class="mb-12">
-			<h1 class="text-shadow text-3xl font-bold tracking-tight text-amber-600 dark:text-yellow-400 md:text-6xl">
+			<h1
+				class="text-shadow text-3xl font-bold tracking-tight text-amber-600 md:text-6xl dark:text-yellow-400"
+			>
 				{name}
-				<span class="text-base text-unshadow text-slate-500 dark:text-gray-600">({date.slice(0,4)})</span>
+				<span class="text-unshadow text-base text-slate-500 dark:text-gray-600"
+					>({date.slice(0, 4)})</span
+				>
 			</h1>
 		</div>
 	{/if}

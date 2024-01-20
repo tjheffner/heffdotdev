@@ -126,7 +126,7 @@
 .prose h4 {
 	@apply relative;
 	a {
-		@apply bg-unset font-bold !text-accent p-0;
+		@apply bg-unset p-0 font-bold !text-accent;
 	}
 	&::before {
 		@apply absolute -left-5;
@@ -139,7 +139,7 @@
 }
 
 .back-link {
-	@apply relative mb-4 font-bold text-accent mx-4 lg:mx-12;
+	@apply relative mx-4 mb-4 font-bold text-accent lg:mx-12;
 	&::before {
 		@apply absolute -left-5;
 		content: '<';
