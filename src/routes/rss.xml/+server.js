@@ -4,6 +4,8 @@ import { remark } from 'remark'
 import remarkHTML from 'remark-html'
 import { listContentFromIssues } from '$lib/content'
 
+export const prerender = true
+
 // Reference: https://github.com/sveltejs/kit/blob/master/examples/hn.svelte.dev/src/routes/%5Blist%5D/rss.js
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function GET({ fetch }) {
