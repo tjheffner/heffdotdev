@@ -1,50 +1,54 @@
 body {
-	background-color: rgb(17 24 39 / var(--tw-bg-opacity)) !important;
+  background-color: rgb(17 24 39 / var(--tw-bg-opacity)) !important;
 }
 body::-webkit-scrollbar-thumb {
-	background: repeating-linear-gradient(60deg, red 0 9%, white 10% 18%) !important;
-	border-radius: 100vw !important;
-	margin-block: 10px !important;
+  background: repeating-linear-gradient(
+    60deg,
+    red 0 9%,
+    white 10% 18%
+  ) !important;
+  border-radius: 100vw !important;
+  margin-block: 10px !important;
 }
 body::-webkit-scrollbar-track {
-	background: powderblue !important;
+  background: powderblue !important;
 }
 
 .serif {
-	font-family: 'Gloock', serif;
+  font-family: 'Gloock', serif;
 }
 .sans {
-	font-family: 'Pragati Narrow', sans-serif;
+  font-family: 'Pragati Narrow', sans-serif;
 }
 
 #snow {
-	position: fixed;
-	height: 100%;
-	left: 0;
-	top: 0;
-	width: 100%;
-	z-index: 1;
+  position: fixed;
+  height: 100%;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 1;
 }
 
 .holly-container {
-	position: relative;
+  position: relative;
 }
 .holly {
-	position: absolute;
-	top: 0;
-	background: none;
-	width: 20%;
+  position: absolute;
+  top: 0;
+  background: none;
+  width: 20%;
 }
 .left {
-	left: 0;
+  left: 0;
 }
 .right {
-	right: 0;
-	transform: scaleX(-1);
+  right: 0;
+  transform: scaleX(-1);
 }
 .bottom {
-	transform: scaleY(-1);
+  transform: scaleY(-1);
 }
 .bottom.right {
-	transform: scaleX(-1) scaleY(-1);
+  transform: scaleX(-1) scaleY(-1);
 }
