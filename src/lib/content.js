@@ -1,6 +1,5 @@
 import { compile } from 'mdsvex';
 import { dev } from '$app/environment';
-import grayMatter from 'gray-matter';
 import fetch from 'node-fetch';
 import {
 	GH_USER_REPO,
@@ -8,11 +7,8 @@ import {
 	GH_PUBLISHED_TAGS,
 	REPO_OWNER
 } from './siteConfig';
-import { slugify, readingTime } from './utils'
+import { slugify, readingTime, baseIssueContent } from './utils'
 import parse from 'parse-link-header';
-import { remark } from 'remark';
-import remarkParse from 'remark-parse';
-import remarkStringify from 'remark-stringify';
 import rehypeStringify from 'rehype-stringify';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutoLink from 'rehype-autolink-headings';
@@ -31,6 +27,7 @@ const rehypePlugins = [
 ];
 
 let allBlogposts = [];
+let allGalleries = [];
 // let etag = null // todo - implmement etag header
 
 export async function listContent() {
@@ -71,7 +68,7 @@ export async function listContent() {
 					// issue.labels.some((label) => GH_PUBLISHED_TAGS.includes(label.name)) &&
 					APPROVED_POSTERS_GH_USERNAME.includes(issue.user.login)
 				) {
-					_allBlogposts.push(parseIssue(issue));
+					_allBlogposts.push(parseBlogIssue(issue));
 				}
 			}
 		);
@@ -81,6 +78,58 @@ export async function listContent() {
 	_allBlogposts.sort((a, b) => b.date.valueOf() - a.date.valueOf()); // use valueOf to make TS happy https://stackoverflow.com/a/60688789/1106414
 	allBlogposts = _allBlogposts;
 	return _allBlogposts;
+}
+
+export async function listContentFromIssues(label) {
+	let allContentWithLabel = []
+	let next = null;
+
+	const authheader = process.env.GH_TOKEN && {
+		Authorization: `token ${process.env.GH_TOKEN}`
+	};
+
+	let url =
+		`https://api.github.com/repos/${GH_USER_REPO}/issues?` +
+		new URLSearchParams({
+			state: 'all',
+			labels: label,
+			per_page: '100',
+		});
+
+	// pull issues created by owner only if allowed author = repo owner
+	if (APPROVED_POSTERS_GH_USERNAME.length === 1 && APPROVED_POSTERS_GH_USERNAME[0] === REPO_OWNER) {
+		url += '&' + new URLSearchParams({ creator: REPO_OWNER });
+	}
+
+	do {
+		const res = await fetch(next?.url ?? url, {
+			headers: authheader
+		});
+
+		const issues = await res.json();
+		if ('message' in issues && res.status > 400)
+			throw new Error(res.status + ' ' + res.statusText + '\n' + (issues && issues.message));
+
+		issues.forEach((issue) => {
+			if (APPROVED_POSTERS_GH_USERNAME.includes(issue.user.login)) {
+				// Add additional label page types here:
+				switch (label) {
+					case 'Gallery':
+						allContentWithLabel.push(parseGalleryIssue(issue));
+						break;
+					case 'Published':
+					default:
+						allContentWithLabel.push(parseBlogIssue(issue));
+						break;
+				}
+			}
+		});
+		const headers = parse(res.headers.get('Link'));
+		next = headers && headers.next;
+	} while (next)
+
+	allContentWithLabel.sort((a, b) => b.date.valueOf() - a.date.valueOf()); // use valueOf to make TS happy https://stackoverflow.com/a/60688789/1106414
+	return allContentWithLabel
 }
 
 export async function getContent(slug) {
@@ -175,38 +224,17 @@ export async function getContent(slug) {
 
 		return { ...blogpost, content };
 	} else {
-		throw new Error('Blogpost not found for slug: ' + slug);
+		throw new Error('Issue not found for slug: ' + slug);
 	}
 }
 
 /**
  * @param {import('./types').GithubIssue} issue
- * @returns {import('./types').ContentItem}
+ * @returns {import('./types').BlogItem}
  */
-function parseIssue(issue) {
-	const src = issue.body;
-	const { content, data } = grayMatter(src);
-	let title = data.title ?? issue.title;
-	let slug;
-	if (data.slug) {
-		slug = data.slug;
-	} else {
-		slug = slugify(title);
-	}
-	let description = data.description ?? content.trim().split('\n')[0];
-	// extract plain text from markdown
-	description = remark()
-		.use(remarkParse)
-		.use(remarkStringify)
-		.processSync(description)
-		.toString();
-	description = description.replace(/\n/g, ' ');
-	// strip html
-	description = description.replace(/<[^>]*>?/gm, '');
-	// strip markdown
-	description = description.replace(/[[\]]/gm, '');
-	// strip markdown
-	description = description.replace(/[[\]]/gm, '');
+function parseBlogIssue(issue) {
+	const base = baseIssueContent(issue);
+	const data = base.frontmatter;
 
 	// you may wish to use a truncation approach like this instead...
 	// let description = (data.content.length > 300) ? data.content.slice(0, 300) + '...' : data.content
@@ -218,27 +246,26 @@ function parseIssue(issue) {
 	// console.log(slug, tags);
 
 	return {
-		type: 'blog', // futureproof in case you want to add other types of content
-		issueNumber: issue.number,
-		content,
-		frontmatter: data,
-		title,
-		subtitle: data.subtitle,
-		description,
-		category: data.category?.toLowerCase() || 'blog',
+		...base,
+		type: 'blog',
+		category: data.category?.toLowerCase() || 'note',
 		tags,
 		image: data.image ?? data.cover_image,
-		canonical: data.canonical, // for canonical URLs of something published elsewhere
-		slug: slug.toString().toLowerCase(),
 		date: new Date(data.date ?? issue.created_at),
-		readingTime: readingTime(content),
-		ghMetadata: {
-			issueUrl: issue.html_url,
-			commentsUrl: issue.comments_url,
-			title: issue.title,
-			created_at: issue.created_at,
-			updated_at: issue.updated_at,
-			reactions: issue.reactions
-		}
+		readingTime: readingTime(base.content),
 	};
+}
+
+function parseGalleryIssue(issue) {
+	const base = baseIssueContent(issue);
+	const data = base.frontmatter;
+
+	return {
+		...base,
+		slug: `gallery/${data.title.toLowerCase()}`,
+		type: 'gallery',
+		image: data.image ?? data.cover_image,
+		alt: data.alt,
+		date: new Date(data.date ?? issue.created_at),
+	}
 }

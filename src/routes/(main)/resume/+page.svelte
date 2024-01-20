@@ -1,5 +1,4 @@
 <script>
-	import { SITE_DESCRIPTION } from '$lib/siteConfig';
 	import Slice from '$lib/components/Slice.svelte';
 	import GetInTouch from '$lib/components/GetInTouch.svelte';
 </script>
