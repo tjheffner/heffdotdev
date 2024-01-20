@@ -10,13 +10,13 @@ export type BaseContentItem = {
 	slug: string;
 	date: Date;
 	ghMetadata: GHMetadata;
+	image: string;
 }
 
 export type BlogItem = BaseContentItem & {
 	type: 'blog';
 	category: string;
 	tags: string[];
-	image: string;
 	readingTime: string;
 };
 

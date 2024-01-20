@@ -1,5 +1,6 @@
 <script>
 	import { SITE_DESCRIPTION } from '$lib/siteConfig';
+	import GetInTouch from '$lib/components/GetInTouch.svelte';
 </script>
 
 <svelte:head>
@@ -13,7 +14,7 @@
 <h1 class="text-shadow">about</h1>
 
 ## the site
-this site is the online home of tanner heffner. it's part [blog](/blog), [portfolio](/work), playground, [resume](/resume), and all [digital garden](https://joelhooks.com/digital-garden), using [swyxkit](https://swyxkit.netlify.app/about) as my starting point. [this post](/heffdotdev-technical-details) explains more about the tools i chose and why.
+this site is the online home of tanner heffner. it's part [blog](/blog), [portfolio](/work), [photo gallery](/gallery),  [playground](/christmas), [resume](/resume), and all [digital garden](https://joelhooks.com/digital-garden), using [swyxkit](https://swyxkit.netlify.app/about) as my starting point. [this post](/heffdotdev-technical-details) explains more about the tools i chose and why.
 
 you'll find technical snippets & longer blogs, cooking recipes, old projects both professional and personal, and potentially much more. we're just getting started watering this garden :)
 
@@ -21,27 +22,5 @@ you'll find technical snippets & longer blogs, cooking recipes, old projects bot
 i do a lot of different stuff. when i'm not staring at screens for work and fun,
 i like to get outside in the pnw.
 
-here's a list of my favorite disc golf courses around portland, or.
-if you're in the area you might catch me out here!
-
-<ul class="list-outside">
-  <li>Dabney</li>
-  <li>Pier on an empty day</li>
-  <li>Ft. Stevens</li>
-  <li>Milo</li>
-  <li>Blue Lake on a still day</li>
-  <li>Stub Stewart</li>
-  <li>Horning's</li>
-  <li>Champoeg</li>
-  <li>Timber</li>
-  <li>McCormick</li>
-  <li>Rooster Rock</li>
-  <li>Pier on a busy day</li>
-  <li>Leveritch</li>
-  <li>...</li>
-  <li>Blue Lake on a windy day</li>
-  <li>Trojan</li>
-  <li>Eco Park</li>
-</ul>
-
-i'm hoping to play Buxton soon!
+i'm interested in cooking, DIY, sustainability,
+gardening, disc golf, and a whole lot more.

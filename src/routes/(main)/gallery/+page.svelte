@@ -23,7 +23,7 @@
 
   {#each items as trip}
     <Slice title={trip.title}>
-		<a href={trip.slug} style="display: inline-block"><img src={trip.image} alt={trip.alt} style="margin: 0" />
+		<a href="/gallery/{trip.slug}" style="display: inline-block"><img src={trip.image} alt={trip.alt} style="margin: 0" />
     	{trip.description}
 			</a>
   	</Slice>
