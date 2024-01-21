@@ -13,7 +13,6 @@
 <h1 class="mb-3 text-3xl font-bold tracking-tight text-shadow md:text-5xl">
 	about
 </h1>
-<hr class="mb-8 not-prose">
 
 ## the site
 this site is the online home of tanner heffner. it's part [blog](/blog), [portfolio](/work), [photo gallery](/gallery),  [playground](/christmas), [resume](/resume), and all [digital garden](https://joelhooks.com/digital-garden), using [swyxkit](https://swyxkit.netlify.app/about) as my starting point. [this post](/heffdotdev-technical-details) explains more about the tools i chose and why.
