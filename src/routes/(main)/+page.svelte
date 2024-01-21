@@ -57,30 +57,31 @@
   </Slice>
 
   <Slice title="Currently...">
-    <!-- TODO: should these tie to external services?  -->
-    <!-- data from last.fm, letterboxd, goodreads, steam ? is that too much? -->
     <p>
-      <span class="text-3xl">🎶</span> - Stove God Cooks, Nujabes, Fleetwood Mac
+      <span class="text-3xl">🎶</span> - Westside Gunn
     </p>
-    <p><span class="text-3xl">🍿</span> - The Righteous Gemstones, Saltburn</p>
+    <p>
+      <span class="text-3xl">🍿</span> - House of the Dragon
+    </p>
     <p>
       <span class="text-3xl">📚</span> - Thinking, Fast And Slow by Daniel Kahneman
     </p>
     <p>
-      <span class="text-3xl">🎮</span> - Baldur's Gate 3, Monster Train, RDR2
+      <span class="text-3xl">🎮</span> - Baldur's Gate 3
     </p>
 
-    <p class="text-xs">Last updated: Jan 12, 2024</p>
+    <p class="text-xs">Last updated: Jan 20, 2024</p>
+    <p class="text-xs">In the future, this data will be pulled from other APIs. maybe.</p>
   </Slice>
 
-  <Slice title="Top Recipes">
-    <p>In no particular order...</p>
+  <Slice title="Fav Recipes">
+    <p>In no particular order, these are recipes I get a lot of mileage out of...</p>
     <div class="grid w-full grid-cols-1 gap-4 align-middle md:grid-cols-3">
       <Card title="Creme Brulee" href={'/creme-brulee'} />
       <Card title="Caper Butter" href={'/dill-caper-compound-butter'} />
       <Card title="Preserved Lemons" href={'/preserved-lemons'} />
       <Card title="Pizza Dough" href={'/pizza-dough'} />
-      <Card title="Chicken & Bean Stew" href={'/southwest-chicken-bean-stew'} />
+      <Card title="Chicken & Beans" href={'/southwest-chicken-bean-stew'} />
       <Card title="Shrimp and Rice" href={'/shrimp-and-rice'} />
     </div>
   </Slice>
