@@ -5,6 +5,16 @@
   import GetInTouch from '$lib/components/GetInTouch.svelte'
 
   export let data
+  export let resume = {
+    slug: '/resume',
+    name: 'Resume',
+    description: ''
+  }
+  export let gallery = {
+    slug: '/gallery',
+    name: 'gallery',
+    description: 'photos, drawings, etc.'
+  }
 </script>
 
 <svelte:head>
@@ -40,7 +50,7 @@
       {#each data.items as project}
         {#if project.type === 'professional'}
           <li>
-            <ProjectItem item={project} />
+            <ProjectItem item={project} prefix={true} />
           </li>
         {/if}
       {/each}
@@ -53,11 +63,7 @@
       Line, PGA Tour, Weight Watchers, Urban Institute, Wilson Center
     </p>
 
-    <a
-      href="/resume"
-      class="text-lg font-bold text-orange-600 hover:text-red-600 dark:text-lime-500 dark:hover:text-yellow-400"
-      >Resume</a
-    >
+    <ProjectItem item={resume} />
   </Slice>
 
   <Slice title="Personal" prose={false}>
@@ -65,10 +71,13 @@
       {#each data.items as project}
         {#if project.type === 'personal'}
           <li>
-            <ProjectItem item={project} />
+            <ProjectItem item={project} prefix={true} />
           </li>
         {/if}
       {/each}
+      <li>
+        <ProjectItem item={gallery} />
+      </li>
     </ul>
   </Slice>
 

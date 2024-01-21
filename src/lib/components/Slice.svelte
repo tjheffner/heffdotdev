@@ -1,5 +1,6 @@
 <script>
   export let title = false
+  export let date = false
   export let prose = true
 
   let slotWrapperClasses = 'w-full md:w-2/3 md:ml-4 lg:ml-12'
@@ -26,6 +27,11 @@
         <a href="#{title}" class="slice-title">
           {title}
         </a>
+        {#if date}
+        <span class="text-unshadow text-base text-slate-500 dark:text-gray-600">
+        ({date.slice(0, 4)})
+        </span>
+        {/if}
       </h2>
     </div>
   {/if}

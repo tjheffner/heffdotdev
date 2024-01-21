@@ -1,9 +1,8 @@
 <script>
+  import { page } from '$app/stores'
   import { MY_TWITTER_HANDLE, SITE_URL } from '$lib/siteConfig'
   import Comments from '$lib/components/Comments.svelte'
-
   import 'prism-themes/themes/prism-shades-of-purple.min.css'
-  import { page } from '$app/stores'
 
   /** @type {import('./$types').PageData} */
   export let data
@@ -57,46 +56,24 @@
 <article
   class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8"
 >
-  <h1 class="text-shadow mb-8 text-3xl font-bold tracking-tight md:text-6xl">
-    {json.title}
-  </h1>
-  <div
-    class="bg mt-2 flex w-full justify-between sm:flex-col sm:items-start md:flex-row md:items-center"
-  >
-    <p class="flex items-center text-sm text-gray-700 dark:text-gray-300">
-      tjheffner
-    </p>
-    <p
-      class="flex min-w-32 items-center text-sm text-gray-600 md:mt-0 dark:text-gray-400"
-    >
-      {#if json.ghMetadata.reactions.total_count > 0}
-        <a
-          href={json.ghMetadata.issueUrl}
-          rel="external noreferrer noopener"
-          class="no-underline"
-          target="_blank"
+  {#if json.title}
+    <div class="mb-12">
+      <h1
+        class="text-shadow text-3xl font-bold tracking-tight text-amber-600 md:text-6xl dark:text-yellow-400"
+      >
+        {json.title}
+        <span class="text-unshadow text-base text-slate-500 dark:text-gray-600"
+          >({json.date.slice(0, 4)})</span
         >
-          <span
-            class="mr-4 font-mono text-xs text-gray-700 text-opacity-70 dark:text-gray-300"
-            >{json.ghMetadata.reactions.total_count}
-            {#if json.ghMetadata.reactions.total_count === 1}reaction{:else}reactions{/if}</span
-          >
-        </a>
-      {/if}
-      {new Date(json.date).toISOString().slice(0, 10)}
-    </p>
-  </div>
+      </h1>
+    </div>
+  {/if}
 
-  <hr class="mt-2 w-full border-t-2 border-red-600 dark:border-blue-300" />
-
-  <!-- <div
-		class="-mx-4 my-2 flex h-1 w-[100vw] bg-gradient-to-r from-blue-300 via-indigo-700 to-slate-900 sm:mx-0 sm:w-full"
-	/> -->
-
-  <div class="prose mb-12 mt-12 w-full max-w-none dark:prose-invert">
+  <div class="prose mb-12 w-full max-w-none dark:prose-invert">
     {@html json.content}
   </div>
 </article>
+
 
 <div
   class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8"

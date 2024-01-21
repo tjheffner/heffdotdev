@@ -11,7 +11,7 @@ export async function load({ params, url, fetch, setHeaders }) {
     throw error(res.status, await res.text())
   }
   setHeaders({
-    'Cache-Control': 'public, max-age=60',
+    'Cache-Control': 'public, max-age=86400',
   })
   return {
     json: await res.json(),
