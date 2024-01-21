@@ -7,6 +7,7 @@ import remarkUnwrapImages from 'remark-unwrap-images'
 import rehypeStringify from 'rehype-stringify'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutoLink from 'rehype-autolink-headings'
+import rehypeZoomImages from './rehype-wrap-img.js'
 
 const remarkPlugins = [ remarkUnwrapImages ]
 const rehypePlugins = [
@@ -19,6 +20,7 @@ const rehypePlugins = [
       properties: { class: 'hover:text-yellow-100 no-underline' },
     },
   ],
+  rehypeZoomImages,
 ]
 
 /**
@@ -179,7 +181,7 @@ export async function formatContent(content) {
     .replace(/>{@html `<code class="language-/g, '><code class="language-')
     .replace(/<\/code>`}<\/pre>/g, '</code></pre>')
     // lazy load images
-    .replace(/<img/g, '<img loading="lazy" ')
+    // .replace(/<img/g, '<img loading="lazy" ')
 
   return output
 }
