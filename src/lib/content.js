@@ -111,6 +111,7 @@ function parseIssue(issue, label) {
         type: 'gallery',
         ...base,
         alt: data.alt,
+        images: data.images
       }
       break
     case 'Published':

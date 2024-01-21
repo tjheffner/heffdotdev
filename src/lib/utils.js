@@ -3,11 +3,12 @@ import { compile } from 'mdsvex'
 import { remark } from 'remark'
 import remarkParse from 'remark-parse'
 import remarkStringify from 'remark-stringify'
+import remarkUnwrapImages from 'remark-unwrap-images'
 import rehypeStringify from 'rehype-stringify'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutoLink from 'rehype-autolink-headings'
 
-const remarkPlugins = undefined
+const remarkPlugins = [ remarkUnwrapImages ]
 const rehypePlugins = [
   rehypeStringify,
   rehypeSlug,
@@ -67,6 +68,7 @@ export function baseIssueContent(issue) {
   description = remark()
     .use(remarkParse)
     .use(remarkStringify)
+    .use(remarkUnwrapImages)
     .processSync(description)
     .toString()
   description = description.replace(/\n/g, ' ')
@@ -99,6 +101,7 @@ export function baseIssueContent(issue) {
 
 export async function formatContent(content) {
   const formatted = content
+    // replace youtube vids
     .replace(/\n{% youtube (.*?) %}/g, (_, x) => {
       // https://stackoverflow.com/a/27728417/1106414
       function youtube_parser(url) {
@@ -152,6 +155,7 @@ export async function formatContent(content) {
 		allowFullScreen
 		aria-hidden="true"></iframe>`
     })
+    // replace tweet embeds
     .replace(/\n{% (tweet|twitter) (.*?) %}/g, (_, _2, x) => {
       const url = x.startsWith('https://twitter.com/')
         ? x
@@ -174,6 +178,8 @@ export async function formatContent(content) {
     // https://github.com/pngwn/MDsveX/issues/392
     .replace(/>{@html `<code class="language-/g, '><code class="language-')
     .replace(/<\/code>`}<\/pre>/g, '</code></pre>')
+    // lazy load images
+    .replace(/<img/g, '<img loading="lazy" ')
 
   return output
 }

@@ -34,11 +34,18 @@
   </Slice>
 
   {#each items as trip}
-    <Slice title={trip.title}>
-      <a href="/gallery/{trip.slug}" style="display: inline-block"
-        ><img src={trip.image} alt={trip.alt} style="margin: 0" />
-        {trip.description}
+    <Slice title={trip.title} date={trip.date}>
+      <a href="/gallery/{trip.slug}" style="display: inline-block">
+        <img src={trip.image} alt={trip.alt} class="gallery-image" loading="lazy" />
+        {'>> ' + trip.description + ' <<'}
       </a>
     </Slice>
   {/each}
 </section>
+
+<style>
+  .gallery-image {
+    margin: 0;
+    max-height: 600px;
+  }
+</style>
