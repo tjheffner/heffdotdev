@@ -4,8 +4,6 @@
   import Comments from '$lib/components/Comments.svelte'
   import 'prism-themes/themes/prism-shades-of-purple.min.css'
 
-  export let commentsEl;
-
   /** @type {import('./$types').PageData} */
   export let data
 
@@ -75,6 +73,7 @@
     {@html json.content}
   </div>
 </article>
+
 
 <div
   class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8"
