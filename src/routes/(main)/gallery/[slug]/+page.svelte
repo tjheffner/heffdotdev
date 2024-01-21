@@ -1,9 +1,10 @@
 <script>
-  import { MY_TWITTER_HANDLE, SITE_URL } from '$lib/siteConfig'
-  import Comments from '$lib/components/Comments.svelte'
-
-  import 'prism-themes/themes/prism-shades-of-purple.min.css'
   import { page } from '$app/stores'
+  import { MY_TWITTER_HANDLE, SITE_URL } from '$lib/siteConfig'
+  import utterances, {injectScript}  from '$lib/loadUtterances'
+  import 'prism-themes/themes/prism-shades-of-purple.min.css'
+
+  export let commentsEl;
 
   /** @type {import('./$types').PageData} */
   export let data
@@ -81,6 +82,13 @@
   <hr class="mt-2 w-full border-t-2 border-red-600 dark:border-blue-300" />
 
   <div class="mb-8 w-full">
-    <Comments issueNumber={json.issueNumber} />
+    <div class="mb-8 text-black dark:text-white " bind:this={commentsEl} use:utterances={{number: json.issueNumber}}>
+      Loading comments...
+      <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+      <button class="my-4 bg-blue-200 hover:bg-blue-100 text-black p-2 rounded-lg"
+        on:click={() => injectScript(commentsEl, json.issueNumber)}
+        on:mouseover={() => injectScript(commentsEl, json.issueNumber)}
+      >Load now</button>
+    </div>
   </div>
 </div>
