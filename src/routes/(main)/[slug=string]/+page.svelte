@@ -1,10 +1,8 @@
 <script>
   import { page } from '$app/stores'
   import { MY_TWITTER_HANDLE, SITE_URL } from '$lib/siteConfig'
-  import utterances, {injectScript}  from '$lib/loadUtterances'
+  import Comments from '$lib/components/Comments.svelte'
   import 'prism-themes/themes/prism-shades-of-purple.min.css'
-
-  export let commentsEl;
 
   /** @type {import('./$types').PageData} */
   export let data
@@ -74,10 +72,6 @@
 
   <hr class="mt-2 w-full border-t-2 border-red-600 dark:border-blue-300" />
 
-  <!-- <div
-		class="-mx-4 my-2 flex h-1 w-[100vw] bg-gradient-to-r from-blue-300 via-indigo-700 to-slate-900 sm:mx-0 sm:w-full"
-	/> -->
-
   <div class="prose mb-12 mt-12 w-full max-w-none dark:prose-invert">
     {@html json.content}
   </div>
@@ -89,16 +83,7 @@
   <hr class="mt-2 w-full border-t-2 border-red-600 dark:border-blue-300" />
 
   <div class="mb-8 w-full">
-    <!-- <Comments issueNumber={json.issueNumber} /> -->
-
-    <div class="mb-8 text-black dark:text-white " bind:this={commentsEl} use:utterances={{number: json.issueNumber}}>
-  		Loading comments...
-  		<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-  		<button class="my-4 bg-blue-200 hover:bg-blue-100 text-black p-2 rounded-lg"
-  			on:click={() => injectScript(commentsEl, json.issueNumber)}
-  			on:mouseover={() => injectScript(commentsEl, json.issueNumber)}
-  		>Load now</button>
-  	</div>
+    <Comments issueNumber={json.issueNumber} />
   </div>
 
 
