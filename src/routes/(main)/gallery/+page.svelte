@@ -29,13 +29,13 @@
       Gallery
     </h1>
     <p class="text-xl font-semibold text-accent">
-      details, photos, ephemera from past adventures
+      details, photos, etc. from past adventures
     </p>
   </Slice>
 
   {#each items as trip}
     <Slice title={trip.title} date={trip.date}>
-      <a href="/gallery/{trip.slug}" style="display: inline-block">
+      <a href="/gallery/{trip.slug}" style="display: inline-block" class="not-prose w-full">
         <img src={trip.image} alt={trip.alt} class="gallery-image" loading="lazy" />
         {'>> ' + trip.description + ' <<'}
       </a>
@@ -45,7 +45,9 @@
 
 <style>
   .gallery-image {
-    margin: 0;
     max-height: 600px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 </style>

@@ -1,5 +1,4 @@
 <script>
-  import MobileMenu from './MobileMenu.svelte'
   let isDark = false
   if (typeof localStorage !== 'undefined') {
     if (
@@ -24,7 +23,6 @@
 </script>
 
 <nav class="relative flex justify-between md:mx-4 lg:mx-12">
-  <MobileMenu />
   <h1
     class="text-lg font-bold text-accent transition-all duration-200 ease-in-out hover:scale-110"
   >
@@ -32,7 +30,7 @@
   </h1>
   <div class="flex">
     <a href="#menu"
-       class="hidden md:flex mr-3 h-9 w-9 items-center justify-center rounded-lg"
+       class="flex mr-3 h-9 w-9 items-center justify-center rounded-lg"
     >
       <svg
         class="absolute h-5 w-5 text-red-600 dark:text-yellow-400"

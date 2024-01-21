@@ -10,9 +10,8 @@
     <h3>
       {title}
     </h3>
-    <div />
-  </div></a
->
+  </div>
+</a>
 
 <style>
   .card h3 {

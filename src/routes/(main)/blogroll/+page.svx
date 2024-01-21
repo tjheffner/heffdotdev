@@ -1,23 +1,18 @@
-<script>
-	import Slice from '$lib/components/Slice.svelte';
-</script>
-
 <svelte:head>
   <title>heffner.dev | blogroll</title>
-  <meta name="description" content="other neat websites" />
+  <meta name="description" content="other cool blogs I enjoy reading" />
 	<meta property="og:image" content={`https://heffner.dev/og?message=blogroll`}>
 	<meta name="twitter:card" content={`https://heffner.dev/og?message=blogroll` ? 'summary_large_image' : 'summary'} />
 	<meta name="twitter:image" content={`https://heffner.dev/og?message=blogroll`} />
 </svelte:head>
 
-
-  <h1 class="mb-3 text-3xl font-bold tracking-tight text-shadow md:text-5xl">
-    blogroll
-  </h1>
-  <p class="text-xl font-semibold text-accent">
-    other cool blogs I enjoy reading
-  </p>
-  <hr class="mb-8 not-prose">
+<h1 class="mb-3 text-3xl font-bold tracking-tight text-shadow md:text-5xl">
+  blogroll
+</h1>
+<p class="text-xl font-semibold text-accent">
+  other cool blogs I enjoy reading
+</p>
+<hr class="mb-8 not-prose">
 
 - [nug doug](https://darkdell.net)
 - [mike crittenden](https://critter.blog)
