@@ -14,9 +14,10 @@
   >
     <div class="col-span-3 md:col-span-2">
       <NavLink href="/blog">Posts</NavLink>
-      <NavLink href="/work">Work</NavLink>
       <NavLink href="/gallery">Gallery</NavLink>
+      <NavLink href="/work">Work</NavLink>
       <NavLink href="/about">About</NavLink>
+      <NavLink href="/blogroll">Blogroll</NavLink>
     </div>
 
     <div class="col-span-1 text-right md:col-span-2 md:col-start-4">
