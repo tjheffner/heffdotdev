@@ -4,10 +4,12 @@
 </script>
 
 <a
-  class="m-1 inline-block rounded-lg bg-sky-600 text-orange-100 ring-red-600
+  class="m-1 inline-block rounded-lg
          transition-all duration-200
-         ease-in-out hover:ring-2 dark:bg-yellow-800
-         dark:text-yellow-100 dark:ring-yellow-400"
+         ease-in-out hover:ring-2
+         bg-transparent
+         text-red-600 ring-red-600
+         dark:text-yellow-400 dark:ring-yellow-400"
   {href}
   aria-label={label}
 >
