@@ -5,6 +5,7 @@
 </script>
 
 <footer
+  id="menu"
   class="flex flex-col justify-center bg-orange-100 px-4 py-12 sm:px-8 dark:bg-slate-900"
 >
   <hr class="mb-8" />
