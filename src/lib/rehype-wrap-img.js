@@ -9,6 +9,9 @@ export default function rehypeZoomImages(options = { selector: 'img' }) {
         const wrapper = fromSelector('div.zoom ')
         const label = fromSelector('label')
         const checkbox = fromSelector('input[type="checkbox"]')
+
+        node.properties.loading = "lazy"
+
         label.children = [checkbox, node]
         wrapper.children = [label]
         parent.children[i] = wrapper
