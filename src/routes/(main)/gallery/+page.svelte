@@ -11,12 +11,7 @@
     property="og:image"
     content={`https://heffner.dev/og?message=adventure%20log`}
   />
-  <meta
-    name="twitter:card"
-    content={`https://heffner.dev/og?message=adventure%20log`
-      ? 'summary_large_image'
-      : 'summary'}
-  />
+  <meta name="twitter:card" content={'summary'} />
   <meta
     name="twitter:image"
     content={`https://heffner.dev/og?message=adventure%20log`}
@@ -29,7 +24,10 @@
       Gallery
     </h1>
     <p class="text-xl font-semibold text-accent">
-      details, photos, etc. from past adventures
+      details, photos<sup>*</sup>, etc. from past adventures
+    </p>
+    <p class="text-sm text-accent mt-2">
+      <sup>*</sup>advance warning many of the pages are very image heavy
     </p>
   </Slice>
 

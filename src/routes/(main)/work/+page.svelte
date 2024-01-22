@@ -23,12 +23,7 @@
     property="og:image"
     content={`https://heffner.dev/og?message=heffner.dev%20|%20work`}
   />
-  <meta
-    name="twitter:card"
-    content={`https://heffner.dev/og?message=heffner.dev%20|%20work`
-      ? 'summary_large_image'
-      : 'summary'}
-  />
+  <meta name="twitter:card" content={'summary'} />
   <meta
     name="twitter:image"
     content={`https://heffner.dev/og?message=heffner.dev%20|%20work`}

@@ -1,9 +1,4 @@
-<!-- https://tailwindcss.com/docs/typography-plugin#element-modifiers -->
-<article
-  class="container prose mx-auto mb-16 flex w-full flex-col items-start px-4 dark:prose-invert hover:prose-a:text-blue-300
-prose-ul:list-disc
-sm:p-0
-"
->
+<!-- this file gets used for any .svx file -->
+<article class="mx-auto mb-16 flex w-full flex-col items-start px-4 sm:p-0 prose dark:prose-invert">
   <slot />
 </article>

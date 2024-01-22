@@ -7,12 +7,7 @@
   <title>Tanner Heffner's Resume</title>
   <meta name="description" content="digital resume of tanner heffner" />
   <meta property="og:image" content={`https://heffner.dev/og?message=resume`} />
-  <meta
-    name="twitter:card"
-    content={`https://heffner.dev/og?message=resume`
-      ? 'summary_large_image'
-      : 'summary'}
-  />
+  <meta name="twitter:card" content={'summary'} />
   <meta
     name="twitter:image"
     content={`https://heffner.dev/og?message=resume`}

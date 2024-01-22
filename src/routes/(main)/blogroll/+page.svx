@@ -2,7 +2,7 @@
   <title>heffner.dev | blogroll</title>
   <meta name="description" content="other cool blogs I enjoy reading" />
 	<meta property="og:image" content={`https://heffner.dev/og?message=blogroll`}>
-	<meta name="twitter:card" content={`https://heffner.dev/og?message=blogroll` ? 'summary_large_image' : 'summary'} />
+	<meta name="twitter:card" content={'summary'} />
 	<meta name="twitter:image" content={`https://heffner.dev/og?message=blogroll`} />
 </svelte:head>
 
