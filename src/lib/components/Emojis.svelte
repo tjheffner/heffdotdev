@@ -73,7 +73,7 @@
   {#each shuffled as f, i}
     <!-- <span>{i}</span> -->
     <button
-      class="emoji emoji-{i} p-1 m-1"
+      class="emoji emoji-{i} p-1 m-1 text-shadow"
       style="mix-blend-mode: {f.b}"
       data-emoji={f.e}
       data-blend={f.b}
