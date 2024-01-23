@@ -6,14 +6,16 @@
 </script>
 
 <a data-sveltekit-prefetch class="post w-full" href={'/' + href}>
-  <div class="grid grid-cols-4 px-0 pt-8 my-4 sm:p-4">
-    <h2 class="col-span-4 text-lg font-bold text-accent sm:col-span-3">
-      {item.title}
-    </h2>
+  <div class="grid grid-cols-4 px-0 m-6">
+    <div class="col-span-4 sm:col-span-3 row-start-1">
+      <h2 class="text-lg font-bold text-accent">
+        {item.title}
+      </h2>
 
-    <p class="col-span-4 mb-2 text-slate-800 sm:col-span-3 dark:text-gray-400">
-      <slot />
-    </p>
+      <p class="mb-2 text-slate-800 dark:text-gray-400">
+        <slot />
+      </p>
+    </div>
 
     <div
       class="col-span-4 row-start-1 md:col-span-1 md:col-start-4 md:row-start-1 md:row-span-2 md:justify-self-end w-full text-right"

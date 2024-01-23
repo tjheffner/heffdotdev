@@ -16,10 +16,7 @@
   <meta property="og:title" content={name} />
   <meta name="Description" content={description} />
   <meta property="og:description" content={description} />
-  <meta
-    name="twitter:card"
-    content={image ? 'summary_large_image' : 'summary'}
-  />
+  <meta name="twitter:card" content={'summary'} />
   <meta name="twitter:creator" content={'@' + MY_TWITTER_HANDLE} />
   <meta name="twitter:title" content={name} />
   <meta name="twitter:description" content={description} />

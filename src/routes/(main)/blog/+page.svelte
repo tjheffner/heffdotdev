@@ -108,12 +108,7 @@
   <title>heffner.dev | posts</title>
   <meta name="description" content="Latest musings fit to print." />
   <meta property="og:image" content={`https://heffner.dev/og?message=posts`} />
-  <meta
-    name="twitter:card"
-    content={`https://heffner.dev/og?message=posts`
-      ? 'summary_large_image'
-      : 'summary'}
-  />
+  <meta name="twitter:card" content={'summary'} />
   <meta name="twitter:image" content={`https://heffner.dev/og?message=posts`} />
 </svelte:head>
 
@@ -126,7 +121,7 @@
     Posts
   </h1>
   <p class="mb-4 text-zinc-900 dark:text-gray-400">
-    In total, I've written {items.length} posts on my blog. Use the search below
+    In total, I've written <strong>{items.length}</strong> posts on my blog. Use the search below
     to filter.
   </p>
 
@@ -162,7 +157,7 @@
   <!-- Filter Buttons -->
   <div class="my-4 flex w-full items-center">
     <span class="mr-2 text-zinc-900 dark:text-gray-400"> Filter: </span>
-    <span class="">
+    <span>
       <button
         type="button"
         on:click={() => {
@@ -215,13 +210,10 @@
       {/each}
     </ul>
     {#if !showAll}
-      <div class="flex justify-center">
+      <div class="flex justify-center mx-auto">
         <button
           on:click={() => (showAll = true)}
-          class="my-4 rounded-lg bg-sky-600 p-2 font-bold text-orange-100 ring-red-600
-					transition-all duration-200 ease-in-out hover:ring-2
-					dark:bg-yellow-800 dark:text-yellow-100 dark:ring-yellow-400
-					"
+          class="filter"
         >
           See more posts
         </button>
@@ -234,10 +226,7 @@
     </div>
     <button
       on:click={() => (filterStr = '')}
-      class="my-4 rounded-lg bg-yellow-400 p-2 font-bold text-yellow-800 ring-yellow-800
-			transition-all duration-200 ease-in-out hover:ring-2
-			dark:bg-yellow-800 dark:text-yellow-100 dark:ring-yellow-400
-			"
+      class="filter my-4"
     >
       Clear your search
     </button>

@@ -28,10 +28,6 @@
   <meta name="twitter:description" content={json.description} />
   {#if json.image}
     <meta property="og:image" content={json.image} />
-    <meta
-      name="twitter:card"
-      content={json.image ? 'summary_large_image' : 'summary'}
-    />
     <meta name="twitter:image" content={json.image} />
   {:else}
     <meta
@@ -39,16 +35,11 @@
       property="og:image"
     />
     <meta
-      name="twitter:card"
-      content={`https://heffner.dev/og?message=${json.title}`
-        ? 'summary_large_image'
-        : 'summary'}
-    />
-    <meta
       name="twitter:image"
       content={`https://heffner.dev/og?message=${json.title}`}
     />
   {/if}
+  <meta name="twitter:card" content={'summary'} />
 </svelte:head>
 
 <a href="/blog" class="back-link"> Back </a>

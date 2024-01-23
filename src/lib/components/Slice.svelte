@@ -2,6 +2,7 @@
   export let title = false
   export let date = false
   export let prose = true
+  export let full = false
 
   let slotWrapperClasses = 'w-full md:w-2/3 md:ml-4 lg:ml-12'
   if (title && prose) {
@@ -9,6 +10,10 @@
   }
   if (title && !prose) {
     slotWrapperClasses = 'not-prose'
+  }
+  // nuclear full width
+  if (full) {
+    slotWrapperClasses = 'w-full px-8'
   }
 </script>
 

@@ -1,12 +1,23 @@
 <script>
   import Icon from '$lib/components/Icon.svelte'
   import NavLink from '$lib/components/NavLink.svelte'
-  import { MY_TWITTER_HANDLE, GH_USER } from '$lib/siteConfig'
+  import { MY_TWITTER_HANDLE, LASTFM_ID, LETTERBOXD_ID, GH_USER } from '$lib/siteConfig'
+
+  let isDark = false
+  if (typeof localStorage !== 'undefined') {
+    if (
+      localStorage.theme === 'dark' ||
+      (!('theme' in localStorage) &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ) {
+      isDark = true
+    }
+  }
 </script>
 
 <footer
   id="menu"
-  class="flex flex-col justify-center bg-orange-100 px-4 py-12 sm:px-8 dark:bg-slate-900"
+  class="flex flex-col justify-center bg-orange-100 px-4 py-4 sm:px-8 dark:bg-slate-900"
 >
   <hr class="mb-8" />
   <div
@@ -37,9 +48,37 @@
         </svg>
       </Icon>
 
-      <Icon href={'https://www.last.fm/user/lob_'} label="last.fm">
+      <Icon href={`https://www.last.fm/user/${LASTFM_ID}`} label="last.fm">
         <svg viewBox="0 0 256 256" class="h-12 w-12 p-1" fill="currentColor">
           <path d="M102.9,158.4c-4.9,4.4-14.4,13.3-30.3,13.3C54,171.8,36,155.4,36,129.3c0-33.5,21.5-44.3,38-44.3c23.8,0,29,14.4,35.5,34.2l8.7,27.2c8.6,26.4,24.9,47.7,71.6,47.7c33.5,0,56.2-10.4,56.2-37.6c0-22.1-12.5-33.5-35.7-39l-17.3-3.8c-11.9-2.7-15.4-7.6-15.4-15.8c0-9.3,7.3-14.7,19.2-14.7c13,0,20,4.9,21.1,16.6l27-3.3C242.7,72,226,61.9,198.4,61.9c-24.3,0-48.1,9.3-48.1,39c0,18.5,8.9,30.2,31.4,35.7l18.4,4.4c13.8,3.3,18.4,9,18.4,16.9c0,10.1-9.7,14.2-28.1,14.2c-27.3,0-41-14.4-47.5-34.3l-8.9-27.2C122.5,75,109.1,61.9,73.2,61.9C41.1,61.9,10,87.3,10,130.3c0,41.4,29.9,63.8,61.3,63.8c22.7,0,34.2-8,39.9-12.1L102.9,158.4z"/>
+        </svg>
+      </Icon>
+
+      <Icon href={`https://letterboxd.com/${LETTERBOXD_ID}/`} label="Letterboxd">
+        <svg viewBox="0 0 500 500" class="h-12 w-12 p-1" fill="currentColor">
+          <defs>
+            <rect id="path-1" x="0" y="0" width="129.847328" height="141.443299"></rect>
+            <rect id="path-3" x="0" y="0" width="129.847328" height="141.443299"></rect>
+          </defs>
+          <g id="letterboxd-decal-dots-neg-mono" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="Dots" transform="translate(61.000000, 180.000000)">
+              <ellipse id="Green" fill="currentColor" cx="189" cy="70" rx="70.0786517" ry="70"></ellipse>
+              <g id="Blue" transform="translate(248.152672, 0.000000)">
+                <mask id="mask-2" fill="white">
+                  <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="Mask"></g>
+                <ellipse fill="currentcolor" mask="url(#mask-2)" cx="59.7686766" cy="70" rx="70.0786517" ry="70"></ellipse>
+              </g>
+              <g id="Orange">
+                  <mask id="mask-4" fill="white">
+                    <use xlink:href="#path-3"></use>
+                  </mask>
+                  <g id="Mask"></g>
+                  <ellipse fill="currentColor" mask="url(#mask-4)" cx="70.0786517" cy="70" rx="70.0786517" ry="70"></ellipse>
+              </g>
+            </g>
+          </g>
         </svg>
       </Icon>
 
