@@ -34,6 +34,8 @@
     '🍳'
   ]
 
+  // all combinations of the above two arrays
+  // ex: { e: '🌊', b: 'exclusion'}
   const full = emojis.map(
     e => {
       const bm = []
@@ -46,14 +48,24 @@
     }
   ).flat()
 
+  // sort by random map, unmap to get new order
   function shuffleArray(array) {
     return array
         .map(value => ({ value, sort: Math.random() }))
         .sort((a, b) => a.sort - b.sort)
         .map(({ value }) => value)
-        .slice(1)
   }
 
+  // reconstruct item from what was clicked, filter array to remove it
+  function handleRemoval(event) {
+    const data = event.target.dataset
+    const r = {e: data.emoji, b: data.blend}
+
+    const items = shuffled.filter(e => !(e.e === r.e && e.b === r.b))
+    shuffled = shuffleArray(items)
+  }
+
+  // set initial shuffle to full list
   let shuffled = shuffleArray(full)
 </script>
 
@@ -63,7 +75,9 @@
     <button
       class="emoji emoji-{i} p-1 m-1"
       style="mix-blend-mode: {f.b}"
-      on:click={() => shuffled = shuffleArray(shuffled)}
+      data-emoji={f.e}
+      data-blend={f.b}
+      on:click={(event) => handleRemoval(event)}
     >
       {f.e}
     </button>
