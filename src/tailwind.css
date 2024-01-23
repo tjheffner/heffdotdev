@@ -171,6 +171,15 @@
   cursor: zoom-out
 }
 
+.emoji {
+  display: inline-block;
+  cursor: pointer;
+  transition: transform .2s;
+}
+.emoji:hover {
+  transform: scale(3);
+}
+
 /*
   CUSTOM SCROLLBARS!
   - https://css-tricks.com/strut-your-stuff-with-a-custom-scrollbar/

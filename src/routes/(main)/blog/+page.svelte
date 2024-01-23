@@ -121,7 +121,7 @@
     Posts
   </h1>
   <p class="mb-4 text-zinc-900 dark:text-gray-400">
-    In total, I've written {items.length} posts on my blog. Use the search below
+    In total, I've written <strong>{items.length}</strong> posts on my blog. Use the search below
     to filter.
   </p>
 
@@ -157,7 +157,7 @@
   <!-- Filter Buttons -->
   <div class="my-4 flex w-full items-center">
     <span class="mr-2 text-zinc-900 dark:text-gray-400"> Filter: </span>
-    <span class="">
+    <span>
       <button
         type="button"
         on:click={() => {

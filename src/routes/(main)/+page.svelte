@@ -1,6 +1,7 @@
 <script>
   import Slice from '$lib/components/Slice.svelte'
   import Card from '$lib/components/Card.svelte'
+  import Emojis from '$lib/components/Emojis.svelte'
   import {
     SITE_URL,
     SITE_TITLE,
@@ -32,11 +33,11 @@
 </svelte:head>
 
 <section class="mx-auto flex w-full flex-col items-start px-4 sm:p-0">
-  <Slice>
-    <h1 class="text-shadow text-3xl font-bold lg:text-5xl oceans">
+  <Slice full={true}>
+    <h1 class="text-shadow text-3xl font-bold lg:text-5xl">
       welcome to my page
     </h1>
-    <span class="block text-shadow text-3xl max-w-80 md:hidden" aria-hidden="true">🌊 🌊 🌊 🌊 🌊 🌊 🌊 🌊 🌊 🌊 🌊 🌊 🌊 🌊 🌊 🌊</span>
+    <Emojis />
   </Slice>
 
   <Slice title="Hello World!">
@@ -87,16 +88,3 @@
     </div>
   </Slice>
 </section>
-
-<style>
-.oceans {
-  @media (min-width: 768px) {
-    &::before {
-      content: '🌊  '
-    }
-    &::after {
-      content: ' 🌊 '
-    }
-  }
-}
-</style>
