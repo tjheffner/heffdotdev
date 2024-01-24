@@ -4,6 +4,8 @@
   export let prose = true
   export let full = false
 
+
+  let sliceClasses = "slice mb-6 grid w-full grid-cols-4 gap-4 py-8 md:mb-8 md:gap-8 md:py-12 lg:gap-12 xl:gap-16"
   let slotWrapperClasses = 'w-full md:w-2/3 md:ml-4 lg:ml-12'
   if (title && prose) {
     slotWrapperClasses = 'prose prose-lg prose-slate dark:prose-invert'
@@ -13,15 +15,12 @@
   }
   // nuclear full width
   if (full) {
+    sliceClasses = "slice mb-6 grid w-full grid-cols-4 gap-4 pb-8 md:mb-8 md:gap-8 md:pb-12 lg:gap-12 xl:gap-16"
     slotWrapperClasses = 'w-full px-8'
   }
 </script>
 
-<div
-  class="slice mb-6 grid w-full grid-cols-4 gap-4
-						py-8 md:mb-8 md:gap-8 md:py-12 lg:gap-12 xl:gap-16
-"
->
+<div class={sliceClasses}>
   {#if title}
     <div class="col-span-4 md:col-span-1">
       <h2
