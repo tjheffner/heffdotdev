@@ -52,7 +52,7 @@
   let visible = shuffleArray(scenes[initial])
 </script>
 
-<div class="block text-shadow text-4xl md:text-6xl mt-4 lg:mt-8 w-full max-h-[400px] md:max-h-[450px] overflow-hidden lg:overflow-visible">
+<div class="block text-shadow text-4xl md:text-6xl mt-4 lg:mt-8 w-full max-h-[400px] md:max-h-[450px] overflow-hidden lg:overflow-visible" aria-hidden="true">
   {#each visible as f, i}
     <!-- <span>{i}</span> -->
     <button
