@@ -20,25 +20,33 @@
 
 <section class="mx-auto flex w-full flex-col items-start px-4 sm:p-0">
   <Slice>
-    <h1 class="mb-6 text-3xl font-bold tracking-tight text-accent md:text-5xl">
+    <h1 class="mb-6 text-3xl font-bold tracking-tight text-shadow md:text-5xl">
       Gallery
     </h1>
     <p class="text-xl font-semibold text-accent">
-      details, photos<sup>*</sup>, etc. from past adventures
+      details, photos<sup class="text-secondary">*</sup>, etc. from past adventures
     </p>
-    <p class="text-sm text-accent mt-2">
-      <sup>*</sup>advance warning many of the pages are very image heavy
+    <p class="text-sm text-secondary mt-2">
+      * advance warning many of the pages are very image heavy
     </p>
   </Slice>
 
   {#each items as trip}
-    <Slice title={trip.title} date={trip.date}>
+    <Slice title={trip.title} date={trip.date} warn={trip.warn}>
       <a href="/gallery/{trip.slug}" style="display: inline-block" class="not-prose w-full">
         <img src={trip.image} alt={trip.alt} class="gallery-image" loading="lazy" />
         {'>> ' + trip.description + ' <<'}
       </a>
+
+      {#if trip.title === 'Japan'}
+      <p class="text-secondary font-bold text-xs">The above link has <strong>>150 MB</strong> worth of images. Please be on wifi.</p>
+      {/if}
     </Slice>
   {/each}
+
+  <p id="warning" class="text-sm text-secondary my-12 mx-0 md:mx-4 lg:mx-12">
+    * seriously, this page has at least <span class="text-secondary">40 MB</span> worth of images.
+  </p>
 </section>
 
 <style>

@@ -8,8 +8,8 @@
          transition-all duration-200
          ease-in-out hover:ring-2
          bg-transparent
-         text-red-600 ring-red-600
-         dark:text-yellow-400 dark:ring-yellow-400"
+         text-secondary
+         ring-red-600 dark:ring-yellow-400"
   {href}
   aria-label={label}
 >

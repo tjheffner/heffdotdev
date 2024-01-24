@@ -21,7 +21,7 @@
 <style>
   .project:hover {
     & p {
-      @apply text-red-600 dark:text-yellow-400;
+      @apply text-secondary;
     }
   }
 </style>

@@ -12,6 +12,7 @@ date: 2022-01-16 00:00:00
 description: "will show underneath title on list page"
 image: upload cover image here
 alt: image alt text
+warn: true
 ***
 
 post content goes here, underneath

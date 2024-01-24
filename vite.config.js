@@ -7,6 +7,7 @@ const config = {
   plugins: [sveltekit(), rawFonts(['.ttf'])],
 }
 
+// this is for using local fonts in OG images
 function rawFonts(ext) {
   return {
     name: 'vite-plugin-raw-fonts',

@@ -1,6 +1,6 @@
 <script>
   import { page } from '$app/stores'
-  import { MY_TWITTER_HANDLE, SITE_URL } from '$lib/siteConfig'
+  import { TWITTER_ID, SITE_URL } from '$lib/siteConfig'
   import Comments from '$lib/components/Comments.svelte'
   import 'prism-themes/themes/prism-shades-of-purple.min.css'
 
@@ -23,7 +23,7 @@
   <meta property="og:title" content={json.title} />
   <meta name="Description" content={json.description} />
   <meta property="og:description" content={json.description} />
-  <meta name="twitter:creator" content={'@' + MY_TWITTER_HANDLE} />
+  <meta name="twitter:creator" content={'@' + TWITTER_ID} />
   <meta name="twitter:title" content={json.title} />
   <meta name="twitter:description" content={json.description} />
   {#if json.image}

@@ -5,6 +5,7 @@
   body {
     --brand-accent: theme('colors.sky.600');
     --brand-alternate: theme('colors.orange.300');
+    --brand-secondary: theme('colors.red.600');
 
     /* https://ishadeed.com/article/defensive-css */
     overflow-wrap: break-word;
@@ -13,7 +14,8 @@
   }
   .dark body {
     --brand-accent: theme('colors.blue.300');
-    --brand-alternate: theme('colors.indigo.700');
+    --brand-alternate: theme('colors.lime.700');
+    --brand-secondary: theme('colors.yellow.400');
   }
   :root {
     accent-color: var(--brand-accent);
@@ -33,6 +35,9 @@
   }
   .text-accent {
     color: var(--brand-accent);
+  }
+  .text-secondary {
+    color: var(--brand-secondary);
   }
 
   :is(
@@ -86,7 +91,7 @@
   .footer-link,
   .prose a {
     @apply from-red-600 to-red-600 dark:from-yellow-400 dark:to-yellow-400;
-    @apply text-red-600 hover:text-sky-200 dark:text-yellow-400 dark:hover:text-slate-900;
+    @apply text-secondary hover:text-sky-200 dark:hover:text-slate-900;
 
     cursor: pointer;
     text-decoration: none;
@@ -116,14 +121,14 @@
 /* filters on /blog page */
 .filter {
   @apply m-1 inline-block whitespace-nowrap rounded rounded-md px-4 py-2;
-  @apply border-red-600 bg-sky-600 font-bold text-orange-100;
+  @apply border-secondary bg-alternate text-secondary font-bold;
   @apply dark:border-slate-600 dark:bg-gray-800 dark:text-gray-100;
-  @apply ring-sky-600 transition-all duration-200 ease-in-out hover:ring-2 dark:ring-lime-700;
+  @apply ring-secondary transition-all duration-200 ease-in-out hover:ring-2;
 }
 .activefilter {
-  @apply border-red-600 bg-orange-300 text-red-600;
-  @apply dark:border-slate-600 dark:bg-blue-300 dark:text-slate-800;
-  @apply ring-yellow-400 dark:ring-yellow-800;
+  @apply border-secondary bg-accent text-orange-100;
+  @apply dark:border-slate-600 dark:bg-secondary dark:text-slate-900;
+  @apply ring-accent dark:ring-secondary;
 }
 
 /* Cleanup styles for markdown headers */
