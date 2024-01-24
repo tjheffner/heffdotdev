@@ -3,6 +3,7 @@
   export let date = false
   export let prose = true
   export let full = false
+  export let warn = false
 
 
   let sliceClasses = "slice mb-6 grid w-full grid-cols-4 gap-4 py-8 md:mb-8 md:gap-8 md:py-12 lg:gap-12 xl:gap-16"
@@ -29,7 +30,7 @@
 		"
       >
         <a href="#{title}" class="slice-title">
-          {title}
+          {title}{#if warn}*{/if}
         </a>
         {#if date}
         <span class="text-unshadow text-base text-slate-500 dark:text-gray-600">

@@ -27,18 +27,22 @@
       details, photos<sup>*</sup>, etc. from past adventures
     </p>
     <p class="text-sm text-accent mt-2">
-      <sup>*</sup>advance warning many of the pages are very image heavy
+      * advance warning many of the pages are very image heavy
     </p>
   </Slice>
 
   {#each items as trip}
-    <Slice title={trip.title} date={trip.date}>
+    <Slice title={trip.title} date={trip.date} warn={trip.warn}>
       <a href="/gallery/{trip.slug}" style="display: inline-block" class="not-prose w-full">
         <img src={trip.image} alt={trip.alt} class="gallery-image" loading="lazy" />
         {'>> ' + trip.description + ' <<'}
       </a>
     </Slice>
   {/each}
+
+  <p class="text-sm text-accent my-12 mx-12">
+    * seriously, this page has at least <span class="text-secondary">40 MB</span> worth of images.
+  </p>
 </section>
 
 <style>

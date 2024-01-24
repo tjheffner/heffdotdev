@@ -5,6 +5,7 @@
   body {
     --brand-accent: theme('colors.sky.600');
     --brand-alternate: theme('colors.orange.300');
+    --brand-secondary: theme('colors.red.600');
 
     /* https://ishadeed.com/article/defensive-css */
     overflow-wrap: break-word;
@@ -14,6 +15,7 @@
   .dark body {
     --brand-accent: theme('colors.blue.300');
     --brand-alternate: theme('colors.indigo.700');
+    --brand-secondary: theme('colors.yellow.400');
   }
   :root {
     accent-color: var(--brand-accent);
@@ -33,6 +35,9 @@
   }
   .text-accent {
     color: var(--brand-accent);
+  }
+  .text-secondary {
+    color: var(--brand-secondary);
   }
 
   :is(

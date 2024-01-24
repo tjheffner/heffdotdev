@@ -111,7 +111,8 @@ function parseIssue(issue, label) {
         type: 'gallery',
         ...base,
         alt: data.alt,
-        images: data.images
+        images: data.images,
+        warn: data.warn || false
       }
       break
     case 'Published':
