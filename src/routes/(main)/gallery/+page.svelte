@@ -37,6 +37,10 @@
         <img src={trip.image} alt={trip.alt} class="gallery-image" loading="lazy" />
         {'>> ' + trip.description + ' <<'}
       </a>
+
+      {#if trip.title === 'Japan'}
+      <p class="text-secondary font-bold text-xs">The above link has <strong>>150 MB</strong> worth of images. Please be on wifi.</p>
+      {/if}
     </Slice>
   {/each}
 

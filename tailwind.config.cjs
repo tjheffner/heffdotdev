@@ -10,6 +10,7 @@ module.exports = {
       colors: {
         accent: 'var(--brand-accent)',
         alternate: 'var(--brand-alternate)',
+        secondary: 'var(--brand-secondary)',
       },
       typography: (theme) => ({
         DEFAULT: {

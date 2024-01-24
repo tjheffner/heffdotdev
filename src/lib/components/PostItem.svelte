@@ -26,9 +26,9 @@
         <span
           class="
           w-fit rounded-full
-          bg-orange-300 px-2
+          bg-alternate dark:bg-secondary px-2
           py-1 text-xs font-bold
-          text-red-600 text-white md:px-4 dark:bg-lime-600 dark:text-gray-900
+          text-red-600 text-white md:px-4 dark:text-gray-900
         ">
           {item.category}
         </span>
