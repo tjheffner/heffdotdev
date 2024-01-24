@@ -4,7 +4,7 @@
 
   const { content, name, date, description, image, url } = data
 
-  import { MY_TWITTER_HANDLE, SITE_URL } from '$lib/siteConfig'
+  import { TWITTER_ID, SITE_URL } from '$lib/siteConfig'
   import GetInTouch from '$lib/components/GetInTouch.svelte'
 </script>
 
@@ -17,7 +17,7 @@
   <meta name="Description" content={description} />
   <meta property="og:description" content={description} />
   <meta name="twitter:card" content={'summary'} />
-  <meta name="twitter:creator" content={'@' + MY_TWITTER_HANDLE} />
+  <meta name="twitter:creator" content={'@' + TWITTER_ID} />
   <meta name="twitter:title" content={name} />
   <meta name="twitter:description" content={description} />
   {#if image}

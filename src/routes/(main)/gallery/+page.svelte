@@ -20,13 +20,13 @@
 
 <section class="mx-auto flex w-full flex-col items-start px-4 sm:p-0">
   <Slice>
-    <h1 class="mb-6 text-3xl font-bold tracking-tight text-accent md:text-5xl">
+    <h1 class="mb-6 text-3xl font-bold tracking-tight text-shadow md:text-5xl">
       Gallery
     </h1>
     <p class="text-xl font-semibold text-accent">
-      details, photos<sup>*</sup>, etc. from past adventures
+      details, photos<sup class="text-secondary">*</sup>, etc. from past adventures
     </p>
-    <p class="text-sm text-accent mt-2">
+    <p class="text-sm text-secondary mt-2">
       * advance warning many of the pages are very image heavy
     </p>
   </Slice>
@@ -40,7 +40,7 @@
     </Slice>
   {/each}
 
-  <p class="text-sm text-accent my-12 mx-12">
+  <p id="warning" class="text-sm text-secondary my-12 mx-0 md:mx-4 lg:mx-12">
     * seriously, this page has at least <span class="text-secondary">40 MB</span> worth of images.
   </p>
 </section>

@@ -32,7 +32,7 @@
 
 <section class="mx-auto flex w-full flex-col items-start px-4 sm:p-0">
   <Slice>
-    <h1 class="mb-6 text-3xl font-bold tracking-tight text-accent md:text-5xl">
+    <h1 class="mb-6 text-3xl font-bold tracking-tight text-shadow md:text-5xl">
       Past work
     </h1>
     <p class="text-xl font-semibold text-accent">

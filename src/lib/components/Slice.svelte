@@ -24,13 +24,9 @@
 <div class={sliceClasses}>
   {#if title}
     <div class="col-span-4 md:col-span-1">
-      <h2
-        class="sticky top-4 mb-2 text-xl font-bold
-							 text-black md:ml-4 md:text-2xl lg:ml-12 dark:text-blue-300
-		"
-      >
+      <h2 class="sticky top-4 mb-2 text-xl font-boldtext-black md:ml-4 md:text-2xl lg:ml-12 dark:text-blue-300">
         <a href="#{title}" class="slice-title">
-          {title}{#if warn}*{/if}
+          {title}{#if warn}<a href="#warning" class="text-secondary">*</a>{/if}
         </a>
         {#if date}
         <span class="text-unshadow text-base text-slate-500 dark:text-gray-600">
