@@ -1,7 +1,7 @@
 <script>
   import Slice from '$lib/components/Slice.svelte'
   import Card from '$lib/components/Card.svelte'
-  import Emojis from '$lib/components/Emojis.svelte'
+  import EmojiWall from '$lib/components/EmojiWall.svelte'
   import {
     SITE_URL,
     SITE_TITLE,
@@ -37,7 +37,7 @@
     <h1 class="text-shadow text-3xl font-bold lg:text-5xl">
       welcome to my page
     </h1>
-    <Emojis />
+    <EmojiWall />
   </Slice>
 
   <Slice title="Hello World!">
