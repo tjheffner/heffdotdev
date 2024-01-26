@@ -176,6 +176,10 @@
   cursor: zoom-out
 }
 
+.lazy-image {
+  @apply bg-gray-600;
+}
+
 .emoji {
   display: inline-block;
   cursor: pointer;
