@@ -57,6 +57,7 @@
 <article use:toc={{ store: tocStore, anchor: false, observe: true, selector: ':where(h1, h2, h3)' }}
   class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8"
 >
+
   {#if json.title}
     <div class="mb-12">
       <h1
