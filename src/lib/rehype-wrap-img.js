@@ -10,12 +10,19 @@ export default function rehypeZoomImages(options = { selector: 'img' }) {
         const label = fromSelector('label')
         const checkbox = fromSelector('input[type="checkbox"]')
 
-        node.properties.loading = 'lazy'
 
+        node.properties.loading = 'lazy'
+        // add class for bg color before loading
+        node.properties.class = 'lazy-image'
         // needs height and width defined for lazy loading
         node.properties.height = '100%'
         node.properties.width = '100%'
-        node.properties.class = 'lazy-image'
+
+        // copy alt to title for caption on hover
+        node.properties.title = node.properties.alt
+
+        // add id to checkbox
+        checkbox.properties.name = `image-${i}`
 
         label.children = [checkbox, node]
         wrapper.children = [label]
