@@ -112,7 +112,7 @@ function parseIssue(issue, label) {
         ...base,
         alt: data.alt,
         images: data.images,
-        warn: data.warn || false
+        warn: data.warn || false,
       }
       break
     case 'Published':

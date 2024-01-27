@@ -162,18 +162,18 @@
 }
 
 /* zoomable images */
-.zoom input[type=checkbox] {
-  display: none
+.zoom input[type='checkbox'] {
+  display: none;
 }
 
 .zoom img {
   transition: transform 0.25s ease;
-  cursor: zoom-in
+  cursor: zoom-in;
 }
 
-.zoom input[type=checkbox]:checked~img {
+.zoom input[type='checkbox']:checked ~ img {
   transform: scale(1.65);
-  cursor: zoom-out
+  cursor: zoom-out;
 }
 
 .lazy-image {
@@ -183,7 +183,7 @@
 .emoji {
   display: inline-block;
   cursor: pointer;
-  transition: transform .2s;
+  transition: transform 0.2s;
 }
 .emoji:hover {
   transform: scale(3);
