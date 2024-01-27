@@ -9,8 +9,6 @@
 			isOpen = true;
 		}
 	})
-
-  console.log($tocStore.items)
 </script>
 
 <!-- Table of contents thing -->
@@ -53,6 +51,5 @@
   }
   .toc-active {
     @apply text-accent font-bold border-s-2 border-current;
-    /* margin-left:; */
   }
 </style>
