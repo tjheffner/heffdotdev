@@ -54,20 +54,21 @@
 
 <Toc {tocStore} />
 
-<article use:toc={{ store: tocStore, anchor: false, observe: true, selector: ':where(h1, h2, h3)' }}
+<article
+  use:toc={{ store: tocStore, anchor: false, observe: true, selector: ':where(h1, h2, h3)' }}
   class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8"
 >
 
   {#if json.title}
-    <div class="mb-12">
+    <div class="mb-12 flex items-end">
       <h1
         class="text-shadow text-3xl font-bold tracking-tight text-amber-600 md:text-6xl dark:text-yellow-400"
       >
         {json.title}
-        <span class="text-unshadow text-base text-slate-500 dark:text-gray-600"
-          >({json.date.slice(0, 4)})</span
-        >
       </h1>
+      <span class="text-unshadow text-base text-slate-500 dark:text-gray-600 ml-2"
+        >({json.date.slice(0, 4)})</span
+      >
     </div>
   {/if}
 
