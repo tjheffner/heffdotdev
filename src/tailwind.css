@@ -121,9 +121,9 @@
 /* filters on /blog page */
 .filter {
   @apply m-1 inline-block whitespace-nowrap rounded rounded-md px-4 py-2;
-  @apply border-secondary bg-alternate text-secondary font-bold;
+  @apply border-accent bg-gray-200 text-gray-900 font-bold;
   @apply dark:border-slate-600 dark:bg-gray-800 dark:text-gray-100;
-  @apply ring-secondary transition-all duration-200 ease-in-out hover:ring-2;
+  @apply ring-accent transition-all duration-200 ease-in-out hover:ring-2;
 }
 .activefilter {
   @apply border-secondary bg-accent text-orange-100;
@@ -186,7 +186,7 @@
   transition: transform 0.2s;
 }
 .emoji:hover {
-  transform: scale(3);
+  transform: scale(2);
 }
 
 /*

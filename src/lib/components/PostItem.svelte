@@ -26,7 +26,7 @@
         <span
           class="
           w-fit rounded-full
-          bg-alternate dark:bg-secondary px-2
+          bg-alternate px-2
           py-1 text-xs font-bold
           text-red-600 text-white md:px-4 dark:text-gray-900
         ">

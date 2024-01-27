@@ -55,7 +55,7 @@
       <a href="/about">about</a>.
     </p>
     <p />
-    <p>Thanks for stopping by, check out the links that work. ✌️</p>
+    <p>Thanks for stopping by, check out the <a href="/blogroll">links that work</a>. ✌️</p>
   </Slice>
 
   <Slice title="Currently...">

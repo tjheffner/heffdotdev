@@ -1,12 +1,12 @@
 <script>
-  const WALL_SIZE = 84
+  const WALL_SIZE = 96
 
   // The first emoji in the array becomes the dominant background
   // The others intersperse randomly
   const emojis = [
-    ['🌊','🦑','🦀','🐳','🦐','🐡','🐠','🦈','🏄‍♂️','🏝'],
-    ['🌳','🦥','🦜','🐊','🐸','🐒','🌺','🍄','🐯','🐜'],
-    ['🏜','🌵','🌞','🦂','🐍','🤠','🦇','🦉','🐫'],
+    ['🌊','🦑','🦀','🐳','🦐','🐡','🐠','🦈','🏄‍♂️','🏝','🦞','🐋'],
+    ['🌳','🦥','🦜','🐊','🐸','🐒','🌺','🍄','🐯','🐜','🦟','🐝'],
+    ['🏜','🌵','🌞','🦂','🐍','🤠','🦇','🦉','🐫', '🦗'],
     ['🏔','🏕','🌲','🦅','🌝','🏂']
   ]
 
@@ -52,7 +52,7 @@
   let visible = shuffleArray(scenes[initial])
 </script>
 
-<div class="block text-shadow text-4xl md:text-6xl mt-4 lg:mt-8 w-full max-h-[400px] md:max-h-[450px] overflow-hidden lg:overflow-visible" aria-hidden="true">
+<div class="block text-shadow text-4xl md:text-6xl mt-4 p-8 lg:mt-8 w-full max-h-[370px] md:max-h-[415px] overflow-hidden" aria-hidden="true">
   {#each visible as f, i}
     <!-- <span>{i}</span> -->
     <button
