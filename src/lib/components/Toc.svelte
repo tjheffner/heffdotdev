@@ -1,0 +1,58 @@
+<script>
+	import { onMount } from "svelte";
+
+	export let tocStore;
+	let isOpen = false;
+	onMount(() => {
+		// set isOpen if window width is mobile checking the media query
+		if (window.matchMedia("(min-width: 640px)").matches) {
+			isOpen = true;
+		}
+	})
+
+  console.log($tocStore.items)
+</script>
+
+<!-- Table of contents thing -->
+{#if Object.values($tocStore.items).length && Object.values($tocStore.items).length > 1}
+	<section
+		class="sticky max-w-[12em] top-10 h-0 z-10"
+	>
+    <button
+      class="text-accent font-bold -ml-1 lg:ml-7"
+      aria-label="{isOpen ? 'Close' : 'Open'} Table of Contents"
+      on:click={() => (isOpen = !isOpen)}
+    >
+      {isOpen ? '<' : '>'}
+    </button>
+
+      <!-- adjust margins to slide in/out, works with sticky -->
+      <!-- need to adjust left margin to slide text, right margin to slide bg -->
+			<ul class="toc-list max-h-fit {isOpen ? '-ml-6 mr-0 lg:ml-2' : '-ml-96 mr-96'}">
+				{#each Object.values($tocStore.items) as { id, text, element }}
+          <li>
+            <a
+  						class="ml-2 block text-sm"
+  						class:toc-active={$tocStore.activeItem?.id === id}
+              class:pl-2={element.nodeName === 'H2' || element.nodeName === 'H1'}
+              class:pl-4={element.nodeName === 'H3'}
+  						href="#{id}"
+  					>
+  					{text}
+  					</a>
+          </li>
+				{/each}
+			</ul>
+	</section>
+{/if}
+
+<style>
+  .toc-list {
+    @apply text-secondary py-5 px-8 -mt-10 space-y-1 overflow-auto transition-all duration-500;
+    @apply bg-orange-100 dark:bg-slate-900;
+  }
+  .toc-active {
+    @apply text-accent font-bold border-s-2 border-current;
+    /* margin-left:; */
+  }
+</style>

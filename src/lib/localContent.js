@@ -4,7 +4,7 @@ let localContent = []
 
 // fetch all markdown posts and shape into item with metadata
 export const fetchMarkdownPosts = async () => {
-  const allPostFiles = import.meta.glob('$lib/content/work/*.svx')
+  const allPostFiles = import.meta.glob('./../content/work/*.svx')
   const iterablePostFiles = Object.entries(allPostFiles)
 
   const allPosts = await Promise.all(

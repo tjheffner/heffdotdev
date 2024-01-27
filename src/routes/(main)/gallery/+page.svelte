@@ -9,12 +9,12 @@
   <meta name="description" content="part photo gallery, part adventure log" />
   <meta
     property="og:image"
-    content={`https://heffner.dev/og?message=adventure%20log`}
+    content={`https://heffner.dev/og?message=photo%20gallery`}
   />
   <meta name="twitter:card" content={'summary'} />
   <meta
     name="twitter:image"
-    content={`https://heffner.dev/og?message=adventure%20log`}
+    content={`https://heffner.dev/og?message=photo%20gallery`}
   />
 </svelte:head>
 
@@ -32,14 +32,14 @@
   </Slice>
 
   {#each items as trip}
-    <Slice title={trip.title} date={trip.date} warn={trip.warn}>
-      <a href="/gallery/{trip.slug}" style="display: inline-block" class="not-prose w-full">
-        <img src={trip.image} alt={trip.alt} class="gallery-image" loading="lazy" />
+    <Slice title={trip.title} date={trip.date} warn={trip.warn} titleLink={false}>
+      <a href="/gallery/{trip.slug}" style="display: inline-block" class="not-prose gallery-link w-full">
+        <img loading="lazy" src={trip.image} alt={trip.alt} class="gallery-image lazy-image" height="100%" width="100%" />
         {'>> ' + trip.description + ' <<'}
       </a>
 
       {#if trip.title === 'Japan'}
-      <p class="text-secondary font-bold text-xs">The above link has <strong>>150 MB</strong> worth of images. Please be on wifi.</p>
+      <p class="text-secondary font-bold text-xs">The above link has <strong>>500 MB</strong> worth of images. Please be on wifi.</p>
       {/if}
     </Slice>
   {/each}
@@ -52,8 +52,9 @@
 <style>
   .gallery-image {
     max-height: 600px;
-    width: 100%;
-    height: 100%;
     object-fit: cover;
+  }
+  .gallery-link:hover {
+    background-size: 4px 100px;
   }
 </style>

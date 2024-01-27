@@ -9,14 +9,15 @@
     "postinstall": "svelte-kit sync",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
-    "lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
-    "format": "prettier --write --plugin-search-dir=. ."
+    "lint": "prettier --check . && eslint --ignore-path .gitignore .",
+    "format": "prettier --write ."
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.4.1",
     "@sveltejs/adapter-auto": "^3.1.1",
     "@sveltejs/adapter-netlify": "^2.0.8",
     "@sveltejs/kit": "1.27.6",
+    "@svelte-put/toc": "^4.0.0",
     "@tailwindcss/typography": "^0.5.10",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
