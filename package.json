@@ -45,7 +45,7 @@
     "remark-parse": "^11.0.0",
     "remark-rehype": "^8.1.0",
     "remark-sectionize": "^1.1.1",
-    "remark-slug": "^6.1.0",
+    "remark-slug": "^7.0.1",
     "remark-toc": "^9.0.0",
     "rss": "^1.2.2",
     "satori": "^0.10.11",
