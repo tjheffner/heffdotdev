@@ -74,7 +74,7 @@
   <hr class="mt-2 w-full border-t-2 border-red-600 dark:border-blue-300" />
 
   <div class="mb-8 w-full">
-    <Comments issueNumber={data.json.issueNumber} />
+    <Comments issueNumber={json.issueNumber} />
   </div>
 
 
