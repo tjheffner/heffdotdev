@@ -3,6 +3,11 @@
   import { TWITTER_ID, SITE_URL } from '$lib/siteConfig'
   import Comments from '$lib/components/Comments.svelte'
   import 'prism-themes/themes/prism-shades-of-purple.min.css'
+  import { toc, createTocStore } from '@svelte-put/toc';
+  import Toc from '$lib/components/Toc.svelte';
+
+  // table of contents
+  const tocStore = createTocStore();
 
   /** @type {import('./$types').PageData} */
   export let data
@@ -44,7 +49,10 @@
 
 <a href="/blog" class="back-link"> Back </a>
 
+<Toc {tocStore} />
+
 <article
+  use:toc={{ store: tocStore, anchor: false, observe: true, selector: ':where(h1, h2, h3)' }}
   class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8"
 >
   <h1 class="text-shadow mb-8 text-3xl font-bold tracking-tight md:text-6xl">
