@@ -17,7 +17,7 @@
   <title>{json.title}</title>
   <meta name="description" content="heffdotdev blog" />
 
-  <link rel="canonical" href={SITE_URL} />
+  <link rel="canonical" href={SITE_URL + '/' + json.slug} />
   <meta property="og:url" content={SITE_URL} />
   <meta property="og:type" content="article" />
   <meta property="og:title" content={json.title} />
