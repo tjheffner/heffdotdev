@@ -77,8 +77,7 @@
     </p>
 
     <p class="mb-3">
-      I mentor new and junior developers and perform duties as a front-end tech
-      lead.
+      I mentor new and junior developers and perform duties as a tech lead.
     </p>
   </Slice>
 
