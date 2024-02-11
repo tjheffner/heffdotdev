@@ -17,7 +17,7 @@
   <title>{json.title}</title>
   <meta name="description" content="heffdotdev blog" />
 
-  <link rel="canonical" href={SITE_URL} />
+  <link rel="canonical" href={SITE_URL + '/' + json.slug} />
   <meta property="og:url" content={SITE_URL} />
   <meta property="og:type" content="article" />
   <meta property="og:title" content={json.title} />
@@ -74,7 +74,7 @@
   <hr class="mt-2 w-full border-t-2 border-red-600 dark:border-blue-300" />
 
   <div class="mb-8 w-full">
-    <Comments issueNumber={json.issueNumber} />
+    <Comments issueNumber={data.json.issueNumber} />
   </div>
 
 
