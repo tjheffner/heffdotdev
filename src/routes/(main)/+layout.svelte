@@ -9,13 +9,7 @@
 
   import { fade } from 'svelte/transition'
 
-  let showBackToTop = true
-
   export let data
-
-  onMount(async () => {
-    if ($page.url.pathname === '/') showBackToTop = !showBackToTop
-  })
 </script>
 
 <svelte:head>
@@ -27,27 +21,21 @@
   />
 </svelte:head>
 
-<div
-  class="flex flex-col justify-center bg-orange-100 px-4 py-12 sm:px-8 dark:bg-slate-900"
->
-  <Header />
-</div>
-<!-- for skip link -->
+
+<Header />
 
 {#key data.currentRoute}
   <main
     in:fade={{ duration: 150, delay: 150 }}
     out:fade={{ duration: 150 }}
     id="maincontent"
-    class="flex flex-col justify-center bg-orange-100 px-4 sm:px-8 dark:bg-slate-900"
+    class="max-w-7xl mx-auto flex flex-col justify-center bg-orange-100 px-4 sm:px-8 dark:bg-slate-900"
   >
     <slot />
 
-    {#if showBackToTop}
-      <a href="#maincontent" class="font-bold text-accent md:mx-4 lg:mx-12"
-        >Back to top</a
-      >
-    {/if}
+    <a href="#maincontent" class="font-bold text-accent md:mx-4 lg:mx-12"
+      >Back to top</a
+    >
   </main>
 
   <Footer />
