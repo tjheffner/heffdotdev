@@ -17,7 +17,7 @@
 
 <footer
   id="menu"
-  class="flex flex-col justify-center bg-orange-100 px-4 pt-4 pb-56 sm:px-8 dark:bg-slate-900"
+  class="max-w-7xl mx-auto flex flex-col justify-center bg-orange-100 px-4 pt-4 pb-56 sm:px-8 dark:bg-slate-900"
 >
   <hr class="mb-8" />
   <div
