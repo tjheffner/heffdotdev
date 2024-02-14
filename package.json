@@ -17,7 +17,7 @@
     "@sveltejs/adapter-auto": "^3.1.1",
     "@sveltejs/adapter-netlify": "^2.0.8",
     "@sveltejs/kit": "1.27.6",
-    "@svelte-put/toc": "^4.0.0",
+    "@svelte-put/toc": "^5.0.0",
     "@tailwindcss/typography": "^0.5.10",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
