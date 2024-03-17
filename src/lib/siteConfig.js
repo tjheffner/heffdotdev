@@ -8,8 +8,8 @@ export const DEFAULT_OG_IMAGE = 'https://heffner.dev/og?message=heffner.dev'
 
 export const TWITTER_ID = 'foodpyramids'
 export const LETTERBOXD_ID = 'tjheffner'
-export const LASTFM_ID = 'lob_'
-// export const STEAM_ID = ''
+export const LASTFM_ID = 'lob_' // need process.env.LASTFM_API_KEY
+export const STEAM_ID = '76561197965804852' // need process.env.STEAM_API_KEY
 
 export const APPROVED_POSTERS_GH_USERNAME = ['tjheffner']
 export const GH_PUBLISHED_TAGS = ['Published']

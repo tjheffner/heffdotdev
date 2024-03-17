@@ -13,7 +13,7 @@
 
   // data from +page.server.js, keeps api keys private
   export let data;
-  const { recentlyPlayed, recentlyWatched } = data;
+  const { recentlyListened, recentlyWatched, recentlyPlayed } = data;
 </script>
 
 <svelte:head>
@@ -64,7 +64,10 @@
   </Slice>
 
   <Slice title="Currently...">
-    <Currently recentlyPlayed={recentlyPlayed} recentlyWatched={recentlyWatched} />
+    <Currently recentlyListened={recentlyListened}
+               recentlyWatched={recentlyWatched}
+               recentlyPlayed={recentlyPlayed}
+    />
   </Slice>
 
   <Slice title="Fav Recipes">
