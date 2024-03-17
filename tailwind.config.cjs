@@ -12,6 +12,9 @@ module.exports = {
         alternate: 'var(--brand-alternate)',
         secondary: 'var(--brand-secondary)',
       },
+      gridTemplateColumns: {
+        'currently': '50px 1fr'
+      },
       typography: (theme) => ({
         DEFAULT: {
           css: {

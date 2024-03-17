@@ -2,6 +2,7 @@
   import Slice from '$lib/components/Slice.svelte'
   import Card from '$lib/components/Card.svelte'
   import EmojiWall from '$lib/components/EmojiWall.svelte'
+  import Currently from '$lib/components/Currently.svelte'
   import {
     SITE_URL,
     SITE_TITLE,
@@ -9,6 +10,10 @@
     DEFAULT_OG_IMAGE,
     TWITTER_ID,
   } from '$lib/siteConfig'
+
+  // data from +page.server.js, keeps api keys private
+  export let data;
+  const { recentlyPlayed, recentlyWatched } = data;
 </script>
 
 <svelte:head>
@@ -59,21 +64,7 @@
   </Slice>
 
   <Slice title="Currently...">
-    <p>
-      <span class="text-3xl">🎶</span> - Westside Gunn
-    </p>
-    <p>
-      <span class="text-3xl">🍿</span> - House of the Dragon
-    </p>
-    <p>
-      <span class="text-3xl">📚</span> - Thinking, Fast And Slow by Daniel Kahneman
-    </p>
-    <p>
-      <span class="text-3xl">🎮</span> - Baldur's Gate 3
-    </p>
-
-    <p class="text-xs">Last updated: Jan 20, 2024</p>
-    <p class="text-xs">In the future, this data will be pulled from other APIs. maybe.</p>
+    <Currently recentlyPlayed={recentlyPlayed} recentlyWatched={recentlyWatched} />
   </Slice>
 
   <Slice title="Fav Recipes">
