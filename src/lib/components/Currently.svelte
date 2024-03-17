@@ -18,7 +18,10 @@
     <p class="my-4 text-3xl">🍿</p>
     <div class="my-4">
       {#each recentlyWatched as movie}
-         <p class="m-0"><strong>{movie.name}</strong> - {movie.rating}</p>
+         <p class="m-0"><strong>{movie.film.title}</strong> - {movie.rating.text}</p>
+         {#if movie.review.length > 0}
+         <p class="m-0 ml-4 text-sm italic">{movie.review}</p>
+         {/if}
       {/each}
     </div>
   </li>

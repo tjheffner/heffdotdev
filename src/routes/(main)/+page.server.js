@@ -1,17 +1,24 @@
 import { LASTFM_API_KEY } from '$env/static/private'
-import { LASTFM_ID } from '$lib/siteConfig';
+import { LASTFM_ID, LETTERBOXD_ID } from '$lib/siteConfig';
+import letterboxd from 'letterboxd'
 
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ fetch, params }) {
+  // Fetch recently played songs from last.fm
   const lastfm_res = await fetch(`http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_ID}&api_key=${LASTFM_API_KEY}&format=json`)
   const lastfm_json = await lastfm_res.json()
-
-  // Only surface the 5 most recent tracks
   const recentlyPlayed = lastfm_json.recenttracks.track.slice(0, 5)
 
+  let recentlyWatched = []
 
-  const recentlyWatched = [{name: 'Poor Things', rating: 3}]
+  // Fetch recently watched movies from letterboxd. scrapes rss feed
+  await letterboxd(LETTERBOXD_ID).then(function (items) {
+    recentlyWatched = items.slice(0, 5)
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
 
   return {
 		recentlyPlayed,
