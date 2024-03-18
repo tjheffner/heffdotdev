@@ -9,8 +9,7 @@
     <p class="my-4 text-3xl">🎶</p>
     <div class="my-4">
       {#each recentlyListened as track}
-         <p class="m-0"><strong>{track.artist['#text']}</strong> - {track.name}</p>
-         <p class="m-0 ml-4 text-sm italic"><strong>Album: </strong>{track.album['#text']}</p>
+         <p class="m-0"><strong>{track.artist['#text']}</strong> - {track.name} <span class="text-sm text-accent italic">[{track.album['#text']}]</span></p>
       {/each}
     </div>
   </li>
@@ -19,7 +18,7 @@
     <p class="my-4 text-3xl">🍿</p>
     <div class="my-4">
       {#each recentlyWatched as movie}
-         <p class="m-0"><strong>{movie.film.title}</strong> - {movie.rating.text}</p>
+         <p class="m-0"><strong>{movie.film.title}</strong> - <span class="text-secondary"> {movie.rating.text}</span></p>
          {#if movie.review.length > 0}
           <p class="m-0 ml-4 text-sm italic">{movie.review}</p>
          {/if}
@@ -41,10 +40,8 @@
     <div class="my-4">
       {#each recentlyPlayed.games.slice(0, 5) as played }
         <p class="m-0"><strong>{played.name}</strong></p>
-        <p class="m-0 ml-4 text-sm italic"><strong>{(played.playtime_2weeks / 60).toFixed(0)}</strong> hours out of <strong>{(played.playtime_forever / 60).toFixed(0)}</strong> total hours played</p>
+        <p class="m-0 ml-4 text-sm italic"><span class="font-bold text-secondary">{(played.playtime_2weeks / 60).toFixed(0)}</span> hours out of <span class="font-bold text-accent">{(played.playtime_forever / 60).toFixed(0)}</span> total hours played</p>
       {/each}
     </div>
   </li>
 </ul>
-
-<p>All data sourced from the last two weeks, except for books, which are manually updated as I remember to do so. 🙈</p>
