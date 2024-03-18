@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.4.1",
-    "@svelte-put/toc": "^4.0.0",
+    "@svelte-put/toc": "^5.0.1",
     "@sveltejs/adapter-auto": "^3.1.1",
     "@sveltejs/adapter-netlify": "^4.1.0",
     "@sveltejs/kit": "2.5.4",
