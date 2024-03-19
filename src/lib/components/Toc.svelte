@@ -12,7 +12,7 @@
 </script>
 
 <!-- Table of contents thing -->
-{#if Object.values($tocStore.items).length && Object.values($tocStore.items).length > 1}
+{#if $tocStore.items.size}
 	<section
 		class="sticky max-w-[12em] top-10 h-0 z-10"
 	>
@@ -27,7 +27,7 @@
       <!-- adjust margins to slide in/out, works with sticky -->
       <!-- need to adjust left margin to slide text, right margin to slide bg -->
 			<ul class="toc-list max-h-fit {isOpen ? '-ml-6 mr-0 lg:ml-2' : '-ml-96 mr-96'}">
-				{#each Object.values($tocStore.items) as { id, text, element }}
+				{#each $tocStore.items.values() as { id, text, element }}
           <li>
             <a
   						class="ml-2 block text-sm"
