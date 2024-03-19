@@ -29,7 +29,7 @@
     in:fade={{ duration: 150, delay: 150 }}
     out:fade={{ duration: 150 }}
     id="maincontent"
-    class="max-w-7xl mx-auto flex flex-col justify-center bg-orange-100 px-4 sm:px-8 dark:bg-slate-900"
+    class="max-w-7xl mx-auto flex flex-col justify-center bg-orange-100 prose-slate px-4 sm:px-8 dark:bg-slate-900 dark:prose-invert"
   >
     <slot />
 
