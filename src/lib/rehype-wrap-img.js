@@ -10,7 +10,6 @@ export default function rehypeZoomImages(options = { selector: 'img' }) {
         const label = fromSelector('label')
         const checkbox = fromSelector('input[type="checkbox"]')
 
-
         node.properties.loading = 'lazy'
         // add class for bg color before loading
         node.properties.class = 'lazy-image'

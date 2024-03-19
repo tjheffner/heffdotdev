@@ -13,7 +13,7 @@ module.exports = {
         secondary: 'var(--brand-secondary)',
       },
       gridTemplateColumns: {
-        'currently': '50px 1fr'
+        currently: '50px 1fr',
       },
       typography: (theme) => ({
         DEFAULT: {
