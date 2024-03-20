@@ -26,7 +26,7 @@
 
       <!-- adjust margins to slide in/out, works with sticky -->
       <!-- need to adjust left margin to slide text, right margin to slide bg -->
-			<ul class="toc-list max-h-fit {isOpen ? '-ml-6 mr-0 lg:ml-2' : '-ml-96 mr-96'}">
+			<ul class="toc-list max-h-fit {isOpen ? '-ml-6 mr-0 lg:ml-2 opacity-100' : '-ml-96 mr-96 opacity-0'}">
 				{#each $tocStore.items.values() as { id, text, element }}
           <li>
             <a
