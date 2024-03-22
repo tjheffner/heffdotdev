@@ -1,107 +1,44 @@
 <script>
+  import { queryParam, ssp } from 'sveltekit-search-params'
   import PostItem from '$lib/components/PostItem.svelte'
-  import queryString from 'query-string'
-  import { onMount } from 'svelte'
+  import { POST_CATEGORIES } from '$lib/siteConfig'
+  import { fuzzySearch } from './fuzzySearch'
 
   export let data
   let { items } = data
 
-  let urlState = { filter: '', show: [] }
-  let defaultURLState = { filter: '', show: [] }
+  // https://github.com/paoloricciuti/sveltekit-search-params#how-to-use-it
+  /** @type import('svelte/store').Writable<String[] | null> */
+  let selectedCategories = queryParam(
+    'show',
+    {
+      encode: (arr) => arr?.toString(),
+      decode: (str) => str?.split(',')?.filter((e) => e) ?? []
+    },
+    { debounceHistory: 500 }
+  );
+  let search = queryParam('filter', ssp.string(), {
+    debounceHistory: 500
+  });
 
-  const setURLState = (newState) => {
-    // merge with existing state
-    const finalState = { ...urlState, ...newState }
-    urlState = finalState
+  let inputEl;
 
-    Object.keys(finalState).forEach(function (k) {
-      if (
-        // don't save some state values if it meets the conditions below
-        !finalState[k] || // falsy
-        finalState[k] === '' || // string
-        (Array.isArray(finalState[k]) && !finalState[k].length) || // array
-        finalState[k] === defaultURLState[k] // same as default state, unnecessary
-      ) {
-        delete finalState[k] // drop query params with new values = falsy
-      }
-    })
-    if (typeof window !== 'undefined') {
-      history.pushState(
-        {},
-        '',
-        document.location.origin +
-          document.location.pathname +
-          '?' +
-          queryString.stringify(finalState)
-      )
-    }
-  }
-
-  let recipes = false
-  let technical = false
-  let notes = false
-
-  let filterStr = ''
-
-  onMount(() => {
-    if (location.search.length < 1) return // early terminate if no search
-    let givenstate = queryString.parse(location.search)
-    if (!Array.isArray(givenstate.show)) givenstate.show = [givenstate.show]
-    if (!givenstate.show.includes('Recipes')) recipes = false
-    if (!givenstate.show.includes('Technical')) technical = false
-    if (!givenstate.show.includes('Notes')) notes = false
-    if (givenstate.filter) filterStr = givenstate.filter
-    urlState = { ...defaultURLState, ...givenstate }
-  })
-
-  function saveURLState() {
-    showAll = true
-    setTimeout(() => {
-      setURLState({
-        filter: filterStr,
-        show: [
-          recipes && 'Recipes',
-          technical && 'Technical',
-          notes && 'Notes',
-        ].filter(Boolean),
-      })
-    }, 100)
-  }
-
-  // $: showAll = filterStr.length > 2
-  $: showAll = false
-
-  function notIncludes(_filterStr, item) {
-    let res = true
-    _filterStr = _filterStr.toLowerCase().replace('/', '')
-    function incluye(thing) {
-      // make sure to coerce to string bc sometimes yaml parses as string
-      if (thing && String(thing).toLowerCase().includes(_filterStr)) res = false
-    }
-    incluye(item.title)
-    incluye(item.slug)
-    incluye(item.category)
-    incluye(item.description)
-    return res
-  }
-
-  let inputEl
   function focusSearch(e) {
-    if (e.key === '/' && inputEl) inputEl.select()
+    if (e.key === '/' && inputEl) inputEl.select();
   }
 
-  $: list = items
-    .slice(0, showAll ? items.length : 10) // bump this up when more posts
-    .filter((x) => {
-      if (filterStr && notIncludes(filterStr, x)) {
-        return false
-      } else {
-        if ([recipes, technical, notes].every((v) => v === false)) return true
-        if (recipes && x.category === 'recipe') return true
-        if (technical && x.category === 'technical') return true
-        if (notes && x.category === 'note') return true
-      }
-    })
+  function clearFilters(e) {
+    $search = ''
+    $selectedCategories = []
+  }
+
+  let LIST_DISPLAY_LENGTH = 10
+  let isTruncated = items?.length > LIST_DISPLAY_LENGTH;
+
+  let list
+  $: fuzzySearch(items, $selectedCategories, $search).then(_items => {
+    list = _items.slice(0, isTruncated ? LIST_DISPLAY_LENGTH : items.length)
+  })
 </script>
 
 <svelte:head>
@@ -125,13 +62,13 @@
     to filter.
   </p>
 
+  <!-- Search Bar -->
   <div class="relative w-full">
     <input
       aria-label="Search articles"
       type="text"
-      bind:this={inputEl}
-      on:input={saveURLState}
-      bind:value={filterStr}
+      bind:value={$search}
+			bind:this={inputEl}
       placeholder="Hit / to search"
       class="block w-full rounded-md border border-zinc-400 bg-gray-200
 						px-4 py-2 text-gray-900 placeholder:text-zinc-700
@@ -157,47 +94,30 @@
   <!-- Filter Buttons -->
   <div class="my-4 flex w-full items-center">
     <span class="mr-2 text-zinc-900 dark:text-gray-400"> Filter: </span>
-    <span>
-      <button
-        type="button"
-        on:click={() => {
-          saveURLState()
-          recipes = !recipes
-        }}
-        class:activefilter={recipes}
-        class="filter"
-      >
-        Recipes
-      </button>
-      <button
-        type="button"
-        on:click={() => {
-          saveURLState()
-          technical = !technical
-        }}
-        class:activefilter={technical}
-        class="filter"
-      >
-        Technical
-      </button>
-      <button
-        type="button"
-        on:click={() => {
-          saveURLState()
-          notes = !notes
-        }}
-        class:activefilter={notes}
-        class="filter"
-      >
-        Notes
-      </button>
-    </span>
+    {#each POST_CATEGORIES as availableCategory}
+      <div>
+        <input
+          id="category-{availableCategory}"
+          class="peer sr-only"
+          type="checkbox"
+          bind:group={$selectedCategories}
+          value={availableCategory}
+        />
+        <label
+          for="category-{availableCategory}"
+          class="filter"
+          class:activefilter={$selectedCategories.includes(availableCategory)}
+        >
+          {availableCategory}
+        </label>
+      </div>
+    {/each}
   </div>
 
   <hr class="mb-6 md:mb-12" />
 
   <!-- Results -->
-  {#if list.length}
+  {#if list?.length}
     <ul
       class="w-full divide-y divide-dashed divide-sky-600 md:mx-auto md:w-4/5 dark:divide-blue-300"
     >
@@ -209,28 +129,34 @@
         </li>
       {/each}
     </ul>
-    {#if !showAll}
+    {#if isTruncated}
       <div class="flex justify-center mx-auto">
         <button
-          on:click={() => (showAll = true)}
+          on:click={() => (isTruncated = false)}
           class="filter"
         >
           See more posts
         </button>
       </div>
     {/if}
-  {:else if filterStr}
+  {:else if $search && $selectedCategories.length === 0}
     <div class="prose dark:prose-invert">
       No posts found for
-      <code>{filterStr}</code>.
+      <code>{$search}</code>.
     </div>
     <button
-      on:click={() => (filterStr = '')}
+      on:click={() => ($search = '')}
       class="filter my-4"
     >
       Clear your search
     </button>
   {:else}
-    <div class="prose dark:prose-invert">Search something else!</div>
+    <div class="prose dark:prose-invert">No posts found with this combination of filters. Search something else!</div>
+    <button
+      on:click={clearFilters}
+      class="filter my-4"
+    >
+      Clear all filters
+    </button>
   {/if}
 </section>

@@ -14,6 +14,8 @@ export const STEAM_ID = '76561197965804852' // need process.env.STEAM_API_KEY
 export const APPROVED_POSTERS_GH_USERNAME = ['tjheffner']
 export const GH_PUBLISHED_TAGS = ['Published']
 
+export const POST_CATEGORIES = ['Note', 'Recipe', 'Technical', 'DIY']
+
 // auto generated variables
 export const REPO_URL = 'https://github.com/' + GH_USER_REPO
 export const REPO_OWNER = GH_USER_REPO.split('/')[0]
