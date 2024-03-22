@@ -15,7 +15,7 @@
       encode: (arr) => arr?.toString(),
       decode: (str) => str?.split(',')?.filter((e) => e) ?? []
     },
-    { debounceHistory: 500 }
+    { debounceHistory: 100 }
   );
   let search = queryParam('filter', ssp.string(), {
     debounceHistory: 500
@@ -37,7 +37,7 @@
 
   let list
   $: fuzzySearch(items, $selectedCategories, $search).then(_items => {
-    list = _items.slice(0, isTruncated ? LIST_DISPLAY_LENGTH : items.length)
+    list = _items
   })
 </script>
 
@@ -68,7 +68,7 @@
       aria-label="Search articles"
       type="text"
       bind:value={$search}
-			bind:this={inputEl}
+      bind:this={inputEl}
       placeholder="Hit / to search"
       class="block w-full rounded-md border border-zinc-400 bg-gray-200
 						px-4 py-2 text-gray-900 placeholder:text-zinc-700
@@ -121,15 +121,23 @@
     <ul
       class="w-full divide-y divide-dashed divide-sky-600 md:mx-auto md:w-4/5 dark:divide-blue-300"
     >
-      {#each list as item}
-        <li class="mb-4 sm:mb-0">
-          <PostItem {item} href={item.slug}>
-            {item.description}
-          </PostItem>
-        </li>
+      {#each list as item, i}
+        {#if isTruncated && (i+1 < LIST_DISPLAY_LENGTH)}
+          <li class="mb-4 sm:mb-0">
+            <PostItem {item} href={item.slug}>
+              {item.description}
+            </PostItem>
+          </li>
+        {:else if !isTruncated}
+          <li class="mb-4 sm:mb-0">
+            <PostItem {item} href={item.slug}>
+              {item.description}
+            </PostItem>
+          </li>
+        {/if}
       {/each}
     </ul>
-    {#if isTruncated}
+    {#if isTruncated && list.length > LIST_DISPLAY_LENGTH}
       <div class="flex justify-center mx-auto">
         <button
           on:click={() => (isTruncated = false)}
