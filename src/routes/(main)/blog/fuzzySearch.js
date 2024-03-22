@@ -55,7 +55,7 @@ function _fuzzySearch(items, selectedCategories, search) {
       [
         v.title,
         v.subtitle,
-        v.tags.map((tag) => 'hashtag-' + tag), // add #tag so as to enable tag search
+        v.tags,
         v.content,
         v.description,
       ].join(' ')
