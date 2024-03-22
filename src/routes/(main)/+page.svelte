@@ -49,7 +49,7 @@
     <p>This site is perpetually under construction but coming along. 😎</p>
 
     <p>
-      It's mostly a place for me to post <a href="/blog?show=Recipes"
+      It's mostly a place for me to post <a href="/blog?show=Recipe"
         >recipes I like</a
       >
       and
