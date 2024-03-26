@@ -9,10 +9,11 @@
 			isOpen = true;
 		}
 	})
+
 </script>
 
 <!-- Table of contents thing -->
-{#if $tocStore.items.size}
+{#if $tocStore.items.size > 1}
 	<section
 		class="sticky max-w-[12em] top-10 h-0 z-10"
 	>
@@ -21,7 +22,7 @@
       aria-label="{isOpen ? 'Close' : 'Open'} Table of Contents"
       on:click={() => (isOpen = !isOpen)}
     >
-      {isOpen ? '<' : '>'}
+      {isOpen ? 'X' : '>'}
     </button>
 
       <!-- adjust margins to slide in/out, works with sticky -->
