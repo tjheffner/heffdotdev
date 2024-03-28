@@ -1,5 +1,10 @@
 import { LASTFM_API_KEY, STEAM_API_KEY } from '$env/static/private'
-import { LASTFM_ID, LETTERBOXD_ID, STEAM_ID, DUOLINGO_ID } from '$lib/siteConfig'
+import {
+  LASTFM_ID,
+  LETTERBOXD_ID,
+  STEAM_ID,
+  DUOLINGO_ID,
+} from '$lib/siteConfig'
 import letterboxd from 'letterboxd'
 
 /** @type {import('./$types').PageServerLoad} */
@@ -28,14 +33,16 @@ export async function load({ fetch, params }) {
   const steam_json = await steam_res.json()
   const recentlyPlayed = steam_json.response
 
-  // Fetch stats from Duolingo.
-  const duolingo_res = await fetch(`https://www.duolingo.com/2017-06-30/users?username=${DUOLINGO_ID}`)
+  // Fetch stats from Duolingo. This is an unofficial endpoint, may break!!
+  const duolingo_res = await fetch(
+    `https://www.duolingo.com/2017-06-30/users?username=${DUOLINGO_ID}`
+  )
   const duolingo_json = await duolingo_res.json()
 
   return {
     recentlyListened,
     recentlyWatched,
     recentlyPlayed,
-    duolingo: duolingo_json.users[0]
+    duolingo: duolingo_json.users[0],
   }
 }

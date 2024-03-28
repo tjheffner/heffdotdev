@@ -4,8 +4,10 @@
   export let recentlyPlayed
   export let duolingo
 
-  const formattedDate = new Date(duolingo.streakData.currentStreak.startDate).toLocaleDateString('en-us', { year:"numeric", month:"short", day:"numeric"})
+  const formattedDate = new Date(duolingo.streakData.currentStreak.startDate)
+    .toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric'})
 
+  // https://dev.to/jorik/country-code-to-flag-emoji-a21
   function getFlagEmoji(countryCode) {
     const codePoints = countryCode
       .toUpperCase()
