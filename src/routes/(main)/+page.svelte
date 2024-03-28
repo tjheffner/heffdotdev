@@ -3,6 +3,7 @@
   import Card from '$lib/components/Card.svelte'
   import EmojiWall from '$lib/components/EmojiWall.svelte'
   import Currently from '$lib/components/Currently.svelte'
+  import GetInTouch from '$lib/components/GetInTouch.svelte'
   import {
     SITE_URL,
     SITE_TITLE,
@@ -13,7 +14,7 @@
 
   // data from +page.server.js, keeps api keys private
   export let data;
-  const { recentlyListened, recentlyWatched, recentlyPlayed } = data;
+  const { recentlyListened, recentlyWatched, recentlyPlayed, duolingo } = data;
 </script>
 
 <svelte:head>
@@ -63,13 +64,6 @@
     <p>Thanks for stopping by, check out the <a href="/blogroll">links that work</a>. ✌️</p>
   </Slice>
 
-  <Slice title="Currently...">
-    <Currently recentlyListened={recentlyListened}
-               recentlyWatched={recentlyWatched}
-               recentlyPlayed={recentlyPlayed}
-    />
-  </Slice>
-
   <Slice title="Fav Recipes">
     <p>In no particular order, these are recipes I get a lot of mileage out of...</p>
     <div class="grid w-full grid-cols-1 gap-4 align-middle md:grid-cols-3">
@@ -81,4 +75,15 @@
       <Card title="Shrimp and Rice" href={'/shrimp-and-rice'} />
     </div>
   </Slice>
+
+  <Slice title="Currently...">
+    <Currently recentlyListened={recentlyListened}
+               recentlyWatched={recentlyWatched}
+               recentlyPlayed={recentlyPlayed}
+               duolingo={duolingo}
+    />
+  </Slice>
+
+  <GetInTouch />
+
 </section>

@@ -52,13 +52,7 @@ function _fuzzySearch(items, selectedCategories, search) {
   })
   if (search) {
     const haystack = filteredItems.map((v) =>
-      [
-        v.title,
-        v.subtitle,
-        v.tags,
-        v.content,
-        v.description,
-      ].join(' ')
+      [v.title, v.subtitle, v.tags, v.content, v.description].join(' ')
     )
     const idxs = u.filter(haystack, search)
     const info = u.info(idxs, haystack, search)

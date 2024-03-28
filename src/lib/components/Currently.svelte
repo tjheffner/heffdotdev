@@ -2,6 +2,19 @@
   export let recentlyListened
   export let recentlyWatched
   export let recentlyPlayed
+  export let duolingo
+
+  const formattedDate = new Date(duolingo.streakData.currentStreak.startDate)
+    .toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric'})
+
+  // https://dev.to/jorik/country-code-to-flag-emoji-a21
+  function getFlagEmoji(countryCode) {
+    const codePoints = countryCode
+      .toUpperCase()
+      .split('')
+      .map(char =>  127397 + char.charCodeAt());
+    return String.fromCodePoint(...codePoints);
+  }
 </script>
 
 <ul class="divide-y divide-dashed divide-sky-600 dark:divide-blue-300 pl-0">
@@ -25,6 +38,18 @@
       {/each}
     </div>
   </li>
+
+  {#if Object.hasOwn(duolingo, 'courses')}
+    <li class="grid grid-cols-currently">
+      <p class="my-4 text-3xl">🦉</p>
+      <div class="my-4">
+        {#each duolingo.courses as course}
+          <p class="m-0"><strong>{course.title} {getFlagEmoji(course.learningLanguage)}</strong> <span class="text-sm text-accent">[{course.xp} xp]</span></p>
+        {/each}
+        <p class="m-0">Current streak: <span class="font-bold text-secondary">{duolingo.streak}</span> days! <span class="text-sm block md:inline-block">Streak began: <span class="text-accent">{formattedDate}</span></span></p>
+      </div>
+    </li>
+  {/if}
 
   <li class="grid grid-cols-currently">
     <p class="my-4 text-3xl">📚</p>
