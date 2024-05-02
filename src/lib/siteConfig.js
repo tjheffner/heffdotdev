@@ -10,7 +10,6 @@ export const REPO_OWNER = GH_USER_REPO.split('/')[0]
 
 /* for posting */
 export const APPROVED_POSTERS_GH_USERNAME = [GH_USER]
-export const GH_PUBLISHED_TAGS = ['Published']
 export const POST_CATEGORIES = ['Note', 'Recipe', 'Technical', 'DIY']
 
 /* for gathering various stats */

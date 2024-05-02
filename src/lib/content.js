@@ -2,10 +2,9 @@ import { dev } from '$app/environment'
 import {
   GH_USER_REPO,
   APPROVED_POSTERS_GH_USERNAME,
-  GH_PUBLISHED_TAGS,
   REPO_OWNER,
 } from './siteConfig'
-import { slugify, readingTime, baseIssueContent, formatContent } from './utils'
+import { readingTime, baseIssueContent, formatContent } from './utils'
 import parse from 'parse-link-header'
 
 let allBlogposts = []

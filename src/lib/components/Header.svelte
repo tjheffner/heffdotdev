@@ -59,7 +59,7 @@
       <button
         aria-label="Toggle Dark Mode"
         class="ml-1 flex h-9 w-9 items-center justify-center rounded-lg bg-sky-600 ring-red-600 transition-all
-    		hover:ring-2 dark:bg-yellow-800 dark:ring-yellow-400"
+    		hover:ring-2 dark:bg-sky-900 dark:ring-yellow-400"
         on:click={toggleDarkMode}
       >
         {#if isDark}
