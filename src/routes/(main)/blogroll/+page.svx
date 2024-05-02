@@ -21,6 +21,7 @@
 - [fujichia](https://www.fujichia.com/)
 - [shawn wang](https://www.swyx.io/)
 - [css-tricks](https://css-tricks.com/)
+- [randi bolt](https://www.rbolt.me/)
 
 <style>
   ul {
