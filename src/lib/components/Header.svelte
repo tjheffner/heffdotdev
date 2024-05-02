@@ -25,7 +25,7 @@
 <div class="max-w-7xl mx-auto flex flex-col justify-center px-4 py-12 sm:px-8">
   <nav class="relative flex justify-between md:mx-4 lg:mx-12">
     <h1
-      class="text-lg font-bold text-accent transition-all duration-200 ease-in-out hover:scale-110"
+      class="text-lg font-bold text-accent header-link"
     >
       <a href="/">heffner.dev</a>
     </h1>
