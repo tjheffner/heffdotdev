@@ -24,11 +24,11 @@
 
 <div class="max-w-7xl mx-auto flex flex-col justify-center px-4 py-12 sm:px-8">
   <nav class="relative flex justify-between md:mx-4 lg:mx-12">
-    <h1
-      class="text-lg font-bold text-accent header-link"
-    >
-      <a href="/">heffner.dev</a>
-    </h1>
+    <a class="text-lg font-bold text-accent header-link" href="/">
+      <h1>
+        heffner.dev
+      </h1>
+    </a>
     <div class="flex">
       <a href="#menu"
          class="flex mr-3 h-9 w-9 items-center justify-center rounded-lg"

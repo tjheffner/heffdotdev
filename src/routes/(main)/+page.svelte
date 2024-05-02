@@ -3,7 +3,7 @@
   import Card from '$lib/components/Card.svelte'
   import EmojiWall from '$lib/components/EmojiWall.svelte'
   import Currently from '$lib/components/Currently.svelte'
-  import GetInTouch from '$lib/components/GetInTouch.svelte'
+  // import GetInTouch from '$lib/components/GetInTouch.svelte'
   import {
     SITE_URL,
     SITE_TITLE,
@@ -84,6 +84,6 @@
     />
   </Slice>
 
-  <GetInTouch />
+  <!-- <GetInTouch /> -->
 
 </section>
