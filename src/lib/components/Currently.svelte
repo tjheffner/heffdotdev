@@ -60,6 +60,7 @@
     </div>
   </li>
 
+  {#if recentlyPlayed.games}
   <li class="grid grid-cols-currently">
     <p class="my-4 text-3xl">🎮</p>
     <div class="my-4">
@@ -69,4 +70,5 @@
       {/each}
     </div>
   </li>
+  {/if}
 </ul>
