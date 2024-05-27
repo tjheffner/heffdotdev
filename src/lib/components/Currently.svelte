@@ -51,14 +51,14 @@
     </li>
   {/if}
 
-  <li class="grid grid-cols-currently">
+  <!-- <li class="grid grid-cols-currently">
     <p class="my-4 text-3xl">📚</p>
     <div class="my-4">
       <p class="m-0"><strong>Thinking, Fast And Slow</strong> by Daniel Kahneman</p>
       <p class="m-0"><strong>The Lathe of Heaven</strong> by Ursula K. Le Guin</p>
       <p class="m-0"><strong>The Art of Sauna Building</strong> by Bert (Pertti) Olavi Jalasjaa</p>
     </div>
-  </li>
+  </li> -->
 
   <li class="grid grid-cols-currently">
     <p class="my-4 text-3xl">🎮</p>
