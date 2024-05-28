@@ -3,7 +3,7 @@
   import Card from '$lib/components/Card.svelte'
   import EmojiWall from '$lib/components/EmojiWall.svelte'
   import Currently from '$lib/components/Currently.svelte'
-  import GetInTouch from '$lib/components/GetInTouch.svelte'
+  // import GetInTouch from '$lib/components/GetInTouch.svelte'
   import {
     SITE_URL,
     SITE_TITLE,
@@ -46,7 +46,7 @@
     <EmojiWall />
   </Slice>
 
-  <Slice title="Hello World!">
+  <Slice title="Hello world!">
     <p>This site is perpetually under construction but coming along. 😎</p>
 
     <p>
@@ -64,7 +64,7 @@
     <p>Thanks for stopping by, check out the <a href="/blogroll">links that work</a>. ✌️</p>
   </Slice>
 
-  <Slice title="Fav Recipes">
+  <Slice title="Favorite recipes">
     <p>In no particular order, these are recipes I get a lot of mileage out of...</p>
     <div class="grid w-full grid-cols-1 gap-4 align-middle md:grid-cols-3">
       <Card title="Creme Brulee" href={'/creme-brulee'} />
@@ -76,7 +76,7 @@
     </div>
   </Slice>
 
-  <Slice title="Currently...">
+  <Slice title="Currently">
     <Currently recentlyListened={recentlyListened}
                recentlyWatched={recentlyWatched}
                recentlyPlayed={recentlyPlayed}
@@ -84,6 +84,6 @@
     />
   </Slice>
 
-  <GetInTouch />
+  <!-- <GetInTouch /> -->
 
 </section>

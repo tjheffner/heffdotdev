@@ -89,6 +89,7 @@
   /* Links that highlight from bottom */
   .gh-link,
   .footer-link,
+  .header-link,
   .prose a {
     @apply from-red-600 to-red-600 dark:from-yellow-400 dark:to-yellow-400;
     @apply text-secondary hover:text-sky-200 dark:hover:text-slate-900;
