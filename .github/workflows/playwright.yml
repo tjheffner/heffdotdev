@@ -7,11 +7,11 @@ env:
 
 jobs:
   prepare:
-    name: Wait for deployment on Netlify
+    name: Wait for Netlify deployment
     runs-on: ubuntu-latest
     steps:
       - name: Waiting for Netlify Preview
-        uses: josephduffy/wait-for-netlify-action@v1
+        uses: jakepartusch/wait-for-netlify-action@v1.4
         id: wait-for-netlify-preview
         with:
           site_name: "heffner"
@@ -19,7 +19,7 @@ jobs:
 
   test:
     needs: prepare
-    name: Run end-to-end tests on Netlify PR preview
+    name: Run Playwright tests against Netlify deployment
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
