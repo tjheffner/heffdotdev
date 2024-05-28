@@ -19,7 +19,7 @@ jobs:
 
   test:
     needs: prepare
-    name: Run Playwright tests against Netlify deployment
+    name: Run tests against PR environment
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
