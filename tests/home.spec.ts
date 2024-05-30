@@ -1,4 +1,4 @@
-import { test, expect, generateReport } from './axe-test';
+import { test, expect, generateReport, goto } from './utils';
 
 test('Home page renders without a11y errors', async ({
   page,

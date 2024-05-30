@@ -9,6 +9,11 @@
 
   import { fade } from 'svelte/transition'
 
+  onMount(() => {
+    // Indicate that the SvelteKit app has started
+    document.body.classList.add("started");
+  });
+
   export let data
 </script>
 

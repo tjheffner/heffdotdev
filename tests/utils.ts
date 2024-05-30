@@ -1,4 +1,4 @@
-// This file contains consistent configuration for a11y tests across other test files.
+/* This file contains consistent configuration for a11y tests across other test files. */
 import { test as base } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 import { createHtmlReport } from 'axe-html-reporter';
@@ -8,7 +8,7 @@ type AxeFixture = {
   makeAxeBuilder: () => AxeBuilder
 }
 
-// Extend base test by providing "makeAxeBuilder"
+// Extend Playwright's base test by providing "makeAxeBuilder"
 //
 // This new "test" can be used in multiple test files, and each of them will get
 // a consistently configured AxeBuilder instance.
@@ -31,8 +31,9 @@ export const test = base.extend<AxeFixture>({
 // so other test files can do import { test, export } from './axe-test'
 export { expect } from '@playwright/test'
 
-// Generate an easy readable html report for a given page.
+// Generate readable report outputs for a given check.
 export const generateReport = (accessibilityScanResults, key) => {
+  // axe-html-reporter builds a nice page, use that. open in browser
   const htmlReport = createHtmlReport({
     results: accessibilityScanResults,
     options: {
@@ -41,11 +42,40 @@ export const generateReport = (accessibilityScanResults, key) => {
     },
   });
 
+  // write report to file. test-results is gitignored
   const htmlReportDir = 'test-results/a11y'
   if (!fs.existsSync(htmlReportDir)) {
     fs.mkdirSync(htmlReportDir, { recursive: true })
   }
   fs.writeFileSync(`${htmlReportDir}/${key}.html`, htmlReport)
 
-  return htmlReport
+  // create useful json object
+  const errors = accessibilityScanResults.violations.map(v => {
+    return {
+      issue: v.id,
+      count: v.nodes.length,
+      description: v.description,
+      errors: v.nodes.map(n => {
+        return {
+          html: n.html,
+          impact: n.impact,
+          target: n.target,
+          summary: n.failureSummary,
+        }
+      }),
+    }
+  })
+
+  return {
+    htmlReport,
+    errors
+  }
 }
+
+// gives sveltekit a chance to hydrate before playwright starts testing
+export const goto = async (page: Page, url: string, opts?: { waitForStarted?: boolean }) => {
+    await page.goto(url);
+    if (opts?.waitForStarted !== false) {
+      await page.waitForSelector("body.started", { timeout: 5000 });
+    }
+  };

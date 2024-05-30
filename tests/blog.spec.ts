@@ -1,10 +1,10 @@
-import { test, expect, generateReport } from './axe-test';
+import { test, expect, generateReport, goto } from './utils';
 
-test('blog page renders without a11y errors', async ({
+test.only('blog page renders without a11y errors', async ({
   page,
   makeAxeBuilder,
 }) => {
-  await page.goto('/blog')
+  await goto(page, '/blog')
 
   await expect(page).toHaveTitle(/heffner.dev | posts/);
   await expect(page.getByRole('heading', { name: 'Posts' })).toBeVisible();
@@ -12,7 +12,8 @@ test('blog page renders without a11y errors', async ({
   const accessibilityScanResults = await makeAxeBuilder().analyze()
 
   if (accessibilityScanResults.violations.length > 0) {
-    generateReport(accessibilityScanResults, 'blog')
+    const { errors } = generateReport(accessibilityScanResults, 'blog')
+    console.dir(errors, { depth: 5 })
   }
 
   expect(accessibilityScanResults.violations.length).toEqual(0)
