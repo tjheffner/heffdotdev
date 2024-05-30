@@ -1,11 +1,22 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, generateReport } from './axe-test';
 
-test('has title', async ({ page }) => {
-  await page.goto('/blog');
+test('blog page renders without a11y errors', async ({
+  page,
+  makeAxeBuilder,
+}) => {
+  await page.goto('/blog')
+
   await expect(page).toHaveTitle(/heffner.dev | posts/);
-
   await expect(page.getByRole('heading', { name: 'Posts' })).toBeVisible();
-});
+
+  const accessibilityScanResults = await makeAxeBuilder().analyze()
+
+  if (accessibilityScanResults.violations.length > 0) {
+    generateReport(accessibilityScanResults, 'blog')
+  }
+
+  expect(accessibilityScanResults.violations.length).toEqual(0)
+})
 
 // test('blog filters', async ({ page }) => {
 
