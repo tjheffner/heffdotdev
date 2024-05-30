@@ -39,6 +39,8 @@
           height="20"
           viewBox="0 0 20 20"
           fill="none"
+          role="img"
+          title="Site Menu"
           >
           <path
             d="M2.5 7.5H17.5"
