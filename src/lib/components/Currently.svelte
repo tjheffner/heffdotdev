@@ -4,13 +4,14 @@
   export let recentlyPlayed
   export let duolingo
 
+  // duolingo math
   const streakStartDate = new Date(duolingo.streakData.currentStreak.startDate);
   const formattedDate = streakStartDate
     .toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric'})
   const today = new Date();
   const diff = Math.abs(today - streakStartDate)
   const days = Math.floor(diff/(86400 * 1000))
-  const freezes = days - duolingo.streak - 1
+  const freezes = days - duolingo.streak
 
 
   // https://dev.to/jorik/country-code-to-flag-emoji-a21
@@ -69,19 +70,22 @@
   <li class="grid grid-cols-currently">
     <p class="my-4 text-3xl">📚</p>
     <div class="my-4">
-      <p class="m-0">The last book I read was <strong class="text-accent">The Lathe of Heaven</strong> by <span class="text-secondary">Ursula K. Le Guin</span>. But I mostly only read books when traveling. Currently reading: <a href="/blogroll">internet articles</a></p>
+      <p class="m-0">The last book I read was <strong class="text-accent">The Lathe of Heaven</strong> by <span class="text-secondary">Ursula K. Le Guin</span>. Currently reading several books on sauna building.
     </div>
   </li>
 
-  {#if recentlyPlayed.games}
   <li class="grid grid-cols-currently">
     <p class="my-4 text-3xl">🎮</p>
     <div class="my-4">
+    {#if recentlyPlayed.games}
       {#each recentlyPlayed.games.slice(0, 5) as played }
         <p class="m-0"><strong>{played.name}</strong></p>
         <p class="m-0 ml-4 text-sm italic"><span class="font-bold text-secondary">{(played.playtime_2weeks / 60).toFixed(0)}</span> hours out of <span class="font-bold text-accent">{(played.playtime_forever / 60).toFixed(0)}</span> total hours played</p>
       {/each}
+    {:else}
+      <p class="m-0">No playtime logged on Steam in the last two weeks.</p>
+    {/if}
     </div>
   </li>
-  {/if}
+
 </ul>
