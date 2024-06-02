@@ -23,7 +23,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'http://localhost:5173',
+    baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:5173',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },
@@ -63,11 +63,4 @@ export default defineConfig({
     },
     // my computer is too old to test webkit via playwright, save it for ci
   ].filter(p => process.env.CI ? p : p.name === 'chromium'),
-
-  /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'npm run start',
-    url: 'http://localhost:5173',
-    reuseExistingServer: !process.env.CI,
-  },
 })
