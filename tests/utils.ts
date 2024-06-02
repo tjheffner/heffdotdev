@@ -28,12 +28,12 @@ export const test = base.extend<AxeFixture>({
 })
 
 // Exported here for convenience
-// so other test files can do import { test, export } from './axe-test'
+// so other test files can do import { test, export } from './utils'
 export { expect } from '@playwright/test'
 
 // Generate readable report outputs for a given check.
 export const generateReport = (accessibilityScanResults, key) => {
-  // axe-html-reporter builds a nice page, use that. open in browser
+  // axe-html-reporter builds a nice page, use that.
   const htmlReport = createHtmlReport({
     results: accessibilityScanResults,
     options: {

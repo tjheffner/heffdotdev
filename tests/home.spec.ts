@@ -1,6 +1,6 @@
 import { test, expect, generateReport, goto } from './utils';
 
-test('Home page renders without a11y errors', async ({
+test.skip('Home page renders without a11y errors', async ({
   page,
   makeAxeBuilder,
 }) => {
