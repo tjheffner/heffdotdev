@@ -27,7 +27,7 @@ test('dark mode toggle', async ({ page }) => {
   await expect(page.locator('html')).toHaveAttribute('class', 'dark');
 });
 
-test.only('header menu icon jumps to footer menu', async ({ page }) => {
+test('header menu icon jumps to footer menu', async ({ page }) => {
   await page.goto('/');
 
   const menu = await page.getByText('Site Menu')
