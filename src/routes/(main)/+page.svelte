@@ -60,8 +60,7 @@
       can be found here too, but that's not what I want to talk
       <a href="/about">about</a>.
     </p>
-    <p />
-    <p>Thanks for stopping by, check out the <a href="/blogroll">links that work</a>. ✌️</p>
+    <p>Thanks for stopping by. ✌️</p>
   </Slice>
 
   <Slice title="Favorite recipes">

@@ -33,12 +33,15 @@
       <a href="#menu"
          class="flex mr-3 h-9 w-9 items-center justify-center rounded-lg"
       >
+        <span class="sr-only">Site Menu</span>
         <svg
           class="absolute h-5 w-5 text-secondary"
           width="20"
           height="20"
           viewBox="0 0 20 20"
           fill="none"
+          role="img"
+          title="Site Menu"
           >
           <path
             d="M2.5 7.5H17.5"
