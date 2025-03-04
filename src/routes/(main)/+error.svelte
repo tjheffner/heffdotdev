@@ -11,7 +11,7 @@
 
   let title = offline ? 'Offline' : $page.status
   if ($page.status === 404) {
-    title = 'Page not found :('
+    title = 'Page not found'
     message = 'Sorry! If you think this URL is broken, please let me know!'
   }
 </script>

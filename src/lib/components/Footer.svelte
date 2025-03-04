@@ -26,7 +26,6 @@
     <div class="col-span-2 md:col-span-2">
       <NavLink href="/blog">Posts</NavLink>
       <NavLink href="/gallery">Gallery</NavLink>
-      <NavLink href="/work">Work</NavLink>
       <NavLink href="/about">About</NavLink>
       <NavLink href="/blogroll">Blogroll</NavLink>
     </div>
