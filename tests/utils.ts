@@ -1,8 +1,8 @@
 /* This file contains consistent configuration for a11y tests across other test files. */
 import { test as base } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
-import { createHtmlReport } from 'axe-html-reporter';
-import fs from 'fs';
+import { createHtmlReport } from 'axe-html-reporter'
+import fs from 'fs'
 
 type AxeFixture = {
   makeAxeBuilder: () => AxeBuilder
@@ -38,9 +38,9 @@ export const generateReport = (accessibilityScanResults, key) => {
     results: accessibilityScanResults,
     options: {
       projectKey: 'heffdotdev',
-      doNotCreateReportFile: true
+      doNotCreateReportFile: true,
     },
-  });
+  })
 
   // write report to file. test-results is gitignored
   const htmlReportDir = 'test-results/a11y'
@@ -50,12 +50,12 @@ export const generateReport = (accessibilityScanResults, key) => {
   fs.writeFileSync(`${htmlReportDir}/${key}.html`, htmlReport)
 
   // create useful json object
-  const errors = accessibilityScanResults.violations.map(v => {
+  const errors = accessibilityScanResults.violations.map((v) => {
     return {
       issue: v.id,
       count: v.nodes.length,
       description: v.description,
-      errors: v.nodes.map(n => {
+      errors: v.nodes.map((n) => {
         return {
           html: n.html,
           impact: n.impact,
@@ -68,14 +68,18 @@ export const generateReport = (accessibilityScanResults, key) => {
 
   return {
     htmlReport,
-    errors
+    errors,
   }
 }
 
 // gives sveltekit a chance to hydrate before playwright starts testing
-export const goto = async (page: Page, url: string, opts?: { waitForStarted?: boolean }) => {
-    await page.goto(url);
-    if (opts?.waitForStarted !== false) {
-      await page.waitForSelector("body.started", { timeout: 5000 });
-    }
-  };
+export const goto = async (
+  page: Page,
+  url: string,
+  opts?: { waitForStarted?: boolean }
+) => {
+  await page.goto(url)
+  if (opts?.waitForStarted !== false) {
+    await page.waitForSelector('body.started', { timeout: 5000 })
+  }
+}

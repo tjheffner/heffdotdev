@@ -62,5 +62,5 @@ export default defineConfig({
       use: { ...devices['iPhone 12'] },
     },
     // my computer is too old to test webkit via playwright, save it for ci
-  ].filter(p => process.env.CI ? p : p.name === 'chromium'),
+  ].filter((p) => (process.env.CI ? p : p.name === 'chromium')),
 })

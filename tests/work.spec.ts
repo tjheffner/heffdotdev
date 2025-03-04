@@ -1,4 +1,4 @@
-import { test, expect, generateReport, goto } from './utils';
+import { test, expect, generateReport, goto } from './utils'
 
 test.skip('Work page renders without a11y errors', async ({
   page,

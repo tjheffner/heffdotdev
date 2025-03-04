@@ -12,7 +12,7 @@ module.exports = {
         alternate: 'var(--brand-alternate)',
         secondary: 'var(--brand-secondary)',
         copy: 'var(--brand-text)',
-        background: 'var(--brand-background)'
+        background: 'var(--brand-background)',
       },
       gridTemplateColumns: {
         currently: '50px 1fr',
