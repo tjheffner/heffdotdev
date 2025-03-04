@@ -3,19 +3,16 @@
 
 @layer components {
   body {
-    --brand-accent: theme('colors.sky.600');
-    --brand-alternate: theme('colors.orange.300');
-    --brand-secondary: theme('colors.red.600');
+    --brand-accent: theme('colors.blue.300');
+    --brand-alternate: theme('colors.lime.700');
+    --brand-secondary: theme('colors.yellow.400');
+    --brand-text: theme('colors.gray.400');
+    --brand-background: theme('colors.slate.900');
 
     /* https://ishadeed.com/article/defensive-css */
     overflow-wrap: break-word;
     overflow-y: auto;
     scrollbar-gutter: stable;
-  }
-  .dark body {
-    --brand-accent: theme('colors.blue.300');
-    --brand-alternate: theme('colors.lime.700');
-    --brand-secondary: theme('colors.yellow.400');
   }
   :root {
     accent-color: var(--brand-accent);
@@ -24,11 +21,8 @@
     outline-color: var(--brand-accent);
   }
   ::selection {
-    color: theme('colors.sky.200');
-    background-color: var(--brand-accent);
-  }
-  .dark ::selection {
     color: theme('colors.slate.900');
+    background-color: var(--brand-accent);
   }
   ::marker {
     color: var(--brand-accent);
@@ -70,20 +64,7 @@
   }
 
   hr {
-    @apply w-full border-t-2 border-sky-600 dark:border-blue-300;
-  }
-
-  /* header styles, works best larger font sizes */
-  .text-shadow {
-    @apply text-red-600;
-    text-shadow: 2px 3px 1px theme('colors.sky.600');
-  }
-  .dark .text-shadow {
-    @apply text-yellow-400;
-    text-shadow: 2px 3px 1px theme('colors.yellow.700');
-  }
-  .text-unshadow {
-    text-shadow: none !important;
+    @apply w-full border-t-2 border-blue-300;
   }
 
   /* Links that highlight from bottom */
@@ -91,8 +72,8 @@
   .footer-link,
   .header-link,
   .prose a {
-    @apply from-red-600 to-red-600 dark:from-yellow-400 dark:to-yellow-400;
-    @apply text-secondary hover:text-sky-200 dark:hover:text-slate-900;
+    @apply from-yellow-400 to-yellow-400;
+    @apply text-secondary hover:text-slate-900;
     @apply box-decoration-clone;
 
     cursor: pointer;
@@ -118,24 +99,21 @@
     background: unset;
     color: currentColor;
   }
-}
 
 /* filters on /blog page */
 .filter {
-  @apply m-1 inline-block whitespace-nowrap rounded rounded-md px-4 py-2;
-  @apply border-accent bg-gray-200 text-gray-900 font-bold;
-  @apply dark:border-slate-600 dark:bg-gray-800 dark:text-gray-100;
+  @apply m-1 inline-block whitespace-nowrap rounded rounded-md px-4 py-2 font-bold;
+  @apply border-slate-600 bg-gray-800 text-gray-100;
   @apply ring-accent transition-all duration-200 ease-in-out hover:ring-2;
 }
 .activefilter {
-  @apply border-secondary bg-accent text-orange-100;
-  @apply dark:border-slate-600 dark:bg-secondary dark:text-slate-900;
-  @apply ring-accent dark:ring-secondary;
+  @apply border-slate-600 bg-secondary text-slate-900;
+  @apply ring-secondary;
 }
 
 /* Cleanup styles for markdown headers */
 .prose h1 a {
-  @apply bg-unset text-lime-800 hover:text-lime-800 dark:text-yellow-400 dark:hover:text-yellow-400;
+  @apply bg-unset text-yellow-400 hover:text-yellow-400;
 }
 .prose h2,
 .prose h3,
@@ -189,6 +167,8 @@
 }
 .emoji:hover {
   transform: scale(2);
+}
+
 }
 
 @tailwind utilities;

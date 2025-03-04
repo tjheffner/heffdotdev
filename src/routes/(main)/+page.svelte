@@ -33,7 +33,7 @@
 
 <section>
   <Slice>
-    <h1 class="text-shadow mb-3 text-3xl font-bold tracking-tight md:text-5xl">
+    <h1 class="text-secondary mb-3 text-3xl font-bold tracking-tight md:text-5xl">
       Creative technologist passionate about design systems, responsive web
       design and accessibility.
     </h1>

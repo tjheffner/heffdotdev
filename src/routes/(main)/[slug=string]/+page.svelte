@@ -55,23 +55,23 @@
   use:toc={{ store: tocStore, anchor: false, observe: true, selector: ':where(h1, h2, h3)' }}
   class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8"
 >
-  <h1 class="text-shadow mb-8 text-3xl font-bold tracking-tight md:text-6xl">
+  <h1 class="text-secondary mb-8 text-3xl font-bold tracking-tight md:text-6xl">
     {json.title}
   </h1>
   <div
     class="bg mt-2 flex w-full justify-between sm:flex-col sm:items-start md:flex-row md:items-center"
   >
-    <p class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+    <p class="flex items-center text-sm text-copy">
       tjheffner
     </p>
-    <p class="flex items-center text-sm text-gray-600 md:mt-0 dark:text-gray-400">
+    <p class="flex items-center text-sm text-copy">
       {new Date(json.date).toISOString().slice(0, 10)}
     </p>
   </div>
 
-  <hr class="mt-2 w-full border-t-2 border-red-600 dark:border-blue-300" />
+  <hr class="mt-2 w-full border-t-2 border-accent" />
 
-  <div class="prose mb-12 mt-12 w-full max-w-none dark:prose-invert">
+  <div class="prose mb-12 mt-12 w-full max-w-none prose-invert">
     {@html json.content}
   </div>
 </article>
@@ -79,7 +79,7 @@
 <div
   class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8"
 >
-  <hr class="mt-2 w-full border-t-2 border-red-600 dark:border-blue-300" />
+  <hr class="mt-2 w-full border-t-2 border-accent" />
 
   <div class="mb-8 w-full">
     <Comments issueNumber={json.issueNumber} />

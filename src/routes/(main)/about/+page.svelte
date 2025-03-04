@@ -40,7 +40,7 @@
 
 <section class="mx-auto flex w-full flex-col items-start px-4 sm:p-0">
   <Slice full={true}>
-    <h1 class="text-shadow text-3xl font-bold lg:text-5xl">
+    <h1 class="text-secondary text-3xl font-bold lg:text-5xl">
       welcome to my page
     </h1>
     <EmojiWall />

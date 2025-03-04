@@ -9,7 +9,7 @@
          ease-in-out hover:ring-2
          bg-transparent
          text-secondary
-         ring-red-600 dark:ring-yellow-400"
+         ring-yellow-400"
   {href}
   aria-label={label}
 >

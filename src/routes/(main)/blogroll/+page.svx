@@ -6,13 +6,14 @@
 	<meta name="twitter:image" content={`https://heffner.dev/og?message=blogroll`} />
 </svelte:head>
 
-<h1 class="mb-3 text-3xl font-bold tracking-tight text-shadow md:text-5xl">
+<h1 class="mb-3 text-3xl font-bold tracking-tight text-secondary md:text-5xl">
   blogroll
 </h1>
-<p class="text-xl font-semibold text-accent">
-  other cool blogs I enjoy reading
-</p>
 <hr class="mb-8 not-prose">
+
+<p class="text-xl font-semibold text-accent">
+  other cool blogs I enjoy:
+</p>
 
 - [nug doug](https://darkdell.net)
 - [mike crittenden](https://critter.blog)

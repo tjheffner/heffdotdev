@@ -20,7 +20,7 @@
 
 <section class="mx-auto flex w-full flex-col items-start px-4 sm:p-0">
   <Slice>
-    <h1 class="mb-6 text-3xl font-bold tracking-tight text-shadow md:text-5xl">
+    <h1 class="mb-6 text-3xl font-bold tracking-tight text-secondary md:text-5xl">
       Gallery
     </h1>
     <p class="text-xl font-semibold text-accent">

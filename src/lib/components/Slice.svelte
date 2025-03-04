@@ -15,7 +15,7 @@
   let sliceClasses = "slice mb-6 grid w-full grid-cols-4 gap-4 py-8 md:mb-8 md:gap-8 md:py-12 lg:gap-12 xl:gap-16"
   let slotWrapperClasses = 'w-full md:w-2/3 md:ml-4 lg:ml-12'
   if (title && prose) {
-    slotWrapperClasses = 'prose prose-lg prose-slate dark:prose-invert'
+    slotWrapperClasses = 'prose prose-lg prose-slate prose-invert'
   }
   if (title && !prose) {
     slotWrapperClasses = 'not-prose'
@@ -30,12 +30,12 @@
 <div class={sliceClasses}>
   {#if title}
     <div class="col-span-4 md:col-span-1">
-      <h2 class="sticky top-4 mb-2 text-xl font-bold text-black md:ml-4 md:text-2xl lg:ml-12 dark:text-blue-300">
+      <h2 class="sticky top-4 mb-2 text-xl font-bold text-blue-300 md:ml-4 md:text-2xl lg:ml-12">
         <svelte:element this={tag} href={titleLink ? `#${title}` : null} class="slice-title">
           {title}{#if warn}<a href="#warning" class="text-secondary">*</a>{/if}
         </svelte:element>
         {#if date}
-        <span class="text-unshadow text-base text-slate-500 dark:text-gray-600">
+        <span class="text-unshadow text-base text-gray-600">
         ({date.slice(0, 4)})
         </span>
         {/if}

@@ -12,7 +12,7 @@
         {item.title}
       </h2>
 
-      <p class="mb-2 text-slate-800 dark:text-gray-400">
+      <p class="mb-2 text-copy">
         <slot />
       </p>
     </div>
@@ -20,7 +20,7 @@
     <div
       class="col-span-4 row-start-1 md:col-span-1 md:col-start-4 md:row-start-1 md:row-span-2 md:justify-self-end w-full text-right"
     >
-      <p class="font-semibold text-slate-800 dark:text-gray-400 mb-1">{new Date(item.date).toISOString().slice(0, 10)}</p>
+      <p class="font-semibold text-copy mb-1">{new Date(item.date).toISOString().slice(0, 10)}</p>
 
       {#if item.category}
         <span
@@ -28,7 +28,7 @@
           w-fit rounded-full
           bg-alternate px-2
           py-1 text-xs font-bold
-          text-red-600 text-white md:px-4 dark:text-gray-900
+          md:px-4 text-background
         ">
           {item.category}
         </span>

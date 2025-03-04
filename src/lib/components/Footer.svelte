@@ -2,28 +2,18 @@
   import Icon from '$lib/components/Icon.svelte'
   import NavLink from '$lib/components/NavLink.svelte'
   import { TWITTER_ID, LASTFM_ID, LETTERBOXD_ID, GH_USER } from '$lib/siteConfig'
-
-  let isDark = false
-  if (typeof localStorage !== 'undefined') {
-    if (
-      localStorage.theme === 'dark' ||
-      (!('theme' in localStorage) &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      isDark = true
-    }
-  }
 </script>
 
 <footer
   id="menu"
-  class="max-w-7xl mx-auto flex flex-col justify-center bg-orange-100 px-4 pt-4 pb-56 sm:px-8 dark:bg-slate-900"
+  class="max-w-7xl mx-auto flex flex-col justify-center px-4 pt-4 pb-56 sm:px-8 bg-background"
 >
   <hr class="mb-8" />
   <div
     class="grid grid-cols-4 gap-4 md:mx-4 md:gap-8 lg:mx-12 lg:gap-12 xl:gap-16"
   >
     <div class="col-span-2 md:col-span-2">
+    <NavLink href="/">Home</NavLink>
       <NavLink href="/blog">Posts</NavLink>
       <NavLink href="/gallery">Gallery</NavLink>
       <NavLink href="/about">About</NavLink>
