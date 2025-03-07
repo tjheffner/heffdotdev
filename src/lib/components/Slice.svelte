@@ -6,6 +6,8 @@
   export let warn = false
   export let titleLink = true
 
+  import { slugify } from '$lib/utils'
+
   let tag = 'a'
 
   if (titleLink === false) {
@@ -31,7 +33,7 @@
   {#if title}
     <div class="col-span-4 md:col-span-1">
       <h2 class="sticky top-4 mb-2 text-xl font-bold text-blue-300 md:ml-4 md:text-2xl lg:ml-12">
-        <svelte:element this={tag} href={titleLink ? `#${title}` : null} class="slice-title">
+        <svelte:element this={tag} id={titleLink ? slugify(title) : null} href={titleLink ? `#${slugify(title)}` : null} class="slice-title">
           {title}{#if warn}<a href="#warning" class="text-secondary">*</a>{/if}
         </svelte:element>
         {#if date}

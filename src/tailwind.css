@@ -3,11 +3,11 @@
 
 @layer components {
   body {
-    --brand-accent: theme('colors.blue.300');
-    --brand-alternate: theme('colors.lime.700');
-    --brand-secondary: theme('colors.yellow.400');
-    --brand-text: theme('colors.gray.400');
-    --brand-background: theme('colors.slate.900');
+    --brand-accent: theme('colors.teal.300');
+    --brand-alternate: theme('colors.amber.900');
+    --brand-secondary: theme('colors.yellow.300');
+    --brand-text: theme('colors.stone.200');
+    --brand-background: theme('colors.emerald.950');
 
     /* https://ishadeed.com/article/defensive-css */
     overflow-wrap: break-word;
@@ -21,7 +21,7 @@
     outline-color: var(--brand-accent);
   }
   ::selection {
-    color: theme('colors.slate.900');
+    color: var(--brand-background));
     background-color: var(--brand-accent);
   }
   ::marker {
@@ -64,7 +64,7 @@
   }
 
   hr {
-    @apply w-full border-t-2 border-blue-300;
+    @apply w-full border-t-2 border-accent;
   }
 
   /* Links that highlight from bottom */
@@ -72,8 +72,8 @@
   .footer-link,
   .header-link,
   .prose a {
-    @apply from-yellow-400 to-yellow-400;
-    @apply text-secondary hover:text-slate-900;
+    @apply from-secondary to-secondary;
+    @apply text-accent hover:text-background;
     @apply box-decoration-clone;
 
     cursor: pointer;
