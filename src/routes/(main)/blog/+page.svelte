@@ -70,12 +70,10 @@
       bind:value={$search}
       bind:this={inputEl}
       placeholder="Hit / to search"
-      class="block w-full rounded-md border border-slate-600 bg-gray-800 text-gray-100
-						px-4 py-2 text-gray-900 placeholder:text-zinc-50
-						"
+      class="block w-full rounded-md border border-secondary bg-background px-4 py-2 text-copy placeholder:text-zinc-50"
     />
     <svg
-      class="absolute right-3 top-3 h-5 w-5 text-gray-400"
+      class="absolute right-3 top-3 h-5 w-5 text-secondary"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
@@ -118,7 +116,7 @@
   <!-- Results -->
   {#if list?.length}
     <ul
-      class="w-full divide-y divide-dashed divide-blue-300 md:mx-auto md:w-4/5"
+      class="w-full divide-y divide-dashed divide-secondary md:mx-auto md:w-4/5"
     >
       {#each list as item, i}
         {#if isTruncated && (i+1 < LIST_DISPLAY_LENGTH)}

@@ -103,11 +103,11 @@
   /* filters on /blog page */
   .filter {
     @apply m-1 inline-block whitespace-nowrap rounded rounded-md px-4 py-2 font-bold;
-    @apply border-slate-600 bg-gray-800 text-gray-100;
+    @apply text-copy;
     @apply ring-accent transition-all duration-200 ease-in-out hover:ring-2;
   }
   .activefilter {
-    @apply border-slate-600 bg-secondary text-slate-900;
+    @apply border-accent bg-secondary text-background;
     @apply ring-secondary;
   }
 
