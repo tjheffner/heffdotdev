@@ -61,7 +61,7 @@ ul {
   display: flex;
   flex-direction: column;
   gap: .5em;
-  font-size: .8em
+  /* font-size: .8em */
 }
 
 .contact a {
