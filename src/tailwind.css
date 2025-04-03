@@ -3,11 +3,11 @@
 
 @layer components {
   body {
-    --brand-accent: theme('colors.teal.300');
-    --brand-alternate: theme('colors.amber.900');
-    --brand-secondary: theme('colors.yellow.300');
-    --brand-text: theme('colors.stone.200');
-    --brand-background: theme('colors.emerald.950');
+    --brand-accent: theme('colors.red.900');
+    --brand-alternate: theme('colors.indigo.900');
+    --brand-secondary: theme('colors.blue.700');
+    --brand-text: theme('colors.slate.800');
+    --brand-background: theme('colors.slate.100');
 
     /* https://ishadeed.com/article/defensive-css */
     overflow-wrap: break-word;
@@ -21,7 +21,7 @@
     outline-color: var(--brand-accent);
   }
   ::selection {
-    color: var(--brand-background));
+    color: var(--brand-background);
     background-color: var(--brand-accent);
   }
   ::marker {
