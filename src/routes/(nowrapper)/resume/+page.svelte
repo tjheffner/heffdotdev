@@ -64,7 +64,7 @@
       <h4 id="tech lead">Technical Lead</h4>
       <p>October 2021 — present</p>
       <ul>
-        <li><strong>Architected the modern headless foundation</strong> for <a href="https://va.gov">VA.gov</a>, reducing publishing times for thousands of editors from hours down to sub five minutes.</li>
+        <li><strong>Architected the modern headless foundation</strong> for <a href="https://va.gov">VA.gov</a>, reducing content publishing times for thousands of editors from hours to under five minutes.</li>
         <li>Assisted with <strong>benefits claims processing improvements across the VA stack</strong> as part of the PACT Act. Including but not limited to: <strong>accessibility updates</strong> to custom React form inputs, improving <strong>OCR processing</strong> of PDF claim data in Python, and <strong>adding new features in React and Ruby</strong> for Accredited Representatives helping Veterans with the claims process.</li>
         <li>Quick <strong>prototyping of technical solutions</strong> leading to SWIFT and SPRUCE contract vehicle wins, <strong>receiving highest technical marks</strong> from government evaluators.</li>
       </ul>

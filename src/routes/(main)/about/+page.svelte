@@ -3,7 +3,6 @@
   import Card from '$lib/components/Card.svelte'
   import EmojiWall from '$lib/components/EmojiWall.svelte'
   import Currently from '$lib/components/Currently.svelte'
-  // import GetInTouch from '$lib/components/GetInTouch.svelte'
   import {
     SITE_URL,
     SITE_TITLE,
@@ -40,48 +39,50 @@
 
 <section class="mx-auto flex w-full flex-col items-start px-4 sm:p-0">
   <Slice full={true}>
-    <h1 class="text-secondary text-3xl font-bold lg:text-5xl">
-      welcome to my page
+    <h1 class="text-secondary text-3xl font-bold lg:text-5xl mb-4">
+      information desk
     </h1>
-    <EmojiWall />
-  </Slice>
 
-  <Slice title="Hello world!">
-    <p>This site is perpetually under construction but coming along. 😎</p>
+    <div class="prose">
+      <h2>about the site</h2>
+      <p>this site is the online home of <strong>tanner heffner</strong>.</p>
+      <p>perpetually under construction but coming together 🏄‍♂️</p>
 
-    ## the site
-    this site is the online home of tanner heffner. it's part [blog](/blog), [portfolio](/work), [photo gallery](/gallery),  [playground](/christmas), [resume](/resume), and all [digital garden](https://joelhooks.com/digital-garden), using [swyxkit](https://swyxkit.netlify.app/about) as my starting point. [this post](/heffdotdev-technical-details) explains more about the tools i chose and why.
+      <p>partly <a href="/blog">blog</a>, <a href="/gallery">photo gallery</a>, <a href="/christmas">playground</a>, and <a href="/resume">resume</a>, it's all my own personal <a href="https://joelhooks.com/digital-garden">digital garden</a>, using <a href="https://swyxkit.netlify.app/about">swyxkit</a> as my starting point.</p>
 
-    you'll find technical snippets & longer blogs, cooking recipes, old projects both professional and personal, and potentially much more. we're just getting started watering this garden :)
+      <p>this site is <a href="https://github.com/tjheffner/heffdotdev">public on github</a> and hosted via <a href="https://www.netlify.com/">netlify</a>.</p>
+      <p><a href="/heffdotdev-technical-details">this post</a> explains more about the tools i chose and why.</p>
 
-    ## me
-    i do a lot of different stuff. when i'm not staring at screens for work and fun,
-    i like to get outside in the pnw.
 
-    i'm interested in cooking, DIY, sustainability,
-    gardening, disc golf, and a whole lot more.
-  </Slice>
+      <h2>about me</h2>
+      <p>i am based out of <strong>portland, oregon</strong>. in my free time i like to play disc golf, ride my bike, garden, cook, hit the gym, and make art. i generally find a way to get outside, weather permitting. i have been a software engineer for over a decade and i still love the feeling of a fresh <strong>hello world!</strong></p>
+      <p>you can find my professional resume <a href="/resume">over here</a>.</p>
 
-  <Slice title="Favorite recipes">
-    <p>In no particular order, these are recipes I get a lot of mileage out of...</p>
-    <div class="grid w-full grid-cols-1 gap-4 align-middle md:grid-cols-3">
-      <Card title="Creme Brulee" href={'/creme-brulee'} />
-      <Card title="Caper Butter" href={'/dill-caper-compound-butter'} />
-      <Card title="Preserved Lemons" href={'/preserved-lemons'} />
-      <Card title="Pizza Dough" href={'/pizza-dough'} />
-      <Card title="Chicken & Beans" href={'/southwest-chicken-bean-stew'} />
-      <Card title="Shrimp and Rice" href={'/shrimp-and-rice'} />
+
+      <h2>other cool pages i enjoy visiting</h2>
+      <ul>
+        <li><a href="https://darkdell.net">nug doug</a></li>
+        <li><a href="https://critter.blog">mike crittenden</a></li>
+        <li><a href="https://defector.com">defector</a></li>
+        <li><a href="https://www.brightsideofthesun.com/">bright side of the sun</a></li>
+        <li><a href="https://www.fujichia.com/">fujichia</a></li>
+        <li><a href="https://www.swyx.io/">shawn wang</a></li>
+        <li><a href="https://css-tricks.com/">css-tricks</a></li>
+        <li><a href="https://www.randibolt.com/">randi bolt</a></li>
+      </ul>
+
+      <p><strong>thank you</strong> for stopping by!</p>
     </div>
   </Slice>
-
-  <Slice title="Currently">
-    <Currently recentlyListened={recentlyListened}
-               recentlyWatched={recentlyWatched}
-               recentlyPlayed={recentlyPlayed}
-               duolingo={duolingo}
-    />
-  </Slice>
-
-  <!-- <GetInTouch /> -->
-
 </section>
+
+<style>
+  ul {
+    list-style: none;
+  }
+  li:before {
+    content: '\1F525';
+    margin-left: -20px;
+    margin-right: 10px;
+  }
+</style>
