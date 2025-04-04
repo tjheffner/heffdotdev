@@ -17,7 +17,7 @@
   let sliceClasses = "slice mb-6 grid w-full grid-cols-4 gap-4 py-8 md:mb-8 md:gap-8 md:py-12 lg:gap-12 xl:gap-16"
   let slotWrapperClasses = 'w-full md:w-2/3 md:ml-4 lg:ml-12'
   if (title && prose) {
-    slotWrapperClasses = 'prose prose-lg prose-slate prose-invert'
+    slotWrapperClasses = 'prose prose-lg prose-slate'
   }
   if (title && !prose) {
     slotWrapperClasses = 'not-prose'

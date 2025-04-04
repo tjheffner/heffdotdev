@@ -17,7 +17,7 @@
 </div> -->
 
 
-<div class="mb-8 text-white " bind:this={commentsEl} use:utterances={{number: issueNumber}}>
+<div class="mb-8 text-black " bind:this={commentsEl} use:utterances={{number: issueNumber}}>
   Loading comments...
   <!-- svelte-ignore a11y-mouse-events-have-key-events -->
   <button class="my-4 bg-blue-200 hover:bg-blue-100 text-black p-2 rounded-lg"

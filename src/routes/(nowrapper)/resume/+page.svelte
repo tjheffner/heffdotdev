@@ -20,10 +20,10 @@
     <h2>Contact</h2>
     <ul class="contact">
       <li>
-        <a data-i="t" href="tel:7023380110">(702) 338-0110</a>
+        <a data-i="e" href="mailto:tannerjheffner@gmail.com">tannerjheffner@gmail.com</a>
       </li>
       <li>
-        <a data-i="e" href="mailto:tannerjheffner@gmail.com">tannerjheffner@gmail.com</a>
+        <a data-i="t" href="tel:7023380110">(702) 338-0110</a>
       </li>
       <li>
         <a data-i="w" href="https://heffner.dev">https://heffner.dev</a>
@@ -61,7 +61,7 @@
     <div class="list">
       <h2 id="experience">Experience</h2>
       <h3 id="Agile Six">Agile Six</h3>
-      <h4 id="tech lead">Technical Lead, Senior Developer</h4>
+      <h4 id="tech lead">Technical Lead</h4>
       <p>October 2021 — present</p>
       <ul>
         <li><strong>Architected the modern headless foundation</strong> for <a href="https://va.gov">VA.gov</a>, reducing publishing times for thousands of editors from hours down to sub five minutes.</li>
@@ -70,7 +70,7 @@
       </ul>
 
       <h3 id="Coforma">Coforma</h3>
-      <h4 id="senior dev 2">Senior Developer, Tech Lead</h4>
+      <h4 id="senior dev 2">Senior Software Engineer</h4>
       <p>January 2023 — June 2023</p>
       <ul>
         <li>For the No Surprises Act, <strong>architected the <a href="https://www.cms.gov/medical-bill-rights">Medical Bill Rights</a> sub-site</strong> for CMS.gov with localized content in English and Spanish.</li>
@@ -109,7 +109,9 @@
       <p><a href="https://www.cms.gov/medical-bill-rights">cms.gov/medical-bill-rights</a></p>
 
       <h3 id="greenhouse">Greenhouse</h3>
-      <p>A bespoke marketing website for a leading hiring solutions company. Using Craft CMS, Twig and vanilla JavaScript, I wrote most of the responsive components, the A/B testing harness, as well as the accessibility handling sitewide for things like keyboard and focus handling, lazy loading images, etc.</p>
+      <p>A bespoke marketing website for a leading hiring solutions company, using Craft CMS, Twig and vanilla JavaScript. As a freelance front-end developer I joined a small team at Instrument and built Greenhouse's marketing website from the ground up. Collaborating closely with designers, we worked to design an accessible, responsive component library with a wide range of flexibility.
+
+      Almost every component can be reversed, and every single page or component slot can be A/B tested, all controlled through the CMS itself, giving Greenhouse's marketing team full control to test optimal user flows to their heart's desire.</p>
       <p><a href="https://greenhouse.com">greenhouse.com</a></p>
      </div>
    </main>

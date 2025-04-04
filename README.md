@@ -36,3 +36,4 @@ Accessibility test reports can be found in `test-results/a11y`. View the files i
 - Slice component design inspired by Rene Stalder: https://renestalder.me/en/
 - Geoff Rich for dynamic og images https://geoffrich.net/posts/svelte-social-image/
 - Patrick Bacon for sveltekit hydration helper for playwright tests https://spin.atomicobject.com/hydration-sveltekit-tests/
+- Donnie D'amato for the resume design: https://resume.damato.design/donnie/

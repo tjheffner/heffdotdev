@@ -71,7 +71,7 @@
 
   <hr class="mt-2 w-full border-t-2 border-accent" />
 
-  <div class="prose mb-12 mt-12 w-full max-w-none prose-invert">
+  <div class="prose mb-12 mt-12 w-full max-w-none">
     {@html json.content}
   </div>
 </article>

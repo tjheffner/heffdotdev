@@ -24,8 +24,12 @@ a {
 h1 {
   font-family: "Domine;", serif;
   font-weight: 700;
-  font-size: 3em;
+  font-size: 2.5em;
   margin-block:0
+
+  @media screen and (min-width: 680px) {
+    font-size: 3em;
+  }
 }
 
 h2 {

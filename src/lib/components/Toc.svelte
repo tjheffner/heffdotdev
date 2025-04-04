@@ -47,7 +47,7 @@
 
 <style>
   .toc-list {
-    @apply text-secondary py-5 px-8 -mt-10 space-y-1 overflow-auto transition-all duration-500;
+    @apply text-secondary pb-5 px-8 -mt-5 space-y-1 overflow-auto transition-all duration-500;
 		@apply bg-background;
   }
   .toc-active {

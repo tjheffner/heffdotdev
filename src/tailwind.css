@@ -3,9 +3,9 @@
 
 @layer components {
   body {
-    --brand-accent: theme('colors.red.900');
-    --brand-alternate: theme('colors.indigo.900');
-    --brand-secondary: theme('colors.blue.700');
+    --brand-accent: #d81d4e;
+    --brand-alternate: #4ed81d;
+    --brand-secondary: #1d4ed8;
     --brand-text: theme('colors.slate.800');
     --brand-background: theme('colors.slate.100');
 

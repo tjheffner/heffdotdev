@@ -5,22 +5,12 @@
 </script>
 
 <footer
-  id="menu"
-  class="max-w-7xl mx-auto flex flex-col justify-center px-4 pt-4 pb-56 sm:px-8 bg-background"
+  class="max-w-7xl mx-auto flex flex-col justify-center py-12 sm:px-8 bg-background"
 >
-  <hr class="mb-8" />
   <div
     class="grid grid-cols-4 gap-4 md:mx-4 md:gap-8 lg:mx-12 lg:gap-12 xl:gap-16"
   >
-    <div class="col-span-2 md:col-span-2">
-      <NavLink href="/">Home</NavLink>
-      <NavLink href="/blog">Posts</NavLink>
-      <NavLink href="/gallery">Gallery</NavLink>
-      <NavLink href="/about">About</NavLink>
-      <NavLink href="/blogroll">Blogroll</NavLink>
-    </div>
-
-    <div class="col-span-2 text-right md:col-start-4">
+    <div class="col-span-4 md:text-right md:col-start-4">
       <Icon href={`/rss.xml`} label="RSS">
         <svg viewBox="0 0 256 256" class="h-12 w-12 p-1" fill="currentColor">
           <circle cx="68" cy="189" r="24"/>

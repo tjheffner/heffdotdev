@@ -70,7 +70,7 @@
       bind:value={$search}
       bind:this={inputEl}
       placeholder="Hit / to search"
-      class="block w-full rounded-md border border-secondary bg-background px-4 py-2 text-copy placeholder:text-zinc-50"
+      class="block w-full rounded-md border border-secondary bg-background px-4 py-2 text-copy placeholder:text-accent"
     />
     <svg
       class="absolute right-3 top-3 h-5 w-5 text-secondary"
@@ -145,7 +145,7 @@
       </div>
     {/if}
   {:else if $search && $selectedCategories.length === 0}
-    <div class="prose prose-invert">
+    <div class="prose">
       No posts found for
       <code>{$search}</code>.
     </div>
@@ -156,7 +156,7 @@
       Clear your search
     </button>
   {:else}
-    <div class="prose prose-invert">No posts found with this combination of filters. Search something else!</div>
+    <div class="prose">No posts found with this combination of filters. Search something else!</div>
     <button
       on:click={clearFilters}
       class="filter my-4"
