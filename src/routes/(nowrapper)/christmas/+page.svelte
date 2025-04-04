@@ -134,9 +134,9 @@
 </div>
 
 <section class="serif h-full pt-[10rem] text-center text-white">
-  <h1 class="text-shadow mb-10 text-6xl">{data.title}</h1>
-  <p>at</p>
-  <p class="text-shadow mb-12 mt-6 text-3xl">
+  <h1 class="text-yellow-400 mb-10 text-6xl">{data.title}</h1>
+  <p class="text-yellow-400">at</p>
+  <p class="text-yellow-400 mb-12 mt-6 text-3xl">
     {data.where} | <span class="sans">{data.when}</span>
   </p>
   <p>

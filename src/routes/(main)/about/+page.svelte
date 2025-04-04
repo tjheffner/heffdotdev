@@ -46,17 +46,18 @@
     <div class="prose">
       <h2>about the site</h2>
       <p>this site is the online home of <strong>tanner heffner</strong>.</p>
-      <p>perpetually under construction but coming together 🏄‍♂️</p>
+      <p>it's perpetually under construction but coming together 🏄‍♂️</p>
 
-      <p>partly <a href="/blog">blog</a>, <a href="/gallery">photo gallery</a>, <a href="/christmas">playground</a>, and <a href="/resume">resume</a>, it's all my own personal <a href="https://joelhooks.com/digital-garden">digital garden</a>, using <a href="https://swyxkit.netlify.app/about">swyxkit</a> as my starting point.</p>
+      <p>partly a <a href="/blog">blog</a> ,a <a href="/gallery">photo gallery</a>, a <a href="/christmas">playground</a>, and the home of my <a href="/resume" target="_blank">resume</a>, this site is my own personal <a href="https://joelhooks.com/digital-garden" target="_blank">digital garden</a>, using
+      <a href="https://swyxkit.netlify.app/about" target="_blank">swyxkit</a> as my starting point.</p>
 
       <p>this site is <a href="https://github.com/tjheffner/heffdotdev">public on github</a> and hosted via <a href="https://www.netlify.com/">netlify</a>.</p>
       <p><a href="/heffdotdev-technical-details">this post</a> explains more about the tools i chose and why.</p>
 
 
       <h2>about me</h2>
-      <p>i am based out of <strong>portland, oregon</strong>. in my free time i like to play disc golf, ride my bike, garden, cook, hit the gym, and make art. i generally find a way to get outside, weather permitting. i have been a software engineer for over a decade and i still love the feeling of a fresh <strong>hello world!</strong></p>
-      <p>you can find my professional resume <a href="/resume">over here</a>.</p>
+      <p>i am based out of <strong>portland, oregon</strong>. in my free time i like to play disc golf, ride my bike, garden, cook, hit the gym, and make art. i generally find a way to get outside, weather permitting. i have been a software engineer for over a decade and i still love the feeling when i launch a fresh <strong>hello world!</strong></p>
+      <p>you can find my professional resume <a href="/resume" target="_blank">over here</a>.</p>
 
 
       <h2>other cool pages i enjoy visiting</h2>
