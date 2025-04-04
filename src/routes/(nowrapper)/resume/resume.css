@@ -68,10 +68,15 @@ ul {
   font-size: 1.1em;
 }
 .contact a:before {
-  content: attr(data-i) ":";
-  display: inline-block;
-  width: 2ch;
-  margin-inline-end:1ch
+  content: attr(data-i);
+  display: inline-flex;
+  width: 2.5ch;
+  margin-right: 1ch;
+  background-color: black;
+  border-radius: 50px;
+  color: white;
+  font-weight: 600;
+  justify-content: center;
 }
 
 ul.tags {
