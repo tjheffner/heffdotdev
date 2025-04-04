@@ -48,7 +48,7 @@
 <style>
   .toc-list {
     @apply text-secondary py-5 px-8 -mt-10 space-y-1 overflow-auto transition-all duration-500;
-    @apply bg-slate-900;
+		@apply bg-background;
   }
   .toc-active {
     @apply text-accent font-bold border-s-2 border-current;
