@@ -6,6 +6,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <title>Tanner Heffner's Resume</title>
 </head>
 
 <body>
@@ -73,7 +74,7 @@
       <h4 id="senior dev 2">Senior Software Engineer</h4>
       <p>January 2023 — June 2023</p>
       <ul>
-        <li>For the No Surprises Act, <strong>architected the <a href="https://www.cms.gov/medical-bill-rights">Medical Bill Rights</a> sub-site</strong> for CMS.gov with localized content in English and Spanish.</li>
+        <li><strong>Architected the <a href="https://www.cms.gov/medical-bill-rights">Medical Bill Rights</a> portal</strong> for CMS.gov with localized content in English and Spanish in support of the No Surprises Act.</li>
         <li><strong>Led front-end implementation</strong>, providing direction to junior team members and actively building out the React form architecture including <strong>localization, field and schema validations, plus Salesforce and Drupal integration.</strong>.</li>
       </ul>
 
@@ -92,14 +93,14 @@
       <h4 id="intern to senior">Senior Developer</h4>
       <p>June 2015 — August 2019</p>
       <ul>
-        <li><strong>Co-maintained the agency front-end tooling</strong>, enabling the rapid stand-up of new sites with atomic design principles & consistent processes.</li>
+        <li><strong>Co-maintained our agency's front-end toolkit</strong>, enabling the rapid stand-up of new sites with atomic design principles & consistent processes.</li>
         <li>Helped <strong>multiple enterprise organizations</strong> migrate from Drupal 7 to Drupal 8 efficiently.</li>
         <li><strong>Won a Webby award</strong> as part of the team shipping the revamped <a href="https://arsenal.com">Arsenal.com</a>.</li>
       </ul>
 
       <h2 id="recent-projects">Recent Projects</h2>
       <h3 id="va.gov">VA.gov</h3>
-      <p>Architected a Next.js build system for an existing headless Drupal installation to improve publishing times for VA Editors. With >55,000 pieces of content, growing daily, timely publishing is key. The legacy system's build times took a minimum of 45 minutes, sometimes closer to two hours! This new approach enables rapid publishing of content in under five minutes. It also provides editors the capability to preview their content exactly as it appears before publishing, a major pain point of the prior process.</p>
+      <p>Architected a Next.js build system for an existing headless Drupal installation to improve publishing times for VA Editors. With >55,000 pieces of content, growing daily, timely publishing is key. The legacy system's build times took a minimum of 45 minutes, sometimes closer to two hours! This new approach enables rapid publishing of content in under five minutes. It also provides editors the capability to preview their content exactly as it would appear on VA.gov <em>before publishing</em>, a major pain point of the prior process.</p>
       <p>
         <a href="https://va.gov">VA.gov</a>
       </p>

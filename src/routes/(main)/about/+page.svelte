@@ -48,7 +48,9 @@
       <p>this site is the online home of <strong>tanner heffner</strong>.</p>
       <p>it's perpetually under construction but coming together 🏄‍♂️</p>
 
-      <p>partly a <a href="/blog">blog</a> ,a <a href="/gallery">photo gallery</a>, a <a href="/christmas">playground</a>, and the home of my <a href="/resume" target="_blank">resume</a>, this site is my own personal <a href="https://joelhooks.com/digital-garden" target="_blank">digital garden</a>, using
+      <p>partly a <a href="/blog">blog,</a> a <a href="/gallery">photo gallery,</a> a <a href="/christmas">web playground,</a> and the home of my <a href="/resume" target="_blank">resume</a></p>
+
+      <p>this site is my own personal <a href="https://joelhooks.com/digital-garden" target="_blank">digital garden</a>, using
       <a href="https://swyxkit.netlify.app/about" target="_blank">swyxkit</a> as my starting point.</p>
 
       <p>this site is <a href="https://github.com/tjheffner/heffdotdev">public on github</a> and hosted via <a href="https://www.netlify.com/">netlify</a>.</p>
