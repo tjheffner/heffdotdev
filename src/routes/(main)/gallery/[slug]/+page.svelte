@@ -72,7 +72,7 @@
     </div>
   {/if}
 
-  <div class="prose mb-12 w-full max-w-none prose-invert">
+  <div class="prose mb-12 w-full max-w-none">
     {@html json.content}
   </div>
 </article>
