@@ -1,8 +1,14 @@
-<script>
-  export let href = '#'
+<script lang="ts">
 
-  // gimme full item
-  export let item
+  
+  interface Props {
+    href?: string;
+    // gimme full item
+    item: any;
+    children?: import('svelte').Snippet;
+  }
+
+  let { href = '#', item, children }: Props = $props();
 </script>
 
 <a data-sveltekit-prefetch class="post w-full" href={'/' + href}>
@@ -13,7 +19,7 @@
       </h2>
 
       <p class="mb-2 text-copy">
-        <slot />
+        {@render children?.()}
       </p>
     </div>
 

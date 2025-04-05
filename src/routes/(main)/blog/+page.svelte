@@ -1,10 +1,12 @@
-<script>
+<script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { queryParam, ssp } from 'sveltekit-search-params'
   import PostItem from '$lib/components/PostItem.svelte'
   import { POST_CATEGORIES } from '$lib/siteConfig'
   import { fuzzySearch } from './fuzzySearch'
 
-  export let data
+  let { data } = $props();
   let { items } = data
 
   // https://github.com/paoloricciuti/sveltekit-search-params#how-to-use-it
@@ -21,7 +23,7 @@
     debounceHistory: 500
   });
 
-  let inputEl;
+  let inputEl = $state();
 
   function focusSearch(e) {
     if (e.key === '/' && inputEl) inputEl.select();
@@ -33,12 +35,14 @@
   }
 
   let LIST_DISPLAY_LENGTH = 10
-  let isTruncated = items?.length > LIST_DISPLAY_LENGTH;
+  let isTruncated = $state(items?.length > LIST_DISPLAY_LENGTH);
 
-  let list
-  $: fuzzySearch(items, $selectedCategories, $search).then(_items => {
-    list = _items
-  })
+  let list = $state()
+  run(() => {
+    fuzzySearch(items, $selectedCategories, $search).then(_items => {
+      list = _items
+    })
+  });
 </script>
 
 <svelte:head>
@@ -49,7 +53,7 @@
   <meta name="twitter:image" content={`https://heffner.dev/og?message=posts`} />
 </svelte:head>
 
-<svelte:window on:keyup={focusSearch} />
+<svelte:window onkeyup={focusSearch} />
 
 <section
   class="mx-auto mb-16 flex w-full flex-col items-start p-0 sm:px-8 lg:w-2/3"
@@ -137,7 +141,7 @@
     {#if isTruncated && list.length > LIST_DISPLAY_LENGTH}
       <div class="flex justify-center mx-auto">
         <button
-          on:click={() => (isTruncated = false)}
+          onclick={() => (isTruncated = false)}
           class="filter"
         >
           See more posts
@@ -150,7 +154,7 @@
       <code>{$search}</code>.
     </div>
     <button
-      on:click={() => ($search = '')}
+      onclick={() => ($search = '')}
       class="filter my-4"
     >
       Clear your search
@@ -158,7 +162,7 @@
   {:else}
     <div class="prose">No posts found with this combination of filters. Search something else!</div>
     <button
-      on:click={clearFilters}
+      onclick={clearFilters}
       class="filter my-4"
     >
       Clear all filters

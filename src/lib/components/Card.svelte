@@ -1,6 +1,10 @@
-<script>
-  export let title = 'Untitled post'
-  export let href = '#'
+<script lang="ts">
+  interface Props {
+    title?: string;
+    href?: string;
+  }
+
+  let { title = 'Untitled post', href = '#' }: Props = $props();
 </script>
 
 <a data-sveltekit-prefetch {href} class="!bg-unset">

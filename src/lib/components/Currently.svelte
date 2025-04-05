@@ -1,8 +1,10 @@
-<script>
-  export let recentlyListened
-  export let recentlyWatched
-  export let recentlyPlayed
-  export let duolingo
+<script lang="ts">
+  let {
+    recentlyListened,
+    recentlyWatched,
+    recentlyPlayed,
+    duolingo
+  } = $props();
 
   // duolingo math
   const streakStartDate = new Date(duolingo.streakData.currentStreak.startDate);

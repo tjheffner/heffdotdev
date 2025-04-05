@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import '../../tailwind.css'
   import '../../site.css'
   import Header from '$lib/components/Header.svelte'
@@ -15,7 +15,7 @@
     document.body.classList.add("started");
   });
 
-  export let data
+  let { data, children } = $props();
 </script>
 
 <svelte:head>
@@ -36,7 +36,7 @@
       id="maincontent"
       class="mx-auto px-4 sm:px-8"
     >
-      <slot />
+      {@render children?.()}
     </main>
 
   {/key}

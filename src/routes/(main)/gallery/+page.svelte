@@ -1,6 +1,6 @@
-<script>
+<script lang="ts">
   import Slice from '$lib/components/Slice.svelte'
-  export let data
+  let { data } = $props();
   let { items } = data
 </script>
 

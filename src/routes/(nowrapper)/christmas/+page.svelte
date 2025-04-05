@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte'
   import './christmas.css'
-  export let data
+  let { data } = $props();
 
   // https://codepen.io/HektorW/pen/ZBryeV
   onMount(() => {
@@ -126,7 +126,7 @@
   />
 </svelte:head>
 
-<canvas id="snow" />
+<canvas id="snow"></canvas>
 
 <div class="holly-container">
   <img src="/assets/holly-clipart-corner-11.png" alt="" class="holly left" />
@@ -148,7 +148,7 @@
     {#each data.agenda as { event, time }}
       <li class="my-2">
         <p class="text-lg">
-          {event} - <span class="sans">{time}<span /></span>
+          {event} - <span class="sans">{time}<span></span></span>
         </p>
       </li>
     {/each}

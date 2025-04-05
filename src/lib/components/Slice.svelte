@@ -1,21 +1,34 @@
-<script>
-  export let title = false
-  export let date = false
-  export let prose = true
-  export let full = false
-  export let warn = false
-  export let titleLink = true
+<script lang="ts">
 
   import { slugify } from '$lib/utils'
+  interface Props {
+    title?: boolean;
+    date?: boolean;
+    prose?: boolean;
+    full?: boolean;
+    warn?: boolean;
+    titleLink?: boolean;
+    children?: import('svelte').Snippet;
+  }
 
-  let tag = 'a'
+  let {
+    title = false,
+    date = false,
+    prose = true,
+    full = false,
+    warn = false,
+    titleLink = true,
+    children
+  }: Props = $props();
+
+  let tag = $state('a')
 
   if (titleLink === false) {
     tag = 'div'
   }
 
-  let sliceClasses = "slice mb-6 grid w-full grid-cols-4 gap-4 py-8 md:mb-8 md:gap-8 md:py-12 lg:gap-12 xl:gap-16"
-  let slotWrapperClasses = 'w-full md:w-2/3 md:ml-4 lg:ml-12'
+  let sliceClasses = $state("slice mb-6 grid w-full grid-cols-4 gap-4 py-8 md:mb-8 md:gap-8 md:py-12 lg:gap-12 xl:gap-16")
+  let slotWrapperClasses = $state('w-full md:w-2/3 md:ml-4 lg:ml-12')
   if (title && prose) {
     slotWrapperClasses = 'prose prose-lg prose-slate'
   }
@@ -46,7 +59,7 @@
   {/if}
   <div class={title ? 'col-span-4 md:col-span-3 xl:col-span-2' : 'col-span-4'}>
     <p class={slotWrapperClasses}>
-      <slot />
+      {@render children?.()}
     </p>
   </div>
 </div>

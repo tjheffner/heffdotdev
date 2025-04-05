@@ -1,5 +1,9 @@
-<script>
-  export let message = 'Hello, world!'
+<script lang="ts">
+  interface Props {
+    message?: string;
+  }
+
+  let { message = 'Hello, world!' }: Props = $props();
 </script>
 
 <div class="outer">

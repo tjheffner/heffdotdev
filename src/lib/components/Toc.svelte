@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
 	import { onMount } from "svelte";
 
-	export let tocStore;
-	let isOpen = false;
+  let { tocStore } = $props();
+	let isOpen = $state(false);
 	onMount(() => {
 		// set isOpen if window width is mobile checking the media query
 		if (window.matchMedia("(min-width: 640px)").matches) {
@@ -20,7 +20,7 @@
     <button
       class="text-accent font-bold -ml-1 lg:ml-7"
       aria-label="{isOpen ? 'Close' : 'Open'} Table of Contents"
-      on:click={() => (isOpen = !isOpen)}
+      onclick={() => (isOpen = !isOpen)}
     >
       {isOpen ? 'X' : '>'}
     </button>

@@ -1,6 +1,5 @@
-<script>
-  export let href = undefined
-  export let label = undefined
+<script lang="ts">
+  let { href = undefined, label = undefined, children } = $props();
 </script>
 
 <a
@@ -17,5 +16,5 @@
   {href}
   aria-label={label}
 >
-  <slot />
+  {@render children?.()}
 </a>

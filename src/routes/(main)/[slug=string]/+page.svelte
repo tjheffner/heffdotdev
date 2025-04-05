@@ -9,13 +9,19 @@
   // table of contents
   const tocStore = createTocStore();
 
-  /** @type {import('./$types').PageData} */
-  export let data
+  
+  /**
+   * @typedef {Object} Props
+   * @property {import('./$types').PageData} data
+   */
+
+  /** @type {Props} */
+  let { data } = $props();
 
   /** @type {import('$lib/types').ContentItem} */
-  $: json = data.json // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
+  let json = $derived(data.json) // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
 
-  $: canonical = SITE_URL + $page.url.pathname
+  let canonical = $derived(SITE_URL + $page.url.pathname)
 </script>
 
 <svelte:head>

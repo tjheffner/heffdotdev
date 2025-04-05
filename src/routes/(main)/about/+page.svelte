@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Slice from '$lib/components/Slice.svelte'
   import Card from '$lib/components/Card.svelte'
   import EmojiWall from '$lib/components/EmojiWall.svelte'
@@ -11,8 +11,13 @@
     TWITTER_ID,
   } from '$lib/siteConfig'
 
-  // data from +page.server.js, keeps api keys private
-  export let data;
+  
+  interface Props {
+    // data from +page.server.js, keeps api keys private
+    data: any;
+  }
+
+  let { data }: Props = $props();
   const { recentlyListened, recentlyWatched, recentlyPlayed, duolingo } = data;
 </script>
 
