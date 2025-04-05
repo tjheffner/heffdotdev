@@ -67,7 +67,7 @@
       <p>you can find my professional resume <a href="/resume" target="_blank">over here</a>.</p>
 
 
-      <h2>other cool pages i enjoy visiting</h2>
+      <h2>other cool pages i enjoy</h2>
       <ul>
         <li><a href="https://darkdell.net">nug doug</a></li>
         <li><a href="https://critter.blog">mike crittenden</a></li>

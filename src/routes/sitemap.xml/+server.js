@@ -7,7 +7,7 @@ export const prerender = true
 export async function GET({ fetch }) {
   const posts = await listContentFromIssues(fetch, 'Published')
   const galleries = await listContentFromIssues(fetch, 'Gallery')
-  const pages = ['about', 'resume', 'christmas', 'blog']
+  const pages = ['about', 'resume', 'christmas', 'gallery', 'blog']
   const body = sitemap(posts, pages, galleries)
 
   return new Response(body, {
