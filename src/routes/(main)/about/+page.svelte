@@ -44,11 +44,17 @@
 
 <section class="mx-auto flex w-full flex-col items-start px-4 sm:p-0">
   <Slice full={true}>
-    <h1 class="text-secondary text-3xl font-bold lg:text-5xl mb-4">
+    <h1 class="text-secondary text-3xl font-bold lg:text-5xl mb-8">
       information desk
     </h1>
 
     <div class="prose">
+      <h2>about me</h2>
+      <p>i am based out of <strong>portland, oregon</strong>. in my free time i like to play disc golf, ride my bike, garden, cook, hit the gym, and make art. i generally find a way to get outside, weather permitting. i have been a software engineer for over a decade and i still love the feeling when i launch a fresh <strong>hello world!</strong></p>
+      <p>you can find my professional resume <a href="/resume" target="_blank">over here</a>.</p>
+
+
+
       <h2>about the site</h2>
       <p>this site is the online home of <strong>tanner heffner</strong>.</p>
       <p>it's perpetually under construction but coming together 🏄‍♂️</p>
@@ -60,11 +66,6 @@
 
       <p>this site is <a href="https://github.com/tjheffner/heffdotdev">public on github</a> and hosted via <a href="https://www.netlify.com/">netlify</a>.</p>
       <p><a href="/heffdotdev-technical-details">this post</a> explains more about the tools i chose and why.</p>
-
-
-      <h2>about me</h2>
-      <p>i am based out of <strong>portland, oregon</strong>. in my free time i like to play disc golf, ride my bike, garden, cook, hit the gym, and make art. i generally find a way to get outside, weather permitting. i have been a software engineer for over a decade and i still love the feeling when i launch a fresh <strong>hello world!</strong></p>
-      <p>you can find my professional resume <a href="/resume" target="_blank">over here</a>.</p>
 
 
       <h2>other cool pages i enjoy</h2>

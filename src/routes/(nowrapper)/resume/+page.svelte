@@ -66,7 +66,7 @@
     <ul>
       <li><strong>Architected the modern headless foundation</strong> for <a href="https://va.gov">VA.gov</a>, reducing content publishing times for thousands of editors from hours to under five minutes.</li>
       <li>Assisted with <strong>benefits claims processing improvements across the VA stack</strong> as part of the PACT Act. Including but not limited to: <strong>accessibility updates</strong> to custom React form inputs, improving <strong>OCR processing</strong> of PDF claim data in Python, and <strong>adding new features in React and Ruby</strong> for Accredited Representatives helping Veterans with the claims process.</li>
-      <li>Quick <strong>prototyping of technical solutions</strong> leading to SWIFT and SPRUCE contract vehicle wins, <strong>receiving highest technical marks</strong> from government evaluators.</li>
+      <li>Rapid <strong>prototyping of technical solutions</strong> leading to major contract vehicle wins, <strong>receiving highest technical marks</strong> from government evaluators.</li>
     </ul>
 
     <h3 id="Coforma">Coforma</h3>
@@ -97,7 +97,7 @@
       <li><strong>Won a Webby award</strong> as part of the team shipping the revamped <a href="https://arsenal.com">Arsenal.com</a>.</li>
     </ul>
 
-    <h2 id="recent-projects">Recent Projects</h2>
+    <h2 id="recent-projects">Highlighted Projects</h2>
     <h3 id="va.gov">VA.gov</h3>
     <p>Architected a Next.js build system for an existing headless Drupal installation to improve publishing times for VA Editors. With >55,000 pieces of content, growing daily, timely publishing is key. The legacy system's build times took a minimum of 45 minutes, sometimes closer to two hours! This new approach enables rapid publishing of content in under five minutes. It also provides editors the capability to preview their content exactly as it would appear on VA.gov <em>before publishing</em>, a major pain point of the prior process.</p>
     <p>
