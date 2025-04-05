@@ -58,9 +58,9 @@
     </div>
   {/if}
   <div class={title ? 'col-span-4 md:col-span-3 xl:col-span-2' : 'col-span-4'}>
-    <p class={slotWrapperClasses}>
+    <div class={slotWrapperClasses}>
       {@render children?.()}
-    </p>
+    </div>
   </div>
 </div>
 

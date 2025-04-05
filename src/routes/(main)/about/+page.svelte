@@ -11,7 +11,7 @@
     TWITTER_ID,
   } from '$lib/siteConfig'
 
-  
+
   interface Props {
     // data from +page.server.js, keeps api keys private
     data: any;
@@ -53,7 +53,7 @@
       <p>this site is the online home of <strong>tanner heffner</strong>.</p>
       <p>it's perpetually under construction but coming together 🏄‍♂️</p>
 
-      <p>partly a <a href="/blog">blog,</a> a <a href="/gallery">photo gallery,</a> a <a href="/christmas">web playground,</a> and the home of my <a href="/resume" target="_blank">resume</a></p>
+      <p>parts <a href="/blog">blog,</a> <a href="/gallery">photo gallery,</a> web <a href="/christmas"> playground,</a> and <a href="/resume" target="_blank">resume</a></p>
 
       <p>this site is my own personal <a href="https://joelhooks.com/digital-garden" target="_blank">digital garden</a>, using
       <a href="https://swyxkit.netlify.app/about" target="_blank">swyxkit</a> as my starting point.</p>

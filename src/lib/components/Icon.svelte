@@ -8,9 +8,7 @@
          ease-in-out
          bg-transparent
          text-accent
-         ring-secondary
-         hover:ring-2
-         hover:bg-alternate
+         hover:bg-accent
          hover:text-background
          "
   {href}

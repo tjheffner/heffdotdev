@@ -24,9 +24,4 @@
   .card h3::before {
     display: none;
   }
-  .dark .card:hover {
-    h3 {
-      color: black;
-    }
-  }
 </style>
