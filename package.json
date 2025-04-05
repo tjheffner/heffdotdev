@@ -72,6 +72,7 @@
     "@axe-core/playwright": "^4.9.1",
     "@leeoniya/ufuzzy": "^1.0.11",
     "axe-html-reporter": "^2.2.3",
+    "caniuse-lite": "^1.0.30001710",
     "date-fns": "^2.28.0",
     "hast-util-from-selector": "^3.0.0",
     "hast-util-select": "^6.0.2",

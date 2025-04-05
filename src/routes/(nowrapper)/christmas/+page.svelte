@@ -28,7 +28,8 @@
       ctx.clearRect(0, 0, width, height)
       if (snowflakes.length < maxSnowflakes) snowflakes.push(new Snowflake())
 
-      ctx.fillStyle = ctx.strokeStyle = '#fff'
+      ctx.fillStyle = '#fff'
+      ctx.strokeStyle = '#fff'
 
       snowflakes.forEach((snowflake) => snowflake.update(elapsed, now))
     }
