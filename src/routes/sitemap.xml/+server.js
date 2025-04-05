@@ -1,6 +1,5 @@
 import { SITE_URL } from '$lib/siteConfig'
 import { listContentFromIssues } from '$lib/content'
-import { fetchMarkdownPosts } from '$lib/localContent'
 
 export const prerender = true
 
@@ -8,9 +7,8 @@ export const prerender = true
 export async function GET({ fetch }) {
   const posts = await listContentFromIssues(fetch, 'Published')
   const galleries = await listContentFromIssues(fetch, 'Gallery')
-  const projects = await fetchMarkdownPosts()
-  const pages = ['about', 'resume', 'blogroll', 'christmas', 'blog', 'work']
-  const body = sitemap(posts, projects, pages, galleries)
+  const pages = ['about', 'resume', 'christmas', 'gallery', 'blog']
+  const body = sitemap(posts, pages, galleries)
 
   return new Response(body, {
     headers: {
@@ -22,7 +20,6 @@ export async function GET({ fetch }) {
 
 const sitemap = (
   posts,
-  projects,
   pages,
   galleries
 ) => `<?xml version="1.0" encoding="UTF-8" ?>
@@ -74,17 +71,6 @@ const sitemap = (
               ? gallery.ghMetadata.updated_at.substring(0, 10)
               : gallery.ghMetadata.created_at.substring(0, 10)
           }</lastmod>
-        </url>
-        `
-      )
-      .join('')}
-    ${projects
-      .map((project) =>
-        project.isPrivate
-          ? null
-          : `
-        <url>
-          <loc>${SITE_URL}/work/${project.slug}</loc>
         </url>
         `
       )

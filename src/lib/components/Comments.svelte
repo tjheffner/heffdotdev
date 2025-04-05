@@ -1,8 +1,7 @@
-<script>
+<script lang="ts">
   import utterances, {injectScript}  from '$lib/loadUtterances'
 
-  export let issueNumber
-  export let commentsEl
+  let { issueNumber, commentsEl = $bindable() } = $props();
 </script>
 
 <!-- <div>
@@ -17,11 +16,11 @@
 </div> -->
 
 
-<div class="mb-8 text-black dark:text-white " bind:this={commentsEl} use:utterances={{number: issueNumber}}>
+<div class="mb-8 text-black " bind:this={commentsEl} use:utterances={{number: issueNumber}}>
   Loading comments...
-  <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+  <!-- svelte-ignore a11y_mouse_events_have_key_events -->
   <button class="my-4 bg-blue-200 hover:bg-blue-100 text-black p-2 rounded-lg"
-    on:click={() => injectScript(commentsEl, issueNumber)}
-    on:mouseover={() => injectScript(commentsEl, issueNumber)}
+    onclick={() => injectScript(commentsEl, issueNumber)}
+    onmouseover={() => injectScript(commentsEl, issueNumber)}
   >Load now</button>
 </div>

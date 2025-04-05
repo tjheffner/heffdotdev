@@ -1,17 +1,18 @@
-<script>
-  export let href = undefined
-  export let label = undefined
+<script lang="ts">
+  let { href = undefined, label = undefined, children } = $props();
 </script>
 
 <a
   class="m-1 inline-block rounded-lg
          transition-all duration-200
-         ease-in-out hover:ring-2
+         ease-in-out
          bg-transparent
-         text-secondary
-         ring-red-600 dark:ring-yellow-400"
+         text-accent
+         hover:bg-accent
+         hover:text-background
+         "
   {href}
   aria-label={label}
 >
-  <slot />
+  {@render children?.()}
 </a>

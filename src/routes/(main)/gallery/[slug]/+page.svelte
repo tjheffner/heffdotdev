@@ -9,13 +9,19 @@
   // table of contents
   const tocStore = createTocStore();
 
-  /** @type {import('./$types').PageData} */
-  export let data
+  
+  /**
+   * @typedef {Object} Props
+   * @property {import('./$types').PageData} data
+   */
+
+  /** @type {Props} */
+  let { data } = $props();
 
   /** @type {import('$lib/types').ContentItem} */
-  $: json = data.json // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
+  let json = $derived(data.json) // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
 
-  $: canonical = SITE_URL + $page.url.pathname
+  let canonical = $derived(SITE_URL + $page.url.pathname)
 </script>
 
 <svelte:head>
@@ -62,17 +68,17 @@
   {#if json.title}
     <div class="mb-12 flex items-end">
       <h1
-        class="text-shadow text-3xl font-bold tracking-tight text-amber-600 md:text-6xl dark:text-yellow-400"
+        class="text-3xl font-bold tracking-tight text-secondary md:text-6xl"
       >
         {json.title}
       </h1>
-      <span class="text-unshadow text-base text-slate-500 dark:text-gray-600 ml-2"
+      <span class="text-copy ml-2"
         >({json.date.slice(0, 4)})</span
       >
     </div>
   {/if}
 
-  <div class="prose mb-12 w-full max-w-none dark:prose-invert">
+  <div class="prose mb-12 w-full max-w-none">
     {@html json.content}
   </div>
 </article>
@@ -81,7 +87,7 @@
 <div
   class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8"
 >
-  <hr class="mt-2 w-full border-t-2 border-red-600 dark:border-blue-300" />
+  <hr class="mt-2 w-full border-t-2 border-accent" />
 
   <div class="mb-8 w-full">
     <Comments issueNumber={json.issueNumber} />

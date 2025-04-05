@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
 	import { onMount } from "svelte";
 
-	export let tocStore;
-	let isOpen = false;
+  let { tocStore } = $props();
+	let isOpen = $state(false);
 	onMount(() => {
 		// set isOpen if window width is mobile checking the media query
 		if (window.matchMedia("(min-width: 640px)").matches) {
@@ -20,7 +20,7 @@
     <button
       class="text-accent font-bold -ml-1 lg:ml-7"
       aria-label="{isOpen ? 'Close' : 'Open'} Table of Contents"
-      on:click={() => (isOpen = !isOpen)}
+      onclick={() => (isOpen = !isOpen)}
     >
       {isOpen ? 'X' : '>'}
     </button>
@@ -47,8 +47,8 @@
 
 <style>
   .toc-list {
-    @apply text-secondary py-5 px-8 -mt-10 space-y-1 overflow-auto transition-all duration-500;
-    @apply bg-orange-100 dark:bg-slate-900;
+    @apply text-secondary pb-5 px-8 -mt-5 space-y-1 overflow-auto transition-all duration-500;
+		@apply bg-background;
   }
   .toc-active {
     @apply text-accent font-bold border-s-2 border-current;

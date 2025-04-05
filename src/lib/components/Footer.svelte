@@ -2,36 +2,15 @@
   import Icon from '$lib/components/Icon.svelte'
   import NavLink from '$lib/components/NavLink.svelte'
   import { TWITTER_ID, LASTFM_ID, LETTERBOXD_ID, GH_USER } from '$lib/siteConfig'
-
-  let isDark = false
-  if (typeof localStorage !== 'undefined') {
-    if (
-      localStorage.theme === 'dark' ||
-      (!('theme' in localStorage) &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      isDark = true
-    }
-  }
 </script>
 
 <footer
-  id="menu"
-  class="max-w-7xl mx-auto flex flex-col justify-center bg-orange-100 px-4 pt-4 pb-56 sm:px-8 dark:bg-slate-900"
+  class="max-w-7xl mx-auto flex flex-col justify-center py-12 sm:px-8 bg-background"
 >
-  <hr class="mb-8" />
   <div
     class="grid grid-cols-4 gap-4 md:mx-4 md:gap-8 lg:mx-12 lg:gap-12 xl:gap-16"
   >
-    <div class="col-span-2 md:col-span-2">
-      <NavLink href="/blog">Posts</NavLink>
-      <NavLink href="/gallery">Gallery</NavLink>
-      <NavLink href="/work">Work</NavLink>
-      <NavLink href="/about">About</NavLink>
-      <NavLink href="/blogroll">Blogroll</NavLink>
-    </div>
-
-    <div class="col-span-2 text-right md:col-start-4">
+    <div class="col-span-4 md:text-right md:col-start-4">
       <Icon href={`/rss.xml`} label="RSS">
         <svg viewBox="0 0 256 256" class="h-12 w-12 p-1" fill="currentColor">
           <circle cx="68" cy="189" r="24"/>
@@ -40,13 +19,13 @@
         </svg>
       </Icon>
 
-      <Icon href={`https://twitter.com/${TWITTER_ID}`} label="Twitter">
+      <!-- <Icon href={`https://twitter.com/${TWITTER_ID}`} label="Twitter">
         <svg viewBox="0 0 512 512" class="h-12 w-12 p-1" fill="currentColor">
           <path
             d="M419.6 168.6c-11.7 5.2-24.2 8.7-37.4 10.2 13.4-8.1 23.8-20.8 28.6-36 -12.6 7.5-26.5 12.9-41.3 15.8 -11.9-12.6-28.8-20.6-47.5-20.6 -42 0-72.9 39.2-63.4 79.9 -54.1-2.7-102.1-28.6-134.2-68 -17 29.2-8.8 67.5 20.1 86.9 -10.7-0.3-20.7-3.3-29.5-8.1 -0.7 30.2 20.9 58.4 52.2 64.6 -9.2 2.5-19.2 3.1-29.4 1.1 8.3 25.9 32.3 44.7 60.8 45.2 -27.4 21.4-61.8 31-96.4 27 28.8 18.5 63 29.2 99.8 29.2 120.8 0 189.1-102.1 185-193.6C399.9 193.1 410.9 181.7 419.6 168.6z"
           />
         </svg>
-      </Icon>
+      </Icon> -->
 
       <Icon href={`https://github.com/${GH_USER}`} label="Github">
         <svg
@@ -84,19 +63,19 @@
         </svg>
       </Icon>
 
-      <Icon href={`https://instagram.com/${TWITTER_ID}`} label="Instagram">
+      <!-- <Icon href={`https://instagram.com/${TWITTER_ID}`} label="Instagram">
         <svg class="h-12 w-12 p-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd" d="M2 6C2 3.79086 3.79086 2 6 2H18C20.2091 2 22 3.79086 22 6V18C22 20.2091 20.2091 22 18 22H6C3.79086 22 2 20.2091 2 18V6ZM6 4C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V6C20 4.89543 19.1046 4 18 4H6ZM12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9ZM7 12C7 9.23858 9.23858 7 12 7C14.7614 7 17 9.23858 17 12C17 14.7614 14.7614 17 12 17C9.23858 17 7 14.7614 7 12ZM17.5 8C18.3284 8 19 7.32843 19 6.5C19 5.67157 18.3284 5 17.5 5C16.6716 5 16 5.67157 16 6.5C16 7.32843 16.6716 8 17.5 8Z" fill="currentColor"/>
         </svg>
-      </Icon>
+      </Icon> -->
 
-      <Icon href={`https://www.last.fm/user/${LASTFM_ID}`} label="last.fm">
+      <!-- <Icon href={`https://www.last.fm/user/${LASTFM_ID}`} label="last.fm">
         <svg viewBox="0 0 256 256" class="h-12 w-12 p-1" fill="currentColor">
           <path d="M102.9,158.4c-4.9,4.4-14.4,13.3-30.3,13.3C54,171.8,36,155.4,36,129.3c0-33.5,21.5-44.3,38-44.3c23.8,0,29,14.4,35.5,34.2l8.7,27.2c8.6,26.4,24.9,47.7,71.6,47.7c33.5,0,56.2-10.4,56.2-37.6c0-22.1-12.5-33.5-35.7-39l-17.3-3.8c-11.9-2.7-15.4-7.6-15.4-15.8c0-9.3,7.3-14.7,19.2-14.7c13,0,20,4.9,21.1,16.6l27-3.3C242.7,72,226,61.9,198.4,61.9c-24.3,0-48.1,9.3-48.1,39c0,18.5,8.9,30.2,31.4,35.7l18.4,4.4c13.8,3.3,18.4,9,18.4,16.9c0,10.1-9.7,14.2-28.1,14.2c-27.3,0-41-14.4-47.5-34.3l-8.9-27.2C122.5,75,109.1,61.9,73.2,61.9C41.1,61.9,10,87.3,10,130.3c0,41.4,29.9,63.8,61.3,63.8c22.7,0,34.2-8,39.9-12.1L102.9,158.4z"/>
         </svg>
-      </Icon>
+      </Icon> -->
 
-      <Icon href={`https://letterboxd.com/${LETTERBOXD_ID}/`} label="Letterboxd">
+      <!-- <Icon href={`https://letterboxd.com/${LETTERBOXD_ID}/`} label="Letterboxd">
         <svg viewBox="0 0 500 500" class="h-12 w-12 p-1" fill="currentColor">
           <defs>
             <rect id="path-1" x="0" y="0" width="129.847328" height="141.443299"></rect>
@@ -122,7 +101,7 @@
             </g>
           </g>
         </svg>
-      </Icon>
+      </Icon> -->
     </div>
   </div>
 </footer>

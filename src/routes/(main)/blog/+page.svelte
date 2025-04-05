@@ -1,10 +1,12 @@
-<script>
+<script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { queryParam, ssp } from 'sveltekit-search-params'
   import PostItem from '$lib/components/PostItem.svelte'
   import { POST_CATEGORIES } from '$lib/siteConfig'
   import { fuzzySearch } from './fuzzySearch'
 
-  export let data
+  let { data } = $props();
   let { items } = data
 
   // https://github.com/paoloricciuti/sveltekit-search-params#how-to-use-it
@@ -21,7 +23,7 @@
     debounceHistory: 500
   });
 
-  let inputEl;
+  let inputEl = $state();
 
   function focusSearch(e) {
     if (e.key === '/' && inputEl) inputEl.select();
@@ -33,12 +35,14 @@
   }
 
   let LIST_DISPLAY_LENGTH = 10
-  let isTruncated = items?.length > LIST_DISPLAY_LENGTH;
+  let isTruncated = $state(items?.length > LIST_DISPLAY_LENGTH);
 
-  let list
-  $: fuzzySearch(items, $selectedCategories, $search).then(_items => {
-    list = _items
-  })
+  let list = $state()
+  run(() => {
+    fuzzySearch(items, $selectedCategories, $search).then(_items => {
+      list = _items
+    })
+  });
 </script>
 
 <svelte:head>
@@ -49,15 +53,15 @@
   <meta name="twitter:image" content={`https://heffner.dev/og?message=posts`} />
 </svelte:head>
 
-<svelte:window on:keyup={focusSearch} />
+<svelte:window onkeyup={focusSearch} />
 
 <section
   class="mx-auto mb-16 flex w-full flex-col items-start p-0 sm:px-8 lg:w-2/3"
 >
-  <h1 class="text-shadow mb-4 text-3xl font-bold tracking-tight md:text-5xl">
+  <h1 class="text-secondary mb-4 text-3xl font-bold tracking-tight md:text-5xl">
     Posts
   </h1>
-  <p class="mb-4 text-zinc-900 dark:text-gray-400">
+  <p class="mb-4 text-copy">
     In total, I've written <strong>{items.length}</strong> posts on my blog. Use the search below
     to filter.
   </p>
@@ -70,13 +74,10 @@
       bind:value={$search}
       bind:this={inputEl}
       placeholder="Hit / to search"
-      class="block w-full rounded-md border border-zinc-400 bg-gray-200
-						px-4 py-2 text-gray-900 placeholder:text-zinc-700
-						dark:border-slate-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-zinc-50
-						"
+      class="block w-full rounded-md border border-secondary bg-background px-4 py-2 text-copy placeholder:text-accent"
     />
     <svg
-      class="absolute right-3 top-3 h-5 w-5 text-gray-700 dark:text-gray-300"
+      class="absolute right-3 top-3 h-5 w-5 text-secondary"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
@@ -93,7 +94,7 @@
 
   <!-- Filter Buttons -->
   <div class="my-4 flex w-full items-center">
-    <span class="mr-2 text-zinc-900 dark:text-gray-400"> Filter: </span>
+    <span class="mr-2 text-copy"> Filter: </span>
     {#each POST_CATEGORIES as availableCategory}
       <div>
         <input
@@ -119,7 +120,7 @@
   <!-- Results -->
   {#if list?.length}
     <ul
-      class="w-full divide-y divide-dashed divide-sky-600 md:mx-auto md:w-4/5 dark:divide-blue-300"
+      class="w-full divide-y divide-dashed divide-secondary md:mx-auto md:w-4/5"
     >
       {#each list as item, i}
         {#if isTruncated && (i+1 < LIST_DISPLAY_LENGTH)}
@@ -140,7 +141,7 @@
     {#if isTruncated && list.length > LIST_DISPLAY_LENGTH}
       <div class="flex justify-center mx-auto">
         <button
-          on:click={() => (isTruncated = false)}
+          onclick={() => (isTruncated = false)}
           class="filter"
         >
           See more posts
@@ -148,20 +149,20 @@
       </div>
     {/if}
   {:else if $search && $selectedCategories.length === 0}
-    <div class="prose dark:prose-invert">
+    <div class="prose">
       No posts found for
       <code>{$search}</code>.
     </div>
     <button
-      on:click={() => ($search = '')}
+      onclick={() => ($search = '')}
       class="filter my-4"
     >
       Clear your search
     </button>
   {:else}
-    <div class="prose dark:prose-invert">No posts found with this combination of filters. Search something else!</div>
+    <div class="prose">No posts found with this combination of filters. Search something else!</div>
     <button
-      on:click={clearFilters}
+      onclick={clearFilters}
       class="filter my-4"
     >
       Clear all filters

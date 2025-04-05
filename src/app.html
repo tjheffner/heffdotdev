@@ -12,31 +12,17 @@
     <meta
       name="theme-color"
       content="#facc15"
-      media="(prefers-color-scheme: light)"
+      media="(prefers-color-scheme: dark)"
     />
     <meta
       name="theme-color"
       content="#93c5fd"
-      media="(prefers-color-scheme: dark)"
+      media="(prefers-color-scheme: light)"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script nonce="heffdotdev">
-      // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-      if (
-        localStorage.theme === 'dark' ||
-        (!('theme' in localStorage) &&
-          window.matchMedia('(prefers-color-scheme: dark)').matches)
-      ) {
-        document.documentElement.classList.add('dark')
-      } else {
-        document.documentElement.classList.remove('dark')
-      }
-    </script>
     %sveltekit.head%
   </head>
-  <body
-    class="bg-orange-100 text-white antialiased dark:bg-slate-900 dark:text-black"
-  >
+  <body class="antialiased bg-background text-black">
     <div id="svelte">%sveltekit.body%</div>
   </body>
 </html>

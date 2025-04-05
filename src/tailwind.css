@@ -3,19 +3,16 @@
 
 @layer components {
   body {
-    --brand-accent: theme('colors.sky.600');
-    --brand-alternate: theme('colors.orange.300');
-    --brand-secondary: theme('colors.red.600');
+    --brand-accent: #d81d4e;
+    --brand-alternate: #4ed81d;
+    --brand-secondary: #1d4ed8;
+    --brand-text: theme('colors.slate.800');
+    --brand-background: theme('colors.slate.100');
 
     /* https://ishadeed.com/article/defensive-css */
     overflow-wrap: break-word;
     overflow-y: auto;
     scrollbar-gutter: stable;
-  }
-  .dark body {
-    --brand-accent: theme('colors.blue.300');
-    --brand-alternate: theme('colors.lime.700');
-    --brand-secondary: theme('colors.yellow.400');
   }
   :root {
     accent-color: var(--brand-accent);
@@ -24,11 +21,8 @@
     outline-color: var(--brand-accent);
   }
   ::selection {
-    color: theme('colors.sky.200');
+    color: var(--brand-background);
     background-color: var(--brand-accent);
-  }
-  .dark ::selection {
-    color: theme('colors.slate.900');
   }
   ::marker {
     color: var(--brand-accent);
@@ -70,20 +64,7 @@
   }
 
   hr {
-    @apply w-full border-t-2 border-sky-600 dark:border-blue-300;
-  }
-
-  /* header styles, works best larger font sizes */
-  .text-shadow {
-    @apply text-red-600;
-    text-shadow: 2px 3px 1px theme('colors.sky.600');
-  }
-  .dark .text-shadow {
-    @apply text-yellow-400;
-    text-shadow: 2px 3px 1px theme('colors.yellow.700');
-  }
-  .text-unshadow {
-    text-shadow: none !important;
+    @apply w-full border-t-2 border-accent;
   }
 
   /* Links that highlight from bottom */
@@ -91,8 +72,8 @@
   .footer-link,
   .header-link,
   .prose a {
-    @apply from-red-600 to-red-600 dark:from-yellow-400 dark:to-yellow-400;
-    @apply text-secondary hover:text-sky-200 dark:hover:text-slate-900;
+    @apply from-secondary to-secondary;
+    @apply text-accent hover:text-background;
     @apply box-decoration-clone;
 
     cursor: pointer;
@@ -118,121 +99,60 @@
     background: unset;
     color: currentColor;
   }
-}
 
-/* filters on /blog page */
-.filter {
-  @apply m-1 inline-block whitespace-nowrap rounded rounded-md px-4 py-2;
-  @apply border-accent bg-gray-200 text-gray-900 font-bold;
-  @apply dark:border-slate-600 dark:bg-gray-800 dark:text-gray-100;
-  @apply ring-accent transition-all duration-200 ease-in-out hover:ring-2;
-}
-.activefilter {
-  @apply border-secondary bg-accent text-orange-100;
-  @apply dark:border-slate-600 dark:bg-secondary dark:text-slate-900;
-  @apply ring-accent dark:ring-secondary;
-}
-
-/* Cleanup styles for markdown headers */
-.prose h1 a {
-  @apply bg-unset text-lime-800 hover:text-lime-800 dark:text-yellow-400 dark:hover:text-yellow-400;
-}
-.prose h2,
-.prose h3,
-.prose h4 {
-  @apply relative;
-  a {
-    @apply bg-unset p-0 font-bold !text-accent;
+  /* filters on /blog page */
+  .filter {
+    @apply m-1 inline-block whitespace-nowrap rounded rounded-md px-4 py-2 font-bold;
+    @apply text-copy;
+    @apply ring-accent transition-all duration-200 ease-in-out hover:ring-2;
   }
-  &::before {
-    @apply absolute -left-5;
-    @apply text-accent;
-    content: '#';
+  .activefilter {
+    @apply border-accent bg-secondary text-background;
+    @apply ring-secondary;
   }
-}
-.prose-img-dense {
-  @apply !m-0;
-}
 
-.back-link {
-  @apply relative mx-4 mb-4 font-bold text-accent lg:mx-12;
-  &::before {
-    @apply absolute -left-5;
-    content: '<';
-    color: currentColor;
+  /* Cleanup styles for markdown headers */
+  .prose h1 a {
+    @apply bg-unset text-yellow-400 hover:text-yellow-400;
   }
-}
+  .prose h2,
+  .prose h3,
+  .prose h4 {
+    @apply relative;
+    a {
+      @apply bg-unset p-0 font-bold !text-accent;
+    }
+    &::before {
+      @apply absolute -left-5;
+      @apply text-accent;
+      content: '#';
+    }
+  }
+  .prose-img-dense {
+    @apply !m-0;
+  }
 
-/* zoomable images */
-.zoom input[type='checkbox'] {
-  display: none;
-}
+  .back-link {
+    @apply relative mx-4 mb-4 font-bold text-accent lg:mx-12;
+    &::before {
+      @apply absolute -left-5;
+      content: '<';
+      color: currentColor;
+    }
+  }
 
-.zoom img {
-  transition: transform 0.25s ease;
-  cursor: zoom-in;
-}
+  .lazy-image {
+    @apply bg-gray-600;
+  }
 
-.zoom input[type='checkbox']:checked ~ img {
-  transform: scale(1.65);
-  cursor: zoom-out;
-}
-
-.lazy-image {
-  @apply bg-gray-600;
-}
-
-.emoji {
-  display: inline-block;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-.emoji:hover {
-  transform: scale(2);
-}
-
-/*
-  CUSTOM SCROLLBARS!
-  - https://css-tricks.com/strut-your-stuff-with-a-custom-scrollbar/
-  */
-body {
-  --sb-primary-color: theme('colors.amber.400');
-  --sb-accent-color: theme('colors.red.500');
-  --sb-track-1: theme('colors.sky.600');
-  --sb-track-2: theme('colors.blue.300');
-}
-.dark body {
-  --sb-primary-color: theme('colors.yellow.600');
-  --sb-accent-color: theme('colors.amber.900');
-  --sb-track-1: theme('colors.sky.900');
-  --sb-track-2: theme('colors.slate.800');
-}
-
-body::-webkit-scrollbar {
-  width: 1rem;
-  height: 1rem;
-}
-
-body::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    270deg,
-    var(--sb-accent-color),
-    var(--sb-primary-color)
-  );
-  border-radius: 2px;
-  box-shadow:
-    inset 2px 2px 2px var(--sb-primary-color),
-    inset -1px -1px 1px var(--sb-track-1);
-}
-
-body::-webkit-scrollbar-track {
-  background: linear-gradient(
-    90deg,
-    var(--sb-track-2),
-    var(--sb-track-2) 1px,
-    var(--sb-track-1) 0,
-    var(--sb-track-1)
-  );
+  .emoji {
+    display: inline-block;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .emoji:hover {
+    transform: scale(2);
+  }
 }
 
 @tailwind utilities;

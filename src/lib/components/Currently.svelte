@@ -1,8 +1,10 @@
-<script>
-  export let recentlyListened
-  export let recentlyWatched
-  export let recentlyPlayed
-  export let duolingo
+<script lang="ts">
+  let {
+    recentlyListened,
+    recentlyWatched,
+    recentlyPlayed,
+    duolingo
+  } = $props();
 
   // duolingo math
   const streakStartDate = new Date(duolingo.streakData.currentStreak.startDate);
@@ -24,7 +26,7 @@
   }
 </script>
 
-<ul class="divide-y divide-dashed divide-sky-600 dark:divide-blue-300 pl-0">
+<ul class="divide-y divide-dashed divide-blue-300 pl-0">
   <li class="grid grid-cols-currently">
     <p class="my-4 text-3xl">🎶</p>
     <div class="my-4">
@@ -55,6 +57,7 @@
         {/each}
         <p class="m-0">Current streak: <span class="font-bold text-secondary">{duolingo.streak}</span> days! <span class="text-sm block md:inline-block">Streak began: <span class="text-accent">{formattedDate}</span></span></p>
         <span class="text-secondary text-sm">
+         {freezes} skips
           {#each Array(freezes) as _, index}
             {#if index % 2 == 0}
             🧊
@@ -70,7 +73,7 @@
   <li class="grid grid-cols-currently">
     <p class="my-4 text-3xl">📚</p>
     <div class="my-4">
-      <p class="m-0">The last book I read was <strong class="text-accent">The Lathe of Heaven</strong> by <span class="text-secondary">Ursula K. Le Guin</span>. Currently reading several books on sauna building.
+      <p class="m-0">The last book I read was <strong class="text-accent">This Is How You Lose the Time War</strong> by <span class="text-secondary">Amal El-Mohtar and Max Gladstone</span>.
     </div>
   </li>
 

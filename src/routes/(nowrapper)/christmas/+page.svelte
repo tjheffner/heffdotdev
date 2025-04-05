@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte'
   import './christmas.css'
-  export let data
+  let { data } = $props();
 
   // https://codepen.io/HektorW/pen/ZBryeV
   onMount(() => {
@@ -28,7 +28,8 @@
       ctx.clearRect(0, 0, width, height)
       if (snowflakes.length < maxSnowflakes) snowflakes.push(new Snowflake())
 
-      ctx.fillStyle = ctx.strokeStyle = '#fff'
+      ctx.fillStyle = '#fff'
+      ctx.strokeStyle = '#fff'
 
       snowflakes.forEach((snowflake) => snowflake.update(elapsed, now))
     }
@@ -126,7 +127,7 @@
   />
 </svelte:head>
 
-<canvas id="snow" />
+<canvas id="snow"></canvas>
 
 <div class="holly-container">
   <img src="/assets/holly-clipart-corner-11.png" alt="" class="holly left" />
@@ -134,9 +135,9 @@
 </div>
 
 <section class="serif h-full pt-[10rem] text-center text-white">
-  <h1 class="text-shadow mb-10 text-6xl">{data.title}</h1>
-  <p>at</p>
-  <p class="text-shadow mb-12 mt-6 text-3xl">
+  <h1 class="text-yellow-400 mb-10 text-6xl">{data.title}</h1>
+  <p class="text-yellow-400">at</p>
+  <p class="text-yellow-400 mb-12 mt-6 text-3xl">
     {data.where} | <span class="sans">{data.when}</span>
   </p>
   <p>
@@ -148,7 +149,7 @@
     {#each data.agenda as { event, time }}
       <li class="my-2">
         <p class="text-lg">
-          {event} - <span class="sans">{time}<span /></span>
+          {event} - <span class="sans">{time}<span></span></span>
         </p>
       </li>
     {/each}

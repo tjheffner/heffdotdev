@@ -11,6 +11,8 @@ module.exports = {
         accent: 'var(--brand-accent)',
         alternate: 'var(--brand-alternate)',
         secondary: 'var(--brand-secondary)',
+        copy: 'var(--brand-text)',
+        background: 'var(--brand-background)',
       },
       gridTemplateColumns: {
         currently: '50px 1fr',

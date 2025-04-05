@@ -1,5 +1,14 @@
 body {
-  background-color: rgb(17 24 39 / var(--tw-bg-opacity)) !important;
+  background-color: oklch(20.8% 0.042 265.755) !important;
+}
+
+/*
+  CUSTOM SCROLLBARS!
+  - https://css-tricks.com/strut-your-stuff-with-a-custom-scrollbar/
+  */
+body::-webkit-scrollbar {
+  width: 1rem;
+  height: 1rem;
 }
 body::-webkit-scrollbar-thumb {
   background: repeating-linear-gradient(

@@ -13,10 +13,10 @@
     <a href="https://www.linkedin.com/in/tannerheffner/">linkedin</a> with a message.
   </p>
 
-  <p class="font-bold">
+  <!-- <p class="font-bold">
     Please no recruiters. I'm happy where I'm at. <span
       role="img"
       aria-label="happy cowboy">&#129312;</span
     >
-  </p>
+  </p> -->
 </Slice>

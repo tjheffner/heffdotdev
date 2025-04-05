@@ -49,15 +49,15 @@
 
   // set default wall
   let initial = 0
-  let visible = shuffleArray(scenes[initial])
+  let visible = $state(shuffleArray(scenes[initial]))
 </script>
 
-<div class="block text-shadow text-4xl md:text-6xl mt-4 p-8 lg:mt-8 w-full max-h-[370px] md:max-h-[415px] overflow-hidden" aria-hidden="true">
+<div class="block text-4xl md:text-6xl mt-4 p-8 lg:mt-8 w-full max-h-[370px] md:max-h-[415px] overflow-hidden" aria-hidden="true">
   {#each visible as f, i}
     <!-- <span>{i}</span> -->
     <button
-      class="emoji emoji-{i} p-1 m-1 text-shadow"
-      on:click={() => changeWall()}
+      class="emoji emoji-{i} p-1 m-1"
+      onclick={() => changeWall()}
     >
       {f}
     </button>
