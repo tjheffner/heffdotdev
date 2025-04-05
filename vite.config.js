@@ -1,11 +1,8 @@
 // vite.config.js
 import { sveltekit } from '@sveltejs/kit/vite'
 import fs from 'fs'
-
-/** @type {import('vite').UserConfig} */
-const config = {
-  plugins: [sveltekit(), rawFonts(['.ttf'])],
-}
+import { defineConfig } from 'vite'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 // this is for using local fonts in OG images
 function rawFonts(ext) {
@@ -20,4 +17,12 @@ function rawFonts(ext) {
   }
 }
 
-export default config
+// https://vitejs.dev/config/
+/** @type {import('vite').UserConfig} */
+export default defineConfig({
+  plugins: [
+    sveltekit(),
+    rawFonts(['.ttf']),
+    nodePolyfills(),
+  ],
+})
