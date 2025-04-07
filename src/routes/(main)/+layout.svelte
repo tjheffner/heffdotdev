@@ -34,7 +34,7 @@
       in:fade={{ duration: 150, delay: 150 }}
       out:fade={{ duration: 150 }}
       id="maincontent"
-      class="mx-auto px-4 sm:px-8"
+      class="max-w-7xl mx-auto px-4 sm:px-8"
     >
       {@render children?.()}
     </main>
