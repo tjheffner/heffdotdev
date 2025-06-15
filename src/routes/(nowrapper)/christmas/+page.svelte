@@ -41,7 +41,7 @@
       lastNow = performance.now()
       requestAnimationFrame(render)
     }
-
+    // svelte-ignore perf_avoid_nested_class
     class Snowflake {
       constructor() {
         this.spawn()
