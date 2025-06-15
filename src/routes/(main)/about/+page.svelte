@@ -1,8 +1,8 @@
 <script lang="ts">
   import Slice from '$lib/components/Slice.svelte'
-  import Card from '$lib/components/Card.svelte'
-  import EmojiWall from '$lib/components/EmojiWall.svelte'
-  import Currently from '$lib/components/Currently.svelte'
+  // import Card from '$lib/components/Card.svelte'
+  // import EmojiWall from '$lib/components/EmojiWall.svelte'
+  // import Currently from '$lib/components/Currently.svelte'
   import {
     SITE_URL,
     SITE_TITLE,
@@ -17,8 +17,8 @@
     data: any;
   }
 
-  let { data }: Props = $props();
-  const { recentlyListened, recentlyWatched, recentlyPlayed, duolingo } = data;
+  // let { data }: Props = $props();
+  // const { recentlyListened, recentlyWatched, recentlyPlayed, duolingo } = data;
 </script>
 
 <svelte:head>
@@ -50,48 +50,28 @@
 
     <div class="prose">
       <h2>about me</h2>
-      <p>i am based out of <strong>portland, oregon</strong>. in my free time i like to play disc golf, ride my bike, garden, cook, hit the gym, and make art. i generally find a way to get outside, weather permitting. i have been a software engineer for over a decade and i still love the feeling when i launch a fresh <strong>hello world!</strong></p>
-      <p>you can find my professional resume <a href="/resume" target="_blank">over here</a>.</p>
+      <p>my name is <strong>tanner heffner</strong> and i am based out of <strong>portland, oregon</strong>.</p>
+      <p>
+        i like to play disc golf, ride my bike, garden, cook, hit the gym, and make art.
+        generally will find a way to get outside, weather permitting.
+        i have been a software engineer for over a decade and still love the feeling when i launch a fresh <strong>hello world!</strong></p>
+      
+      <p>you can find my professional resume <a href="/resume" target="_blank">over here</a></p>
 
 
 
       <h2>about the site</h2>
-      <p>this site is the online home of <strong>tanner heffner</strong>.</p>
-      <p>it's perpetually under construction but coming together 🏄‍♂️</p>
+      <p>perpetually under construction but coming together 🏄‍♂️</p>
 
-      <p>parts <a href="/blog">blog,</a> <a href="/gallery">photo gallery,</a> web <a href="/christmas"> playground,</a> and <a href="/resume" target="_blank">resume</a></p>
+      <p>parts <a href="/blog">blog,</a> <a href="/gallery">photo gallery,</a> <a href="/resume" target="_blank">resume,</a> and <a href="/christmas">playground</a></p>
 
-      <p>this site is my own personal <a href="https://joelhooks.com/digital-garden" target="_blank">digital garden</a>, using
-      <a href="https://swyxkit.netlify.app/about" target="_blank">swyxkit</a> as my starting point.</p>
+      <p>my own personal <a href="https://joelhooks.com/digital-garden" target="_blank">digital garden</a>, using
+      <a href="https://swyxkit.netlify.app/about" target="_blank">swyxkit</a> as my starting point</p>
 
-      <p>this site is <a href="https://github.com/tjheffner/heffdotdev">public on github</a> and hosted via <a href="https://www.netlify.com/">netlify</a>.</p>
-      <p><a href="/heffdotdev-technical-details">this post</a> explains more about the tools i chose and why.</p>
-
-
-      <h2>other cool pages i enjoy</h2>
-      <ul>
-        <li><a href="https://darkdell.net">nug doug</a></li>
-        <li><a href="https://critter.blog">mike crittenden</a></li>
-        <li><a href="https://defector.com">defector</a></li>
-        <li><a href="https://www.brightsideofthesun.com/">bright side of the sun</a></li>
-        <li><a href="https://www.fujichia.com/">fujichia</a></li>
-        <li><a href="https://www.swyx.io/">shawn wang</a></li>
-        <li><a href="https://css-tricks.com/">css-tricks</a></li>
-        <li><a href="https://www.randibolt.com/">randi bolt</a></li>
-      </ul>
+      <p><a href="https://github.com/tjheffner/heffdotdev">public on github</a> and hosted via <a href="https://www.netlify.com/">netlify</a></p>
+      <p><a href="/heffdotdev-technical-details">this post</a> explains more about the tools i chose and why</p>
 
       <p><strong>thank you</strong> for stopping by!</p>
     </div>
   </Slice>
 </section>
-
-<style>
-  ul {
-    list-style: none;
-  }
-  li:before {
-    content: '\1F525';
-    margin-left: -20px;
-    margin-right: 10px;
-  }
-</style>
