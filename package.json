@@ -1,7 +1,8 @@
 {
   "name": "heffnerdotdev",
   "private": true,
-  "version": "0.9.0",
+  "version": "0.10.0",
+  "type": "module",
   "scripts": {
     "start": "vite dev",
     "build": "vite build",
@@ -13,12 +14,29 @@
     "format": "prettier --write .",
     "test": "npx playwright test"
   },
+  "dependencies": {
+    "@axe-core/playwright": "^4.9.1",
+    "@leeoniya/ufuzzy": "^1.0.11",
+    "axe-html-reporter": "^2.2.3",
+    "caniuse-lite": "^1.0.30001710",
+    "date-fns": "^2.28.0",
+    "hast-util-from-selector": "^3.0.0",
+    "hast-util-select": "^6.0.2",
+    "letterboxd": "^3.1.1",
+    "parse-link-header": "^2.0.0",
+    "prism-themes": "^1.9.0",
+    "remark": "^15.0.1",
+    "remark-unwrap-images": "^4.0.0",
+    "shiki": "^0.14.7",
+    "snarkdown": "^2.0.0",
+    "unist-util-visit": "^5.0.0"
+  },
   "devDependencies": {
     "@playwright/test": "^1.43.1",
     "@resvg/resvg-js": "^2.4.1",
-    "@svelte-put/toc": "^5.0.1",
+    "@svelte-put/toc": "^6.0.1",
     "@sveltejs/adapter-auto": "^3.1.1",
-    "@sveltejs/adapter-netlify": "^4.1.0",
+    "@sveltejs/adapter-netlify": "^5.0.2",
     "@sveltejs/kit": "^2.5.27",
     "@tailwindcss/typography": "^0.5.10",
     "@types/node": "^20.12.8",
@@ -28,7 +46,7 @@
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
     "gray-matter": "^4.0.3",
-    "mdsvex": "^0.11.0",
+    "mdsvex": "^0.12.6",
     "postcss": "^8.4.31",
     "postcss-load-config": "^5.0.3",
     "prettier": "~3.1.0",
@@ -65,24 +83,6 @@
     "vite-plugin-node-polyfills": "^0.23.0"
   },
   "engines": {
-    "node": ">=16.7"
-  },
-  "type": "module",
-  "dependencies": {
-    "@axe-core/playwright": "^4.9.1",
-    "@leeoniya/ufuzzy": "^1.0.11",
-    "axe-html-reporter": "^2.2.3",
-    "caniuse-lite": "^1.0.30001710",
-    "date-fns": "^2.28.0",
-    "hast-util-from-selector": "^3.0.0",
-    "hast-util-select": "^6.0.2",
-    "letterboxd": "^3.1.1",
-    "parse-link-header": "^2.0.0",
-    "prism-themes": "^1.9.0",
-    "remark": "^15.0.1",
-    "remark-unwrap-images": "^4.0.0",
-    "shiki": "^0.14.7",
-    "snarkdown": "^2.0.0",
-    "unist-util-visit": "^5.0.0"
+    "node": ">=20"
   }
 }
