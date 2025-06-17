@@ -23,7 +23,7 @@
   color: var(--brand-accent);
   cursor: pointer;
   text-decoration: none;
-  padding: 1px 4px;
+  padding: 3px 4px;
   background: linear-gradient(
     to bottom,
     var(--brand-secondary) 0%,
