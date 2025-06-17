@@ -51,11 +51,7 @@
     <div class="prose">
       <h2>about me</h2>
       <p>my name is <strong>tanner heffner</strong> and i am based out of <strong>portland, oregon</strong>.</p>
-      <p>
-        i like to play disc golf, ride my bike, garden, cook, hit the gym, and make art.
-        generally will find a way to get outside, weather permitting.
-        i have been a software engineer for over a decade and still love the feeling when i launch a fresh <strong>hello world!</strong></p>
-      
+      <p>i have been a software engineer for over a decade and still love the feeling when launching a fresh <strong>hello world!</strong></p>
       <p>you can find my professional resume <a href="/resume" target="_blank">over here</a></p>
 
 

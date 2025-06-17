@@ -18,7 +18,7 @@
   /** @type {Props} */
   let { data } = $props();
 
-  /** @type {import('$lib/types').ContentItem} */
+  /** @type {import('$lib/types').BaseContentItem} */
   let json = $derived(data.json) // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
 
   let canonical = $derived(SITE_URL + $page.url.pathname)

@@ -14,3 +14,29 @@
   transform: scale(1.65);
   cursor: zoom-out;
 }
+
+/* Links that highlight from bottom */
+.gh-link,
+.footer-link,
+.header-link,
+.prose a {
+  color: var(--brand-accent);
+  cursor: pointer;
+  text-decoration: none;
+  padding: 1px 4px;
+  background: linear-gradient(
+    to bottom,
+    var(--brand-secondary) 0%,
+    var(--brand-secondary) 100%
+  );
+  background-position: 0 100%;
+  background-repeat: repeat-x;
+  background-size: 4px 2px;
+  transition: all 0.3s linear;
+
+  &.active,
+  &:hover {
+    background-size: 4px 50px;
+    color: var(--brand-background);
+  }
+}

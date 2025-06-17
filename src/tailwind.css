@@ -67,33 +67,6 @@
     @apply w-full border-t-2 border-accent;
   }
 
-  /* Links that highlight from bottom */
-  .gh-link,
-  .footer-link,
-  .header-link,
-  .prose a {
-    @apply from-secondary to-secondary;
-    @apply text-accent hover:text-background;
-    @apply box-decoration-clone;
-
-    cursor: pointer;
-    text-decoration: none;
-    padding: 1px 4px;
-    background: linear-gradient(
-      to bottom,
-      var(--tw-gradient-from) 0%,
-      var(--tw-gradient-to) 100%
-    );
-    background-position: 0 100%;
-    background-repeat: repeat-x;
-    background-size: 4px 2px;
-    transition: all 0.3s linear;
-
-    &:hover {
-      background-size: 4px 50px;
-    }
-  }
-
   /* to undo above */
   .bg-unset {
     background: unset;

@@ -11,6 +11,7 @@ export type BaseContentItem = {
   date: Date
   ghMetadata: GHMetadata
   image: string
+  issueNumber: string
 }
 
 export type BlogItem = BaseContentItem & {

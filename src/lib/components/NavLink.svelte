@@ -6,7 +6,7 @@
 
 <a
   class={isActive
-    ? 'footer-link my-4 block w-fit bg-[length:4px_50px] font-bold text-secondary'
+    ? 'footer-link my-4 block w-fit font-bold active'
     : 'footer-link my-4 block w-fit font-bold'}
   href={props.href}
 >
