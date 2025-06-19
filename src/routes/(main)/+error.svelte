@@ -1,7 +1,6 @@
 <script>
   // import Nav from '../components/Nav.svelte';
   import { page } from '$app/state'
-  import { dev } from '$app/environment'
 
   const offline = typeof navigator !== 'undefined' && navigator.onLine === false
 
@@ -40,9 +39,6 @@
     </p>
   {:else}
     <p class="font-mono">{message}</p>
-  {/if}
-  {#if dev && page.error.stack}
-    <pre class="mono overflow-scroll bg-gray-800 p-8">{page.error.stack}</pre>
   {/if}
 </section>
 

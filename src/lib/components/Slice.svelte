@@ -3,7 +3,7 @@
   import { slugify } from '$lib/utils'
   interface Props {
     title?: string;
-    date?: string;
+    date?: Date;
     prose?: boolean;
     full?: boolean;
     warn?: boolean;
@@ -51,7 +51,7 @@
         </svelte:element>
         {#if date}
         <span class="text-unshadow text-base text-gray-600">
-        ({date.slice(0, 4)})
+        ({date.toString().slice(0, 4)})
         </span>
         {/if}
       </h2>

@@ -72,7 +72,7 @@
         {json.title}
       </h1>
       <span class="text-copy ml-2"
-        >({json.date.slice(0, 4)})</span
+        >({json.date.toString().slice(0, 4)})</span
       >
     </div>
   {/if}

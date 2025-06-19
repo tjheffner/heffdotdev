@@ -36,7 +36,7 @@ function debounce(func, wait) {
 }
 
 /**
- * @param {import('$lib/types').ContentItem[]} items
+ * @param {import('$lib/types').BlogItem[]} items
  * @param {string[]} selectedCategories
  * @param {string} search
  * @return {Object[]}

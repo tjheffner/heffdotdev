@@ -1,17 +1,15 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { queryParam, ssp } from 'sveltekit-search-params'
   import PostItem from '$lib/components/PostItem.svelte'
   import { POST_CATEGORIES } from '$lib/siteConfig'
   import { fuzzySearch } from './fuzzySearch'
+  import type { Writable } from 'svelte/store'
 
   let { data } = $props();
   let { items } = data
 
   // https://github.com/paoloricciuti/sveltekit-search-params#how-to-use-it
-  /** @type import('svelte/store').Writable<String[] | null> */
-  let selectedCategories = queryParam(
+  let selectedCategories: Writable<string[] | null> = queryParam(
     'show',
     {
       encode: (arr) => arr?.toString(),
@@ -23,7 +21,7 @@
     debounceHistory: 500
   });
 
-  let inputEl = $state();
+  let inputEl: HTMLInputElement = $state();
 
   function focusSearch(e) {
     if (e.key === '/' && inputEl) inputEl.select();
@@ -37,12 +35,12 @@
   let LIST_DISPLAY_LENGTH = 10
   let isTruncated = $state(items?.length > LIST_DISPLAY_LENGTH);
 
-  let list = $state()
-  run(() => {
+  let list: (typeof items) = $state()
+  $effect.pre(() => {
     fuzzySearch(items, $selectedCategories, $search).then(_items => {
       list = _items
     })
-  });
+  })
 </script>
 
 <svelte:head>
@@ -70,6 +68,7 @@
   <div class="relative w-full">
     <input
       aria-label="Search articles"
+      id="search"
       type="text"
       bind:value={$search}
       bind:this={inputEl}

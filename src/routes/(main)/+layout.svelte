@@ -3,8 +3,6 @@
   import '../../site.css'
   import Header from '$lib/components/Header.svelte'
   import Footer from '$lib/components/Footer.svelte'
-  import Slice from '$lib/components/Slice.svelte'
-  import { page } from '$app/stores'
   import { onMount } from 'svelte'
   import { SITE_TITLE } from '$lib/siteConfig'
 

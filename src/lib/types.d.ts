@@ -11,6 +11,7 @@ export type BaseContentItem = {
   date: Date
   ghMetadata: GHMetadata
   image: string
+  alt?: string
   issueNumber: string
 }
 
@@ -24,6 +25,7 @@ export type BlogItem = BaseContentItem & {
 export type GalleryItem = BaseContentItem & {
   type: 'gallery'
   images: GalleryImage[]
+  warn: boolean
 }
 
 export type GalleryImage = {

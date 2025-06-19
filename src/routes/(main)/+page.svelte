@@ -1,7 +1,5 @@
 <script>
   import Slice from '$lib/components/Slice.svelte'
-  import NavLink from '$lib/components/NavLink.svelte'
-  import GetInTouch from '$lib/components/GetInTouch.svelte'
   import {
     SITE_URL,
     SITE_TITLE,
