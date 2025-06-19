@@ -180,7 +180,7 @@ export async function formatContent(content) {
     // https://github.com/pngwn/MDsveX/issues/392
     .replace(/>{@html `<code class="language-/g, '><code class="language-')
     .replace(/<\/code>`}<\/pre>/g, '</code></pre>')
-  // lazy load images
+  // lazy load images, if not using rehype-wrap-img
   // .replace(/<img/g, '<img loading="lazy" ')
 
   return output

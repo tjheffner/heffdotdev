@@ -4,9 +4,9 @@ export type BaseContentItem = {
     [key: string]: string
   }
   title: string
-  subtitle: string
+  subtitle?: string
   description: string
-  canonical: string
+  canonical?: string
   slug: string
   date: Date
   ghMetadata: GHMetadata
@@ -88,6 +88,7 @@ export type GHUser = {
 
 export type GithubIssue = {
   user: GHUser
+  number: string
   labels: {
     name: string
   }[]
