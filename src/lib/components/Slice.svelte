@@ -2,8 +2,8 @@
 
   import { slugify } from '$lib/utils'
   interface Props {
-    title?: boolean;
-    date?: boolean;
+    title?: string;
+    date?: string;
     prose?: boolean;
     full?: boolean;
     warn?: boolean;
@@ -12,8 +12,8 @@
   }
 
   let {
-    title = false,
-    date = false,
+    title,
+    date,
     prose = true,
     full = false,
     warn = false,
@@ -21,7 +21,7 @@
     children
   }: Props = $props();
 
-  let tag = $state('a')
+  let tag: 'a' | 'div' = $state('a')
 
   if (titleLink === false) {
     tag = 'div'

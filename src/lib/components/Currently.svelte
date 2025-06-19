@@ -11,7 +11,7 @@
   const formattedDate = streakStartDate
     .toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric'})
   const today = new Date();
-  const diff = Math.abs(today - streakStartDate)
+  const diff = Math.abs(today.valueOf() - streakStartDate.valueOf())
   const days = Math.floor(diff/(86400 * 1000))
   const freezes = days - duolingo.streak
 

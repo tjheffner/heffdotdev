@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { page } from '$app/stores'
+  import { page } from '$app/state'
   let { ...props } = $props();
-  let isActive = $derived($page.url.pathname === props.href)
+  let isActive = $derived(page.url.pathname === props.href)
 </script>
 
 <a
