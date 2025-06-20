@@ -15,12 +15,14 @@
   </script>
 </div> -->
 
-
-<div class="mb-8 text-black " bind:this={commentsEl} use:utterances={{number: issueNumber}}>
+<div class="" bind:this={commentsEl} use:utterances={{number: issueNumber}}>
   Loading comments...
   <!-- svelte-ignore a11y_mouse_events_have_key_events -->
-  <button class="my-4 bg-blue-200 hover:bg-blue-100 text-black p-2 rounded-lg"
+  <button 
+    class=""
     onclick={() => injectScript(commentsEl, issueNumber)}
     onmouseover={() => injectScript(commentsEl, issueNumber)}
-  >Load now</button>
+  >
+    Load now
+  </button>
 </div>

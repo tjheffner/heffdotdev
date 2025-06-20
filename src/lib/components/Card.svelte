@@ -7,9 +7,9 @@
   let { title = 'Untitled post', href = '#' }: Props = $props();
 </script>
 
-<a data-sveltekit-prefetch {href} class="!bg-unset">
+<a data-sveltekit-prefetch {href} class="card link-bg-unset">
   <div
-    class="card flex h-full rounded-xl border-4 p-2 text-center align-middle transition-all border-slate-500 hover:border-yellow-800 hover:bg-yellow-400"
+    class=""
   >
     <h3>
       {title}

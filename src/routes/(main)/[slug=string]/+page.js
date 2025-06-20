@@ -20,7 +20,7 @@ export async function load({ params, fetch, setHeaders }) {
   }
 
   setHeaders({
-    'Cache-Control': 'public, max-age=60',
+    'Cache-Control': 'public, max-age=86400',
   })
   return {
     json,

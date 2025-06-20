@@ -18,22 +18,22 @@
   />
 </svelte:head>
 
-<section class="mx-auto flex w-full flex-col items-start px-4 sm:p-0">
+<section class="">
   <Slice>
-    <h1 class="mb-6 text-3xl font-bold tracking-tight text-secondary md:text-5xl">
+    <h1 class="">
       Gallery
     </h1>
-    <p class="text-xl font-semibold text-accent">
-      details, photos<sup class="text-secondary">*</sup>, etc. from past adventures
+    <p class="">
+      details, photos<sup class="">*</sup>, etc. from past adventures
     </p>
-    <p class="text-sm text-secondary mt-2">
+    <p class="">
       * advance warning many of the pages are very image heavy
     </p>
   </Slice>
 
   {#each items as trip}
     <Slice title={trip.title} date={trip.date} warn={trip.warn} titleLink={false}>
-      <a href="/gallery/{trip.slug}" style="display: inline-block" class="not-prose gallery-link w-full">
+      <a href="/gallery/{trip.slug}" style="display: inline-block" class="gallery-link">
         <img loading="lazy" src={trip.image} alt={trip.alt} class="gallery-image lazy-image" height="100%" width="100%" />
         {'>> ' + trip.description + ' <<'}
       </a>

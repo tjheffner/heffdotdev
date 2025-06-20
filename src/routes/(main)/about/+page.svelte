@@ -30,13 +30,13 @@
   <meta name="twitter:image" content={DEFAULT_OG_IMAGE} />
 </svelte:head>
 
-<section class="mx-auto flex w-full flex-col items-start px-4 sm:p-0">
+<section class="">
   <Slice full={true}>
-    <h1 class="text-secondary text-3xl font-bold lg:text-5xl mb-8">
+    <h1 class="">
       information desk
     </h1>
 
-    <div class="prose">
+    <div class="">
       <h2>about me</h2>
       <p>my name is <strong>tanner heffner</strong> and i am based out of <strong>portland, oregon</strong>.</p>
       <p>i have been a software engineer for over a decade and still love the feeling when launching a fresh <strong>hello world!</strong></p>

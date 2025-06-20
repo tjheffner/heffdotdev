@@ -1,3 +1,4 @@
+// @ts-ignore-next-line
 import { LASTFM_API_KEY, STEAM_API_KEY } from '$env/static/private'
 import {
   LASTFM_ID,

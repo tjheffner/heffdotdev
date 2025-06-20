@@ -32,7 +32,7 @@
 
 <section>
   <Slice>
-    <h1 class="text-secondary text-3xl font-bold tracking-tight md:text-5xl">
+    <h1 class="">
       Creative technologist passionate about design systems, responsive web
       design and accessibility.
     </h1>

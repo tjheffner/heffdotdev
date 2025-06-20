@@ -13,13 +13,7 @@ const remarkPlugins = [remarkUnwrapImages]
 const rehypePlugins = [
   rehypeStringify,
   rehypeSlug,
-  [
-    rehypeAutoLink,
-    {
-      behavior: 'wrap',
-      properties: { class: 'hover:text-yellow-100 no-underline' },
-    },
-  ],
+  rehypeAutoLink,
   rehypeZoomImages,
 ]
 
@@ -180,7 +174,7 @@ export async function formatContent(content) {
     // https://github.com/pngwn/MDsveX/issues/392
     .replace(/>{@html `<code class="language-/g, '><code class="language-')
     .replace(/<\/code>`}<\/pre>/g, '</code></pre>')
-  // lazy load images, if not using rehype-wrap-img
+  // lazy load images, if not using rehypeZoomImages
   // .replace(/<img/g, '<img loading="lazy" ')
 
   return output

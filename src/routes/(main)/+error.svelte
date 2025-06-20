@@ -1,5 +1,4 @@
 <script>
-  // import Nav from '../components/Nav.svelte';
   import { page } from '$app/state'
 
   const offline = typeof navigator !== 'undefined' && navigator.onLine === false
@@ -19,7 +18,7 @@
   <title>{title}</title>
 </svelte:head>
 
-<section class="container prose mx-auto py-12 dark:prose-invert">
+<section class="">
   <h1>{page.status}: {title}</h1>
 
   {#if page.status === 404}
@@ -38,29 +37,6 @@
       >
     </p>
   {:else}
-    <p class="font-mono">{message}</p>
+    <p class="">{message}</p>
   {/if}
 </section>
-
-<style>
-  h1,
-  p {
-    margin: 0 auto;
-  }
-
-  h1 {
-    font-size: 2.8em;
-    font-weight: 700;
-    margin: 0 0 0.5em 0;
-  }
-
-  p {
-    margin: 1em auto;
-  }
-
-  @media (min-width: 480px) {
-    h1 {
-      font-size: 4em;
-    }
-  }
-</style>

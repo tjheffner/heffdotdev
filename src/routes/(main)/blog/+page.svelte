@@ -54,18 +54,18 @@
 <svelte:window onkeyup={focusSearch} />
 
 <section
-  class="mx-auto mb-16 flex w-full flex-col items-start p-0 sm:px-8 lg:w-2/3"
+  class=""
 >
-  <h1 class="text-secondary mb-4 text-3xl font-bold tracking-tight md:text-5xl">
+  <h1 class="">
     Posts
   </h1>
-  <p class="mb-4 text-copy">
+  <p class="">
     In total, I've written <strong>{items.length}</strong> posts on my blog. Use the search below
     to filter.
   </p>
 
   <!-- Search Bar -->
-  <div class="relative w-full">
+  <div class="">
     <input
       aria-label="Search articles"
       id="search"
@@ -73,10 +73,10 @@
       bind:value={$search}
       bind:this={inputEl}
       placeholder="Hit / to search"
-      class="block w-full rounded-md border border-secondary bg-background px-4 py-2 text-copy placeholder:text-accent"
+      class=""
     />
     <svg
-      class="absolute right-3 top-3 h-5 w-5 text-secondary"
+      class=""
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
@@ -92,8 +92,8 @@
   </div>
 
   <!-- Filter Buttons -->
-  <div class="my-4 flex w-full items-center">
-    <span class="mr-2 text-copy"> Filter: </span>
+  <div class="">
+    <span class=""> Filter: </span>
     {#each POST_CATEGORIES as availableCategory}
       <div>
         <input
@@ -114,13 +114,11 @@
     {/each}
   </div>
 
-  <hr class="mb-6 md:mb-12" />
+  <hr class="" />
 
   <!-- Results -->
   {#if list?.length}
-    <ul
-      class="w-full divide-y divide-dashed divide-secondary md:mx-auto md:w-4/5"
-    >
+    <ul class="">
       {#each list as item, i}
         {#if isTruncated && (i+1 < LIST_DISPLAY_LENGTH)}
           <li class="mb-4 sm:mb-0">
@@ -138,7 +136,7 @@
       {/each}
     </ul>
     {#if isTruncated && list.length > LIST_DISPLAY_LENGTH}
-      <div class="flex justify-center mx-auto">
+      <div class="">
         <button
           onclick={() => (isTruncated = false)}
           class="filter"
@@ -154,7 +152,7 @@
     </div>
     <button
       onclick={() => ($search = '')}
-      class="filter my-4"
+      class="filter"
     >
       Clear your search
     </button>
@@ -162,9 +160,22 @@
     <div class="prose">No posts found with this combination of filters. Search something else!</div>
     <button
       onclick={clearFilters}
-      class="filter my-4"
+      class="filter"
     >
       Clear all filters
     </button>
   {/if}
 </section>
+
+
+<style>
+  .filter {
+    /* @apply m-1 inline-block whitespace-nowrap rounded rounded-md px-4 py-2 font-bold; */
+    /* @apply text-copy; */
+    /* @apply ring-accent transition-all duration-200 ease-in-out hover:ring-2; */
+  }
+  .activefilter {
+    /* @apply border-accent bg-secondary text-background; */
+    /* @apply ring-secondary; */
+  }
+</style>

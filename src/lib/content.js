@@ -97,7 +97,6 @@ export async function getContent(fetch, slug) {
 }
 
 // format github issue into object that page type expects.
-// work pages are loaded using localContent.js for .svx files, not github issues
 function parseIssue(issue, label) {
   const base = baseIssueContent(issue)
   const data = base.frontmatter

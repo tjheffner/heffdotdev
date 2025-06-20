@@ -1,18 +1,85 @@
 /* migrate all custom css to this file to eventually rip tailwind out */
+:root {
+  --brand-accent: #d81d4e;
+  --brand-secondary: #1d4ed8;
+  --brand-text: oklch(27.9% 0.041 260.031);
+  --brand-background: oklch(96.8% 0.007 247.896);
+
+  accent-color: var(--brand-accent);
+}  
+
+body {
+  /* https://ishadeed.com/article/defensive-css */
+  overflow-wrap: break-word;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+:focus-visible {
+  outline-color: var(--brand-accent);
+}
+::selection {
+  color: var(--brand-background);
+  background-color: var(--brand-accent);
+}
+::marker {
+  color: var(--brand-accent);
+}
+.text-accent {
+  color: var(--brand-accent);
+}
+.text-secondary {
+  color: var(--brand-secondary);
+}
+
+:is(
+    ::-webkit-calendar-picker-indicator,
+    ::-webkit-clear-button,
+    ::-webkit-inner-spin-button,
+    ::-webkit-outer-spin-button
+  ) {
+  color: var(--brand-accent);
+}
+
+/* https://css-tricks.com/two-issues-styling-the-details-element-and-how-to-solve-them/ */
+details {
+  border: 2px solid var(--brand-accent);
+  padding: 0.5rem 1rem;
+}
+details > summary {
+  cursor: pointer;
+}
+details > summary > *:first-child {
+  display: inline;
+}
+
+hr {
+  width: 100%;
+  border-top: 2px solid var(--brand-accent);
+}
+
+img {
+  /* https://ishadeed.com/article/defensive-css */
+  max-width: 100%;
+  object-fit: cover;
+  background-color: grey;
+}
 
 /* zoomable images */
 .zoom input[type='checkbox'] {
   display: none;
 }
-
 .zoom img {
   transition: transform 0.25s ease;
   cursor: zoom-in;
 }
-
 .zoom input[type='checkbox']:checked ~ img {
   transform: scale(1.65);
   cursor: zoom-out;
+}
+
+/* lazy loaded images */
+.lazy-image {
+  background-color: grey;
 }
 
 /* Links that highlight from bottom */
@@ -39,4 +106,34 @@
     background-size: 4px 50px;
     color: var(--brand-background);
   }
+}
+.link-bg-unset {
+  background: unset;
+  color: currentColor;
+}
+
+.back-link {
+  position: relative;
+  margin: 0 1rem 1rem;
+  font-weight: bold;
+  color: var(--brand-secondary);
+
+  &::before {
+    position: absolute;
+    left: -1rem;
+    content: '<';
+    color: currentColor;
+  }
+}
+
+/* utilities */
+.wrapper {
+  max-width: 1400px;
+  margin: auto;
+}
+.flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1rem;
 }

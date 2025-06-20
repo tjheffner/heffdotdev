@@ -6,9 +6,18 @@
 
 <a
   class={isActive
-    ? 'footer-link my-4 block w-fit font-bold active'
-    : 'footer-link my-4 block w-fit font-bold'}
+    ? 'footer-link active'
+    : 'footer-link'}
   href={props.href}
 >
   {@render props.children?.()}
 </a>
+
+<style>
+  .footer-link {
+    margin: 1rem 0;
+    display: block;
+    width: fit-content;
+    font-weight: bold;
+  }
+</style>

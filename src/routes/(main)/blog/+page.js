@@ -10,7 +10,7 @@ export async function load({ setHeaders, fetch }) {
   /** @type {import('$lib/types').BlogItem[]} */
   const items = await res.json()
   setHeaders({
-    'Cache-Control': 'public, max-age=60', // 1 minute
+    'Cache-Control': 'public, max-age=86400', // 1 day
   })
   return { items }
 }
