@@ -1,7 +1,7 @@
 <script lang="ts">
-  // keep tailwind, but no layout otherwise
+  // keep css reset, but no layout otherwise
   // any route in this group can render without header/footer
-  import '../../tailwind.css'
+  // import '../../tailwind.css'
   interface Props {
     children?: import('svelte').Snippet;
   }

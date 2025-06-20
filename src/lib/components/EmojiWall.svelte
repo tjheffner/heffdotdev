@@ -52,7 +52,7 @@
   let visible = $state(shuffleArray(scenes[initial]))
 </script>
 
-<div class="block text-4xl md:text-6xl mt-4 p-8 lg:mt-8 w-full max-h-[370px] md:max-h-[415px] overflow-hidden" aria-hidden="true">
+<div class="emoji-wall" aria-hidden="true">
   {#each visible as f, i}
     <!-- <span>{i}</span> -->
     <button
@@ -63,3 +63,23 @@
     </button>
   {/each}
 </div>
+
+
+<style>
+  .emoji-wall {
+    display: block;
+    font-size: 4rem;
+    padding: 4rem;
+    width: 100%;
+    max-height: 415px;
+    overflow: hidden;
+  }
+  .emoji {
+    display: inline-block;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .emoji:hover {
+    transform: scale(2);
+  }
+</style>

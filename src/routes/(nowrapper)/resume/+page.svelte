@@ -4,7 +4,7 @@
 
 <head>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <title>Tanner Heffner's Resume</title>
 </head>
@@ -74,7 +74,7 @@
     <p>January 2023 — June 2023</p>
     <ul>
       <li><strong>Architected the <a href="https://www.cms.gov/medical-bill-rights">Medical Bill Rights</a> portal</strong> for CMS.gov with localized content in English and Spanish in support of the No Surprises Act.</li>
-      <li><strong>Led front-end implementation</strong>, providing direction to junior team members and actively building out the React form architecture including <strong>localization, field and schema validations, plus Salesforce and Drupal integration.</strong>.</li>
+      <li><strong>Led front-end implementation</strong>, providing direction to junior team members and actively building out the React form architecture including <strong>localization, field and schema validations, plus Salesforce and Drupal integration.</strong></li>
     </ul>
 
     <h3 id="Instrument">Instrument</h3>
