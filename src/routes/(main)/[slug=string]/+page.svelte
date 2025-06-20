@@ -2,7 +2,6 @@
   import { page } from '$app/stores'
   import { TWITTER_ID, SITE_URL } from '$lib/siteConfig'
   import Comments from '$lib/components/Comments.svelte'
-  import 'prism-themes/themes/prism-shades-of-purple.min.css'
   import { Toc as TocStore } from '@svelte-put/toc';
   import Toc from '$lib/components/Toc.svelte';
 
