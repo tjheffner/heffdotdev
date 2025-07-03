@@ -18,5 +18,6 @@
     display: block;
     width: fit-content;
     font-weight: bold;
+    line-height: 1.5rem;
   }
 </style>

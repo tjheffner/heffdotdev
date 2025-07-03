@@ -1,12 +1,12 @@
 :root {
-  --brand-accent: #d81d4e;
-  --brand-secondary: #1d4ed8;
-  --brand-text: oklch(27.9% 0.041 260.031);
-  --brand-background: oklch(96.8% 0.007 247.896);
+  --c-accent: #d81d4e;
+  --c-secondary: #1d4ed8;
+  --c-text: oklch(27.9% 0.041 260.031);
+  --c-background: oklch(96.8% 0.007 247.896);
 
-  --density: .5rem; /* ~8pt grid */
+  --density: .65rem; /* ~8pt grid */
 
-  accent-color: var(--brand-accent);
+  accent-color: var(--c-accent);
 }
 
 /* https://www.joshwcomeau.com/css/custom-css-reset/ */
@@ -24,6 +24,8 @@
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+
+  background-color: var(--c-background);
 }
 img, picture, video, canvas, svg {
   display: block;
@@ -65,14 +67,14 @@ body [data-density-shift] [data-density-shift] {
 
 /* colors */
 :focus-visible {
-  outline-color: var(--brand-accent);
+  outline-color: var(--c-accent);
 }
 ::selection {
-  color: var(--brand-background);
-  background-color: var(--brand-accent);
+  color: var(--c-background);
+  background-color: var(--c-accent);
 }
 ::marker {
-  color: var(--brand-accent);
+  color: var(--c-accent);
 }
 :is(
     ::-webkit-calendar-picker-indicator,
@@ -80,12 +82,12 @@ body [data-density-shift] [data-density-shift] {
     ::-webkit-inner-spin-button,
     ::-webkit-outer-spin-button
   ) {
-  color: var(--brand-accent);
+  color: var(--c-accent);
 }
 
 /* https://css-tricks.com/two-issues-styling-the-details-element-and-how-to-solve-them/ */
 details {
-  border: 2px solid var(--brand-accent);
+  border: 2px solid var(--c-accent);
   padding: 0.5rem 1rem;
 }
 details > summary {
@@ -97,7 +99,7 @@ details > summary > *:first-child {
 
 hr {
   width: 100%;
-  border-top: 2px solid var(--brand-accent);
+  border-top: 2px solid var(--c-accent);
 }
 
 img {
@@ -126,14 +128,14 @@ img {
 /* Links that highlight from bottom */
 .nav-link,
 .prose a {
-  color: var(--brand-accent);
+  color: var(--c-accent);
   cursor: pointer;
   text-decoration: none;
   padding: 2px 4px;
   background: linear-gradient(
     to bottom,
-    var(--brand-secondary) 0%,
-    var(--brand-secondary) 100%
+    var(--c-secondary) 0%,
+    var(--c-secondary) 100%
   );
   background-position: 0 100%;
   background-repeat: repeat-x;
@@ -143,7 +145,7 @@ img {
   &.active,
   &:hover {
     background-size: 2px 50px;
-    color: var(--brand-background);
+    color: var(--c-background);
   }
 }
 .link-unset {
@@ -154,7 +156,7 @@ img {
 .back-link {
   margin: var(--space-away) 0;
   font-weight: bold;
-  color: var(--brand-secondary);
+  color: var(--c-secondary);
   text-decoration: none;
 
   &::before {

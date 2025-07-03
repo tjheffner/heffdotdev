@@ -58,7 +58,7 @@ function _fuzzySearch(items, selectedCategories, search) {
     const info = u.info(idxs, haystack, search)
     const order = u.sort(info, haystack, search)
     const mark = (part, matched) =>
-      matched ? '<b style="color:var(--brand-accent)">' + part + '</b>' : part
+      matched ? '<b style="color:var(--c-accent)">' + part + '</b>' : part
     const list = order.map((i) => {
       const x = filteredItems[info.idx[order[i]]]
       const hl = uFuzzy

@@ -17,6 +17,9 @@
 <style>
   .header {
     position: sticky;
+    top: 0;
+    padding: var(--space-near) 0;
+    background-color: var(--c-background);
   }
   .flex {
     display: flex;

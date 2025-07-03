@@ -10,7 +10,7 @@ body {
   padding: min(0.5in, 6vw);
 
   font-family: 'Urbanist', sans-serif;
-  --brand-accent: black;
+  --c-accent: black;
 }
 
 a {

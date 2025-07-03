@@ -69,9 +69,9 @@
     display: none;
   }
   .slice-title {
-    color: var(--brand-accent) !important;
+    color: var(--c-accent) !important;
   }
   .slice:not(:first-child) {
-    border-top: 2px solid var(--brand-accent);
+    border-top: 2px solid var(--c-accent);
   }
 </style>

@@ -18,11 +18,11 @@
     margin: .25rem;
     transition: all ease-in-out 200ms;
     /* background-color: transparent; */
-    color: var(--brand-accent);
+    color: var(--c-accent);
 
     &:hover {
-      background-color: var(--brand-accent);
-      color: var(--brand-background);
+      background-color: var(--c-accent);
+      color: var(--c-background);
     }
   }
 </style>
