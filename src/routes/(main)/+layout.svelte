@@ -26,16 +26,16 @@
 
 <Header />
 
-  {#key data.currentRoute}
-    <main
-      in:fade={{ duration: 150, delay: 150 }}
-      out:fade={{ duration: 150 }}
-      id="maincontent"
-      class="wrapper"
-    >
-      {@render children?.()}
-    </main>
+{#key data.currentRoute}
+  <main
+    in:fade={{ duration: 200, delay: 200 }}
+    out:fade={{ duration: 200 }}
+    id="maincontent"
+    class="wrapper"
+  >
+    {@render children?.()}
+  </main>
 
-  {/key}
+{/key}
 
 <Footer />
