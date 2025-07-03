@@ -29,7 +29,7 @@
   <meta name="twitter:image" content={DEFAULT_OG_IMAGE} />
 </svelte:head>
 
-<section>
+<section class="container">
   <h1 class="big-boi">
     Creative technologist passionate about design systems, responsive web
     design and accessibility.
@@ -37,9 +37,13 @@
 </section>
 
 <style>
+  .container {
+    height: calc(100vh - 200px);
+    display: flex;
+  }
   .big-boi {
-    font-size: var(--large-text);
     flex-grow: 1;
     align-self: center;
+    line-height: .85;
   }
 </style>
