@@ -2,15 +2,9 @@
   import '../../site.css'
   import Header from '$lib/components/Header.svelte'
   import Footer from '$lib/components/Footer.svelte'
-  import { onMount } from 'svelte'
   import { SITE_TITLE } from '$lib/siteConfig'
 
   import { fade } from 'svelte/transition'
-
-  onMount(() => {
-    // Indicate that the SvelteKit app has started
-    document.body.classList.add("started");
-  });
 
   let { data, children } = $props();
 </script>
@@ -27,7 +21,7 @@
 <Header />
 
 {#key data.currentRoute}
-  <main
+  <main 
     in:fade={{ duration: 200, delay: 200 }}
     out:fade={{ duration: 200 }}
     id="maincontent"
@@ -39,3 +33,7 @@
 {/key}
 
 <Footer />
+
+<style>
+
+</style>

@@ -1,19 +1,69 @@
-/* migrate all custom css to this file to eventually rip tailwind out */
 :root {
   --brand-accent: #d81d4e;
   --brand-secondary: #1d4ed8;
   --brand-text: oklch(27.9% 0.041 260.031);
   --brand-background: oklch(96.8% 0.007 247.896);
 
-  accent-color: var(--brand-accent);
-}  
+  --density: .5rem; /* ~8pt grid */
 
-body {
-  /* https://ishadeed.com/article/defensive-css */
-  overflow-wrap: break-word;
-  overflow-y: auto;
-  scrollbar-gutter: stable;
+  accent-color: var(--brand-accent);
 }
+
+/* https://www.joshwcomeau.com/css/custom-css-reset/ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    interpolate-size: allow-keywords;
+  }
+}
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+p {
+  text-wrap: pretty;
+}
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+#root, #__next {
+  isolation: isolate;
+}
+
+/* https://complementary.space/ */
+body {
+  --space-near: calc(var(--density) * 4);
+  --space-away: calc(var(--density) * 8);
+  font-size: 1.5625rem;
+}
+body [data-density-shift] {
+  --space-near: calc(var(--density) * 2);
+  --space-away: calc(var(--density) * 4);
+  font-size: 1.25rem;
+}
+body [data-density-shift] [data-density-shift] {
+  --space-near: calc(var(--density) * 1);
+  --space-away: calc(var(--density) * 2);
+  font-size: 1rem;
+}
+
+/* colors */
 :focus-visible {
   outline-color: var(--brand-accent);
 }
@@ -24,13 +74,6 @@ body {
 ::marker {
   color: var(--brand-accent);
 }
-.text-accent {
-  color: var(--brand-accent);
-}
-.text-secondary {
-  color: var(--brand-secondary);
-}
-
 :is(
     ::-webkit-calendar-picker-indicator,
     ::-webkit-clear-button,
@@ -63,7 +106,10 @@ img {
   object-fit: cover;
   background-color: grey;
 }
-
+/* lazy loaded images */
+.lazy-image {
+  background-color: grey;
+}
 /* zoomable images */
 .zoom input[type='checkbox'] {
   display: none;
@@ -77,15 +123,8 @@ img {
   cursor: zoom-out;
 }
 
-/* lazy loaded images */
-.lazy-image {
-  background-color: grey;
-}
-
 /* Links that highlight from bottom */
-.gh-link,
-.footer-link,
-.header-link,
+.nav-link,
 .prose a {
   color: var(--brand-accent);
   cursor: pointer;
@@ -98,29 +137,28 @@ img {
   );
   background-position: 0 100%;
   background-repeat: repeat-x;
-  background-size: 4px 2px;
+  background-size: 2px 2px;
   transition: all 0.3s linear;
 
   &.active,
   &:hover {
-    background-size: 4px 50px;
+    background-size: 2px 50px;
     color: var(--brand-background);
   }
 }
-.link-bg-unset {
-  background: unset;
-  color: currentColor;
+.link-unset {
+  background: unset !important;
+  color: currentColor !important;
 }
 
 .back-link {
-  position: relative;
-  margin: 0 1rem 1rem;
+  margin: var(--space-away) 0;
   font-weight: bold;
   color: var(--brand-secondary);
+  text-decoration: none;
 
   &::before {
-    position: absolute;
-    left: -1rem;
+    margin-right: .25rem;
     content: '<';
     color: currentColor;
   }
@@ -128,12 +166,6 @@ img {
 
 /* utilities */
 .wrapper {
-  max-width: 1400px;
+  max-width: 65ch;
   margin: auto;
-}
-.flex {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 1rem;
 }

@@ -1,5 +1,4 @@
 <script>
-  import Slice from '$lib/components/Slice.svelte'
   import {
     SITE_URL,
     SITE_TITLE,
@@ -31,10 +30,16 @@
 </svelte:head>
 
 <section>
-  <Slice>
-    <h1 class="">
-      Creative technologist passionate about design systems, responsive web
-      design and accessibility.
-    </h1>
-  </Slice>
+  <h1 class="big-boi">
+    Creative technologist passionate about design systems, responsive web
+    design and accessibility.
+  </h1>
 </section>
+
+<style>
+  .big-boi {
+    font-size: var(--large-text);
+    flex-grow: 1;
+    align-self: center;
+  }
+</style>

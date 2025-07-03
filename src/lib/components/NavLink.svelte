@@ -6,16 +6,15 @@
 
 <a
   class={isActive
-    ? 'footer-link active'
-    : 'footer-link'}
+    ? 'nav-link active'
+    : 'nav-link'}
   href={props.href}
 >
   {@render props.children?.()}
 </a>
 
 <style>
-  .footer-link {
-    margin: 1rem 0;
+  .nav-link {
     display: block;
     width: fit-content;
     font-weight: bold;

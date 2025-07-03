@@ -36,7 +36,7 @@
       information desk
     </h1>
 
-    <div class="">
+    <div class="prose">
       <h2>about me</h2>
       <p>my name is <strong>tanner heffner</strong> and i am based out of <strong>portland, oregon</strong>.</p>
       <p>i have been a software engineer for over a decade and still love the feeling when launching a fresh <strong>hello world!</strong></p>
