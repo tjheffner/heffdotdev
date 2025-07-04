@@ -141,18 +141,6 @@ body [data-density-shift] [data-density-shift] {
   color: var(--c-accent);
 }
 
-/* https://css-tricks.com/two-issues-styling-the-details-element-and-how-to-solve-them/ */
-details {
-  border: 2px solid var(--c-accent);
-  padding: 0.5rem 1rem;
-}
-details > summary {
-  cursor: pointer;
-}
-details > summary > *:first-child {
-  display: inline;
-}
-
 hr {
   width: 100%;
   border-top: 2px solid var(--c-accent);

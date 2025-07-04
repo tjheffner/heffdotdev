@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Slice from '$lib/components/Slice.svelte'
+  import Details from '$lib/components/Details.svelte'
   import {
     SITE_URL,
     SITE_TITLE,
@@ -30,32 +30,34 @@
   <meta name="twitter:image" content={DEFAULT_OG_IMAGE} />
 </svelte:head>
 
-<section >
-  <Slice full={true}>
-    <h1 >
-      information desk
-    </h1>
+<section class="wrapper prose">
+    <h1>information kiosk</h1>
 
-    <div>
-      <h2>about me</h2>
-      <p>my name is <strong>tanner heffner</strong> and i am based out of <strong>portland, oregon</strong>.</p>
-      <p>i have been a software engineer for over a decade and still love the feeling when launching a fresh <strong>hello world!</strong></p>
+    <Details title="about me" open>
+      <p>My name is <strong>tanner heffner</strong> and I am based out of <strong>portland, oregon</strong>.</p>
+
+      <p>I enjoy disc golf, cooking, gardening, making art, riding bikes and plenty more.</p>
+
+      <p>A software engineer for over a decade but I still love the feeling when launching a fresh <strong>hello world!</strong></p>
+
       <a href="/resume" target="_blank">[resume]</a>
+    </Details>
 
-
-
-      <h2>about the site</h2>
-      <p>perpetually under construction but coming together 🏄‍♂️</p>
+    <Details title="about the site">
+      <p>heffner.dev is perpetually under construction but coming together 🏄‍♂️</p>
 
       <p>parts <a href="/blog">blog,</a> <a href="/gallery">photo gallery,</a> <a href="/about/latest">tracker,</a> and <a href="/christmas">playground</a></p>
 
-      <p>it's my own personal <a href="https://joelhooks.com/digital-garden" target="_blank">digital garden</a>, using
-      <a href="https://swyxkit.netlify.app/about" target="_blank">swyxkit</a> as a starting point</p>
+      <p>it's my own personal <a href="https://joelhooks.com/digital-garden" target="_blank">digital garden</a>, built with <a href="https://svelte.dev/docs/kit/introduction" target="_blank">sveltekit</a> and leveraging github issues as my CMS.</p>
 
-      <p><a href="https://github.com/tjheffner/heffdotdev">public on github</a> and hosted via <a href="https://www.netlify.com/">netlify</a></p>
+      <p>the code is <a href="https://github.com/tjheffner/heffdotdev">public on github</a> and hosted via <a href="https://www.netlify.com/">netlify</a></p>
       <p><a href="/heffdotdev-technical-details">this post</a> explains more about the tools i chose and why</p>
+    </Details>
 
-      <p><strong>thank you</strong> for stopping by!</p>
-    </div>
-  </Slice>
+    <Details title="contact">
+      <p>If you have questions, or are interested in hiring me, send me an <a href="mailto:tannerjheffner@gmail.com">email</a> or reach out on linkedin. The icon in the footer will take you to my profile.</p>
+
+      <p>Cheers!</p>
+    </Details>
+
 </section>
