@@ -43,8 +43,8 @@
       <a href="/resume" target="_blank">[resume]</a>
     </Details>
 
-    <Details title="about the site">
-      <p>heffner.dev is perpetually under construction but coming together 🏄‍♂️</p>
+    <Details title="about this site">
+      <p>heffner.dev is perpetually under construction, like me 🏄‍♂️</p>
 
       <p>parts <a href="/blog">blog,</a> <a href="/gallery">photo gallery,</a> <a href="/about/latest">tracker,</a> and <a href="/christmas">playground</a></p>
 
@@ -57,7 +57,7 @@
     <Details title="contact">
       <p>If you have questions, or are interested in hiring me, send me an <a href="mailto:tannerjheffner@gmail.com">email</a> or reach out on linkedin. The icon in the footer will take you to my profile.</p>
 
-      <p>Cheers!</p>
+      <p class="h1">✌️</p>
     </Details>
 
 </section>
