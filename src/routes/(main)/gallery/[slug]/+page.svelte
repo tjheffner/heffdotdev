@@ -60,34 +60,34 @@
 
 <article
   use:toc.actions.root
-  class=""
+  
 >
 
   {#if json.title}
-    <div class="">
+    <div >
       <h1
-        class=""
+        
       >
         {json.title}
       </h1>
-      <span class=""
+      <span 
         >({json.date.toString().slice(0, 4)})</span
       >
     </div>
   {/if}
 
-  <div class="">
+  <div >
     {@html json.content}
   </div>
 </article>
 
 
 <div
-  class=""
+  
 >
-  <hr class="" />
+  <hr  />
 
-  <div class="">
+  <div >
     <Comments issueNumber={json.issueNumber} />
   </div>
 </div>

@@ -83,7 +83,7 @@
   </div>
 </article>
 
-<hr class="" />
+<hr />
 
 <div>
   <Comments issueNumber={json.issueNumber} />

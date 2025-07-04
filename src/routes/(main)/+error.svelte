@@ -18,11 +18,11 @@
   <title>{title}</title>
 </svelte:head>
 
-<section class="">
+<section >
   <h1>{page.status}: {title}</h1>
 
   {#if page.status === 404}
-    <p class="">
+    <p >
       There is no post at the slug <code>{page.url.pathname}</code>.
     </p>
     <p>
@@ -30,13 +30,13 @@
         >Try searching for it here!</a
       >
     </p>
-    <p class="">
+    <p >
       If you believe this was a bug, please let me know! <a
         href="https://github.com/tjheffner/heffdotdev/issues"
         >Open an issue here.</a
       >
     </p>
   {:else}
-    <p class="">{message}</p>
+    <p >{message}</p>
   {/if}
 </section>

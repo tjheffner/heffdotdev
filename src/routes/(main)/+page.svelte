@@ -38,7 +38,7 @@
 
 <style>
   .container {
-    height: calc(100vh - 200px);
+    height: calc(100vh - 350px);
     display: flex;
   }
   .big-boi {

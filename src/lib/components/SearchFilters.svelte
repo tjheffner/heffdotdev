@@ -38,7 +38,7 @@
 
     <!-- Filter Buttons -->
     <div class="filters">
-      <span class=""> Category: </span>
+      <span > Category: </span>
       {#each categories as availableCategory}
         <div class="filter">
           <input

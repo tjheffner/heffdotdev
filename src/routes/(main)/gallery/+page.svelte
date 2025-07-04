@@ -18,15 +18,15 @@
   />
 </svelte:head>
 
-<section class="">
+<section >
   <Slice>
-    <h1 class="">
+    <h1 >
       Gallery
     </h1>
-    <p class="">
-      details, photos<sup class="">*</sup>, etc. from past adventures
+    <p >
+      details, photos<sup >*</sup>, etc. from past adventures
     </p>
-    <p class="">
+    <p >
       * advance warning many of the pages are very image heavy
     </p>
   </Slice>

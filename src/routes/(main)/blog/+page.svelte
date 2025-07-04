@@ -55,19 +55,19 @@
 <svelte:window onkeyup={focusSearch} />
 
 <section
-  class=""
+  
   data-density-shift
 >
-  <h1 class="">
+  <h1 >
     Posts
   </h1>
-  <p class="">
+  <p >
     In total, I've written <strong>{items.length}</strong> posts on my blog.
   </p>
 
   <SearchFilters categories={POST_CATEGORIES} bind:search={$search} bind:selectedCategories={selectedCategories} bind:inputEl={inputEl}/>
 
-  <hr class="" />
+  <hr  />
 
   <!-- Results -->
   {#if list?.length}
@@ -85,7 +85,7 @@
       {/each}
     </ul>
     {#if isTruncated && list.length > LIST_DISPLAY_LENGTH}
-      <div class="">
+      <div >
         <button
           onclick={() => (isTruncated = false)}
           class="filter"

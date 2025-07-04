@@ -30,9 +30,9 @@
   <meta name="twitter:image" content={DEFAULT_OG_IMAGE} />
 </svelte:head>
 
-<section class="">
+<section >
   <Slice full={true}>
-    <h1 class="">
+    <h1 >
       information desk
     </h1>
 
