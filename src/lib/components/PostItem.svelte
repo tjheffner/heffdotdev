@@ -1,6 +1,4 @@
 <script lang="ts">
-
-  
   interface Props {
     href?: string;
     // gimme full item
@@ -11,42 +9,72 @@
   let { href = '#', item, children }: Props = $props();
 </script>
 
-<a data-sveltekit-prefetch class="post w-full" href={'/' + href}>
-  <div class="grid grid-cols-4 px-0 m-6">
-    <div class="col-span-4 sm:col-span-3 row-start-1">
-      <h2 class="text-lg font-bold text-accent">
+<li data-density-shift class="post">
+  <a data-sveltekit-prefetch class="post-link" href={'/' + href}>
+    <div class="left">
+      <h2>
         {item.title}
       </h2>
 
-      <p class="mb-2 text-copy">
+      <p>
         {@render children?.()}
       </p>
     </div>
 
-    <div
-      class="col-span-4 row-start-1 md:col-span-1 md:col-start-4 md:row-start-1 md:row-span-2 md:justify-self-end w-full text-right"
-    >
-      <p class="font-semibold text-copy mb-1">{new Date(item.date).toISOString().slice(0, 10)}</p>
+    <div class="right">
+      <p class="">{new Date(item.date).toISOString().slice(0, 10)}</p>
 
-      {#if item.category}
-        <span
-          class="
-          w-fit rounded-full
-          bg-secondary px-2
-          py-1 text-background font-bold
-          md:px-4
-        ">
+      <!-- {#if item.category}
+        <span class="category">
           {item.category}
         </span>
-      {/if}
+      {/if} -->
     </div>
-  </div>
-</a>
+  </a>
+</li>
+
 
 <style>
+  li {
+    margin: var(--space-away) 0;
+    border-bottom: 1px dashed var(--c-accent);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .post-link {
+    text-decoration: none;
+    width: 100%;
+    padding: var(--space-away) var(--space-near);
+    margin-bottom: var(--space-away);
+    display: flex;
+    flex-direction: column;
+
+    @media (min-width: 668px) {
+      flex-direction: row;
+    }
+  }
   .post:hover {
     & h2 {
-      @apply text-secondary;
+      color: var(--c-secondary);
     }
+  }
+  .category {
+    width: fit-content;
+    border-radius: 2rem;
+    background: var(--c-secondary);
+    padding: .25rem .5rem;
+    color: var(--c-background);
+    font-weight: bold;
+  }
+
+  .left {
+    flex-grow: 1;
+  }
+  .right {
+    text-align: right;
+    flex-shrink: 0;
   }
 </style>

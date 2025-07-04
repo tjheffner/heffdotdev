@@ -62,8 +62,7 @@
     Posts
   </h1>
   <p class="">
-    In total, I've written <strong>{items.length}</strong> posts on my blog. Use the search below
-    to filter.
+    In total, I've written <strong>{items.length}</strong> posts on my blog.
   </p>
 
   <SearchFilters categories={POST_CATEGORIES} bind:search={$search} bind:selectedCategories={selectedCategories} bind:inputEl={inputEl}/>
@@ -72,20 +71,16 @@
 
   <!-- Results -->
   {#if list?.length}
-    <ul class="">
+    <ul class="list">
       {#each list as item, i}
         {#if isTruncated && (i+1 < LIST_DISPLAY_LENGTH)}
-          <li class="mb-4 sm:mb-0">
-            <PostItem {item} href={item.slug}>
-              {item.description}
-            </PostItem>
-          </li>
+          <PostItem {item} href={item.slug}>
+            {item.description}
+          </PostItem>
         {:else if !isTruncated}
-          <li class="mb-4 sm:mb-0">
-            <PostItem {item} href={item.slug}>
-              {item.description}
-            </PostItem>
-          </li>
+          <PostItem {item} href={item.slug}>
+            {item.description}
+          </PostItem>
         {/if}
       {/each}
     </ul>
@@ -120,3 +115,10 @@
     </button>
   {/if}
 </section>
+
+<style>
+  .list {
+    padding: 0;
+    list-style-type: none;
+  }
+</style>
