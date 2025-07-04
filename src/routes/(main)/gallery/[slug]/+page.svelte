@@ -59,35 +59,35 @@
 <Toc {toc} />
 
 <article
+  data-density-shift
   use:toc.actions.root
-  
+  class="article"
 >
-
   {#if json.title}
-    <div >
-      <h1
-        
-      >
-        {json.title}
-      </h1>
-      <span 
-        >({json.date.toString().slice(0, 4)})</span
-      >
+    <div class="details">
+      <h1>{json.title}</h1>
+      <small>({json.date.toString().slice(0, 4)})</small>
     </div>
   {/if}
 
-  <div >
+  <div class="prose">
     {@html json.content}
   </div>
 </article>
 
+<hr />
 
-<div
-  
->
-  <hr  />
-
-  <div >
-    <Comments issueNumber={json.issueNumber} />
-  </div>
+<div>
+  <Comments issueNumber={json.issueNumber} />
 </div>
+
+<style>
+  .article {
+    margin: var(--space-near) 0;
+  }
+  .details {
+    display: flex;
+    align-items: center;
+    gap: var(--space-near);
+  }
+</style>

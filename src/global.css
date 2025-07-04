@@ -193,6 +193,7 @@ img {
     color: var(--c-background);
   }
 }
+h2 > a,
 .link-unset {
   background: unset !important;
   color: currentColor !important;
@@ -213,6 +214,7 @@ img {
 
 /* style markdown content from gh */
 .prose {
+  img,
   p {
     margin: var(--space-near) 0;
   }

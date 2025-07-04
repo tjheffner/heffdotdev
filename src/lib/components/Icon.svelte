@@ -16,12 +16,12 @@
     width: 60px;
     border-radius: 8px;
     margin: .25rem;
-    transition: all ease-in-out 200ms;
+    transition: all ease-in-out .3s;
     /* background-color: transparent; */
     color: var(--c-accent);
 
     &:hover {
-      background-color: var(--c-accent);
+      background-color: var(--c-secondary);
       color: var(--c-background);
     }
   }

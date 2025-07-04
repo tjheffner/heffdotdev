@@ -36,9 +36,9 @@
     <Details title="about me" open>
       <p>My name is <strong>tanner heffner</strong> and I am based out of <strong>portland, oregon</strong>.</p>
 
-      <p>I enjoy disc golf, cooking, gardening, making art, riding bikes and plenty more.</p>
+      <p>I enjoy disc golf, cooking, gardening, making art, riding bikes and plenty more. My girlfriend says I like to learn things the hard way, and I would say that's probably accurate. There's beauty in the struggle.</p>
 
-      <p>A software engineer for over a decade but I still love the feeling when launching a fresh <strong>hello world!</strong></p>
+      <p>A software engineer for over a decade and I still love the feeling when launching a fresh <strong>hello world!</strong></p>
 
       <a href="/resume" target="_blank">[resume]</a>
     </Details>
