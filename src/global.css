@@ -1,4 +1,4 @@
-/* set up global css vars */
+/* set up global css vars & fonts */
 :root {
   --c-accent: #d81d4e;
   --c-secondary: #1d4ed8;
@@ -8,6 +8,19 @@
   --density: .4rem; /* ~10pt grid */
 
   accent-color: var(--c-accent);
+}
+
+@font-face {
+  font-family: 'Merriweather';
+  font-style: normal;
+  font-weight: normal;
+  src: url('$lib/font/Merriweather-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Mulish';
+  font-style: normal;
+  font-weight: normal;
+  src: url('$lib/font/Mulish-Regular.ttf') format('truetype');
 }
 
 /* https://www.joshwcomeau.com/css/custom-css-reset/ */
@@ -27,6 +40,7 @@ body {
   -webkit-font-smoothing: antialiased;
 
   background-color: var(--c-background);
+  font-family: 'Mulish', sans-serif;
 }
 img, picture, video, canvas, svg {
   display: block;
@@ -44,6 +58,7 @@ p {
 }
 h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
+  font-family: 'Merriweather', serif;
 }
 #root, #__next {
   isolation: isolate;
@@ -55,11 +70,6 @@ h2 { font-size: 1.6583em; }
 h3 { font-size: 1.401em; }
 small { font-size: .8448em; }
 html { font-size: clamp(1em, .8333vw + .775em, 1.25em); }
-
-h1, h2, h3 {
-	font-family: 'Eczar';
-	font-weight: 600;
-}
 
 /* https://complementary.space/ */
 body {

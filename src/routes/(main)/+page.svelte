@@ -44,6 +44,6 @@
   .big-boi {
     flex-grow: 1;
     align-self: center;
-    line-height: .85;
+    line-height: 1.1;
   }
 </style>
