@@ -1,46 +1,47 @@
-  <script lang="ts">
-	let { 
-        search = $bindable(),
-        selectedCategories = $bindable(),
-        categories,
-        inputEl = $bindable(),
-        ...props 
-    } = $props();
-    
-  </script>
+<script lang="ts">
+  let { 
+      search = $bindable(),
+      selectedCategories = $bindable(),
+      categories,
+      inputEl = $bindable(),
+      ...props 
+  } = $props();
   
-  <div class="blog-search" data-density-shift>
-    <!-- Search Bar -->
-    <div class="search">
-      <input
-        aria-label="Search articles"
-        id="search"
-        type="text"
-        bind:value={search}
-        bind:this={inputEl}
-        placeholder="Hit / to search"
-        class="input"
-      />
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        aria-hidden="true"
-        focusable="false"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-        />
-      </svg>
-    </div>
+</script>
 
-    <!-- Filter Buttons -->
-    <div class="filters">
-      <span > Category: </span>
+<div class="blog-search" data-density-shift>
+  <!-- Search Bar -->
+  <div class="search">
+    <input
+      aria-label="Search articles"
+      id="search"
+      type="text"
+      bind:value={search}
+      bind:this={inputEl}
+      placeholder="Hit / to search"
+      class="input"
+    />
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+      />
+    </svg>
+  </div>
+
+  <!-- Filter Buttons -->
+  <div class="pillbox">
+    <span class="pillbox-label"> Category: </span>
+    <div class="pills">
       {#each categories as availableCategory}
         <div 
           class="filter"
@@ -61,10 +62,11 @@
         </div>
       {/each}
     </div>
+
   </div>
+</div>
 
-
-  <style>
+<style>
   .blog-search {
     position: sticky;
     top: 90px;
@@ -89,14 +91,33 @@
     width: 1.25rem;
   }
 
-  .filters {
+  .pillbox {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     margin: var(--space-away) 0;
+    gap: var(--space-near);
   }
+  .pillbox-label {
+    width: 100%;
+    margin: var(--space-near) 0;
+
+    @media (min-width: 668px) {
+      width: fit-content;
+    }
+  }
+  .pills {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-near);
+  }
+
+
   .filter label {
+    display: inline-block;
     width: 100%;
     height: 100%;
     padding: .5rem 1rem;
