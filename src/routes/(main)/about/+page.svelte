@@ -30,7 +30,7 @@
   <meta name="twitter:image" content={DEFAULT_OG_IMAGE} />
 </svelte:head>
 
-<section class="wrapper prose">
+<section class="wrapper prose" id="#content">
     <h1>information kiosk</h1>
 
     <Details title="about me" open>

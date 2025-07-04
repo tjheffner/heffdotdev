@@ -2,17 +2,21 @@
   import NavLink from '$lib/components/NavLink.svelte'
 </script>
 
-<div class="wrapper header">
-  <nav class="flex" data-density-shift>
-    <NavLink href="/">heffner.dev</NavLink>
+<header class="header">
+  <a class="skip-link" href="#content">Skip to main content</a>
+  
+  <div class="wrapper">
+    <nav class="flex" data-density-shift>
+      <NavLink href="/">heffner.dev</NavLink>
 
-    <div class="flex" data-density-shift>
-      <NavLink href="/blog">Posts</NavLink>
-      <NavLink href="/gallery">Gallery</NavLink>
-      <NavLink href="/about">About</NavLink>
-    </div>
-  </nav>
-</div>
+      <div class="flex" data-density-shift>
+        <NavLink href="/blog">Posts</NavLink>
+        <NavLink href="/gallery">Gallery</NavLink>
+        <NavLink href="/about">About</NavLink>
+      </div>
+    </nav>
+  </div>
+</header>
 
 <style>
   .header {
@@ -26,5 +30,16 @@
     flex-direction: row;
     justify-content: space-between;
     gap: 1rem;
+  }
+
+  .skip-link {
+    position: absolute;
+    transform: translateX(-100%);
+    z-index: 100;
+    padding: 1rem;
+  }
+  .skip-link:focus {
+    transform: translateX(10%);
+    background: var(--c-secondary-brighter);
   }
 </style>

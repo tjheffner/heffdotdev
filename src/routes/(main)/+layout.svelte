@@ -29,7 +29,6 @@
   >
     {@render children?.()}
   </main>
-
 {/key}
 
 <Footer />

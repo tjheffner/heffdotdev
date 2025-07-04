@@ -2,11 +2,11 @@
   import { page } from '$app/state'
   import { TWITTER_ID, SITE_URL } from '$lib/siteConfig'
   import Comments from '$lib/components/Comments.svelte'
-  import { Toc as TocStore } from '@svelte-put/toc';
-  import Toc from '$lib/components/Toc.svelte';
+  import { Toc } from '@svelte-put/toc';
+  import TableOfContents from '$lib/components/TableOfContents.svelte';
 
   // table of contents
-  const toc = new TocStore({ observe: true, anchor: false, selector: ':where(h1, h2, h3)' });
+  const toc = new Toc({ observe: true, anchor: false, selector: ':where(h1, h2, h3)' });
   
   /**
    * @typedef {Object} Props
@@ -54,14 +54,13 @@
   />
 </svelte:head>
 
-<a href="/gallery" class="back-link"> Back </a>
-
-<Toc {toc} />
+<TableOfContents {toc} type='gallery'/>
 
 <article
   data-density-shift
   use:toc.actions.root
   class="article"
+  id="#content"
 >
   {#if json.title}
     <div class="details">

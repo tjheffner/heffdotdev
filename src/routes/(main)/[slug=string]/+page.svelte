@@ -2,13 +2,13 @@
   import { page } from '$app/stores'
   import { TWITTER_ID, SITE_URL } from '$lib/siteConfig'
   import Comments from '$lib/components/Comments.svelte'
-  import { Toc as TocStore } from '@svelte-put/toc';
-  import Toc from '$lib/components/Toc.svelte';
+  import { Toc } from '@svelte-put/toc';
+  import TableOfContents from '$lib/components/TableOfContents.svelte';
 
   import '$lib/code-highlight.css'
 
   // table of contents
-  const toc = new TocStore({ observe: true, anchor: false, selector: ':where(h1, h2, h3)' });
+  const toc = new Toc({ observe: true, anchor: false, selector: ':where(h1, h2, h3)' });
 
   /**
    * @typedef {Object} Props
@@ -52,27 +52,29 @@
   <meta name="twitter:card" content={'summary'} />
 </svelte:head>
 
-<a href="/blog" class="back-link"> Back </a>
-
-<Toc {toc} />
+<TableOfContents {toc} type='blog' />
 
 <article 
   data-density-shift
   use:toc.actions.root
   class="article"
+  id="#content"
 >
-  <h1>
-    {json.title}
-  </h1>
   <div class="details">
-    <small class="date">
-      {new Date(json.date).toISOString().slice(0, 10)}
-    </small>
-    {#if new Date(json.date).toISOString().slice(0, 10) !== new Date(json.ghMetadata.updated_at).toISOString().slice(0, 10)}
-      <small>
-        updated: {new Date(json.ghMetadata.updated_at).toISOString().slice(0, 10)}
-      </small>
-    {/if}
+    <h1>
+      {json.title}
+    </h1>
+ 
+    <div class="side small">
+      <span class="date">
+        {new Date(json.date).toISOString().slice(0, 10)}
+      </span>
+      {#if new Date(json.date).toISOString().slice(0, 10) !== new Date(json.ghMetadata.updated_at).toISOString().slice(0, 10)}
+        <span class="date">
+          updated: {new Date(json.ghMetadata.updated_at).toISOString().slice(0, 10)}
+        </span>
+      {/if}
+    </div>
   </div>
 
   <hr />
@@ -95,10 +97,16 @@
   }
 
   .details {
-    text-align: right;
     margin: var(--space-near) 0;
+
+    display: flex;
+    justify-content: space-between;
+  }
+  .side {
+    align-self: flex-end;
+    text-align: right;
   }
   .date {
-    display: block;
+    white-space: nowrap;
   }
 </style>

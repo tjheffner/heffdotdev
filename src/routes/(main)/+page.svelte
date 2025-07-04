@@ -29,7 +29,7 @@
   <meta name="twitter:image" content={DEFAULT_OG_IMAGE} />
 </svelte:head>
 
-<section class="container">
+<section class="container" id="#content">
   <h1 class="big-boi">
     Creative technologist passionate about design systems, responsive web
     design and accessibility.

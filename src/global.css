@@ -201,19 +201,6 @@ h2 > a,
   color: currentColor !important;
 }
 
-.back-link {
-  margin: var(--space-away) 0;
-  font-weight: bold;
-  color: var(--c-secondary);
-  text-decoration: none;
-
-  &::before {
-    margin-right: 0.25rem;
-    content: '<';
-    color: currentColor;
-  }
-}
-
 /* style markdown content from gh */
 .prose {
   img,
@@ -240,6 +227,10 @@ h2 > a,
   @media (width >=668px) {
     margin: auto;
   }
+}
+.full-width {
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }
 .sr-only {
   position: absolute;
