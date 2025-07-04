@@ -35,3 +35,6 @@ Accessibility test reports can be found in `test-results/a11y`. View the files i
 - Geoff Rich for dynamic OG images https://geoffrich.net/posts/svelte-social-image/
 - Patrick Bacon for sveltekit hydration helper for playwright tests https://spin.atomicobject.com/hydration-sveltekit-tests/
 - Donnie D'amato for the resume layout inspiration: https://resume.damato.design/donnie/
+- Donnie again for https://complementary.space/
+- Stephen Mortenson for the typography scale tool: https://type-scale.spencermortensen.com/
+- Josh Comeau for his modern CSS reset: https://www.joshwcomeau.com/css/custom-css-reset
