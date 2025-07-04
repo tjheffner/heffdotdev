@@ -4,14 +4,15 @@
   interface Props {
     title: string;
     open?: boolean;
+    tall?: boolean
     children?: import('svelte').Snippet;
   }
 
-  let { title, children, open = false }: Props = $props();
+  let { title, children, open = false, tall = false }: Props = $props();
 </script>
 
 
-<details data-density-shift open={open}>
+<details data-density-shift open={open} class:tall={tall}>
   <summary><h2>{title}</h2></summary>
 
   {@render children?.()}
@@ -45,5 +46,10 @@
     &[open]::details-content {
       block-size: auto;  /* Or also:  height:auto; */
     }
+  }
+
+  /* helpful if the children contain a lot of links */
+  details:global(.tall > p) {
+    margin-bottom: var(--space-away);
   }
 </style>

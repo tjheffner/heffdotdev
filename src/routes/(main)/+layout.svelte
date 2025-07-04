@@ -24,7 +24,6 @@
   <main 
     in:fade={{ duration: 200, delay: 200 }}
     out:fade={{ duration: 200 }}
-    id="maincontent"
     class="wrapper"
   >
     {@render children?.()}

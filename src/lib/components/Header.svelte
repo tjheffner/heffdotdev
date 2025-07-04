@@ -40,6 +40,7 @@
   }
   .skip-link:focus {
     transform: translateX(10%);
-    background: var(--c-secondary-brighter);
+    /* one off because the transparency of --brighter doesn't work as an overlay */
+    background: oklch(0.82 0.07 271.3);
   }
 </style>

@@ -53,6 +53,7 @@
     margin-bottom: var(--space-away);
     display: flex;
     flex-direction: column;
+    color: var(--c-text);
 
     @media (min-width: 668px) {
       flex-direction: row;

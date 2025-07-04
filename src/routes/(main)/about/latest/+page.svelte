@@ -1,5 +1,6 @@
 <script lang="ts">
   import Currently from "$lib/components/Currently.svelte";
+  import TableOfContents from "$lib/components/TableOfContents.svelte"
 
   interface Props {
     // data from +page.server.js, keeps api keys private
@@ -11,6 +12,14 @@
 </script>
 
 
-<a href="/about" class="back-link"> Back </a>
+<TableOfContents type="about" toc={{items: []}} />
 
-<Currently recentlyListened={recentlyListened} recentlyPlayed={recentlyPlayed} recentlyWatched={recentlyWatched} duolingo={duolingo}/>
+<h1>Recent activity</h1>
+<div id='#content'>
+  <Currently 
+    recentlyListened={recentlyListened} 
+    recentlyPlayed={recentlyPlayed} 
+    recentlyWatched={recentlyWatched} 
+    duolingo={duolingo}
+  />
+</div>
