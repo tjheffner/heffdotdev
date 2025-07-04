@@ -1,6 +1,7 @@
 <script lang="ts">
   import { queryParam, ssp } from 'sveltekit-search-params'
   import PostItem from '$lib/components/PostItem.svelte'
+  import SearchFilters from '$lib/components/SearchFilters.svelte';
   import { POST_CATEGORIES } from '$lib/siteConfig'
   import { fuzzySearch } from './fuzzySearch'
   import type { Writable } from 'svelte/store'
@@ -55,6 +56,7 @@
 
 <section
   class=""
+  data-density-shift
 >
   <h1 class="">
     Posts
@@ -64,55 +66,7 @@
     to filter.
   </p>
 
-  <!-- Search Bar -->
-  <div class="">
-    <input
-      aria-label="Search articles"
-      id="search"
-      type="text"
-      bind:value={$search}
-      bind:this={inputEl}
-      placeholder="Hit / to search"
-      class=""
-    />
-    <svg
-      class=""
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-      />
-    </svg>
-  </div>
-
-  <!-- Filter Buttons -->
-  <div class="">
-    <span class=""> Filter: </span>
-    {#each POST_CATEGORIES as availableCategory}
-      <div>
-        <input
-          id="category-{availableCategory}"
-          class="peer sr-only"
-          type="checkbox"
-          bind:group={$selectedCategories}
-          value={availableCategory}
-        />
-        <label
-          for="category-{availableCategory}"
-          class="filter"
-          class:activefilter={$selectedCategories.includes(availableCategory)}
-        >
-          {availableCategory}
-        </label>
-      </div>
-    {/each}
-  </div>
+  <SearchFilters categories={POST_CATEGORIES} bind:search={$search} bind:selectedCategories={selectedCategories} bind:inputEl={inputEl}/>
 
   <hr class="" />
 
@@ -166,16 +120,3 @@
     </button>
   {/if}
 </section>
-
-
-<style>
-  .filter {
-    /* @apply m-1 inline-block whitespace-nowrap rounded rounded-md px-4 py-2 font-bold; */
-    /* @apply text-copy; */
-    /* @apply ring-accent transition-all duration-200 ease-in-out hover:ring-2; */
-  }
-  .activefilter {
-    /* @apply border-accent bg-secondary text-background; */
-    /* @apply ring-secondary; */
-  }
-</style>
