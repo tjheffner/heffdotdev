@@ -1,8 +1,10 @@
 <script lang="ts">
+  import type { BlogItem } from '$lib/types'
+
   interface Props {
     href?: string;
     // gimme full item
-    item: any;
+    item: BlogItem;
     children?: import('svelte').Snippet;
   }
 

@@ -73,7 +73,7 @@
 
   <!-- Results -->
   {#if list?.length}
-    <ul class="list">
+    <ul class="clean-list">
       {#each list as item, i}
         {#if isTruncated && (i+1 < LIST_DISPLAY_LENGTH)}
           <PostItem {item} href={item.slug}>
@@ -119,10 +119,6 @@
 </section>
 
 <style>
-  .list {
-    padding: 0;
-    list-style-type: none;
-  }
   .button {
     margin: var(--space-near) 0;
   }

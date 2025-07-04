@@ -5,7 +5,7 @@
   --c-text: oklch(27.9% 0.041 260.031);
   --c-background: oklch(96.8% 0.007 247.896);
 
-  --density: 0.4rem; /* ~10pt grid */
+  --density: .4rem; /* ~10pt grid */
 
   accent-color: var(--c-accent);
 }
@@ -90,6 +90,7 @@ h6 {
 h1 {
   font-size: 2.75em;
   line-height: 1.1;
+  margin-bottom: var(--space-away);
 }
 h2 {
   font-size: 1.6583em;
@@ -99,6 +100,8 @@ h3 {
 }
 small {
   font-size: 0.8448em;
+  display: block;
+  margin-bottom: var(--space-near);
 }
 html {
   font-size: clamp(1em, 0.8333vw + 0.775em, 1.25em);
@@ -153,7 +156,6 @@ details > summary > *:first-child {
 hr {
   width: 100%;
   border-top: 2px solid var(--c-accent);
-  margin: var(--space-near) 0;
 }
 
 img {
@@ -181,6 +183,7 @@ img {
 
 /* Links that highlight from bottom */
 .nav-link,
+.gallery-link,
 .prose a {
   color: var(--c-accent);
   cursor: pointer;
@@ -243,4 +246,14 @@ img {
   width: 1px;
   height: 1px;
   overflow: hidden;
+}
+.clean-list {
+  padding: 0;
+  list-style-type: none;
+}
+.accent {
+  color: var(--c-accent);
+}
+.secondary {
+  color: var(--c-secondary);
 }

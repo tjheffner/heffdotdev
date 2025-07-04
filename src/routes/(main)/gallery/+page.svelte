@@ -1,5 +1,6 @@
 <script lang="ts">
-  import Slice from '$lib/components/Slice.svelte'
+  import GalleryItem from "$lib/components/GalleryItem.svelte";
+
   let { data } = $props();
   let { items } = data
 </script>
@@ -18,43 +19,26 @@
   />
 </svelte:head>
 
-<section >
-  <Slice>
-    <h1 >
-      Gallery
-    </h1>
-    <p >
-      details, photos<sup >*</sup>, etc. from past adventures
+<section class="wrapper" data-density-shift>
+  <h1>Gallery</h1>
+
+  <div>
+    <p>
+      details, photos<sup class="accent">*</sup>, etc. from past projects and adventures
     </p>
-    <p >
+    <small class="accent">
       * advance warning many of the pages are very image heavy
-    </p>
-  </Slice>
+    </small>
+  </div>
 
+  <hr />
+
+  <ul class="clean-list">
   {#each items as trip}
-    <Slice title={trip.title} date={trip.date} warn={trip.warn} titleLink={false}>
-      <a href="/gallery/{trip.slug}" style="display: inline-block" class="gallery-link">
-        <img loading="lazy" src={trip.image} alt={trip.alt} class="gallery-image lazy-image" height="100%" width="100%" />
-        {'>> ' + trip.description + ' <<'}
-      </a>
-
-      {#if trip.title === 'Japan'}
-      <p class="text-secondary font-bold text-xs">The above link has <strong>>500 MB</strong> worth of images. Please be on wifi.</p>
-      {/if}
-    </Slice>
+    <GalleryItem item={trip} href={trip.slug} />
   {/each}
-
-  <p id="warning" class="text-sm text-secondary my-12 mx-0 md:mx-4 lg:mx-12">
-    * seriously, this page has at least <span class="text-secondary">40 MB</span> worth of images.
-  </p>
+  </ul>
 </section>
 
 <style>
-  .gallery-image {
-    max-height: 600px;
-    object-fit: cover;
-  }
-  .gallery-link:hover {
-    background-size: 4px 100px;
-  }
 </style>
