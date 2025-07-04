@@ -65,7 +65,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* type scale */
-h1 { font-size: 2.75em; }
+h1 { 
+  font-size: 2.75em;
+  line-height: 1.1; 
+}
 h2 { font-size: 1.6583em; }
 h3 { font-size: 1.401em; }
 small { font-size: .8448em; }

@@ -4,6 +4,8 @@
 </script>
 
 <footer class="wrapper align-right">
+  <div class="footer">
+
   <Icon href={`/rss.xml`} label="RSS">
     <svg viewBox="0 0 256 256" class="h-12 w-12 p-1" fill="currentColor">
       <circle cx="68" cy="189" r="24"/>
@@ -95,9 +97,13 @@
           </g>
         </svg>
       </Icon> -->
+  </div>
 </footer>
 
 <style>
+  .footer {
+    margin: var(--space-away) 0 var(--space-near);
+  }
   .align-right {
     text-align: right;
   }
