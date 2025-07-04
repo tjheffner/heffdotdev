@@ -9,6 +9,10 @@
 
   --density: .4rem; /* ~10pt grid */
 
+  --bp-small: 668px;
+  --bp-large: 1024px;
+  --bp-xl: 1440px;
+
   accent-color: var(--c-accent);
 }
 
@@ -146,6 +150,7 @@ body [data-density-shift] [data-density-shift] {
 hr {
   width: 100%;
   border-top: 2px solid var(--c-accent);
+  margin: var(--space-away) 0;
 }
 
 img {
@@ -206,6 +211,12 @@ h2 > a,
   img,
   p {
     margin: var(--space-near) 0;
+  }
+  
+  h2 > a,
+  h3 > a,
+  h4 > a {
+    padding: 0;
   }
 
   /* handles `inline code`. larger code blocks are wrapped with pre tags and styled separately */
