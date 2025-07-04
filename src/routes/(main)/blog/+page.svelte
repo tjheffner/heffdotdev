@@ -10,14 +10,14 @@
   let { items } = data
 
   // https://github.com/paoloricciuti/sveltekit-search-params#how-to-use-it
-  let selectedCategories: Writable<string[] | null> = queryParam(
+  let selectedCategories: Writable<string[] | null> = $state(queryParam(
     'show',
     {
       encode: (arr) => arr?.toString(),
       decode: (str) => str?.split(',')?.filter((e) => e) ?? []
     },
     { debounceHistory: 100 }
-  );
+  ));
   let search = queryParam('filter', ssp.string(), {
     debounceHistory: 500
   });
