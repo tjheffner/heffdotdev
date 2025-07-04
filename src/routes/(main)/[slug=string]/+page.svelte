@@ -18,6 +18,9 @@
   /** @type {import('$lib/types').BaseContentItem} */
   let json = $derived(data.json) // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
 
+  const date = new Date(json.date).toISOString().slice(0, 10)
+  const updated = new Date(json.ghMetadata.updated_at).toISOString().slice(0, 10)
+
   let canonical = $derived(SITE_URL + $page.url.pathname)
 </script>
 
@@ -55,30 +58,48 @@
 <Toc {toc} />
 
 <article 
+  data-density-shift
   use:toc.actions.root
-  class=""
+  class="article"
 >
-  <h1 class="">
+  <h1>
     {json.title}
   </h1>
-  <div class="">
-    <p class="">
-      tjheffner
-    </p>
-    <p class="">
-      {new Date(json.date).toISOString().slice(0, 10)}
-    </p>
+  <div class="details">
+    <small class="date">
+      {date}
+    </small>
+    {#if date !== updated}
+      <small>
+        updated: {new Date(json.ghMetadata.updated_at).toISOString().slice(0, 10)}
+      </small>
+    {/if}
   </div>
 
-  <hr class=""/>
+  <hr />
 
-  <div class="">
+  <div class="prose">
     {@html json.content}
   </div>
 </article>
 
 <hr class="" />
 
-<div class="">
+<div>
   <Comments issueNumber={json.issueNumber} />
 </div>
+
+
+<style>
+  .article {
+    margin: var(--space-near) 0;
+  }
+
+  .details {
+    text-align: right;
+    margin: var(--space-near) 0;
+  }
+  .date {
+    display: block;
+  }
+</style>

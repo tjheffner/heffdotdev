@@ -22,7 +22,7 @@
     </div>
 
     <div class="right">
-      <p class="">{new Date(item.date).toISOString().slice(0, 10)}</p>
+      <small>{new Date(item.date).toISOString().slice(0, 10)}</small>
 
       <!-- {#if item.category}
         <span class="category">
