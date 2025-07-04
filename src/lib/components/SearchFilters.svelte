@@ -73,11 +73,14 @@
   .input {
     width: 100%;
     height: 2.5rem;
+    border-radius: 2rem;
+    border: 1px solid;
+    padding: 0 var(--space-away);
   }
   svg {
     position: absolute;
     top: .6rem;
-    right: .5rem;
+    right: var(--space-away);
     height: 1.25rem;
     width: 1.25rem;
   }
@@ -87,26 +90,23 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin: var(--space-near) 0;
+    margin: var(--space-away) 0;
   }
-
-  .filter {
-    padding: .5rem 1rem;
-    border-radius: 2rem;
-    cursor: pointer;
-    /* @apply m-1 inline-block whitespace-nowrap rounded rounded-md px-4 py-2 font-bold; */
-    /* @apply text-copy; */
-    /* @apply ring-accent transition-all duration-200 ease-in-out hover:ring-2; */
-  }
-
   .filter label {
     width: 100%;
     height: 100%;
+    padding: .5rem 1rem;
+    border-radius: 2rem;
+    transition: .3s all ease-in-out;
     cursor: pointer;
+
+    &:hover {
+        background-color: blue;
+        color: var(--c-background);
+    }
   }
   .activefilter {
-    /* @apply border-accent bg-secondary text-background; */
-    /* @apply ring-secondary; */
     background-color: var(--c-accent);
+    color: var(--c-background);
   }
 </style>
