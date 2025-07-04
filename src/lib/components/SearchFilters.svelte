@@ -124,7 +124,7 @@
     border-radius: 2rem;
     transition: .3s all ease-in-out;
     cursor: pointer;
-    background-color: oklch(from var(--c-secondary) l c h / calc(alpha - 0.75));
+    background-color: var(--c-secondary-brighter);
 
     &:hover {
         background-color: var(--c-secondary);

@@ -36,7 +36,11 @@
     <Details title="about me" open>
       <p>My name is <strong>tanner heffner</strong> and I am based out of <strong>portland, oregon</strong>.</p>
 
-      <p>I enjoy disc golf, cooking, gardening, making art, riding bikes and plenty more. My girlfriend says I like to learn things the hard way, and I would say that's probably accurate. There's beauty in the struggle.</p>
+      <p>
+        I enjoy disc golf, cooking, gardening, making art, riding bikes and plenty more. 
+        My girlfriend says I like to learn things the hard way, and I would say that's probably accurate.
+        There's beauty in the struggle.
+      </p>
 
       <p>A software engineer for over a decade and I still love the feeling when launching a fresh <strong>hello world!</strong></p>
 
@@ -44,7 +48,7 @@
     </Details>
 
     <Details title="about this site">
-      <p>heffner.dev is perpetually under construction, like me 🏄‍♂️</p>
+      <p>heffner.dev is perpetually under construction, same as me 🏄‍♂️</p>
 
       <p>parts <a href="/blog">blog,</a> <a href="/gallery">photo gallery,</a> <a href="/about/latest">tracker,</a> and <a href="/christmas">playground</a></p>
 
@@ -55,7 +59,7 @@
     </Details>
 
     <Details title="contact">
-      <p>If you have questions, or are interested in hiring me, send me an <a href="mailto:tannerjheffner@gmail.com">email</a> or reach out on linkedin. The icon in the footer will take you to my profile.</p>
+      <p>If you have questions, or are interested in hiring me, please send me an <a href="mailto:tannerjheffner@gmail.com">email</a> or reach out on linkedin. The icon in the footer will take you to my profile.</p>
 
       <p class="h1">✌️</p>
     </Details>

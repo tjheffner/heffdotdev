@@ -5,6 +5,8 @@
   import { Toc as TocStore } from '@svelte-put/toc';
   import Toc from '$lib/components/Toc.svelte';
 
+  import '$lib/code-highlight.css'
+
   // table of contents
   const toc = new TocStore({ observe: true, anchor: false, selector: ':where(h1, h2, h3)' });
 
@@ -17,9 +19,6 @@
 
   /** @type {import('$lib/types').BaseContentItem} */
   let json = $derived(data.json) // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
-
-  const date = new Date(json.date).toISOString().slice(0, 10)
-  const updated = new Date(json.ghMetadata.updated_at).toISOString().slice(0, 10)
 
   let canonical = $derived(SITE_URL + $page.url.pathname)
 </script>
@@ -67,9 +66,9 @@
   </h1>
   <div class="details">
     <small class="date">
-      {date}
+      {new Date(json.date).toISOString().slice(0, 10)}
     </small>
-    {#if date !== updated}
+    {#if new Date(json.date).toISOString().slice(0, 10) !== new Date(json.ghMetadata.updated_at).toISOString().slice(0, 10)}
       <small>
         updated: {new Date(json.ghMetadata.updated_at).toISOString().slice(0, 10)}
       </small>
