@@ -5,7 +5,7 @@
   --c-text: oklch(27.9% 0.041 260.031);
   --c-background: oklch(96.8% 0.007 247.896);
 
-  --density: .4rem; /* ~10pt grid */
+  --density: 0.4rem; /* ~10pt grid */
 
   accent-color: var(--c-accent);
 }
@@ -24,7 +24,9 @@
 }
 
 /* https://www.joshwcomeau.com/css/custom-css-reset/ */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 * {
@@ -42,37 +44,64 @@ body {
   background-color: var(--c-background);
   font-family: 'Mulish', sans-serif;
 }
-img, picture, video, canvas, svg {
+img,
+picture,
+video,
+canvas,
+svg {
   display: block;
   max-width: 100%;
 }
-input, button, textarea, select {
+input,
+button,
+textarea,
+select {
   font: inherit;
 }
 
-p, h1, h2, h3, h4, h5, h6 {
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   overflow-wrap: break-word;
 }
 p {
   text-wrap: pretty;
 }
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   text-wrap: balance;
   font-family: 'Merriweather', serif;
 }
-#root, #__next {
+#root,
+#__next {
   isolation: isolate;
 }
 
 /* type scale */
-h1 { 
+h1 {
   font-size: 2.75em;
-  line-height: 1.1; 
+  line-height: 1.1;
 }
-h2 { font-size: 1.6583em; }
-h3 { font-size: 1.401em; }
-small { font-size: .8448em; }
-html { font-size: clamp(1em, .8333vw + .775em, 1.25em); }
+h2 {
+  font-size: 1.6583em;
+}
+h3 {
+  font-size: 1.401em;
+}
+small {
+  font-size: 0.8448em;
+}
+html {
+  font-size: clamp(1em, 0.8333vw + 0.775em, 1.25em);
+}
 
 /* https://complementary.space/ */
 body {
@@ -184,7 +213,7 @@ img {
   text-decoration: none;
 
   &::before {
-    margin-right: .25rem;
+    margin-right: 0.25rem;
     content: '<';
     color: currentColor;
   }
@@ -207,10 +236,10 @@ img {
   }
 }
 .sr-only {
-  position:absolute;
-  left:-10000px;
-  top:auto;
-  width:1px;
-  height:1px;
-  overflow:hidden;
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }

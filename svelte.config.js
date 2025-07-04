@@ -1,4 +1,4 @@
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 import adapter from '@sveltejs/adapter-netlify'
 import { mdsvex } from 'mdsvex'
 import remarkGithub from 'remark-github'
@@ -35,11 +35,8 @@ const mdsvexConfig = {
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-  extensions: ['.svelte', '.html', '.svx', ], // ...mdsvexConfig.extensions
-  preprocess: [
-    mdsvex(mdsvexConfig),
-    vitePreprocess(),
-  ],
+  extensions: ['.svelte', '.html', '.svx'], // ...mdsvexConfig.extensions
+  preprocess: [mdsvex(mdsvexConfig), vitePreprocess()],
   outDir: 'public',
 
   kit: {

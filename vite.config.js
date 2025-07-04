@@ -20,9 +20,5 @@ function rawFonts(ext) {
 // https://vitejs.dev/config/
 /** @type {import('vite').UserConfig} */
 export default defineConfig({
-  plugins: [
-    sveltekit(),
-    rawFonts(['.ttf']),
-    nodePolyfills(),
-  ],
+  plugins: [sveltekit(), rawFonts(['.ttf']), nodePolyfills()],
 })

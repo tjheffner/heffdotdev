@@ -54,18 +54,20 @@
 
 <svelte:window onkeyup={focusSearch} />
 
-<section
-  
-  data-density-shift
->
-  <h1 >
+<section data-density-shift>
+  <h1>
     Posts
   </h1>
   <p >
     In total, I've written <strong>{items.length}</strong> posts on my blog.
   </p>
 
-  <SearchFilters categories={POST_CATEGORIES} bind:search={$search} bind:selectedCategories={selectedCategories} bind:inputEl={inputEl}/>
+  <SearchFilters 
+    categories={POST_CATEGORIES} 
+    bind:inputEl={inputEl}
+    bind:search={$search} 
+    bind:selectedCategories={selectedCategories} 
+  />
 
   <hr  />
 
