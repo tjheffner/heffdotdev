@@ -42,7 +42,10 @@
     <div class="filters">
       <span > Category: </span>
       {#each categories as availableCategory}
-        <div class="filter">
+        <div 
+          class="filter"
+          class:active={$selectedCategories.includes(availableCategory)}
+        >
           <input
             id="category-{availableCategory}"
             class="sr-only"
@@ -52,7 +55,6 @@
           />
           <label
             for="category-{availableCategory}"
-            class:activefilter={$selectedCategories.includes(availableCategory)}
           >
             {availableCategory}
           </label>
@@ -101,14 +103,16 @@
     border-radius: 2rem;
     transition: .3s all ease-in-out;
     cursor: pointer;
+    background-color: oklch(from var(--c-secondary) l c h / calc(alpha - 0.75));
 
     &:hover {
-        background-color: blue;
+        background-color: var(--c-secondary);
         color: var(--c-background);
     }
   }
-  .activefilter {
-    background-color: var(--c-accent);
+  .active label {
+    background-color: var(--c-secondary);
     color: var(--c-background);
   }
+
 </style>

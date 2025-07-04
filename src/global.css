@@ -1,7 +1,7 @@
 /* set up global css vars & fonts */
 :root {
-  --c-accent: #d81d4e;
-  --c-secondary: #1d4ed8;
+  --c-accent: oklch(57.057% 0.21474 14.568);
+  --c-secondary: oklch(48.821% 0.21724 264.392);
   --c-text: oklch(27.9% 0.041 260.031);
   --c-background: oklch(96.8% 0.007 247.896);
 
@@ -44,6 +44,7 @@ body {
   background-color: var(--c-background);
   font-family: 'Mulish', sans-serif;
 }
+
 img,
 picture,
 video,

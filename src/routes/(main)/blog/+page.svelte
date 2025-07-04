@@ -58,7 +58,7 @@
   <h1>
     Posts
   </h1>
-  <p >
+  <p>
     In total, I've written <strong>{items.length}</strong> posts on my blog.
   </p>
 
@@ -69,7 +69,7 @@
     bind:selectedCategories={selectedCategories} 
   />
 
-  <hr  />
+  <hr />
 
   <!-- Results -->
   {#if list?.length}
@@ -90,7 +90,7 @@
       <div >
         <button
           onclick={() => (isTruncated = false)}
-          class="filter"
+          class="button"
         >
           See more posts
         </button>
@@ -103,7 +103,7 @@
     </div>
     <button
       onclick={() => ($search = '')}
-      class="filter"
+      class="button"
     >
       Clear your search
     </button>
@@ -111,7 +111,7 @@
     <div class="prose">No posts found with this combination of filters. Search something else!</div>
     <button
       onclick={clearFilters}
-      class="filter"
+      class="button"
     >
       Clear all filters
     </button>
@@ -122,5 +122,8 @@
   .list {
     padding: 0;
     list-style-type: none;
+  }
+  .button {
+    margin: var(--space-near) 0;
   }
 </style>
