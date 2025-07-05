@@ -1,4 +1,4 @@
-// @ts-ignore-next-line
+import type { PageServerLoadEvent } from './$types'
 import { LASTFM_API_KEY, STEAM_API_KEY } from '$env/static/private'
 import {
   LASTFM_ID,
@@ -8,7 +8,12 @@ import {
 } from '$lib/siteConfig'
 import letterboxd from 'letterboxd'
 
-export async function load({ fetch, params }) {
+export async function load({ fetch, params }: PageServerLoadEvent): Promise<{
+  recentlyWatched: any[],
+  recentlyListened: any[],
+  recentlyPlayed: any[],
+  duolingo: any[]
+}> {
   // Fetch recently played songs from last.fm
   const lastfm_res = await fetch(
     `http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_ID}&api_key=${LASTFM_API_KEY}&format=json`

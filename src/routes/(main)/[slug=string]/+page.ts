@@ -1,9 +1,13 @@
+import type { PageLoadEvent } from './$types'
+import type { BlogItem } from '$lib/types'
 import { error, redirect } from '@sveltejs/kit'
-import { goto } from '$app/navigation'
 import { REPO_URL } from '$lib/siteConfig'
 
 export const csr = true // https://github.com/sveltejs/kit/pull/6446
-export async function load({ params, fetch, setHeaders }) {
+
+export async function load({ params, fetch, setHeaders }: PageLoadEvent): Promise<
+{ json: BlogItem, slug: string, REPO_URL: string}
+> {
   const slug = params.slug
 
   let res = null

@@ -1,14 +1,16 @@
+import type { BlogItem } from '$lib/types.js'
+import type { PageLoadEvent } from './$types.js'
+
 import { error } from '@sveltejs/kit'
-// export const prerender = true; // turned off so it refreshes quickly
-export async function load({ setHeaders, fetch }) {
+
+export async function load({ setHeaders, fetch }: PageLoadEvent): Promise<{ items: BlogItem[] }> {
   const res = await fetch(`/api/listContent.json`)
 
   if (res.status > 400) {
     throw error(res.status, await res.text())
   }
 
-  /** @type {import('$lib/types').BlogItem[]} */
-  const items = await res.json()
+  const items: BlogItem[] = await res.json()
   setHeaders({
     'Cache-Control': 'public, max-age=86400', // 1 day
   })

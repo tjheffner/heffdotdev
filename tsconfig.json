@@ -1,13 +1,14 @@
 {
   "extends": "./.svelte-kit/tsconfig.json",
   "compilerOptions": {
-    "moduleResolution": "node",
-    "module": "es2022",
-    "lib": ["es2022"],
-    "target": "es2022",
+    "moduleResolution": "bundler",
+    "module": "esnext",
+    "lib": ["esnext", "DOM", "DOM.Iterable"],
+    "target": "esnext",
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
     /**
 			To have warnings/errors of the Svelte compiler at the correct position,
 			enable source maps by default.
