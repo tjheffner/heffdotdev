@@ -102,11 +102,3 @@ export type GithubIssue = {
   comments_url: string
   reactions: GHReactions
 }
-
-export type Project = {
-  type: 'project'
-  frontmatter: {
-    [key: string]: string
-  }
-  content: string
-}

@@ -9,6 +9,8 @@ import rehypeSlug from 'rehype-slug'
 import rehypeAutoLink from 'rehype-autolink-headings'
 import rehypeZoomImages from './rehype-wrap-img.js'
 
+import type { BaseContentItem, GithubIssue } from '$lib/types.js'
+
 const remarkPlugins = [remarkUnwrapImages]
 const rehypePlugins = [
   rehypeStringify,
@@ -17,20 +19,13 @@ const rehypePlugins = [
   rehypeZoomImages,
 ]
 
-/**
- * @param {string} text
- * @returns {string}
- */
-export function readingTime(text) {
+
+export function readingTime(text: string): string {
   let minutes = Math.ceil(text.trim().split(' ').length / 225)
   return minutes > 1 ? `${minutes} minutes` : `${minutes} minute`
 }
 
-/**
- * @param {string | number} text
- * @returns {string}
- */
-export function slugify(text) {
+export function slugify(text: string | number): string {
   return text
     .toString() // Cast to string (optional)
     .normalize('NFKD') // The normalize() using NFKD method returns the Unicode Normalization Form of a given string.
@@ -44,11 +39,8 @@ export function slugify(text) {
 
 /**
  * All pages built from github issue should contain this data at minimum
- *
- * @param {import('./types').GithubIssue} issue
- * @returns {import('./types').BaseContentItem}
  */
-export function baseIssueContent(issue) {
+export function baseIssueContent(issue: GithubIssue): BaseContentItem {
   const src = issue.body
   const { content, data } = grayMatter(src)
   let title = data.title ?? issue.title
@@ -95,7 +87,7 @@ export function baseIssueContent(issue) {
   }
 }
 
-export async function formatContent(content) {
+export async function formatContent(content: string): Promise<string> {
   const formatted = content
     // replace youtube vids
     .replace(/\n{% youtube (.*?) %}/g, (_, x) => {

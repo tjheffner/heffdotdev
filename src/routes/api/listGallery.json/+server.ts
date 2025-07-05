@@ -1,9 +1,7 @@
-import { listContentFromIssues } from '$lib/content'
+import type { RequestEvent } from './$types';
+import { listContentFromIssues } from '$lib/content/content'
 
-/**
- * @type {import('./$types').RequestHandler}
- */
-export async function GET({ fetch, setHeaders }) {
+export async function GET({ fetch, setHeaders }: RequestEvent): Promise<Response> {
   const list = await listContentFromIssues(fetch, 'Gallery')
 
   setHeaders({

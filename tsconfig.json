@@ -24,7 +24,7 @@
     "src/**/*.js",
     "src/**/*.ts",
     "src/**/*.svelte",
-    "src/lib/content.js",
+    "src/lib/content/content.js",
     "src/lib/types.d.ts",
     ".svelte-kit/ambient.d.ts"
   ]

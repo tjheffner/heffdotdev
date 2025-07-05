@@ -1,5 +1,5 @@
 <script lang="ts">
-  import utterances, {injectScript}  from '$lib/loadUtterances'
+  import utterances, {injectScript}  from '$lib/content/loadUtterances'
 
   let { issueNumber, commentsEl = $bindable() } = $props();
 </script>

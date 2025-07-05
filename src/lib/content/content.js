@@ -4,7 +4,7 @@ import {
   GH_USER_REPO,
   APPROVED_POSTERS_GH_USERNAME,
   REPO_OWNER,
-} from './siteConfig'
+} from '$lib/siteConfig'
 import { readingTime, baseIssueContent, formatContent } from './utils'
 import parse from 'parse-link-header'
 

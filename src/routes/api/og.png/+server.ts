@@ -1,3 +1,4 @@
+import type { RequestHandler } from './$types';
 import { dev } from "$app/environment";
 import { read } from '$app/server';
 import { render } from 'svelte/server';
@@ -16,8 +17,7 @@ const fontData = read(Mulish).arrayBuffer();
 const height = 630;
 const width = 1200;
 
-/** @type {import('./$types').RequestHandler} */
-export const GET = async ({ url, setHeaders }) => {
+export const GET: RequestHandler = async ({ url, setHeaders }) => {
   const message = url.searchParams.get('message') ?? undefined;
 
   const { body, head } = render(OpenGraphImage, { props: { message } })
