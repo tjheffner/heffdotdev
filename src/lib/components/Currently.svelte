@@ -63,17 +63,18 @@
           <strong>{course.title} {getFlagEmoji(course.learningLanguage)}</strong>
         {/each}
 
-        <p><strong>Current streak:</strong>&nbsp;<strong class="secondary">{duolingo.streak}</strong> days!</p>
+        <p><strong>Current streak:</strong>&nbsp;<strong class="secondary">{duolingo.streak}</strong><sup class="accent">*</sup> days!</p>
         <p>Streak began: <span class="accent">{formattedDate}</span></p>
         <span class="secondary small">
-          {#each Array(freezes) as _, index}
+          <span class="accent">*</span>{freezes} days missed. Duolingo plays fast and loose with the meaning of the word "streak"
+
+          <!-- {#each Array(freezes) as _, index}
             {#if index % 2 == 0}
             🧊
             {:else}
             🥶
             {/if}
-          {/each}
-          ({freezes} days missed)
+          {/each} -->
         </span>
       </div>
     </li>
