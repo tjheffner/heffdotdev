@@ -3,8 +3,14 @@
   import Header from '$lib/components/Header.svelte'
   import Footer from '$lib/components/Footer.svelte'
   import { SITE_TITLE } from '$lib/siteConfig'
+  import { onMount } from 'svelte'
 
   import { fade } from 'svelte/transition'
+
+  onMount(() => {
+    // Indicate that the SvelteKit app has started
+    document.body.classList.add("started");
+  });
 
   let { data, children } = $props();
 </script>

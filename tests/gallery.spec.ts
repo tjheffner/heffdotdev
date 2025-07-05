@@ -1,10 +1,12 @@
 import { test, expect, generateReport, goto } from './utils'
 
-test.skip('Gallery page renders without a11y errors', async ({
+test('Gallery page renders without a11y errors', async ({
   page,
   makeAxeBuilder,
 }) => {
-  await page.goto('/gallery')
+  await goto(page, '/gallery')
+
+  await expect(page).toHaveTitle(/heffner.dev | gallery/)
 
   const accessibilityScanResults = await makeAxeBuilder().analyze()
 
