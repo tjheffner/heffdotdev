@@ -9,6 +9,12 @@
 
   let { data } = $props();
   let { items } = data
+  let inputEl: HTMLInputElement = $state();
+  let resultsEl: HTMLElement = $state();
+
+  let list: (typeof items) = $state()
+  let LIST_DISPLAY_LENGTH = 10
+  let isTruncated = $state(items?.length > LIST_DISPLAY_LENGTH);
 
   // https://github.com/paoloricciuti/sveltekit-search-params#how-to-use-it
   let selectedCategories: Writable<string[] | null> = $state(queryParam(
@@ -23,8 +29,6 @@
     debounceHistory: 500
   });
 
-  let inputEl: HTMLInputElement = $state();
-
   function focusSearch(e) {
     if (e.key === '/' && inputEl) inputEl.select();
   }
@@ -34,16 +38,40 @@
     $selectedCategories = []
   }
 
-  let LIST_DISPLAY_LENGTH = 10
-  let isTruncated = $state(items?.length > LIST_DISPLAY_LENGTH);
-
-  let list: (typeof items) = $state()
   $effect.pre(() => {
     fuzzySearch(items, $selectedCategories, $search).then(_items => {
       list = _items
     })
+    // reset list position when filters change
+    if (resultsEl) {
+      const header = document.getElementById('header');
+      const filters = document.getElementById('filters');
+      const stickyHeight = header.offsetHeight + filters.offsetHeight;
+
+      if (window.scrollY === 0) {
+        return;
+      } else {
+        window.scrollTo({top: resultsEl.offsetTop - stickyHeight, behavior: 'instant'})
+      }
+    }
   })
 </script>
+
+{#snippet emptyResults(string, buttonText, func, query = undefined)}
+  <div class="empty prose">
+    {#if query}
+      <p>{string} <code>{query}</code></p>
+    {:else}
+      <p>{string}</p>  
+    {/if}
+    <button
+      onclick={func}
+      class="button"
+    >
+      {buttonText}
+    </button>
+  </div>
+{/snippet}
 
 <svelte:window onkeyup={focusSearch} />
 
@@ -68,57 +96,57 @@
     bind:selectedCategories={selectedCategories} 
   />
 
-  <hr />
-
   <!-- Results -->
-  {#if list?.length}
-    <ul class="clean-list">
-      {#each list as item, i}
-        {#if isTruncated && (i+1 < LIST_DISPLAY_LENGTH)}
-          <PostItem {item} href={item.slug}>
-            {item.description}
-          </PostItem>
-        {:else if !isTruncated}
-          <PostItem {item} href={item.slug}>
-            {item.description}
-          </PostItem>
-        {/if}
-      {/each}
-    </ul>
-    {#if isTruncated && list.length > LIST_DISPLAY_LENGTH}
-      <div >
-        <button
-          onclick={() => (isTruncated = false)}
-          class="button"
-        >
-          See more posts
-        </button>
-      </div>
+  <div id="results" bind:this={resultsEl}>
+    {#if list?.length}
+      <ul class="clean-list">
+        {#each list as item, i}
+          {#if isTruncated && (i+1 < LIST_DISPLAY_LENGTH)}
+            <PostItem {item} href={item.slug}>
+              {item.description}
+            </PostItem>
+          {:else if !isTruncated}
+            <PostItem {item} href={item.slug}>
+              {item.description}
+            </PostItem>
+          {/if}
+        {/each}
+      </ul>
+      {#if isTruncated && list.length > LIST_DISPLAY_LENGTH}
+        {@render emptyResults(
+          '',
+          'See more posts',
+          () => isTruncated = false
+        )}
+      {/if}
+    {:else if $search && $selectedCategories.length === 0}
+      {@render emptyResults(
+        'No posts found for',
+        'Clear your search',
+        () => ($search = ''),
+        $search
+      )}
+    {:else}
+      {@render emptyResults(
+        'No posts found with this combination of filters. Search something else!',
+        'Clear all filters',
+        clearFilters
+      )}
     {/if}
-  {:else if $search && $selectedCategories.length === 0}
-    <div class="prose">
-      No posts found for
-      <code>{$search}</code>.
-    </div>
-    <button
-      onclick={() => ($search = '')}
-      class="button"
-    >
-      Clear your search
-    </button>
-  {:else}
-    <div class="prose">No posts found with this combination of filters. Search something else!</div>
-    <button
-      onclick={clearFilters}
-      class="button"
-    >
-      Clear all filters
-    </button>
-  {/if}
+  </div>
 </section>
 
 <style>
   .button {
     margin: var(--space-near) 0;
+  }
+  .empty {
+    margin: var(--space-away) 0;
+    padding: var(--space-away) 0;
+    min-height: 400px;
+  }
+  #results {
+    min-height: calc(fit-content + 100px);
+    margin: var(--space-away) 0;
   }
 </style>

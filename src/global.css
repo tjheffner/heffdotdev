@@ -70,6 +70,7 @@ h4,
 h5,
 h6 {
   overflow-wrap: break-word;
+  color: var(--c-text);
 }
 p {
   text-wrap: pretty;
@@ -145,7 +146,7 @@ body [data-density-shift] [data-density-shift] {
 
 hr {
   width: 100%;
-  border-top: 2px solid var(--c-accent);
+  border: 1px solid var(--c-accent);
   margin: var(--space-away) 0;
 }
 

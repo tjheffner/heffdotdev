@@ -2,7 +2,7 @@
   import NavLink from '$lib/components/NavLink.svelte'
 </script>
 
-<header class="header">
+<header class="header" id="header">
   <a class="skip-link" href="#content">Skip to main content</a>
   
   <div class="wrapper">

@@ -9,7 +9,7 @@
   
 </script>
 
-<div class="blog-search" data-density-shift>
+<div class="blog-search" data-density-shift id="filters">
   <!-- Search Bar -->
   <div class="search">
     <input
@@ -40,7 +40,7 @@
 
   <!-- Filter Buttons -->
   <div class="pillbox">
-    <span class="pillbox-label"> Category: </span>
+    <p class="pillbox-label"> Category: </p>
     <div class="pills">
       {#each categories as availableCategory}
         <div 
@@ -72,6 +72,7 @@
     top: 90px;
     background-color: var(--c-background);
     padding: var(--space-away) 0;
+    border-bottom: 2px solid var(--c-accent);
   }
   .search {
     position: relative;
