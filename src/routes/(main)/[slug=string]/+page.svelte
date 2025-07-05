@@ -65,13 +65,13 @@
       {json.title}
     </h1>
  
-    <div class="side small">
-      <span class="date">
+    <div class="side small" data-density-shift>
+      <span class="date secondary">
         {new Date(json.date).toISOString().slice(0, 10)}
       </span>
       {#if new Date(json.date).toISOString().slice(0, 10) !== new Date(json.ghMetadata.updated_at).toISOString().slice(0, 10)}
         <span class="date">
-          updated: {new Date(json.ghMetadata.updated_at).toISOString().slice(0, 10)}
+          updated: <span class="accent">{new Date(json.ghMetadata.updated_at).toISOString().slice(0, 10)}</span>
         </span>
       {/if}
     </div>

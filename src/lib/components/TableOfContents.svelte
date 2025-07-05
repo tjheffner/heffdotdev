@@ -105,9 +105,6 @@
     background-size: 2px 50px;
     color: var(--c-background);
   }
-
-  .parent {
-  }
   .child {
     margin-left: var(--space-away)
   }
