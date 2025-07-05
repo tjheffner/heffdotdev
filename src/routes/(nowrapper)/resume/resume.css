@@ -1,3 +1,16 @@
+@font-face {
+  font-family: 'Merriweather';
+  font-style: normal;
+  font-weight: normal;
+  src: url('$lib/font/Merriweather-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Mulish';
+  font-style: normal;
+  font-weight: normal;
+  src: url('$lib/font/Mulish-Regular.ttf') format('truetype');
+}
+
 *,
 *:before,
 *:after {
@@ -9,7 +22,7 @@ body {
   max-width: 7.5in;
   padding: min(0.5in, 6vw);
 
-  font-family: 'Urbanist', sans-serif;
+  font-family: 'Mulish', sans-serif;
   --c-accent: black;
 }
 
@@ -19,7 +32,7 @@ a {
 }
 
 h1 {
-  font-family: 'Domine;', serif;
+  font-family: 'Merriweather;', serif;
   font-weight: 700;
   font-size: 2.5em;
   margin-block: 0;
@@ -30,7 +43,7 @@ h1 {
 
 h2 {
   display: flex;
-  font-family: 'Domine', serif;
+  font-family: 'Merriweather', serif;
   font-weight: 700;
   font-size: 1.5em;
   margin-block: 1em 0.5em;
