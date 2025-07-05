@@ -1,56 +1,25 @@
-<script>
-  import { page } from '$app/stores'
-  import { TWITTER_ID, SITE_URL } from '$lib/siteConfig'
+<script lang="ts">
+  import type { BaseContentItem } from '$lib/types'
   import Comments from '$lib/components/Comments.svelte'
-  import { Toc } from '@svelte-put/toc';
+  import Metatags from '$lib/components/Metatags.svelte'
   import TableOfContents from '$lib/components/TableOfContents.svelte';
+  import { Toc } from '@svelte-put/toc';
 
   import '$lib/code-highlight.css'
 
   // table of contents
   const toc = new Toc({ observe: true, anchor: false, selector: ':where(h1, h2, h3)' });
 
-  /**
-   * @typedef {Object} Props
-   * @property {import('./$types').PageData} data
-   */
-  /** @type {Props} */
   let { data } = $props();
-
-  /** @type {import('$lib/types').BaseContentItem} */
-  let json = $derived(data.json) // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
-
-  let canonical = $derived(SITE_URL + $page.url.pathname)
+  let json: BaseContentItem = $derived(data.json) // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
 </script>
 
-<svelte:head>
-  <title>{json.title}</title>
-  <meta name="description" content="heffdotdev blog" />
-
-  <link rel="canonical" href={SITE_URL + '/' + json.slug} />
-  <meta property="og:url" content={SITE_URL} />
-  <meta property="og:type" content="article" />
-  <meta property="og:title" content={json.title} />
-  <meta name="Description" content={json.description} />
-  <meta property="og:description" content={json.description} />
-  <meta name="twitter:creator" content={'@' + TWITTER_ID} />
-  <meta name="twitter:title" content={json.title} />
-  <meta name="twitter:description" content={json.description} />
-  {#if json.image}
-    <meta property="og:image" content={json.image} />
-    <meta name="twitter:image" content={json.image} />
-  {:else}
-    <meta
-      content={`https://heffner.dev/og?message=${json.title}`}
-      property="og:image"
-    />
-    <meta
-      name="twitter:image"
-      content={`https://heffner.dev/og?message=${json.title}`}
-    />
-  {/if}
-  <meta name="twitter:card" content={'summary'} />
-</svelte:head>
+<Metatags 
+  title={json.title} 
+  description={json.description} 
+  ogMessage={json.title} 
+  canonical={json.slug}
+/>
 
 <TableOfContents {toc} type='blog' />
 

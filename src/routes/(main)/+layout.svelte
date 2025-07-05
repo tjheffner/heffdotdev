@@ -8,7 +8,7 @@
   import { fade } from 'svelte/transition'
 
   onMount(() => {
-    // Indicate that the SvelteKit app has started
+    // Indicate that the SvelteKit app has started. useful for playwright
     document.body.classList.add("started");
   });
 

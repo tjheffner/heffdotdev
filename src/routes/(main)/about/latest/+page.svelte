@@ -1,5 +1,6 @@
 <script lang="ts">
   import Currently from "$lib/components/Currently.svelte";
+  import Metatags from "$lib/components/Metatags.svelte"
   import TableOfContents from "$lib/components/TableOfContents.svelte"
 
   interface Props {
@@ -11,6 +12,7 @@
   const { recentlyListened, recentlyWatched, recentlyPlayed, duolingo } = data;
 </script>
 
+<Metatags title="Recent activity" />
 
 <TableOfContents type="about" toc={{items: []}} />
 

@@ -1,23 +1,16 @@
 <script lang="ts">
   import GalleryItem from "$lib/components/GalleryItem.svelte";
+  import Metatags from "$lib/components/Metatags.svelte"
 
   let { data } = $props();
   let { items } = data
 </script>
 
-<svelte:head>
-  <title>heffner.dev | gallery</title>
-  <meta name="description" content="part photo gallery, part adventure log" />
-  <meta
-    property="og:image"
-    content={`https://heffner.dev/og?message=photo%20gallery`}
-  />
-  <meta name="twitter:card" content={'summary'} />
-  <meta
-    name="twitter:image"
-    content={`https://heffner.dev/og?message=photo%20gallery`}
-  />
-</svelte:head>
+<Metatags 
+  title="Gallery"
+  description="part photo gallery, part adventure log"
+  ogMessage="Photo Gallery"
+/>
 
 <section data-density-shift id="content"  tabindex="-1">
   <h1>Gallery</h1>

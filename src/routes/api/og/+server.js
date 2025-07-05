@@ -3,7 +3,8 @@ import satori from 'satori'
 import { Resvg } from '@resvg/resvg-js'
 import PTSerif from '$lib/font/PTSerif-Regular.ttf'
 import { html as toReactNode } from 'satori-html'
-import Og from '$lib/components/Og.svelte'
+import Og from '$lib/components/OpenGraphImage.svelte'
+import { render } from 'svelte/server'
 
 const height = 400
 const width = 800
@@ -11,7 +12,7 @@ const width = 800
 /** @type {import('./$types').RequestHandler} */
 export const GET = async ({ url }) => {
   const message = url.searchParams.get('message') ?? undefined
-  const result = Og.render({ message })
+  const result = render(<Og message={message} />)
   const element = toReactNode(`${result.html}<style>${result.css.code}</style>`)
 
   const svg = await satori(element, {

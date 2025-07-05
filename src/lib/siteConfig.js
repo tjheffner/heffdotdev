@@ -2,6 +2,7 @@
 export const SITE_URL = 'https://heffner.dev' // 'https://heffner.netlify.app'
 export const SITE_TITLE = 'heffner.dev'
 export const SITE_DESCRIPTION = 'personal site of tanner heffner'
+export const DEFAULT_OG_PATH = '/api/og?message='
 export const DEFAULT_OG_IMAGE = 'https://heffner.dev/og?message=heffner.dev'
 export const GH_USER = 'tjheffner'
 export const GH_USER_REPO = 'tjheffner/heffdotdev' // used for pulling github issues and offering comments

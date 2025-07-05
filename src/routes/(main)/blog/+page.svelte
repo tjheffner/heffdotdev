@@ -2,6 +2,7 @@
   import { queryParam, ssp } from 'sveltekit-search-params'
   import PostItem from '$lib/components/PostItem.svelte'
   import SearchFilters from '$lib/components/SearchFilters.svelte';
+  import Metatags from '$lib/components/Metatags.svelte'
   import { POST_CATEGORIES } from '$lib/siteConfig'
   import { fuzzySearch } from './fuzzySearch'
   import type { Writable } from 'svelte/store'
@@ -44,15 +45,13 @@
   })
 </script>
 
-<svelte:head>
-  <title>heffner.dev | posts</title>
-  <meta name="description" content="Latest musings fit to print." />
-  <meta property="og:image" content={`https://heffner.dev/og?message=posts`} />
-  <meta name="twitter:card" content={'summary'} />
-  <meta name="twitter:image" content={`https://heffner.dev/og?message=posts`} />
-</svelte:head>
-
 <svelte:window onkeyup={focusSearch} />
+
+<Metatags 
+  title="Posts" 
+  description="personal blogs covering topics including DIY, technical tips and tricks, and cooking recipes."
+  ogMessage="Posts"  
+/>
 
 <section data-density-shift id="content" tabindex="-1">
   <h1>
