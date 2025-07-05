@@ -1,18 +1,17 @@
 <script lang="ts">
-  import type { GalleryItem } from '$lib/types'
-
   interface Props {
     title: string;
     open?: boolean;
-    tall?: boolean
+    tall?: boolean;
+    linked?: boolean;
     children?: import('svelte').Snippet;
   }
 
-  let { title, children, open = false, tall = false }: Props = $props();
+  let { title, children, open = false, tall = false, linked = false }: Props = $props();
 </script>
 
 
-<details data-density-shift open={open} class:tall={tall}>
+<details data-density-shift open={open} class:tall={tall} name={linked ? 'details' : ''}>
   <summary><h2>{title}</h2></summary>
 
   {@render children?.()}

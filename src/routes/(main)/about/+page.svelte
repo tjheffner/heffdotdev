@@ -33,7 +33,7 @@
 <section class="wrapper prose" id="#content">
     <h1>information kiosk</h1>
 
-    <Details title="about me" open>
+    <Details title="about me" open linked>
       <p>My name is <strong>tanner heffner</strong> and I am based out of <strong>portland, oregon</strong>.</p>
 
       <p>
@@ -47,7 +47,7 @@
       <a href="/resume" target="_blank">[resume]</a>
     </Details>
 
-    <Details title="about this site" tall>
+    <Details title="about this site" tall linked>
       <p>heffner.dev is perpetually under construction, same as me 🏄‍♂️</p>
 
       <p>parts <a href="/blog">blog,</a> <a href="/gallery">photo gallery,</a> <a href="/about/latest">activity tracker,</a> and <a href="/christmas">playground,</a> 
@@ -62,8 +62,8 @@
       <p><a href="/heffdotdev-technical-details">This post</a> explains more about the tools I chose and why.</p>
     </Details>
 
-    <Details title="contact">
-      <p>If you have questions, or are interested in hiring me, please send me an <a href="mailto:tannerjheffner@gmail.com">email</a> or reach out on linkedin. The icon in the footer will take you to my profile.</p>
+    <Details title="contact" linked>
+      <p>If you have questions, need a tech consultation, or are interested in working together, please send me an <a href="mailto:tannerjheffner@gmail.com">email.</a></p>
 
       <p class="h1">✌️</p>
     </Details>
