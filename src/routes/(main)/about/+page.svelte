@@ -3,7 +3,7 @@
   import Metatags from '$lib/components/Metatags.svelte';
 </script>
 
-<Metatags title="Information Kiosk" />
+<Metatags title="About" />
 
 <section class="prose" id="content" tabindex="-1">
     <h1>information kiosk</h1>

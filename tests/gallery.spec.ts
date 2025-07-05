@@ -6,7 +6,7 @@ test('Gallery page renders without a11y errors', async ({
 }) => {
   await goto(page, '/gallery')
 
-  await expect(page).toHaveTitle(/heffner.dev | gallery/)
+  await expect(page).toHaveTitle(/Gallery | heffner.dev/)
 
   const accessibilityScanResults = await makeAxeBuilder().analyze()
 

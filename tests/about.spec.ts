@@ -6,7 +6,7 @@ test('About page renders without a11y errors', async ({
 }) => {
   await goto(page, '/about')
 
-  await expect(page).toHaveTitle(/heffner.dev/)
+  await expect(page).toHaveTitle(/About | heffner.dev/)
   await expect(page.getByText('tanner heffner')).toBeVisible()
 
   const accessibilityScanResults = await makeAxeBuilder().analyze()
@@ -24,7 +24,7 @@ test('Tracker page renders without a11y errors', async ({
 }) => {
   await goto(page, '/about/latest')
 
-  await expect(page).toHaveTitle(/heffner.dev/)
+  await expect(page).toHaveTitle(/Recent Activity | heffner.dev/)
   await expect(page.getByText('Recent activity')).toBeVisible()
 
   const accessibilityScanResults = await makeAxeBuilder().analyze()
