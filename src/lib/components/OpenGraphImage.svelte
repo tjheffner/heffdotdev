@@ -1,38 +1,55 @@
 <svelte:options css="injected" />
 
 <script lang="ts">
-  interface Props {
-    message?: string;
-  }
+  import { SITE_URL } from "$lib/siteConfig"
 
-  let { message = 'Hello, world!' }: Props = $props();
+  let {
+    message
+  }: {
+    message: string;
+  } = $props();
 </script>
 
-<div class="outer">
-  <div class="inner">
-    {message}
+
+<div class="container">
+  <div class="content">
+    <h1 class="title">{message}</h1>
   </div>
+  <div class="brand">{SITE_URL}</div>
 </div>
 
+
 <style>
-  .outer {
-    font-family: 'PT Serif';
+  * {
+    display: flex; /* Helps satisfy Satori's CSS requirements */
+  }
+  .container {
+    width: 1200px;
+    height: 630px;
     display: flex;
     flex-direction: column;
-    font-size: 70px;
-    background-color: white;
-    height: 100%;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.75;
-    background-image: linear-gradient(270deg, #1e293b, #0c4a6e);
+    justify-content: space-between;
+    padding: 60px;
+    font-family: "Merriweather", serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
   }
-
-  .inner {
-    background-image: linear-gradient(135deg, #fcdb02, #ca8a04);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .title {
+    font-size: 72px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0;
+  }
+  .brand {
+    font-family: "Mulish", sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    opacity: 0.7;
+    align-self: flex-end;
   }
 </style>

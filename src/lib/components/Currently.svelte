@@ -23,8 +23,6 @@
       .map(char =>  127397 + char.charCodeAt());
     return String.fromCodePoint(...codePoints);
   }
-
-  console.log(recentlyListened);
 </script>
 
 <ul class="clean-list">
