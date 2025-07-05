@@ -15,7 +15,7 @@
 <TableOfContents type="about" toc={{items: []}} />
 
 <h1>Recent activity</h1>
-<div id='#content'>
+<div id='content'>
   <Currently 
     recentlyListened={recentlyListened} 
     recentlyPlayed={recentlyPlayed} 

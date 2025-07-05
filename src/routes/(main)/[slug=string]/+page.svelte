@@ -58,7 +58,8 @@
   data-density-shift
   use:toc.actions.root
   class="article"
-  id="#content"
+  id="content"
+  tabindex="-1"
 >
   <div class="details">
     <h1>
@@ -66,14 +67,14 @@
     </h1>
  
     <div class="side small" data-density-shift>
-      <span class="date secondary">
-        {new Date(json.date).toISOString().slice(0, 10)}
-      </span>
-      {#if new Date(json.date).toISOString().slice(0, 10) !== new Date(json.ghMetadata.updated_at).toISOString().slice(0, 10)}
-        <span class="date">
-          updated: <span class="accent">{new Date(json.ghMetadata.updated_at).toISOString().slice(0, 10)}</span>
-        </span>
-      {/if}
+      <p>
+        <span class="secondary">{new Date(json.date).toISOString().slice(0, 10)}</span>
+        {#if new Date(json.date).toISOString().slice(0, 10) !== new Date(json.ghMetadata.updated_at).toISOString().slice(0, 10)}
+          <span>
+            (updated: <span class="accent">{new Date(json.ghMetadata.updated_at).toISOString().slice(0, 10)}</span>)
+          </span>
+        {/if}
+      </p>
     </div>
   </div>
 
@@ -97,23 +98,15 @@
   }
 
   .details {
-    margin: var(--space-near) 0;
+    /* margin: var(--space-near) 0; */
+    /* display: flex;
+    flex-direction: column; */
 
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-
-    @media (min-width: 668px) {
-      flex-direction: row;
+    h1 {
+      margin-bottom: var(--space-near);
     }
   }
   .side {
-    align-self: flex-end;
-    text-align: right;
     margin-bottom: 0;
-  }
-  .date {
-    display: block;
-    white-space: nowrap;
   }
 </style>

@@ -202,6 +202,20 @@ h2 > a,
   color: currentColor !important;
 }
 
+/* layout wrapper + breakout */
+.wrapper {
+  max-width: 65ch;
+  margin: 0 var(--space-near);
+
+  @media (width >=768px) {
+    margin: auto;
+  }
+}
+.full-width {
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
 /* style markdown content from gh */
 .prose {
   p {
@@ -229,18 +243,6 @@ h2 > a,
 }
 
 /* utilities */
-.wrapper {
-  max-width: 65ch;
-  margin: 0 var(--space-near);
-
-  @media (width >=768px) {
-    margin: auto;
-  }
-}
-.full-width {
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-}
 .sr-only {
   position: absolute;
   left: -10000px;

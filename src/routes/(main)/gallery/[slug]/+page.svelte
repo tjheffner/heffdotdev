@@ -60,7 +60,8 @@
   data-density-shift
   use:toc.actions.root
   class="article"
-  id="#content"
+  id="content"
+  tabindex="-1"
 >
   {#if json.title}
     <div class="details">

@@ -4,9 +4,9 @@
   // let isOpen = $state(false);
 </script>
 
-<section class="full-width post-nav" data-density-shift>
+<section class="full-width post-nav">
   <div class="wrapper">
-    <div class="inside">
+    <div class="inside" data-density-shift>
 
       <a href={`/${type}`} class="back-link">Back</a>
 

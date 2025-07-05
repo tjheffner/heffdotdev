@@ -30,7 +30,7 @@
   <meta name="twitter:image" content={DEFAULT_OG_IMAGE} />
 </svelte:head>
 
-<section class="prose" id="#content">
+<section class="prose" id="content" tabindex="-1">
     <h1>information kiosk</h1>
 
     <Details title="about me" open linked>
@@ -50,16 +50,14 @@
     <Details title="about this site" tall linked>
       <p>heffner.dev is perpetually under construction, same as me 🏄‍♂️</p>
 
-      <p>parts <a href="/blog">blog,</a> and <a href="/gallery">photo gallery,</a> a dash of <a href="/about/latest">activity tracker,</a> and a <a href="/christmas">playground</a> too. 
+      <p>parts <a href="/blog">blog,</a> and <a href="/gallery">photo gallery,</a> a dash of <a href="/about/latest">activity tracker,</a> and some <a href="/christmas">playground</a> too. 
          this website is my own personal <a href="https://joelhooks.com/digital-garden" target="_blank">digital garden</a>
       </p>
 
       <p>
-        it is built with <a href="https://svelte.dev/docs/kit/introduction" target="_blank">sveltekit</a> and leverages a github issue queue as my CMS.
-        the code is <a href="https://github.com/tjheffner/heffdotdev">public on github</a> and hosted via <a href="https://www.netlify.com/">netlify.</a>
-      </p>
-
-      <p><a href="/heffdotdev-technical-details">this post</a> explains more about the tools I chose and why.</p>
+        it is built with <a href="https://svelte.dev/docs/kit/introduction" target="_blank">sveltekit</a>.
+        the codebase is <a href="https://github.com/tjheffner/heffdotdev">public on github</a> and hosted via netlify.
+      <a href="/heffdotdev-technical-details">this post</a> explains more about the tools I chose and why.</p>
     </Details>
 
     <Details title="contact" linked>

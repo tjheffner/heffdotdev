@@ -54,7 +54,7 @@
 
 <svelte:window onkeyup={focusSearch} />
 
-<section data-density-shift id="#content">
+<section data-density-shift id="content" tabindex="-1">
   <h1>
     Posts
   </h1>
