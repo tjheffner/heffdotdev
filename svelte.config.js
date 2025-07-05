@@ -33,7 +33,6 @@ const mdsvexConfig = {
   ],
 }
 
-/** @type {import('@sveltejs/kit').Config} */
 const config = {
   extensions: ['.svelte', '.html', '.svx'], // ...mdsvexConfig.extensions
   preprocess: [mdsvex(mdsvexConfig), vitePreprocess()],
