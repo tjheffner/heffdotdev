@@ -1,14 +1,14 @@
+import type { RequestHandler } from './$types';
+
 import RSS from 'rss'
 import { SITE_TITLE, SITE_URL } from '$lib/siteConfig'
 import { remark } from 'remark'
 import remarkHTML from 'remark-html'
-import { listContentFromIssues } from '$lib/content'
+import { listContentFromIssues } from '$lib/content/content'
 
 export const prerender = true
 
-// Reference: https://github.com/sveltejs/kit/blob/master/examples/hn.svelte.dev/src/routes/%5Blist%5D/rss.js
-/** @type {import('@sveltejs/kit').RequestHandler} */
-export async function GET({ fetch }) {
+export const GET: RequestHandler = async ({ fetch }) => {
   const feed = new RSS({
     title: SITE_TITLE + ' RSS Feed',
     site_url: SITE_URL,

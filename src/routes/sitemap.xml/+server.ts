@@ -1,10 +1,11 @@
+import type { RequestHandler } from './$types';
+
 import { SITE_URL } from '$lib/siteConfig'
-import { listContentFromIssues } from '$lib/content'
+import { listContentFromIssues } from '$lib/content/content'
 
 export const prerender = true
 
-/** @type {import('@sveltejs/kit').RequestHandler} */
-export async function GET({ fetch }) {
+export const GET: RequestHandler = async ({ fetch }) => {
   const posts = await listContentFromIssues(fetch, 'Published')
   const galleries = await listContentFromIssues(fetch, 'Gallery')
   const pages = ['about', 'resume', 'christmas', 'gallery', 'blog']
