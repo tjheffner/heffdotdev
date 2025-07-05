@@ -19,7 +19,7 @@
   />
 </svelte:head>
 
-<section class="wrapper" data-density-shift id="#content">
+<section data-density-shift id="#content">
   <h1>Gallery</h1>
 
   <div>

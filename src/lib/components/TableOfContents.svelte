@@ -5,34 +5,38 @@
 </script>
 
 <section class="full-width post-nav" data-density-shift>
-  <div class="wrapper inside">
-    <a href={`/${type}`} class="back-link">Back</a>
+  <div class="wrapper">
+    <div class="inside">
 
-    <!-- Only appears on larger screen sizes -->
-    <div class="toc" data-density-shift>
-      <!-- Dynamic table of contents via @svelte-put/toc -->
-      {#if toc.items.size > 1}
-        <ul class="toc-list clean-list">
-          {#each toc.items.values() as { id, text, element }, index}
-            <li>
-              <a
-                class="toc-list-item"
-                class:active={toc.activeItem?.id === id}
-                class:parent={element.nodeName === 'H1' || element.nodeName === 'H2'}
-                class:child={element.nodeName === 'H3'}
-                class:grandchild={element.nodeName === 'H4'}
-                href="#{id}"
-              >
-              {#if index === 0}
-                Introduction
-              {:else}
-                {text}
-              {/if}
-              </a>
-            </li>
-          {/each}
-        </ul>
-      {/if}
+      <a href={`/${type}`} class="back-link">Back</a>
+
+      <!-- Only appears on larger screen sizes -->
+      <div class="toc" data-density-shift>
+        <!-- Dynamic table of contents via @svelte-put/toc -->
+        {#if toc.items.size > 1}
+          <ul class="toc-list clean-list">
+            {#each toc.items.values() as { id, text, element }, index}
+              <li>
+                <a
+                  class="toc-list-item"
+                  class:active={toc.activeItem?.id === id}
+                  class:parent={element.nodeName === 'H1' || element.nodeName === 'H2'}
+                  class:child={element.nodeName === 'H3'}
+                  class:grandchild={element.nodeName === 'H4'}
+                  href="#{id}"
+                >
+                {#if index === 0}
+                  Introduction
+                {:else}
+                  {text}
+                {/if}
+                </a>
+              </li>
+            {/each}
+          </ul>
+        {/if}
+      </div>
+
     </div>
   </div>
 </section>
@@ -41,7 +45,11 @@
   .post-nav {
     background-color: var(--c-background);
     position: sticky;
-    top: 110px;
+    top: 85px;
+
+    @media (min-width: 668px) {
+      top: 100px;
+    }
   }
   .inside {
     display: flex;

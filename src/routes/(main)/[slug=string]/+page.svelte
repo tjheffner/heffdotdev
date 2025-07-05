@@ -100,13 +100,20 @@
     margin: var(--space-near) 0;
 
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
+
+    @media (min-width: 668px) {
+      flex-direction: row;
+    }
   }
   .side {
     align-self: flex-end;
     text-align: right;
+    margin-bottom: 0;
   }
   .date {
+    display: block;
     white-space: nowrap;
   }
 </style>

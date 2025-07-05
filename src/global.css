@@ -9,10 +9,6 @@
 
   --density: .4rem; /* ~10pt grid */
 
-  --bp-small: 668px;
-  --bp-large: 1024px;
-  --bp-xl: 1440px;
-
   accent-color: var(--c-accent);
 }
 
@@ -208,9 +204,11 @@ h2 > a,
 
 /* style markdown content from gh */
 .prose {
-  img,
   p {
     margin: var(--space-near) 0;
+  }
+  img {
+    margin: var(--space-away) 0;
   }
   
   h2 > a,
@@ -235,7 +233,7 @@ h2 > a,
   max-width: 65ch;
   margin: 0 var(--space-near);
 
-  @media (width >=668px) {
+  @media (width >=768px) {
     margin: auto;
   }
 }
