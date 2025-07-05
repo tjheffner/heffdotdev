@@ -31,7 +31,6 @@ Accessibility test reports can be found in `test-results/a11y`. View the files i
 ## Acknowledgements
 
 - swyxkit for many decisions, especially github as cms + blog filtering
-- Slice component design inspired by Rene Stalder: https://renestalder.me/en/
 - Geoff Rich for dynamic OG images https://geoffrich.net/posts/svelte-social-image/
 - Patrick Bacon for sveltekit hydration helper for playwright tests https://spin.atomicobject.com/hydration-sveltekit-tests/
 - Donnie D'amato for the resume layout inspiration: https://resume.damato.design/donnie/
