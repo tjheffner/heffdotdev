@@ -50,16 +50,16 @@
     <Details title="about this site" tall linked>
       <p>heffner.dev is perpetually under construction, same as me 🏄‍♂️</p>
 
-      <p>parts <a href="/blog">blog,</a> <a href="/gallery">photo gallery,</a> <a href="/about/latest">activity tracker,</a> and <a href="/christmas">playground,</a> 
-         it is my own personal <a href="https://joelhooks.com/digital-garden" target="_blank">digital garden</a>
+      <p>parts <a href="/blog">blog,</a> and <a href="/gallery">photo gallery,</a> a dash of <a href="/about/latest">activity tracker,</a> and a <a href="/christmas">playground</a> too. 
+         this website is my own personal <a href="https://joelhooks.com/digital-garden" target="_blank">digital garden</a>
       </p>
 
       <p>
-        built with <a href="https://svelte.dev/docs/kit/introduction" target="_blank">sveltekit</a> and leveraging a github issue queue as my CMS.
+        it is built with <a href="https://svelte.dev/docs/kit/introduction" target="_blank">sveltekit</a> and leverages a github issue queue as my CMS.
         the code is <a href="https://github.com/tjheffner/heffdotdev">public on github</a> and hosted via <a href="https://www.netlify.com/">netlify.</a>
       </p>
 
-      <p><a href="/heffdotdev-technical-details">This post</a> explains more about the tools I chose and why.</p>
+      <p><a href="/heffdotdev-technical-details">this post</a> explains more about the tools I chose and why.</p>
     </Details>
 
     <Details title="contact" linked>
