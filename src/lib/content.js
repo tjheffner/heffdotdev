@@ -1,5 +1,5 @@
 import { dev } from '$app/environment'
-import { env } from '$env/dynamic/private'
+import { GH_TOKEN } from '$env/static/private'
 import {
   GH_USER_REPO,
   APPROVED_POSTERS_GH_USERNAME,
@@ -23,8 +23,8 @@ export async function listContentFromIssues(fetch, label) {
   let allContentWithLabel = []
   let next = null
 
-  const authheader = env.GH_TOKEN && {
-    Authorization: `token ${env.GH_TOKEN}`,
+  const authheader = GH_TOKEN && {
+    Authorization: `token ${GH_TOKEN}`,
   }
 
   let url =

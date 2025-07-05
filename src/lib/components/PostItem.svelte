@@ -64,14 +64,14 @@
       color: var(--c-secondary);
     }
   }
-  .category {
+  /* .category {
     width: fit-content;
     border-radius: 2rem;
     background: var(--c-secondary);
     padding: .25rem .5rem;
     color: var(--c-background);
     font-weight: bold;
-  }
+  } */
 
   .left {
     flex-grow: 1;
