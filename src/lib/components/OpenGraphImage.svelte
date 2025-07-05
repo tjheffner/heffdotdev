@@ -15,7 +15,9 @@
   <div class="content">
     <h1 class="title">{message}</h1>
   </div>
-  <div class="brand">{SITE_URL}</div>
+  {#if message !== 'heffner.dev'}
+    <div class="brand">{SITE_URL}</div>
+  {/if}
 </div>
 
 
@@ -40,14 +42,14 @@
     gap: 20px;
   }
   .title {
-    font-size: 72px;
+    font-size: 112px;
     font-weight: 800;
     line-height: 1.1;
     margin: 0;
   }
   .brand {
     font-family: "Mulish", sans-serif;
-    font-size: 24px;
+    font-size: 48px;
     font-weight: 600;
     opacity: 0.7;
     align-self: flex-end;
