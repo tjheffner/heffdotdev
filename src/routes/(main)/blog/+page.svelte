@@ -57,12 +57,14 @@
   })
 </script>
 
-{#snippet emptyResults(string, buttonText, func, query = undefined)}
+{#snippet emptyResults(string = undefined, buttonText, func, query = undefined)}
   <div class="empty prose">
-    {#if query}
-      <p>{string} <code>{query}</code></p>
-    {:else}
-      <p>{string}</p>  
+    {#if string}
+      {#if query}
+        <p>{string} <code>{query}</code></p>
+      {:else}
+        <p>{string}</p>  
+      {/if}
     {/if}
     <button
       onclick={func}
@@ -114,7 +116,7 @@
       </ul>
       {#if isTruncated && list.length > LIST_DISPLAY_LENGTH}
         {@render emptyResults(
-          '',
+          null,
           'See more posts',
           () => isTruncated = false
         )}
@@ -138,7 +140,19 @@
 
 <style>
   .button {
+    background-color: var(--c-accent-brighter);
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+
     margin: var(--space-near) 0;
+    padding: .5rem 1rem;
+    transition: .3s all ease-in-out;
+    
+    &:hover {
+        background-color: var(--c-accent);
+        color: var(--c-background);
+    }
   }
   .empty {
     margin: var(--space-away) 0;
