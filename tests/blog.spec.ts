@@ -1,12 +1,12 @@
 import { test, expect, generateReport, goto } from './utils'
 
-test.skip('blog page renders without a11y errors', async ({
+test('blog page renders without a11y errors', async ({
   page,
   makeAxeBuilder,
 }) => {
   await goto(page, '/blog')
 
-  await expect(page).toHaveTitle(/heffner.dev | posts/)
+  await expect(page).toHaveTitle(/Posts | heffner.dev/)
   await expect(page.getByRole('heading', { name: 'Posts' })).toBeVisible()
 
   const accessibilityScanResults = await makeAxeBuilder().analyze()

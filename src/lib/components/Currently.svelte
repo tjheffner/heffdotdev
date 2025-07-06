@@ -11,10 +11,9 @@
   const formattedDate = streakStartDate
     .toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric'})
   const today = new Date();
-  const diff = Math.abs(today - streakStartDate)
+  const diff = Math.abs(today.valueOf() - streakStartDate.valueOf())
   const days = Math.floor(diff/(86400 * 1000))
   const freezes = days - duolingo.streak
-
 
   // https://dev.to/jorik/country-code-to-flag-emoji-a21
   function getFlagEmoji(countryCode) {
@@ -26,69 +25,115 @@
   }
 </script>
 
-<ul class="divide-y divide-dashed divide-blue-300 pl-0">
-  <li class="grid grid-cols-currently">
-    <p class="my-4 text-3xl">🎶</p>
-    <div class="my-4">
+<ul class="clean-list">
+  <li class="list-item grid">
+    <p class="h1">🎶</p>
+    <div class="contents" data-density-shift>
       {#each recentlyListened as track}
-         <p class="m-0"><strong>{track.artist['#text']}</strong> - {track.name} <span class="text-sm text-accent italic">[{track.album['#text']}]</span></p>
+        <div class="tracklist">
+          <img src={track.image.find(i => i.size === 'large')['#text']} alt={track.album['#text']}>
+          <div>
+            <strong>{track.name}</strong>
+            <p>{track.artist['#text']}</p>
+          </div>
+        </div>
       {/each}
     </div>
   </li>
 
-  <li class="grid grid-cols-currently">
-    <p class="my-4 text-3xl">🍿</p>
-    <div class="my-4">
+  <li class="list-item grid">
+    <p class="h1">🍿</p>
+    <div class="contents" data-density-shift>
       {#each recentlyWatched as movie}
-         <p class="m-0"><strong>{movie.film.title}</strong> - <span class="text-secondary"> {movie.rating.text}</span></p>
+         <p><strong>{movie.film.title}</strong> - <span class="secondary"> {movie.rating.text}</span></p>
          {#if movie.review.length > 0}
-          <p class="m-0 ml-4 text-sm italic">{movie.review}</p>
+          <p class="small">{movie.review}</p>
          {/if}
       {/each}
     </div>
   </li>
 
   {#if Object.hasOwn(duolingo, 'courses')}
-    <li class="grid grid-cols-currently">
-      <p class="my-4 text-3xl">🦉</p>
-      <div class="my-4">
+    <li class="list-item grid">
+      <p class="h1">🦉</p>
+      <div class="contents" data-density-shift>
         {#each duolingo.courses as course}
-          <p class="m-0"><strong>{course.title} {getFlagEmoji(course.learningLanguage)}</strong> <span class="text-sm text-accent">[{course.xp} xp]</span></p>
+          <strong>{course.title} {getFlagEmoji(course.learningLanguage)}</strong>
         {/each}
-        <p class="m-0">Current streak: <span class="font-bold text-secondary">{duolingo.streak}</span> days! <span class="text-sm block md:inline-block">Streak began: <span class="text-accent">{formattedDate}</span></span></p>
-        <span class="text-secondary text-sm">
-         {freezes} skips
-          {#each Array(freezes) as _, index}
+
+        <p><strong>Current streak:</strong>&nbsp;<strong class="secondary">{duolingo.streak}</strong><sup class="accent">*</sup> days!</p>
+        <p>Streak began: <span class="accent">{formattedDate}</span></p>
+        <span class="secondary small">
+          <span class="accent">*</span>{freezes} days missed. Duolingo plays fast and loose with the meaning of the word "streak"
+
+          <!-- {#each Array(freezes) as _, index}
             {#if index % 2 == 0}
             🧊
             {:else}
             🥶
             {/if}
-          {/each}
+          {/each} -->
         </span>
       </div>
     </li>
   {/if}
 
-  <li class="grid grid-cols-currently">
-    <p class="my-4 text-3xl">📚</p>
-    <div class="my-4">
-      <p class="m-0">The last book I read was <strong class="text-accent">This Is How You Lose the Time War</strong> by <span class="text-secondary">Amal El-Mohtar and Max Gladstone</span>.
+  <li class="list-item grid">
+    <p class="h1">📚</p>
+    <div class="contents" data-density-shift>
+      <p class="m-0">The last book I read was:</p> 
+      <p><strong class="accent">Forest of Noise</strong> by <span class="text-secondary">Mosab Abu Toha</span>.
     </div>
   </li>
 
-  <li class="grid grid-cols-currently">
-    <p class="my-4 text-3xl">🎮</p>
-    <div class="my-4">
-    {#if recentlyPlayed.games}
-      {#each recentlyPlayed.games.slice(0, 5) as played }
-        <p class="m-0"><strong>{played.name}</strong></p>
-        <p class="m-0 ml-4 text-sm italic"><span class="font-bold text-secondary">{(played.playtime_2weeks / 60).toFixed(0)}</span> hours out of <span class="font-bold text-accent">{(played.playtime_forever / 60).toFixed(0)}</span> total hours played</p>
-      {/each}
-    {:else}
-      <p class="m-0">No playtime logged on Steam in the last two weeks.</p>
-    {/if}
+  <li class="list-item grid">
+    <p class="h1">🎮</p>
+    <div class="contents" data-density-shift>
+      {#if recentlyPlayed.games}
+        {#each recentlyPlayed.games.slice(0, 5) as played }
+          <p><strong>{played.name}</strong></p>
+          <p class="small"><span class="secondary">{(played.playtime_2weeks / 60).toFixed(0)}</span> hours out of <span class="accent">{(played.playtime_forever / 60).toFixed(0)}</span> total hours played</p>
+        {/each}
+      {:else}
+        <p>No playtime logged on Steam in the last two weeks.</p>
+      {/if}
     </div>
   </li>
-
 </ul>
+
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+    gap: var(--space-near);
+  }
+  .contents {
+    grid-column: span 4 / span 4;
+  }
+
+  .list-item {
+    margin: var(--space-away) 0;
+    padding-bottom: var(--space-away);
+    border-bottom: 1px dashed var(--c-secondary);
+
+    > .h1 {
+      margin-bottom: 0;
+    }
+  }
+
+  span.small {
+    margin-bottom: var(--space-near);
+  }
+
+  .tracklist {
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-near);
+    margin-bottom: var(--space-near);
+    img {
+      max-width: 75px;
+    }
+  }
+</style>

@@ -1,14 +1,23 @@
 <script lang="ts">
-  import { page } from '$app/stores'
+  import { page } from '$app/state'
   let { ...props } = $props();
-  let isActive = $derived($page.url.pathname === props.href)
+  let isActive = $derived(page.url.pathname === props.href)
 </script>
 
 <a
   class={isActive
-    ? 'footer-link my-4 block w-fit bg-[length:4px_50px] font-bold text-secondary'
-    : 'footer-link my-4 block w-fit font-bold'}
+    ? 'nav-link active'
+    : 'nav-link'}
   href={props.href}
 >
   {@render props.children?.()}
 </a>
+
+<style>
+  .nav-link {
+    display: block;
+    width: fit-content;
+    font-weight: bold;
+    line-height: 1.5rem;
+  }
+</style>

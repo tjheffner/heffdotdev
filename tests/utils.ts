@@ -1,5 +1,5 @@
 /* This file contains consistent configuration for a11y tests across other test files. */
-import { test as base } from '@playwright/test'
+import { test as base, Page } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 import { createHtmlReport } from 'axe-html-reporter'
 import fs from 'fs'

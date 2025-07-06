@@ -1,17 +1,14 @@
 <script lang="ts">
-  import '../../tailwind.css'
-  import '../../site.css'
+  import '../../global.css'
   import Header from '$lib/components/Header.svelte'
   import Footer from '$lib/components/Footer.svelte'
-  import Slice from '$lib/components/Slice.svelte'
-  import { page } from '$app/stores'
-  import { onMount } from 'svelte'
   import { SITE_TITLE } from '$lib/siteConfig'
+  import { onMount } from 'svelte'
 
   import { fade } from 'svelte/transition'
 
   onMount(() => {
-    // Indicate that the SvelteKit app has started
+    // Indicate that the SvelteKit app has started. useful for playwright
     document.body.classList.add("started");
   });
 
@@ -29,16 +26,14 @@
 
 <Header />
 
-  {#key data.currentRoute}
-    <main
-      in:fade={{ duration: 150, delay: 150 }}
-      out:fade={{ duration: 150 }}
-      id="maincontent"
-      class="max-w-7xl mx-auto px-4 sm:px-8"
-    >
-      {@render children?.()}
-    </main>
-
-  {/key}
+{#key data.currentRoute}
+  <main 
+    in:fade={{ duration: 200, delay: 200 }}
+    out:fade={{ duration: 200 }}
+    class="wrapper"
+  >
+    {@render children?.()}
+  </main>
+{/key}
 
 <Footer />

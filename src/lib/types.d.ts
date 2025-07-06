@@ -4,13 +4,15 @@ export type BaseContentItem = {
     [key: string]: string
   }
   title: string
-  subtitle: string
+  subtitle?: string
   description: string
-  canonical: string
+  canonical?: string
   slug: string
   date: Date
   ghMetadata: GHMetadata
   image: string
+  alt?: string
+  issueNumber: string
 }
 
 export type BlogItem = BaseContentItem & {
@@ -23,6 +25,7 @@ export type BlogItem = BaseContentItem & {
 export type GalleryItem = BaseContentItem & {
   type: 'gallery'
   images: GalleryImage[]
+  warn: boolean
 }
 
 export type GalleryImage = {
@@ -87,6 +90,7 @@ export type GHUser = {
 
 export type GithubIssue = {
   user: GHUser
+  number: string
   labels: {
     name: string
   }[]
@@ -97,12 +101,4 @@ export type GithubIssue = {
   html_url: string
   comments_url: string
   reactions: GHReactions
-}
-
-export type Project = {
-  type: 'project'
-  frontmatter: {
-    [key: string]: string
-  }
-  content: string
 }

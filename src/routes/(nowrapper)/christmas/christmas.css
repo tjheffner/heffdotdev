@@ -1,5 +1,6 @@
 body {
   background-color: oklch(20.8% 0.042 265.755) !important;
+  text-align: center;
 }
 
 /*
@@ -28,6 +29,31 @@ body::-webkit-scrollbar-track {
 }
 .sans {
   font-family: 'Pragati Narrow', sans-serif;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+h2 {
+  margin-bottom: 2rem;
+  margin-top: 4rem;
+  font-size: 1.5rem;
+  text-decoration: underline;
+}
+.menu {
+  padding-top: 10rem;
+  color: white;
+}
+.yellow {
+  color: gold;
+}
+.list-none {
+  list-style-type: none;
+  padding-inline-start: 0;
+}
+.disclaimer {
+  font-size: 0.75rem;
+  margin-top: 4rem;
 }
 
 #snow {

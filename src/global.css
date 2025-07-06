@@ -1,0 +1,305 @@
+/* set up global css vars & fonts */
+:root {
+  --c-accent: oklch(57.057% 0.21474 14.568);
+  --c-accent-brighter: oklch(from var(--c-accent) l c h / calc(alpha - 0.75));
+  --c-secondary: oklch(48.821% 0.21724 264.392);
+  --c-secondary-brighter: oklch(
+    from var(--c-secondary) l c h / calc(alpha - 0.75)
+  );
+  --c-text: oklch(27.9% 0.041 260.031);
+  --c-background: oklch(96.8% 0.007 247.896);
+
+  --density: 0.4rem; /* ~10pt grid */
+
+  accent-color: var(--c-accent);
+}
+
+@font-face {
+  font-family: 'Merriweather';
+  font-style: normal;
+  font-weight: normal;
+  src: url('$lib/font/Merriweather-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Mulish';
+  font-style: normal;
+  font-weight: normal;
+  src: url('$lib/font/Mulish-Regular.ttf') format('truetype');
+}
+
+/* https://www.joshwcomeau.com/css/custom-css-reset/ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    interpolate-size: allow-keywords;
+  }
+}
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+
+  background-color: var(--c-background);
+  font-family: 'Mulish', sans-serif;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+  color: var(--c-text);
+}
+p {
+  text-wrap: pretty;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+  font-family: 'Merriweather', serif;
+}
+#root,
+#__next {
+  isolation: isolate;
+}
+
+/* type scale */
+h1,
+.h1 {
+  font-size: 2.75em;
+  line-height: 1.1;
+  margin-bottom: var(--space-away);
+}
+h2,
+.h2 {
+  font-size: 1.6583em;
+}
+h3,
+.h3, h4, h5, h6 {
+  font-size: 1.401em;
+  margin-bottom: var(--space-near);
+}
+small,
+.small {
+  font-size: 0.8448em;
+  display: block;
+  margin-bottom: var(--space-near);
+}
+html {
+  font-size: clamp(1em, 0.8333vw + 0.775em, 1.25em);
+}
+
+/* https://complementary.space/ */
+body {
+  --space-near: calc(var(--density) * 5);
+  --space-away: calc(var(--density) * 10);
+}
+body [data-density-shift] {
+  --space-near: calc(var(--density) * 2);
+  --space-away: calc(var(--density) * 5);
+}
+body [data-density-shift] [data-density-shift] {
+  --space-near: calc(var(--density) * 1);
+  --space-away: calc(var(--density) * 2);
+}
+
+/* colors */
+:focus-visible {
+  outline-color: var(--c-accent);
+}
+::selection {
+  color: var(--c-background);
+  background-color: var(--c-accent);
+}
+::marker {
+  color: var(--c-accent);
+}
+:is(
+    ::-webkit-calendar-picker-indicator,
+    ::-webkit-clear-button,
+    ::-webkit-inner-spin-button,
+    ::-webkit-outer-spin-button
+  ) {
+  color: var(--c-accent);
+}
+
+hr {
+  width: 100%;
+  border: 1px solid var(--c-accent);
+  margin: var(--space-away) 0;
+}
+
+img {
+  /* https://ishadeed.com/article/defensive-css */
+  max-width: 100%;
+  object-fit: cover;
+  background-color: grey;
+}
+/* lazy loaded images */
+.lazy-image {
+  background-color: grey;
+}
+/* zoomable images */
+.zoom input[type='checkbox'] {
+  display: none;
+}
+.zoom img {
+  transition: transform 0.25s ease;
+  cursor: zoom-in;
+}
+.zoom input[type='checkbox']:checked ~ img {
+  transform: scale(1.65);
+  cursor: zoom-out;
+}
+
+/* Links that highlight from bottom */
+.nav-link,
+.gallery-link,
+.prose a {
+  color: var(--c-accent);
+  cursor: pointer;
+  text-decoration: none;
+  padding: 2px 4px;
+  background: linear-gradient(
+    to bottom,
+    var(--c-secondary) 0%,
+    var(--c-secondary) 100%
+  );
+  background-position: 0 100%;
+  background-repeat: repeat-x;
+  background-size: 2px 2px;
+  transition: all 0.3s linear;
+
+  &.active,
+  &:hover {
+    background-size: 2px 50px;
+    color: var(--c-background);
+  }
+}
+h2 > a,
+.link-unset {
+  background: unset !important;
+  color: currentColor !important;
+}
+
+/* layout wrapper + breakout */
+.wrapper {
+  max-width: 65ch;
+  margin: 0 var(--space-near);
+
+  @media (width >=768px) {
+    margin: auto;
+  }
+}
+.full-width {
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
+/* style markdown content from gh */
+.prose {
+  p {
+    margin: var(--space-near) 0;
+  }
+  ul, 
+  ol,
+  img,
+  table,
+  blockquote {
+    margin: var(--space-away) 0;
+  }
+
+  h2 > a,
+  h3 > a,
+  h4 > a {
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  thead > tr {
+    background-color: var(--c-accent-brighter);
+  }
+  tr:nth-child(even) {
+    background-color: var(--c-secondary-brighter);
+  }
+  th, td {
+    padding: var(--space-near);
+  }
+
+  blockquote {
+    border-left: 8px solid var(--c-secondary);
+    padding-left: var(--space-away);
+    font-size: 1.6583em;
+  }
+  blockquote p:first-of-type::before {
+    content: '',
+  }
+  blockquote p:last-of-type::after {
+    content: '',
+  }
+
+  pre {
+    white-space: pre-wrap;
+  }
+
+  /* handles `inline code`. larger code blocks are wrapped with pre tags and styled separately */
+  code:not(pre *) {
+    background: var(--c-secondary-brighter);
+    border-radius: 0.125em;
+    color: currentColor;
+    font-family: monospace;
+    padding: 0.1em 0.25em;
+    word-break: break-word;
+  }
+}
+
+/* utilities */
+.sr-only {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.clean-list {
+  padding: 0;
+  list-style-type: none;
+}
+.accent {
+  color: var(--c-accent);
+}
+.secondary {
+  color: var(--c-secondary);
+}

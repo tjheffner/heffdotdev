@@ -36,7 +36,7 @@ function debounce(func, wait) {
 }
 
 /**
- * @param {import('$lib/types').ContentItem[]} items
+ * @param {import('$lib/types').BlogItem[]} items
  * @param {string[]} selectedCategories
  * @param {string} search
  * @return {Object[]}
@@ -51,6 +51,9 @@ function _fuzzySearch(items, selectedCategories, search) {
       .includes(item.category.toLowerCase())
   })
   if (search) {
+    search = search.replace(/[^a-zA-Z0-9 ]/g, '')
+    if (!search.length) return filteredItems
+
     const haystack = filteredItems.map((v) =>
       [v.title, v.subtitle, v.tags, v.content, v.description].join(' ')
     )
@@ -58,7 +61,7 @@ function _fuzzySearch(items, selectedCategories, search) {
     const info = u.info(idxs, haystack, search)
     const order = u.sort(info, haystack, search)
     const mark = (part, matched) =>
-      matched ? '<b style="color:var(--brand-accent)">' + part + '</b>' : part
+      matched ? '<b style="color:var(--c-accent)">' + part + '</b>' : part
     const list = order.map((i) => {
       const x = filteredItems[info.idx[order[i]]]
       const hl = uFuzzy

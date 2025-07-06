@@ -35,14 +35,23 @@
     }
 
     function pause() {
+      // @ts-ignore-next-line
       cancelAnimationFrame(render)
     }
     function resume() {
       lastNow = performance.now()
       requestAnimationFrame(render)
     }
-
+    // svelte-ignore perf_avoid_nested_class
     class Snowflake {
+      x: any
+      y: any
+      xVel: any
+      yVel: any
+      angle: any
+      angleVel: any
+      size: any
+      sizeOsc: any
       constructor() {
         this.spawn()
       }
@@ -116,12 +125,6 @@
     content={`https://heffner.dev/og?message=christmas%20dinner!`}
   />
   <meta
-    name="twitter:card"
-    content={`https://heffner.dev/og?message=christmas%20dinner!`
-      ? 'summary_large_image'
-      : 'summary'}
-  />
-  <meta
     name="twitter:image"
     content={`https://heffner.dev/og?message=christmas%20dinner!`}
   />
@@ -134,10 +137,10 @@
   <img src="/assets/holly-clipart-corner-11.png" alt="" class="holly right" />
 </div>
 
-<section class="serif h-full pt-[10rem] text-center text-white">
-  <h1 class="text-yellow-400 mb-10 text-6xl">{data.title}</h1>
-  <p class="text-yellow-400">at</p>
-  <p class="text-yellow-400 mb-12 mt-6 text-3xl">
+<section class="serif menu">
+  <h1 class="yellow">{data.title}</h1>
+  <p>at</p>
+  <p class="yellow mb-12 mt-6 text-3xl">
     {data.where} | <span class="sans">{data.when}</span>
   </p>
   <p>
@@ -166,7 +169,7 @@
     {/each}
   </ul>
 
-  <p class="text-md mt-12">{data.disclaimer}</p>
+  <p class="disclaimer">{data.disclaimer}</p>
 </section>
 
 <div class="holly-container">

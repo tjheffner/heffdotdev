@@ -1,29 +1,33 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { queryParam, ssp } from 'sveltekit-search-params'
   import PostItem from '$lib/components/PostItem.svelte'
+  import SearchFilters from '$lib/components/SearchFilters.svelte';
+  import Metatags from '$lib/components/Metatags.svelte'
   import { POST_CATEGORIES } from '$lib/siteConfig'
   import { fuzzySearch } from './fuzzySearch'
+  import type { Writable } from 'svelte/store'
 
   let { data } = $props();
   let { items } = data
+  let inputEl: HTMLInputElement = $state();
+  let resultsEl: HTMLElement = $state();
+
+  let list: (typeof items) = $state()
+  let LIST_DISPLAY_LENGTH = 10
+  let isTruncated = $state(items?.length > LIST_DISPLAY_LENGTH);
 
   // https://github.com/paoloricciuti/sveltekit-search-params#how-to-use-it
-  /** @type import('svelte/store').Writable<String[] | null> */
-  let selectedCategories = queryParam(
+  let selectedCategories: Writable<string[] | null> = $state(queryParam(
     'show',
     {
       encode: (arr) => arr?.toString(),
       decode: (str) => str?.split(',')?.filter((e) => e) ?? []
     },
     { debounceHistory: 100 }
-  );
+  ));
   let search = queryParam('filter', ssp.string(), {
     debounceHistory: 500
   });
-
-  let inputEl = $state();
 
   function focusSearch(e) {
     if (e.key === '/' && inputEl) inputEl.select();
@@ -34,138 +38,128 @@
     $selectedCategories = []
   }
 
-  let LIST_DISPLAY_LENGTH = 10
-  let isTruncated = $state(items?.length > LIST_DISPLAY_LENGTH);
-
-  let list = $state()
-  run(() => {
+  $effect.pre(() => {
     fuzzySearch(items, $selectedCategories, $search).then(_items => {
       list = _items
     })
-  });
+    // reset list position when filters change
+    if (resultsEl) {
+      const header = document.getElementById('header');
+      const filters = document.getElementById('filters');
+      const stickyHeight = header.offsetHeight + filters.offsetHeight;
+
+      if (window.scrollY === 0) {
+        return;
+      } else {
+        window.scrollTo({top: resultsEl.offsetTop - stickyHeight, behavior: 'instant'})
+      }
+    }
+  })
 </script>
 
-<svelte:head>
-  <title>heffner.dev | posts</title>
-  <meta name="description" content="Latest musings fit to print." />
-  <meta property="og:image" content={`https://heffner.dev/og?message=posts`} />
-  <meta name="twitter:card" content={'summary'} />
-  <meta name="twitter:image" content={`https://heffner.dev/og?message=posts`} />
-</svelte:head>
+{#snippet emptyResults(string = undefined, buttonText, func, query = undefined)}
+  <div class="empty prose">
+    {#if string}
+      {#if query}
+        <p>{string} <code>{query}</code></p>
+      {:else}
+        <p>{string}</p>  
+      {/if}
+    {/if}
+    <button
+      onclick={func}
+      class="button"
+    >
+      {buttonText}
+    </button>
+  </div>
+{/snippet}
 
 <svelte:window onkeyup={focusSearch} />
 
-<section
-  class="mx-auto mb-16 flex w-full flex-col items-start p-0 sm:px-8 lg:w-2/3"
->
-  <h1 class="text-secondary mb-4 text-3xl font-bold tracking-tight md:text-5xl">
+<Metatags 
+  title="Posts" 
+  description="personal blogs covering topics including DIY, technical tips and tricks, and cooking recipes."
+  ogMessage="Posts"  
+/>
+
+<section data-density-shift id="content" tabindex="-1">
+  <h1>
     Posts
   </h1>
-  <p class="mb-4 text-copy">
-    In total, I've written <strong>{items.length}</strong> posts on my blog. Use the search below
-    to filter.
+  <p>
+    In total, I've written <strong>{items.length}</strong> posts on my blog.
   </p>
 
-  <!-- Search Bar -->
-  <div class="relative w-full">
-    <input
-      aria-label="Search articles"
-      type="text"
-      bind:value={$search}
-      bind:this={inputEl}
-      placeholder="Hit / to search"
-      class="block w-full rounded-md border border-secondary bg-background px-4 py-2 text-copy placeholder:text-accent"
-    />
-    <svg
-      class="absolute right-3 top-3 h-5 w-5 text-secondary"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-      />
-    </svg>
-  </div>
-
-  <!-- Filter Buttons -->
-  <div class="my-4 flex w-full items-center">
-    <span class="mr-2 text-copy"> Filter: </span>
-    {#each POST_CATEGORIES as availableCategory}
-      <div>
-        <input
-          id="category-{availableCategory}"
-          class="peer sr-only"
-          type="checkbox"
-          bind:group={$selectedCategories}
-          value={availableCategory}
-        />
-        <label
-          for="category-{availableCategory}"
-          class="filter"
-          class:activefilter={$selectedCategories.includes(availableCategory)}
-        >
-          {availableCategory}
-        </label>
-      </div>
-    {/each}
-  </div>
-
-  <hr class="mb-6 md:mb-12" />
+  <SearchFilters 
+    categories={POST_CATEGORIES} 
+    bind:inputEl={inputEl}
+    bind:search={$search} 
+    bind:selectedCategories={selectedCategories} 
+  />
 
   <!-- Results -->
-  {#if list?.length}
-    <ul
-      class="w-full divide-y divide-dashed divide-secondary md:mx-auto md:w-4/5"
-    >
-      {#each list as item, i}
-        {#if isTruncated && (i+1 < LIST_DISPLAY_LENGTH)}
-          <li class="mb-4 sm:mb-0">
+  <div id="results" bind:this={resultsEl}>
+    {#if list?.length}
+      <ul class="clean-list">
+        {#each list as item, i}
+          {#if isTruncated && (i+1 < LIST_DISPLAY_LENGTH)}
             <PostItem {item} href={item.slug}>
               {item.description}
             </PostItem>
-          </li>
-        {:else if !isTruncated}
-          <li class="mb-4 sm:mb-0">
+          {:else if !isTruncated}
             <PostItem {item} href={item.slug}>
               {item.description}
             </PostItem>
-          </li>
-        {/if}
-      {/each}
-    </ul>
-    {#if isTruncated && list.length > LIST_DISPLAY_LENGTH}
-      <div class="flex justify-center mx-auto">
-        <button
-          onclick={() => (isTruncated = false)}
-          class="filter"
-        >
-          See more posts
-        </button>
-      </div>
+          {/if}
+        {/each}
+      </ul>
+      {#if isTruncated && list.length > LIST_DISPLAY_LENGTH}
+        {@render emptyResults(
+          null,
+          'See more posts',
+          () => isTruncated = false
+        )}
+      {/if}
+    {:else if $search && $selectedCategories.length === 0}
+      {@render emptyResults(
+        'No posts found for',
+        'Clear your search',
+        () => ($search = ''),
+        $search
+      )}
+    {:else}
+      {@render emptyResults(
+        'No posts found with this combination of filters. Search something else!',
+        'Clear all filters',
+        clearFilters
+      )}
     {/if}
-  {:else if $search && $selectedCategories.length === 0}
-    <div class="prose">
-      No posts found for
-      <code>{$search}</code>.
-    </div>
-    <button
-      onclick={() => ($search = '')}
-      class="filter my-4"
-    >
-      Clear your search
-    </button>
-  {:else}
-    <div class="prose">No posts found with this combination of filters. Search something else!</div>
-    <button
-      onclick={clearFilters}
-      class="filter my-4"
-    >
-      Clear all filters
-    </button>
-  {/if}
+  </div>
 </section>
+
+<style>
+  .button {
+    background-color: var(--c-accent-brighter);
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+
+    margin: var(--space-near) 0;
+    padding: .5rem 1rem;
+    transition: .3s all ease-in-out;
+    
+    &:hover {
+        background-color: var(--c-accent);
+        color: var(--c-background);
+    }
+  }
+  .empty {
+    margin: var(--space-away) 0;
+    padding: var(--space-away) 0;
+    min-height: 400px;
+  }
+  #results {
+    margin: var(--space-away) 0;
+  }
+</style>

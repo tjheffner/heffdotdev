@@ -3,16 +3,26 @@
 </script>
 
 <a
-  class="m-1 inline-block rounded-lg
-         transition-all duration-200
-         ease-in-out
-         bg-transparent
-         text-accent
-         hover:bg-accent
-         hover:text-background
-         "
+  class="icon"
   {href}
   aria-label={label}
 >
   {@render children?.()}
 </a>
+
+<style>
+  .icon {
+    display: inline-block;
+    width: 60px;
+    border-radius: 8px;
+    margin: .25rem;
+    transition: all ease-in-out .3s;
+    /* background-color: transparent; */
+    color: var(--c-accent);
+
+    &:hover {
+      background-color: var(--c-secondary);
+      color: var(--c-background);
+    }
+  }
+</style>

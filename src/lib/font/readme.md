@@ -1,3 +1,5 @@
-this folder is because the dynamic og image needs to BYOF.
+this folder is just for self-hosting fonts easily
 
-see `src/routes/og` + `src/components/og.svelte` for implementation details
+see font-faces defined in site.css
+
+otherwise see `src/routes/og` + `src/components/og.svelte` for implementation details of fonts in a dynamic OG image

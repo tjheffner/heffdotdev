@@ -1,42 +1,23 @@
 <script>
-  import Slice from '$lib/components/Slice.svelte'
-  import NavLink from '$lib/components/NavLink.svelte'
-  import GetInTouch from '$lib/components/GetInTouch.svelte'
-  import {
-    SITE_URL,
-    SITE_TITLE,
-    SITE_DESCRIPTION,
-    DEFAULT_OG_IMAGE,
-    TWITTER_ID,
-  } from '$lib/siteConfig'
+  import Metatags from "$lib/components/Metatags.svelte"
 </script>
 
-<svelte:head>
-  <title>{SITE_TITLE}</title>
-  <link rel="canonical" href={SITE_URL} />
-  <link
-    rel="alternate"
-    type="application/rss+xml"
-    href={SITE_URL + '/rss.xml'}
-  />
-  <meta property="og:url" content={SITE_URL} />
-  <meta property="og:type" content="article" />
-  <meta property="og:title" content={SITE_TITLE} />
-  <meta name="Description" content={SITE_DESCRIPTION} />
-  <meta property="og:description" content={SITE_DESCRIPTION} />
-  <meta property="og:image" content={DEFAULT_OG_IMAGE} />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:creator" content={'@' + TWITTER_ID} />
-  <meta name="twitter:title" content={SITE_TITLE} />
-  <meta name="twitter:description" content={SITE_DESCRIPTION} />
-  <meta name="twitter:image" content={DEFAULT_OG_IMAGE} />
-</svelte:head>
+<Metatags />
 
-<section>
-  <Slice>
-    <h1 class="text-secondary text-3xl font-bold tracking-tight md:text-5xl">
-      Creative technologist passionate about design systems, responsive web
-      design and accessibility.
-    </h1>
-  </Slice>
+<section class="container" id="content" tabindex="-1">
+  <h1 class="big-boi">
+    Creative technologist passionate about design systems, responsive web
+    design and accessibility.
+  </h1>
 </section>
+
+<style>
+  .container {
+    height: calc(100vh - 350px);
+    display: flex;
+  }
+  .big-boi {
+    flex-grow: 1;
+    align-self: center;
+  }
+</style>

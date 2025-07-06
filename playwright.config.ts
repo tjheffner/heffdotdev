@@ -14,7 +14,7 @@ export default defineConfig({
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  retries: 2,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
@@ -34,33 +34,27 @@ export default defineConfig({
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        colorScheme: 'light',
       },
     },
     {
       name: 'firefox',
       use: {
         ...devices['Desktop Firefox'],
-        colorScheme: 'light',
       },
     },
     {
       name: 'Mobile Chrome',
       use: {
         ...devices['Pixel 5'],
-        colorScheme: 'light',
       },
     },
-
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
-
     {
       name: 'Mobile Safari',
-      use: { ...devices['iPhone 12'] },
+      use: { ...devices['iPhone 14'] },
     },
-    // my computer is too old to test webkit via playwright, save it for ci
-  ].filter((p) => (process.env.CI ? p : p.name === 'chromium')),
+  ],
 })
