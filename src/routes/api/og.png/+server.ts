@@ -1,60 +1,60 @@
-import type { RequestHandler } from './$types';
-import { dev } from "$app/environment";
-import { read } from '$app/server';
-import { render } from 'svelte/server';
-import satori from 'satori';
-import { html as toReactNode } from 'satori-html';
-import { Resvg } from '@resvg/resvg-js';
-import OpenGraphImage from '$lib/components/OpenGraphImage.svelte';
+import type { RequestHandler } from './$types'
+import { dev } from '$app/environment'
+import { read } from '$app/server'
+import { render } from 'svelte/server'
+import satori from 'satori'
+import { html as toReactNode } from 'satori-html'
+import { Resvg } from '@resvg/resvg-js'
+import OpenGraphImage from '$lib/components/OpenGraphImage.svelte'
 
 // import & load fonts
-import Merriweather from '$lib/font/Merriweather-Bold.ttf';
-import Mulish from '$lib/font/Mulish-Regular.ttf';
+import Merriweather from '$lib/font/Merriweather-Bold.ttf'
+import Mulish from '$lib/font/Mulish-Regular.ttf'
 
-const titleFontData = read(Merriweather).arrayBuffer();
-const fontData = read(Mulish).arrayBuffer();
+const titleFontData = read(Merriweather).arrayBuffer()
+const fontData = read(Mulish).arrayBuffer()
 
-const height = 630;
-const width = 1200;
+const height = 630
+const width = 1200
 
 export const GET: RequestHandler = async ({ url, setHeaders }) => {
-  const message = url.searchParams.get('message') ?? undefined;
+  const message = url.searchParams.get('message') ?? undefined
 
   const { body, head } = render(OpenGraphImage, { props: { message } })
-  const html = toReactNode(`${head}${body}`);
+  const html = toReactNode(`${head}${body}`)
 
   const svg = await satori(html, {
     fonts: [
       {
         name: 'Merriweather',
         data: await titleFontData,
-        style: 'normal'
+        style: 'normal',
       },
       {
         name: 'Mulish',
         data: await fontData,
-        style: 'normal'
-      }
+        style: 'normal',
+      },
     ],
     height,
-    width
-  });
+    width,
+  })
 
   const resvg = new Resvg(svg, {
     fitTo: {
       mode: 'width',
-      value: width
-    }
-  });
+      value: width,
+    },
+  })
 
-  const image = resvg.render();
+  const image = resvg.render()
 
   setHeaders({
-    "Content-Type": "image/png",
-    "Cache-Control": dev
-      ? "no-cache"
-      : "s-maxage=31536000, stale-while-revalidate=31536000"
-  });
+    'Content-Type': 'image/png',
+    'Cache-Control': dev
+      ? 'no-cache'
+      : 's-maxage=31536000, stale-while-revalidate=31536000',
+  })
 
-  return new Response(image.asPng());
-};
+  return new Response(image.asPng())
+}

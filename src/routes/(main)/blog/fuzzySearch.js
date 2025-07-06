@@ -5,7 +5,7 @@ export let isSearchExact = false
 export function setIsSearchExact(value = !isSearchExact) {
   isSearchExact = value
 }
-let u = new uFuzzy({  intraMode: 1 })
+let u = new uFuzzy({ intraMode: 1 })
 
 export function changeSearchMode() {
   isSearchExact = !isSearchExact
@@ -51,7 +51,7 @@ function _fuzzySearch(items, selectedCategories, search) {
       .includes(item.category.toLowerCase())
   })
   if (search) {
-    search = search.replace(/[^a-zA-Z0-9 ]/g, '');
+    search = search.replace(/[^a-zA-Z0-9 ]/g, '')
     if (!search.length) return filteredItems
 
     const haystack = filteredItems.map((v) =>

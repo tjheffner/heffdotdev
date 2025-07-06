@@ -3,7 +3,10 @@ import type { PageLoadEvent } from './$types.js'
 
 import { error } from '@sveltejs/kit'
 
-export async function load({ setHeaders, fetch }: PageLoadEvent): Promise<{ items: BlogItem[] }> {
+export async function load({
+  setHeaders,
+  fetch,
+}: PageLoadEvent): Promise<{ items: BlogItem[] }> {
   const res = await fetch(`/api/listContent.json`)
 
   if (res.status > 400) {

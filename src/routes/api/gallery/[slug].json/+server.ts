@@ -1,4 +1,4 @@
-import type { RequestEvent } from './$types';
+import type { RequestEvent } from './$types'
 import { getContent } from '$lib/content/content'
 import { error } from '@sveltejs/kit'
 

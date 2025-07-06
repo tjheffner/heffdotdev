@@ -5,9 +5,11 @@ import { REPO_URL } from '$lib/siteConfig'
 
 export const csr = true // https://github.com/sveltejs/kit/pull/6446
 
-export async function load({ params, fetch, setHeaders }: PageLoadEvent): Promise<
-{ json: BlogItem, slug: string, REPO_URL: string}
-> {
+export async function load({
+  params,
+  fetch,
+  setHeaders,
+}: PageLoadEvent): Promise<{ json: BlogItem; slug: string; REPO_URL: string }> {
   const slug = params.slug
 
   let res = null

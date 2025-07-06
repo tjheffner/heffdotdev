@@ -7,7 +7,11 @@ test('Home page renders without a11y errors', async ({
   await page.goto('/')
 
   await expect(page).toHaveTitle(/heffner.dev/)
-  await expect(page.getByText('Creative technologist passionate about design systems, responsive web design and accessibility.')).toBeVisible()
+  await expect(
+    page.getByText(
+      'Creative technologist passionate about design systems, responsive web design and accessibility.'
+    )
+  ).toBeVisible()
 
   const accessibilityScanResults = await makeAxeBuilder().analyze()
 
@@ -17,4 +21,3 @@ test('Home page renders without a11y errors', async ({
 
   expect(accessibilityScanResults.violations.length).toEqual(0)
 })
-

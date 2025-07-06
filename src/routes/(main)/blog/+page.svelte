@@ -160,7 +160,6 @@
     min-height: 400px;
   }
   #results {
-    min-height: calc(fit-content + 100px);
     margin: var(--space-away) 0;
   }
 </style>

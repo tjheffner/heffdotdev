@@ -1,4 +1,4 @@
-import type { RequestHandler } from './$types';
+import type { RequestHandler } from './$types'
 
 import { SITE_URL } from '$lib/siteConfig'
 import { listContentFromIssues } from '$lib/content/content'

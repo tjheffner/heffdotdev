@@ -9,9 +9,9 @@ import {
 import letterboxd from 'letterboxd'
 
 export async function load({ fetch, params }: PageServerLoadEvent): Promise<{
-  recentlyWatched: any[],
-  recentlyListened: any[],
-  recentlyPlayed: any[],
+  recentlyWatched: any[]
+  recentlyListened: any[]
+  recentlyPlayed: any[]
   duolingo: any[]
 }> {
   // Fetch recently played songs from last.fm

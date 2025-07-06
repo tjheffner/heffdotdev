@@ -3,11 +3,13 @@
   --c-accent: oklch(57.057% 0.21474 14.568);
   --c-accent-brighter: oklch(from var(--c-accent) l c h / calc(alpha - 0.75));
   --c-secondary: oklch(48.821% 0.21724 264.392);
-  --c-secondary-brighter: oklch(from var(--c-secondary) l c h / calc(alpha - 0.75));
+  --c-secondary-brighter: oklch(
+    from var(--c-secondary) l c h / calc(alpha - 0.75)
+  );
   --c-text: oklch(27.9% 0.041 260.031);
   --c-background: oklch(96.8% 0.007 247.896);
 
-  --density: .4rem; /* ~10pt grid */
+  --density: 0.4rem; /* ~10pt grid */
 
   accent-color: var(--c-accent);
 }
@@ -90,18 +92,22 @@ h6 {
 }
 
 /* type scale */
-h1, .h1 {
+h1,
+.h1 {
   font-size: 2.75em;
   line-height: 1.1;
   margin-bottom: var(--space-away);
 }
-h2, .h2 {
+h2,
+.h2 {
   font-size: 1.6583em;
 }
-h3, .h3 {
+h3,
+.h3 {
   font-size: 1.401em;
 }
-small, .small {
+small,
+.small {
   font-size: 0.8448em;
   display: block;
   margin-bottom: var(--space-near);
@@ -225,7 +231,7 @@ h2 > a,
   img {
     margin: var(--space-away) 0;
   }
-  
+
   h2 > a,
   h3 > a,
   h4 > a {
@@ -235,10 +241,10 @@ h2 > a,
   /* handles `inline code`. larger code blocks are wrapped with pre tags and styled separately */
   code:not(pre *) {
     background: var(--c-secondary-brighter);
-    border-radius: .125em;
+    border-radius: 0.125em;
     color: currentColor;
     font-family: monospace;
-    padding: .1em .25em;
+    padding: 0.1em 0.25em;
     word-break: break-word;
   }
 }

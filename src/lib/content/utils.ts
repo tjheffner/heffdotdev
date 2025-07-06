@@ -19,7 +19,6 @@ const rehypePlugins = [
   rehypeZoomImages,
 ]
 
-
 export function readingTime(text: string): string {
   let minutes = Math.ceil(text.trim().split(' ').length / 225)
   return minutes > 1 ? `${minutes} minutes` : `${minutes} minute`

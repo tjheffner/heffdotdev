@@ -1,4 +1,4 @@
-import type { RequestHandler } from './$types';
+import type { RequestHandler } from './$types'
 
 import RSS from 'rss'
 import { SITE_TITLE, SITE_URL } from '$lib/siteConfig'
