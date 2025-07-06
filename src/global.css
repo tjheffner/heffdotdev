@@ -103,8 +103,9 @@ h2,
   font-size: 1.6583em;
 }
 h3,
-.h3 {
+.h3, h4, h5, h6 {
   font-size: 1.401em;
+  margin-bottom: var(--space-near);
 }
 small,
 .small {
@@ -228,7 +229,11 @@ h2 > a,
   p {
     margin: var(--space-near) 0;
   }
-  img {
+  ul, 
+  ol,
+  img,
+  table,
+  blockquote {
     margin: var(--space-away) 0;
   }
 
@@ -236,6 +241,36 @@ h2 > a,
   h3 > a,
   h4 > a {
     padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  thead > tr {
+    background-color: var(--c-accent-brighter);
+  }
+  tr:nth-child(even) {
+    background-color: var(--c-secondary-brighter);
+  }
+  th, td {
+    padding: var(--space-near);
+  }
+
+  blockquote {
+    border-left: 8px solid var(--c-secondary);
+    padding-left: var(--space-away);
+    font-size: 1.6583em;
+  }
+  blockquote p:first-of-type::before {
+    content: '',
+  }
+  blockquote p:last-of-type::after {
+    content: '',
+  }
+
+  pre {
+    white-space: pre-wrap;
   }
 
   /* handles `inline code`. larger code blocks are wrapped with pre tags and styled separately */
