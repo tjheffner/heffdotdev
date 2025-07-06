@@ -6,7 +6,6 @@
     SITE_TITLE,
     SITE_DESCRIPTION,
     DEFAULT_OG_IMAGE,
-    DEFAULT_OG_PATH,
   } from '$lib/siteConfig'
 
 	interface Props {
@@ -23,7 +22,7 @@
     description = SITE_DESCRIPTION,
     ogMessage,
     canonical,
-    image = dev ? 'https://localhost:5173/og?message=heffner.dev' : DEFAULT_OG_IMAGE
+    image = dev ? 'localhost:5173/api/og.png' : DEFAULT_OG_IMAGE
   }: Props = $props();
 
   const path = page.url.pathname;
@@ -52,9 +51,9 @@
   {/if}
 
   {#if ogMessage}
-    <meta property="og:image" content={SITE_URL + DEFAULT_OG_PATH + ogMessage} />
+    <meta property="og:image" content={`${image}?message=${ogMessage}`} />
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:image" content={SITE_URL + DEFAULT_OG_PATH + ogMessage} />
+    <meta property="twitter:image" content={`${image}?message=${ogMessage}`} />
   {:else}
     <meta property="og:image" content={image} />
     <meta property="twitter:card" content="summary_large_image" />
