@@ -33,7 +33,7 @@
     "@resvg/resvg-js": "^2.4.1",
     "@svelte-put/toc": "^6.0.1",
     "@sveltejs/adapter-netlify": "^5.0.2",
-    "@sveltejs/kit": "^2.21.5",
+    "@sveltejs/kit": "^2.22.2",
     "@sveltejs/vite-plugin-svelte": "^4.0.0",
     "@types/node": "^20.12.8",
     "@typescript-eslint/eslint-plugin": "^7.3.1",
