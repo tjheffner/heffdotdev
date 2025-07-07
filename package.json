@@ -20,7 +20,7 @@
     "axe-html-reporter": "^2.2.3",
     "caniuse-lite": "^1.0.30001710",
     "date-fns": "^2.28.0",
-    "hast-util-from-selector": "^3.0.0",
+    "hast-util-from-selector": "^3.0.1",
     "hast-util-select": "^6.0.2",
     "letterboxd": "^3.1.1",
     "parse-link-header": "^2.0.0",
