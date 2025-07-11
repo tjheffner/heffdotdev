@@ -19,10 +19,8 @@ const fonts = import.meta.glob('./*.ttf', {
 
 const assets = Object.values(fonts); // Array of image URLs
 
-console.log(assets)
-
-const titleFontData = read(assets[0] as string).arrayBuffer()
-const fontData = read(assets[1] as string).arrayBuffer()
+const titleFontData = await read(assets[0] as string).arrayBuffer()
+const fontData = await read(assets[1] as string).arrayBuffer()
 
 const height = 630
 const width = 1200
@@ -33,18 +31,19 @@ export const GET: RequestHandler = async ({ url, setHeaders }) => {
   const { body, head } = render(OpenGraphImage, { props: { message } })
   const html = toReactNode(`${head}${body}`)
 
-  console.log(assets)
+  // console.log(assets)
+  // console.log(await titleFontData);
 
   const svg = await satori(html, {
     fonts: [
       {
         name: 'Merriweather',
-        data: await titleFontData,
+        data: titleFontData,
         style: 'normal',
       },
       {
         name: 'Mulish',
-        data: await fontData,
+        data: fontData,
         style: 'normal',
       },
     ],
