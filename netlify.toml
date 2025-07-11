@@ -21,3 +21,6 @@
     # cache just over 1 hour for webpagetest to be happy
     X-Content-Type-Options = "nosniff"
     ## Content-Security-Policy = "default-src 'self'; script-src 'nonce-swyx'; img-src *"
+  for = "/assets/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
