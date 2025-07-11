@@ -1,4 +1,5 @@
 import type { Handle } from '@sveltejs/kit'
+import type { HandleServerError } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
   const response = await resolve(event, {
@@ -8,3 +9,12 @@ export const handle: Handle = async ({ event, resolve }) => {
   })
   return response
 }
+
+export const handleError: HandleServerError = async ({ error, event, status, message }) => {
+	return {
+    error,
+    event,
+		message,
+    status	
+  };
+};

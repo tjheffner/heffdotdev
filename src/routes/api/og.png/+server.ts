@@ -7,12 +7,20 @@ import { html as toReactNode } from 'satori-html'
 import { Resvg } from '@resvg/resvg-js'
 import OpenGraphImage from '$lib/components/OpenGraphImage.svelte'
 
-// import & load fonts
+// import & load fonts. this works locally but not on netlify
 import Merriweather from '$lib/font/Merriweather-Bold.ttf'
 import Mulish from '$lib/font/Mulish-Regular.ttf'
 
-const titleFontData = read(Merriweather).arrayBuffer()
-const fontData = read(Mulish).arrayBuffer()
+// const fonts = import.meta.glob('./*.ttf', {
+//   query: '?url',
+//   import: 'default',
+// 	eager: true
+// }); // Import all files in this folder ending in .ttf
+
+// const assets = Object.values(fonts); // Array of image URLs
+
+// const titleFontData = await read(assets[0] as string).arrayBuffer()
+// const fontData = await read(assets[1] as string).arrayBuffer()
 
 const height = 630
 const width = 1200
@@ -23,16 +31,19 @@ export const GET: RequestHandler = async ({ url, setHeaders }) => {
   const { body, head } = render(OpenGraphImage, { props: { message } })
   const html = toReactNode(`${head}${body}`)
 
+  const titleFontData = await read(Merriweather).arrayBuffer()
+  const fontData = await read(Mulish).arrayBuffer()
+
   const svg = await satori(html, {
     fonts: [
       {
         name: 'Merriweather',
-        data: await titleFontData,
+        data: titleFontData,
         style: 'normal',
       },
       {
         name: 'Mulish',
-        data: await fontData,
+        data: fontData,
         style: 'normal',
       },
     ],
