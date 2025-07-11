@@ -2,13 +2,13 @@
   font-family: 'Merriweather';
   font-style: normal;
   font-weight: normal;
-  src: url('$lib/font/Merriweather-Bold.ttf') format('truetype');
+  src: url('/assets/font/Merriweather-Bold.ttf') format('truetype');
 }
 @font-face {
   font-family: 'Mulish';
   font-style: normal;
   font-weight: normal;
-  src: url('$lib/font/Mulish-Regular.ttf') format('truetype');
+  src: url('/assets/font/Mulish-Regular.ttf') format('truetype');
 }
 
 *,
