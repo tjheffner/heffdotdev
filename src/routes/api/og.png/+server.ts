@@ -8,8 +8,8 @@ import { Resvg } from '@resvg/resvg-js'
 import OpenGraphImage from '$lib/components/OpenGraphImage.svelte'
 
 // import & load fonts. this works locally but not on netlify
-import Merriweather from '$lib/font/Merriweather-Bold.ttf'
-import Mulish from '$lib/font/Mulish-Regular.ttf'
+import Merriweather from './font/Merriweather-Bold.ttf'
+import Mulish from './font/Mulish-Regular.ttf'
 
 // const fonts = import.meta.glob('./*.ttf', {
 //   query: '?url',
