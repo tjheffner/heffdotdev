@@ -29,7 +29,7 @@
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.53.2",
+    "@playwright/test": "^1.56.1",
     "@resvg/resvg-js": "^2.4.1",
     "@svelte-put/toc": "^6.0.1",
     "@sveltejs/adapter-netlify": "^5.0.2",
