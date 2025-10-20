@@ -61,9 +61,9 @@
     <h4 id="tech lead">Self-employed</h4>
     <p>June 2025 - Present</p>
     <ul>
-      <li>Delivering creative prototypes, design and engineering expertise across the stack.</li>
-      <li>Mobile app development, realtime shared interactivity, PWAs, e-commerce, AI integrations, accessibility</li>
-      <li>clients: <a href="https://wlcr.io">WLCR</a>, <a href="https://twothings.co">two things</a>, </li>
+      <li>Providing engineering expertise and design perspective across the stack.</li>
+      <li>Creative prototyping, mobile app development, design systems, realtime shared interactivity, PWAs, animations, e-commerce, AI integrations, and accessibility.</li>
+      <li>Clients: <a href="https://wlcr.io">WLCR</a>, <a href="https://twothings.co">two things</a></li>
     </ul>
 
     <h3 id="Agile Six">Agile Six</h3>
