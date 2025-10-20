@@ -9,7 +9,7 @@
 <header>
   <h1>Tanner Heffner</h1>
   <p>
-    I am a full-stack engineer with a record of delivering successful projects at scale for organizations in a variety of industries. I am a big advocate for accessible design systems and responsive component libraries. Let's build something cool together.
+    I am a full-stack engineer with a record of delivering successful projects at scale for organizations in a variety of industries. A big advocate for accessible design systems and responsive component libraries. Let's build something cool together.
   </p>
 </header>
 
@@ -57,21 +57,38 @@
 <main>
   <div class="list">
     <h2 id="experience">Experience</h2>
+    <h3 id="Agile Six">Hyzer</h3>
+    <h4 id="tech lead">Self-employed</h4>
+    <p>June 2025 - Present</p>
+    <ul>
+      <li>Providing engineering expertise and design perspective across the stack.</li>
+      <li>Creative prototyping, mobile app development, design systems, realtime shared interactivity, PWAs, animations, e-commerce, AI integrations, and accessibility.</li>
+      <li>Clients: <a href="https://wlcr.io">WLCR</a>, <a href="https://twothings.co">two things</a></li>
+    </ul>
+
     <h3 id="Agile Six">Agile Six</h3>
     <h4 id="tech lead">Technical Lead</h4>
-    <p>October 2021 — present</p>
+    <p>June 2023 — May 2025</p>
     <ul>
       <li><strong>Architected the modern headless foundation</strong> for <a href="https://va.gov">VA.gov</a>, reducing content publishing times for thousands of editors from hours to under five minutes.</li>
-      <li>Assisted with <strong>benefits claims processing improvements across the VA stack</strong> as part of the PACT Act. Including but not limited to: <strong>accessibility updates</strong> to custom React form inputs, improving <strong>OCR processing</strong> of PDF claim data in Python, and <strong>adding new features in React and Ruby</strong> for Accredited Representatives helping Veterans with the claims process.</li>
+      <li><strong>Foundational workflow research & development</strong> for Accredited Representatives helping Veterans with the claims process.</li>
       <li>Rapid <strong>prototyping of technical solutions</strong> leading to major contract vehicle wins, <strong>receiving highest technical marks</strong> from government evaluators.</li>
     </ul>
 
     <h3 id="Coforma">Coforma</h3>
     <h4 id="senior dev 2">Senior Software Engineer</h4>
-    <p>January 2023 — June 2023</p>
+    <p>January 2023 — June 2023 (Contract)</p>
     <ul>
       <li><strong>Architected the <a href="https://www.cms.gov/medical-bill-rights">Medical Bill Rights</a> portal</strong> for CMS.gov with localized content in English and Spanish in support of the No Surprises Act.</li>
       <li><strong>Led front-end implementation</strong>, providing direction to junior team members and actively building out the React form architecture including <strong>localization, field and schema validations, plus Salesforce and Drupal integration.</strong></li>
+    </ul>
+
+    <h3 id="Agile Six">Agile Six</h3>
+    <h4 id="tech lead">Senior Software Engineer</h4>
+    <p>September 2021 — January 2023</p>
+    <ul>
+      <li>Improved the editor experience for VA.gov content editors, with a focus on usability and accessibility.</li>
+      <li>Assisted with <strong>benefits claims processing improvements across the VA stack</strong> as part of the PACT Act. Including <strong>accessibility updates</strong> to custom React form inputs and improving <strong>OCR processing</strong> of PDF claim data in Python.</li>
     </ul>
 
     <h3 id="Instrument">Instrument</h3>
