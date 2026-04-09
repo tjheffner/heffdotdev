@@ -82,7 +82,7 @@
     <p class="h1">📚</p>
     <div class="contents" data-density-shift>
       <p class="m-0">The last book I read was:</p> 
-      <p><strong class="accent">Forest of Noise</strong> by <span class="text-secondary">Mosab Abu Toha</span>.
+      <p><strong class="accent">Debt: The First 5,000 Years</strong> by <span class="text-secondary">David Graeber</span>.
     </div>
   </li>
 
