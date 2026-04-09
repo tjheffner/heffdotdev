@@ -17,7 +17,7 @@
   <h2>Contact</h2>
   <ul class="contact">
     <li>
-      <a data-i="e" href="mailto:tannerjheffner@gmail.com">tannerjheffner@gmail.com</a>
+      <a data-i="e" href="mailto:tanner@hyzer.sh">tanner@hyzer.sh</a>
     </li>
     <li>
       <a data-i="t" href="tel:7023380110">(702) 338-0110</a>
@@ -38,7 +38,8 @@
     <p>Independent consultancy providing full-stack engineering and design leadership to agencies, startups, and direct clients.</p>
     <ul>
       <li>Shipped three mobile app prototypes for a Fortune 500 client over multiple engagements totaling five-plus months. A 40-person focus group tested the second prototype to strong reception. Stack: SvelteKit, Swift, TypeScript, Postgres, AWS.</li>
-      <li>Partnered with an agency on multiple production launches, including a three-week animation-heavy brand rebuild, a B2B marketing site, and realtime messaging and notification features for a social platform.</li>
+      <li>Partnered with an agency on multiple production launches, including a three-week animation-heavy brand rebuild and realtime messaging and notification features for a social platform.</li>
+      <li>Extended a retailer's headless Shopify codebase into a B2B storefront, forking from their existing D2C site and adding buyer-context-aware product catalogs and pricing for company- and region-specific customers, along with a customer intake form feeding into Shopify's customer system.</li>
       <li>Stood up the design system for an early-stage startup over two months, migrating existing code into an accessible navigation system, a consistent type scale, and shared tokens.</li>
     </ul>
 
