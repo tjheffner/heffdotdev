@@ -46,6 +46,7 @@
     <h3 id="Agile Six TL">Agile Six</h3>
     <h4>Technical Lead</h4>
     <p>June 2023 — May 2025</p>
+    <p>Led a cross-functional team of six engineers spanning frontend, backend, and DevOps.</p>
     <ul>
       <li>Architected the modern headless foundation for <a href="https://va.gov">VA.gov</a>, cutting content publishing times for thousands of editors from hours to under five minutes. Named Key Personnel on the Accelerated Publishing contract.</li>
       <li>Led discovery and technical research for a new Accredited Representatives workflow supporting Veterans through the claims process, coordinating changes across multiple siloed VA departments where legal jurisdiction restricted direct API access. Named Key Personnel on the contract.</li>
@@ -83,6 +84,7 @@
     <h3 id="Phase2">Phase2</h3>
     <h4>Senior Developer</h4>
     <p>June 2015 — August 2019</p>
+    <p>Started as part of Phase2's first intern class and grew into a Senior Developer over four years, later mentoring new interns through the same program.</p>
     <ul>
       <li>Co-maintained our agency's front-end toolkit, enabling the rapid stand-up of new sites with atomic design principles and consistent processes.</li>
       <li>Contributed to Drupal 7 to Drupal 8 migrations for at least five enterprise organizations, including Al Jazeera, Weight Watchers, and Memorial Sloan Kettering Cancer Center.</li>
@@ -109,7 +111,7 @@
   </div>
 </main>
 
-<section>
+<section class="skills">
   <h2>Skills & Tools</h2>
   <ul class="tags">
     <li>TypeScript</li>
