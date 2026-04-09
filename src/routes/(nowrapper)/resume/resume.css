@@ -1,7 +1,7 @@
 @font-face {
   font-family: 'Merriweather';
   font-style: normal;
-  font-weight: normal;
+  font-weight: 700;
   src: url('$lib/font/Merriweather-Bold.ttf') format('truetype');
 }
 @font-face {
@@ -23,16 +23,16 @@ body {
   padding: min(0.5in, 6vw);
 
   font-family: 'Mulish', sans-serif;
+  line-height: 1.5;
   --c-accent: black;
 }
-
 a {
   color: inherit;
   text-decoration: underline;
 }
 
 h1 {
-  font-family: 'Merriweather;', serif;
+  font-family: 'Merriweather', serif;
   font-weight: 700;
   font-size: 2.5em;
   margin-block: 0;
@@ -75,7 +75,6 @@ ul {
   display: flex;
   flex-direction: column;
   gap: 0.5em;
-  /* font-size: .8em */
 }
 .contact {
   list-style: none;
@@ -88,7 +87,7 @@ ul {
   display: inline-flex;
   width: 2.5ch;
   margin-right: 1ch;
-  background-color: black;
+  background-color: var(--c-accent);
   border-radius: 50px;
   color: white;
   font-weight: 600;
@@ -133,8 +132,97 @@ p {
   margin-block: 0.25em;
 }
 
+/* Role intro paragraph (e.g., Hyzer's consultancy framing line) */
+.list h4 + p + p {
+  font-style: italic;
+  color: #555;
+  margin-block: 0.5em 0.25em;
+}
+
 .list ul {
   list-style-type: disc;
   text-indent: 0.25rem;
   margin-inline-start: 1.25rem;
+}
+
+@media print {
+  @page {
+    margin: 0.4in;
+  }
+
+  /* Hide Highlighted Projects in print; keep on web */
+  #recent-projects,
+  #recent-projects ~ h3,
+  #recent-projects ~ p {
+    display: none;
+  }
+
+  body {
+    padding: 0;
+    font-size: 10.5pt;
+    line-height: 1.35;
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  h2 {
+    font-size: 1.2em;
+    margin-block: 0.6em 0.3em;
+  }
+
+  h3 {
+    font-size: 1.05em;
+    margin-top: 0.8em;
+  }
+
+  h4 {
+    font-size: 0.85em;
+  }
+
+  ul {
+    gap: 0.25em;
+  }
+
+  p {
+    margin-block: 0.15em;
+  }
+
+  header p {
+    margin-block: 0.3em 0;
+  }
+
+  /* Pull section headings closer to preceding content */
+  h2 {
+    margin-top: 0.8em;
+  }
+
+  /* Page break controls */
+  h2,
+  h3,
+  h4 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  ul,
+  li,
+  p {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  h3 + h4,
+  h4 + p {
+    break-before: avoid;
+    page-break-before: avoid;
+  }
+
+  /* Date line (p immediately after h4) can't end a page,
+     forcing the whole role group onto the next page if needed */
+  .list h4 + p {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
 }
