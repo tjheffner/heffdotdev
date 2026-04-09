@@ -37,9 +37,9 @@
     <p>June 2025 — Present</p>
     <p>Independent consultancy providing full-stack engineering and design leadership to agencies, startups, and direct clients.</p>
     <ul>
-      <li>Shipped three mobile app prototypes for a Fortune 500 client over multiple engagements totaling five-plus months. A 40-person focus group tested the second prototype to strong reception. Stack: SvelteKit, Swift, TypeScript, Postgres, AWS.</li>
+      <li>Shipped three mobile app prototypes for a Fortune 500 client over multiple engagements totaling five-plus months. A 40-person focus group tested the second prototype to strong reception.</li>
       <li>Partnered with an agency on multiple production launches, including a three-week animation-heavy brand rebuild and realtime messaging and notification features for a social platform.</li>
-      <li>Extended a retailer's headless Shopify codebase into a B2B storefront, forking from their existing D2C site and adding buyer-context-aware product catalogs and pricing for company- and region-specific customers, along with a customer intake form feeding into Shopify's customer system.</li>
+      <li>Extended a retailer's headless Shopify codebase into a B2B storefront, forking from their existing D2C site and adding context-aware catalogs and pricing for different company and region segments. Also built a customer intake form integrated with Shopify.</li>
       <li>Stood up the design system for an early-stage startup over two months, migrating existing code into an accessible navigation system, a consistent type scale, and shared tokens.</li>
     </ul>
 
@@ -49,7 +49,7 @@
     <ul>
       <li>Architected the modern headless foundation for <a href="https://va.gov">VA.gov</a>, cutting content publishing times for thousands of editors from hours to under five minutes. Named Key Personnel on the Accelerated Publishing contract.</li>
       <li>Led discovery and technical research for a new Accredited Representatives workflow supporting Veterans through the claims process, coordinating changes across multiple siloed VA departments where legal jurisdiction restricted direct API access. Named Key Personnel on the contract.</li>
-      <li>Delivered rapid technical prototypes for two successful government contract bids, VA's SPRUCE and HHS SWIFT, each earning the highest technical marks from government evaluators. For SPRUCE, built a fully-validated example form using the VA design system with external USPS address verification in just five days.</li>
+      <li>Delivered rapid technical prototypes for two successful government contract bids, VA's SPRUCE and HHS SWIFT, each earning the highest technical marks from government evaluators. For SPRUCE, built an example form with full validation using the VA design system and external USPS address verification, in five days.</li>
       <li>Prototyped an experimental no-code form builder using Drupal as the source of truth, shipped for evaluation on a separate contract team.</li>
     </ul>
 
@@ -57,7 +57,7 @@
     <h4>Senior Software Engineer</h4>
     <p>January 2023 — June 2023 (Contract)</p>
     <ul>
-      <li>Architected the <a href="https://www.cms.gov/medical-bill-rights">Medical Bill Rights</a> portal for CMS.gov in support of the No Surprises Act, shipping under a tight legislative deadline in under six months with fully localized English and Spanish content.</li>
+      <li>Architected the <a href="https://www.cms.gov/medical-bill-rights">Medical Bill Rights</a> portal for CMS.gov in support of the No Surprises Act, shipping under a tight legislative deadline within six months with fully localized English and Spanish content.</li>
       <li>Owned front-end implementation and mentored junior engineers while building the React form architecture, including localization, field and schema validation, and Salesforce and Drupal integration.</li>
     </ul>
 
@@ -78,8 +78,7 @@
       <li>Prototyped brand explorations in React and Storybook for the former Twitter.com design team.</li>
       <li>Launched custom responsive components for <a href="https://google.org">Google.org</a> using Python and vanilla JavaScript.</li>
       <li>Shipped React components to production for <a href="https://business.pinterest.com/getting-started/">Pinterest Business</a>.</li>
-      <li>Contributed to the achievements and social sharing system for the Epic Games launcher, an event-driven React overlay that integrates with game SDKs platform-wide. Worked primarily on the Redux layer managing achievement lifecycle state.</li>
-    </ul>
+      <li>Contributed to the achievements and social sharing system for the Epic Games launcher, an event-driven React overlay that integrates with game SDKs platform-wide. Worked primarily on the state management layer for achievement lifecycle events.</li>    </ul>
 
     <h3 id="Phase2">Phase2</h3>
     <h4>Senior Developer</h4>
