@@ -36,7 +36,7 @@
     </Details>
 
     <Details title="contact" linked>
-      <p>If you have questions, need a tech consultation, or are interested in working together, please send me an <a href="mailto:tannerjheffner@gmail.com">email.</a></p>
+      <p>If you have questions, need a tech consultation, or are interested in working together, please send me an <a href="mailto:tanner@hyzer.sh">email.</a></p>
 
       <p class="h1">✌️</p>
     </Details>
