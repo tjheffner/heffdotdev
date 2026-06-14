@@ -10,7 +10,7 @@
   <h1>Tanner Heffner</h1>
   <p>
     Full-stack engineer and technical lead with a decade at agencies delivering for government, enterprise, and startup clients. 
-    On time, and still there after handoff. Drops into any codebase, but most at home prototyping, building design systems, and shipping to production.
+    Drops into any codebase, but most at home prototyping, building design systems, and shipping to production.
     Let's build something cool together.  
   </p>
 </header>
