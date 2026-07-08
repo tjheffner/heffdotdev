@@ -189,7 +189,7 @@ ${layerLines}
 />`;
   }
 
-  $: configText = (layers, anchor, intensity, snippet());
+  $: configText = (void [layers, anchor, intensity], snippet());
 
   async function copyConfig() {
     try {

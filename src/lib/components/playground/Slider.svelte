@@ -6,21 +6,38 @@
   export let step = 1;
   export let unit = '';
 
-  // Show the same precision the step implies, without trailing float noise.
-  $: decimals = step < 1 ? String(step).split('.')[1]?.length ?? 2 : 0;
-  $: display = Number(value).toFixed(decimals);
+  // Clamp on blur so partial/out-of-range typing is tidied without fighting
+  // the user mid-keystroke (clamping on every input blocks typing e.g. "100").
+  function sanitize(e: Event) {
+    const el = e.currentTarget as HTMLInputElement;
+    let n = Number(el.value);
+    if (Number.isNaN(n)) n = min;
+    value = Math.min(max, Math.max(min, n));
+  }
 </script>
 
 <label class="slider">
   <span class="lab">{label}</span>
-  <input type="range" bind:value {min} {max} {step} />
-  <span class="val">{display}{unit}</span>
+  <input class="range" type="range" bind:value {min} {max} {step} />
+  <span class="num">
+    <input
+      class="field"
+      type="number"
+      bind:value
+      {min}
+      {max}
+      {step}
+      on:blur={sanitize}
+      aria-label={label}
+    />
+    {#if unit}<span class="unit">{unit}</span>{/if}
+  </span>
 </label>
 
 <style>
   .slider {
     display: grid;
-    grid-template-columns: 3.4rem 1fr 3.2rem;
+    grid-template-columns: 3.4rem 1fr auto;
     align-items: center;
     gap: 0.5rem;
     font-size: 0.7rem;
@@ -31,10 +48,41 @@
     letter-spacing: 0.06em;
     white-space: nowrap;
   }
-  .val {
-    color: var(--pg-text, #e8e8ec);
+  .num {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 1px;
+  }
+  .field {
+    width: 3rem;
+    font: inherit;
     font-variant-numeric: tabular-nums;
     text-align: right;
+    color: var(--pg-text, #e8e8ec);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid transparent;
+    padding: 1px 0;
+    border-radius: 0;
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+  .field::-webkit-outer-spin-button,
+  .field::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .field:hover {
+    border-bottom-color: var(--pg-line, #26262e);
+  }
+  .field:focus {
+    outline: none;
+    border-bottom-color: var(--pg-accent, #ff6b35);
+  }
+  .unit {
+    color: var(--pg-dim, #8a8a93);
+    flex: none;
   }
   input[type='range'] {
     width: 100%;
