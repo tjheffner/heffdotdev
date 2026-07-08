@@ -38,6 +38,8 @@
     <Details title="contact" linked>
       <p>If you have questions, need a tech consultation, or are interested in working together, please send me an <a href="mailto:tanner@hyzer.sh">email.</a></p>
 
+      <p>More details can be found at <a href="https://hyzer.sh" target="_blank">hyzer.sh</a></p>
+
       <p class="h1">✌️</p>
     </Details>
 
