@@ -73,7 +73,7 @@
     strokeMatch: true,
     mode: 'radial' as KaleMode,
     segments: 8,
-    spin: 0,
+    spin: 0.12, // a slow default drift so the scene reads as alive on load
     animate: 0,
     zoom: 1
   };
@@ -181,6 +181,10 @@
     outlineColor = randomHex();
     mode = pick(['radial', 'prism'] as const);
     segments = randInt(4, 16);
+    // Motion: a slow drift in a random direction (magnitude squared → biased
+    // slow), and a morph kept in a lively-but-not-frantic 0.25–0.75 band.
+    spin = round((Math.random() < 0.5 ? -1 : 1) * Math.random() ** 2 * 0.5, 2);
+    animate = round(0.25 + Math.random() * 0.5, 2);
     randomizeItems(); // colors itself from the palette just set
     _prevKey = paletteKeyNow(); // don't let the recolor watcher re-tint on top
   }
@@ -299,7 +303,7 @@
     renderer?.recenter();
   }
   const sceneSnapshot = () => renderer?.snapshot(transparent ? '#16161c' : bg) ?? null;
-  $: sceneLabel = `${mode === 'prism' ? 'Prism' : 'Radial'} · ${segments} seg`;
+  $: sceneLabel = `${mode === 'prism' ? 'Tiled' : 'Radial'} · ${segments} seg`;
 
   // Flip the overlay chrome against the actual pixels under it. Coalesced to one
   // sample per frame so a drag / animation stays cheap.
@@ -353,7 +357,7 @@
       <span class="lab">Mode</span>
       <div class="mode-btns">
         <button class="mode-btn" class:active={mode === 'radial'} on:click={() => (mode = 'radial')}>Radial</button>
-        <button class="mode-btn" class:active={mode === 'prism'} on:click={() => (mode = 'prism')}>Prism</button>
+        <button class="mode-btn" class:active={mode === 'prism'} on:click={() => (mode = 'prism')}>Tiled</button>
       </div>
     </div>
     <p class="hint">
@@ -362,8 +366,8 @@
         : 'A mirrored tile repeats across the whole canvas. Segments sets the tile density.'}
     </p>
     <Slider label="Segments" bind:value={segments} min={3} max={24} step={1} />
-    <Slider label="Spin" bind:value={spin} min={0} max={1} step={0.01} />
-    <p class="hint">{mode === 'radial' ? 'Speed the whole field rotates.' : 'Speed the tile sheet drifts across the canvas.'}</p>
+    <Slider label="Spin" bind:value={spin} min={-0.5} max={0.5} step={0.01} />
+    <p class="hint">{mode === 'radial' ? 'Speed and direction the whole field rotates — negative spins the other way.' : 'Speed and direction the tile sheet drifts.'}</p>
     <Slider label="Animate" bind:value={animate} min={0} max={1} step={0.01} />
     <p class="hint">Speed the segment shapes morph — skew, warp, twist and rotation drift over time.</p>
     <Slider label="Zoom" bind:value={zoom} min={0.25} max={4} step={0.01} unit="×" />

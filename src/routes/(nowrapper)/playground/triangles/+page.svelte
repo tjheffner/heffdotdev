@@ -115,9 +115,10 @@
     seed = `${w}-${Math.random().toString(36).slice(2, 6)}`;
   }
 
-  // Shuffle the colors and per-triangle variables, plus the seed. Layout
-  // (shape, warp, taper) and view/backdrop are left as-is.
+  // Shuffle the shape, colors, and per-triangle variables, plus the seed. Field
+  // warp/taper and view/backdrop are left as-is.
   function shuffle() {
+    shape = pick(['triangle', 'square'] as const);
     colorMode = pick(PALETTES);
     hue = randInt(0, 360);
     hueSpread = randInt(0, 300);
@@ -129,7 +130,9 @@
     outlineColor = randomHex();
     grid = randInt(4, 28);
     jitter = rand(-1, 1);
-    explode = rand(0, 0.6);
+    // The clean, un-exploded look is the best one, so bias hard toward it:
+    // often exactly 0, otherwise a squared (low-weighted) amount.
+    explode = Math.random() < 0.35 ? 0 : Math.round(Math.random() ** 2 * 0.6 * 100) / 100;
     warp = rand(0, 1);
     rotate = randInt(0, 360);
     skew = rand(-1, 1);

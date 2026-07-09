@@ -59,7 +59,7 @@
   export let mode: KaleMode = 'radial';
   export let segments = 8; // radial: wedges around the center; prism: tiles across
   export let items: KaleItem[] = [];
-  export let spin = 0; // field motion speed: 0 = still, 1 = fast (rotate / drift)
+  export let spin = 0; // field motion: -1..1, sign = direction, magnitude = speed
   export let animate = 0; // segment-morph speed: 0 = still, 1 = fast (skew/warp/…)
 
   export let zoom = 1; // scales the scene about the canvas center (interactive camera)
@@ -396,7 +396,7 @@
     typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function tick(ts: number) {
-    if (!mounted || (spin <= 0 && animate <= 0)) {
+    if (!mounted || (spin === 0 && animate <= 0)) {
       rafId = 0;
       return;
     }
@@ -411,7 +411,7 @@
   }
 
   function syncAnimation(_a: number = animate, _s: number = spin) {
-    const active = (spin > 0 || animate > 0) && !prefersReducedMotion();
+    const active = (spin !== 0 || animate > 0) && !prefersReducedMotion();
     if (active && !rafId) {
       lastTs = 0;
       rafId = requestAnimationFrame(tick);

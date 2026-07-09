@@ -125,7 +125,7 @@
               {/each}
             </ul>
           </div>
-          <a class="title-link" href="/playground">← All experiments</a>
+          <a class="title-link" href="/playground">← Playground</a>
         </section>
       {/if}
       <slot />
