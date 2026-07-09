@@ -10,6 +10,7 @@
   import { n36, p36, unpackHex } from '$lib/playground/token';
 
   const presets = createPresetStore('glowfield');
+  let savedScenes: SavedScenes;
 
   type Layer = {
     sz: number; ox: number; oy: number; a: number;
@@ -447,6 +448,10 @@ ${layerLines}
   title="Glowfield"
   subtitle="Background ambient light generator"
   {bg}
+  onShuffle={shuffle}
+  onReset={reset}
+  onSavePng={savePng}
+  onSaveScene={() => savedScenes?.saveCurrent()}
 >
   <Section title="Scene">
     <p class="hint">Where the field anchors and how the glow is initially colored.</p>
@@ -563,6 +568,7 @@ ${layerLines}
   </Section>
 
   <SavedScenes
+    bind:this={savedScenes}
     slot="saved"
     store={presets}
     encode={encodeState}
@@ -583,8 +589,8 @@ ${layerLines}
   </SavedScenes>
 
   <svelte:fragment slot="footer">
-    <button class="btn" on:click={shuffle}>Shuffle</button>
-    <button class="btn" on:click={reset}>Reset</button>
+    <button class="btn" on:click={shuffle}>Shuffle (F)</button>
+    <button class="btn" on:click={reset}>Reset (R)</button>
   </svelte:fragment>
 
   <main slot="preview" class="preview" style="background: {bg};">

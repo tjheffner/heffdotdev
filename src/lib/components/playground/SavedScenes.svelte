@@ -64,7 +64,7 @@
     }
   }
 
-  function saveCurrent() {
+  export function saveCurrent() {
     store.save({ label, token: encode(), thumb: snapshot?.() ?? undefined });
   }
   async function copyLink(p: Preset) {
@@ -85,9 +85,9 @@
 
 <Section title={`Saved (${presets.length})`} {open}>
   <div class="scene-actions">
-    <button class="btn" on:click={saveCurrent}>Save</button>
+    <button class="btn" on:click={saveCurrent}>Save (S)</button>
     {#if savePng}
-      <button class="btn" on:click={savePng}>Save PNG</button>
+      <button class="btn" on:click={savePng}>Save PNG (P)</button>
     {/if}
     <button class="btn" on:click={copyCurrent}>{currentCopied ? 'Copied' : 'Copy link'}</button>
   </div>

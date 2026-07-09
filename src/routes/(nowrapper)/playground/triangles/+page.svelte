@@ -92,6 +92,7 @@
   let zoom = DEFAULTS.zoom;
 
   let renderer: Triangles;
+  let savedScenes: SavedScenes;
 
   // Flip the overlay chrome against the actual pixels under it. The canvas can
   // be zoomed past its background, so sampling beats keying off `bg`. Coalesced
@@ -254,6 +255,10 @@
   title="Triangle Wrangler"
   subtitle="Generate a faceted, low-poly triangle scene. On the canvas: scroll to zoom, drag to pan, double-click to recenter."
   lightChrome={chromeLight}
+  onShuffle={shuffle}
+  onReset={reset}
+  onSavePng={savePng}
+  onSaveScene={() => savedScenes?.saveCurrent()}
 >
   <Section title="Layout">
     <p class="hint">These control the containing canvas.</p>
@@ -356,6 +361,7 @@
   </Section>
 
   <SavedScenes
+    bind:this={savedScenes}
     slot="saved"
     store={presets}
     encode={encodeState}
@@ -366,8 +372,8 @@
   />
 
   <svelte:fragment slot="footer">
-    <button class="btn" on:click={shuffle}>Shuffle</button>
-    <button class="btn" on:click={reset}>Reset</button>
+    <button class="btn" on:click={shuffle}>Shuffle (F)</button>
+    <button class="btn" on:click={reset}>Reset (R)</button>
   </svelte:fragment>
 
   <main slot="preview" class="preview" class:checker={transparent} style={transparent ? '' : `background: ${bg};`}>

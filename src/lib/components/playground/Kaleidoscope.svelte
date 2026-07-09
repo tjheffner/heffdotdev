@@ -44,12 +44,7 @@
   import { onMount } from 'svelte';
   import { makeRng } from '$lib/playground/rng';
   import { hexToHsl } from '$lib/playground/color';
-  import {
-    snapshotCanvas,
-    downloadCanvasPng,
-    sampleLuminance as sampleCanvasLuminance,
-    zoomAt
-  } from '$lib/playground/canvas';
+  import CanvasStage, { type StageView } from './CanvasStage.svelte';
 
   // --- appearance ----------------------------------------------------------
   export let bg = '#0a0a12';
@@ -79,19 +74,15 @@
   // reads as sparse. Scale item size up in prism so tiles fill and the seams knit.
   const PRISM_FILL = 2.6;
 
-  let host: HTMLDivElement;
-  let canvas: HTMLCanvasElement;
+  // Camera/canvas live in CanvasStage; these mirror the current view so the
+  // draw helpers below can read them unchanged.
+  let stage: CanvasStage;
   let ctx: CanvasRenderingContext2D | null = null;
-  let ro: ResizeObserver | undefined;
-
   let mounted = false;
   let w = 0;
   let h = 0;
-  let dpr = 1;
-
   let panX = 0;
   let panY = 0;
-  let dragging = false;
 
   const TAU = Math.PI * 2;
   const DEG = Math.PI / 180;
@@ -372,35 +363,32 @@
     }
   }
 
-  function render() {
-    if (!ctx) return;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, w, h);
+  // Paint the scene into the stage's canvas. The stage clears + sets the dpr
+  // transform first and passes the current camera; the render helpers below read
+  // the mirrored w/h/panX/panY and the `zoom` prop (== view.zoom).
+  function draw(context: CanvasRenderingContext2D, view: StageView) {
+    ctx = context;
+    w = view.w;
+    h = view.h;
+    panX = view.panX;
+    panY = view.panY;
     if (!transparent) {
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, w, h);
     }
     ctx.lineJoin = 'round';
     ctx.lineWidth = stroke;
-
     if (mode === 'prism') renderPrism();
     else renderRadial();
-
-    onRendered?.();
   }
 
-  // --- luminance sampling --------------------------------------------------
-  // Transparent scenes composite over the checker color the preview shows.
-  export const sampleLuminance = (stripFrac = 0.16) =>
-    sampleCanvasLuminance(canvas, transparent ? '#232329' : bg, stripFrac);
-
-  // Rebuild + repaint whenever anything scene-defining changes. `spin`/`animate`
-  // drive the RAF loop, not a static repaint, so they're absent here.
+  // Repaint whenever anything scene-defining changes. `spin`/`animate` drive the
+  // RAF loop, and `zoom` is repainted by the stage, so none appear here.
   $: if (
     mounted &&
-    (void [prepared, mode, segments, zoom, bg, transparent, stroke, outlineColor, strokeMatch], true)
+    (void [prepared, mode, segments, bg, transparent, stroke, outlineColor, strokeMatch], true)
   ) {
-    render();
+    stage?.paint();
   }
 
   // --- animation loop ------------------------------------------------------
@@ -418,7 +406,7 @@
     // Morph ramps up faster than spin — a small boost plus a gentle curve so the
     // low end still reads while 1.0 feels genuinely lively.
     morphClock += dt * (animate * 1.6 + animate * animate * 2.2);
-    render();
+    stage?.paint();
     rafId = requestAnimationFrame(tick);
   }
 
@@ -430,146 +418,44 @@
     } else if (!active && rafId) {
       cancelAnimationFrame(rafId);
       rafId = 0;
-      render();
+      stage?.paint();
     }
   }
   $: if (mounted) syncAnimation(animate, spin);
 
-  function resize() {
-    if (!canvas || !host) return;
-    dpr = Math.min(2, window.devicePixelRatio || 1);
-    const rect = contained
-      ? host.getBoundingClientRect()
-      : { width: window.innerWidth, height: window.innerHeight };
-    w = Math.max(1, rect.width);
-    h = Math.max(1, rect.height);
-    canvas.width = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
-    canvas.style.width = `${w}px`;
-    canvas.style.height = `${h}px`;
-    render();
-  }
-
-  // --- drag-to-pan / scroll-to-zoom ---------------------------------------
-  let dragStartX = 0;
-  let dragStartY = 0;
-  let panStartX = 0;
-  let panStartY = 0;
-
-  function onPointerDown(e: PointerEvent) {
-    if (!interactive) return;
-    dragging = true;
-    dragStartX = e.clientX;
-    dragStartY = e.clientY;
-    panStartX = panX;
-    panStartY = panY;
-    host.setPointerCapture?.(e.pointerId);
-  }
-  function onPointerMove(e: PointerEvent) {
-    if (!dragging) return;
-    panX = panStartX + (e.clientX - dragStartX);
-    panY = panStartY + (e.clientY - dragStartY);
-    render();
-  }
-  function onPointerUp(e: PointerEvent) {
-    if (!dragging) return;
-    dragging = false;
-    host.releasePointerCapture?.(e.pointerId);
-  }
-  export function recenter() {
-    panX = 0;
-    panY = 0;
-    render();
-  }
   // Zero the motion clocks so the scene returns to its base (un-morphed,
   // un-rotated) state — used by the page's Reset.
   export function resetMotion() {
     spinClock = 0;
     morphClock = 0;
-    render();
-  }
-  function onWheel(e: WheelEvent) {
-    if (!interactive) return;
-    e.preventDefault();
-    const rect = host.getBoundingClientRect();
-    const cam = zoomAt(
-      { panX, panY, zoom },
-      e.clientX - rect.left,
-      e.clientY - rect.top,
-      e.deltaY,
-      w,
-      h,
-      zoomMin,
-      zoomMax
-    );
-    panX = cam.panX;
-    panY = cam.panY;
-    zoom = cam.zoom;
-    render();
+    stage?.paint();
   }
 
-  // Downscaled JPEG for the saved-scenes library; PNG download for export.
-  export const snapshot = (bgFill: string, maxDim = 128) => snapshotCanvas(canvas, bgFill, maxDim);
+  // Camera + export helpers forward to the stage; luminance folds in the
+  // effective backdrop this scene shows.
+  export const recenter = () => stage?.recenter();
+  export const snapshot = (bgFill: string, maxDim = 128) => stage?.snapshot(bgFill, maxDim) ?? null;
   export const saveImage = (filename = `kaleidoscope-${String(Date.now()).slice(-6)}.png`) =>
-    downloadCanvasPng(canvas, filename);
+    stage?.saveImage(filename);
+  export const sampleLuminance = (stripFrac = 0.16) =>
+    stage?.sampleLuminance(transparent ? '#232329' : bg, stripFrac) ?? null;
 
   onMount(() => {
-    ctx = canvas.getContext('2d');
     mounted = true;
-    resize();
-    render();
     syncAnimation();
-
-    window.addEventListener('resize', resize);
-    if (contained && typeof ResizeObserver !== 'undefined') {
-      ro = new ResizeObserver(() => resize());
-      ro.observe(host);
-    }
-
     return () => {
-      window.removeEventListener('resize', resize);
-      ro?.disconnect();
       if (rafId) cancelAnimationFrame(rafId);
     };
   });
 </script>
 
-<div
-  class="kale-field"
-  class:contained
-  class:interactive
-  class:dragging
-  bind:this={host}
-  aria-hidden="true"
-  on:pointerdown={onPointerDown}
-  on:pointermove={onPointerMove}
-  on:pointerup={onPointerUp}
-  on:pointercancel={onPointerUp}
-  on:dblclick={recenter}
-  on:wheel={onWheel}
->
-  <canvas bind:this={canvas}></canvas>
-</div>
-
-<style>
-  .kale-field {
-    position: fixed;
-    inset: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-  .kale-field.contained {
-    position: absolute;
-  }
-  .kale-field.interactive {
-    pointer-events: auto;
-    cursor: grab;
-    touch-action: none;
-  }
-  .kale-field.interactive.dragging {
-    cursor: grabbing;
-  }
-  canvas {
-    display: block;
-  }
-</style>
+<CanvasStage
+  bind:this={stage}
+  {draw}
+  bind:zoom
+  {zoomMin}
+  {zoomMax}
+  {contained}
+  {interactive}
+  {onRendered}
+/>

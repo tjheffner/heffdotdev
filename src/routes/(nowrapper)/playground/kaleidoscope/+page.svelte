@@ -98,6 +98,7 @@
   let items: KaleItem[] = cloneItems(DEFAULT_ITEMS);
 
   let renderer: Kaleidoscope;
+  let savedScenes: SavedScenes;
 
   // Position sliders mean different things per mode; label them so.
   $: posULabel = mode === 'radial' ? 'Angle' : 'X';
@@ -341,6 +342,10 @@
   title="Kaleidoscope"
   subtitle="Mirror a segment of shapes into a symmetric bloom. On the canvas: scroll to zoom, drag to pan, double-click to recenter."
   lightChrome={chromeLight}
+  onShuffle={shuffle}
+  onReset={reset}
+  onSavePng={savePng}
+  onSaveScene={() => savedScenes?.saveCurrent()}
 >
   <Section title="Layout">
     <p class="hint">How the fundamental segment is mirrored.</p>
@@ -489,6 +494,7 @@
   </Section>
 
   <SavedScenes
+    bind:this={savedScenes}
     slot="saved"
     store={presets}
     encode={encodeState}
@@ -499,8 +505,8 @@
   />
 
   <svelte:fragment slot="footer">
-    <button class="btn" on:click={shuffle}>Shuffle</button>
-    <button class="btn" on:click={reset}>Reset</button>
+    <button class="btn" on:click={shuffle}>Shuffle (F)</button>
+    <button class="btn" on:click={reset}>Reset (R)</button>
   </svelte:fragment>
 
   <main slot="preview" class="preview" class:checker={transparent} style={transparent ? '' : `background: ${bg};`}>

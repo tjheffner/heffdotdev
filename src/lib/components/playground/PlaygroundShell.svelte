@@ -16,6 +16,13 @@
   // the result here and it wins over the bg-color guess.
   export let lightChrome: boolean | undefined = undefined;
 
+  // Optional action hooks, wired to keyboard shortcuts (see onKeydown). A page
+  // supplies the ones it has; missing ones simply do nothing.
+  export let onShuffle: (() => void) | undefined = undefined;
+  export let onReset: (() => void) | undefined = undefined;
+  export let onSavePng: (() => void) | undefined = undefined;
+  export let onSaveScene: (() => void) | undefined = undefined;
+
   // Perceived luminance (Rec. 601). Light backdrop → dark chrome, and vice versa.
   function isLight(hex: string): boolean {
     const m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex.trim());
@@ -29,6 +36,17 @@
     return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.6;
   }
   $: lightCanvas = lightChrome ?? isLight(bg);
+
+  // The keyboard cheat-sheet shown in the title info card. Esc and "/" are
+  // always available; the action keys appear only when the page wired that hook.
+  $: shortcuts = [
+    { k: 'Esc', label: 'Hide controls' },
+    { k: '/', label: 'Toggle controls' },
+    ...(onShuffle ? [{ k: 'F', label: 'Shuffle' }] : []),
+    ...(onReset ? [{ k: 'R', label: 'Reset' }] : []),
+    ...(onSavePng ? [{ k: 'P', label: 'Save PNG' }] : []),
+    ...(onSaveScene ? [{ k: 'S', label: 'Save scene' }] : [])
+  ];
 
   let controlsHidden = false;
   let titleOpen = false;
@@ -45,15 +63,34 @@
   }
   const toggleControls = () => setHidden(!controlsHidden);
 
-  // Esc hides the control layer for a clean full-canvas view; "/" toggles it
-  // (matching the blog's search shortcut). Ignore "/" while typing in a field.
+  // Keyboard: Esc hides the controls; "/" toggles them. F/R/P/S run the scene
+  // actions (shuffle / reset / save PNG / save scene). All are ignored while
+  // typing in a field or when a modifier is held, so browser combos (Cmd+S,
+  // Cmd+R, Cmd+P) and text entry are never hijacked.
   function onKeydown(e: KeyboardEvent) {
     const t = e.target as HTMLElement | null;
     const typing = !!t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
-    if (e.key === 'Escape') setHidden(true);
-    else if (e.key === '/' && !typing) {
+    if (e.key === 'Escape') {
+      setHidden(true);
+      return;
+    }
+    if (typing || e.metaKey || e.ctrlKey || e.altKey) return;
+    const k = e.key.toLowerCase();
+    if (k === '/') {
       setHidden(!controlsHidden);
       e.preventDefault(); // don't trigger the browser's quick-find
+    } else if (k === 'f' && onShuffle) {
+      onShuffle();
+      e.preventDefault();
+    } else if (k === 'r' && onReset) {
+      onReset();
+      e.preventDefault();
+    } else if (k === 'p' && onSavePng) {
+      onSavePng();
+      e.preventDefault();
+    } else if (k === 's' && onSaveScene) {
+      onSaveScene();
+      e.preventDefault();
     }
   }
 </script>
@@ -80,6 +117,14 @@
             <button class="card-close" aria-label="Close" on:click={() => (titleOpen = false)}>×</button>
           </header>
           {#if subtitle}<p class="title-sub">{subtitle}</p>{/if}
+          <div class="title-keys">
+            <h3>Shortcuts</h3>
+            <ul>
+              {#each shortcuts as s}
+                <li><kbd>{s.k}</kbd> <span>{s.label}</span></li>
+              {/each}
+            </ul>
+          </div>
           <a class="title-link" href="/playground">← All experiments</a>
         </section>
       {/if}
@@ -238,6 +283,41 @@
     font-size: 0.72rem;
     line-height: 1.55;
     color: var(--pg-text);
+  }
+  .title-keys h3 {
+    margin: 0 0 0.35rem;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--pg-dim);
+  }
+  .title-keys ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.28rem;
+  }
+  .title-keys li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    color: var(--pg-text);
+  }
+  .title-keys kbd {
+    flex: none;
+    min-width: 1.7rem;
+    text-align: center;
+    font: inherit;
+    font-size: 0.62rem;
+    padding: 0.1rem 0.35rem;
+    color: var(--pg-dim);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--pg-line);
+    border-radius: 4px;
   }
   .title-link {
     font-size: 0.7rem;
