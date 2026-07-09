@@ -15,9 +15,17 @@ const ALPHABET =
   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
 function randomCode(len = 8): string {
-  const bytes = crypto.getRandomValues(new Uint8Array(len))
+  // Rejection sampling: discard bytes in the biased tail (>= the largest
+  // multiple of ALPHABET.length that fits in a byte) so every character is
+  // uniformly distributed rather than favoring the first 256 % 62 letters.
+  const max = Math.floor(256 / ALPHABET.length) * ALPHABET.length
   let s = ''
-  for (let i = 0; i < len; i++) s += ALPHABET[bytes[i] % ALPHABET.length]
+  while (s.length < len) {
+    const bytes = crypto.getRandomValues(new Uint8Array(len - s.length))
+    for (const b of bytes) {
+      if (b < max) s += ALPHABET[b % ALPHABET.length]
+    }
+  }
   return s
 }
 
