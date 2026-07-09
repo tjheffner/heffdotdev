@@ -6,6 +6,7 @@
   import Glowfield from '$lib/components/playground/Glowfield.svelte';
   import Slider from '$lib/components/playground/Slider.svelte';
   import PlaygroundShell from '$lib/components/playground/PlaygroundShell.svelte';
+  import Metatags from '$lib/components/Metatags.svelte';
   import Section from '$lib/components/playground/Section.svelte';
   import SavedScenes from '$lib/components/playground/SavedScenes.svelte';
   import { createPresetStore } from '$lib/playground/presets';
@@ -485,9 +486,11 @@ ${layerLines}
   });
 </script>
 
-<svelte:head>
-  <title>Glowfield playground</title>
-</svelte:head>
+<Metatags
+  title="Glowfield"
+  description="Background ambient light generator"
+  ogMessage="Glowfield"
+/>
 
 <PlaygroundShell
   title="Glowfield"

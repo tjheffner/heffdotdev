@@ -4,6 +4,7 @@
   import type { TriColorMode, TriShape } from '$lib/components/playground/Triangles.svelte';
   import Slider from '$lib/components/playground/Slider.svelte';
   import PlaygroundShell from '$lib/components/playground/PlaygroundShell.svelte';
+  import Metatags from '$lib/components/Metatags.svelte';
   import Section from '$lib/components/playground/Section.svelte';
   import SavedScenes from '$lib/components/playground/SavedScenes.svelte';
   import { createPresetStore } from '$lib/playground/presets';
@@ -250,9 +251,11 @@
   });
 </script>
 
-<svelte:head>
-  <title>Triangle Wrangler | heffner.dev</title>
-</svelte:head>
+<Metatags
+  title="Triangle Wrangler"
+  description="Generate a faceted, low-poly triangle scene."
+  ogMessage="Triangle Wrangler"
+/>
 
 <PlaygroundShell
   title="Triangle Wrangler"

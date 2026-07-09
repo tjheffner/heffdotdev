@@ -10,7 +10,7 @@
   }
 
   let { data }: Props = $props();
-  const { recentlyListened, recentlyWatched, recentlyPlayed, duolingo } = data;
+  const { recentlyListened, recentlyWatched, recentlyPlayed, duolingo } = $derived(data);
 </script>
 
 <Metatags title="Recent activity" />

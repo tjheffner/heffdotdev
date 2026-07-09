@@ -12,6 +12,7 @@
   } from '$lib/components/playground/Kaleidoscope.svelte';
   import Slider from '$lib/components/playground/Slider.svelte';
   import PlaygroundShell from '$lib/components/playground/PlaygroundShell.svelte';
+  import Metatags from '$lib/components/Metatags.svelte';
   import Section from '$lib/components/playground/Section.svelte';
   import SavedScenes from '$lib/components/playground/SavedScenes.svelte';
   import { createPresetStore } from '$lib/playground/presets';
@@ -379,9 +380,11 @@
   });
 </script>
 
-<svelte:head>
-  <title>Kaleidoscope | heffner.dev</title>
-</svelte:head>
+<Metatags
+  title="Kaleidoscope"
+  description="Mirror a segment of shapes into a symmetric bloom."
+  ogMessage="Kaleidoscope"
+/>
 
 <PlaygroundShell
   title="Kaleidoscope"
