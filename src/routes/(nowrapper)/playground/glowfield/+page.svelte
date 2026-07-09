@@ -27,7 +27,9 @@
     depth: 0,
     bg: '#0b0b0e',
     colorMode: 'anchor' as ColorMode,
-    anchorHue: 16
+    anchorHue: 16,
+    anchorSpread: 44,
+    rainbowSat: 90
   };
 
   // --- state ------------------------------------------------------------
@@ -42,16 +44,28 @@
 
   let colorMode: ColorMode = INITIAL.colorMode;
   let anchorHue = INITIAL.anchorHue;
+  let anchorSpread = INITIAL.anchorSpread;
+  let rainbowSat = INITIAL.rainbowSat;
   let _prevHue = anchorHue;
+  let _prevSpread = anchorSpread;
+  let _prevRainbowSat = rainbowSat;
+
+  // Per-mode sub-hint shown under the colour buttons.
+  $: paletteHint =
+    colorMode === 'anchor'
+      ? 'Fans each layer’s hue around the anchor. Spread sets how wide.'
+      : colorMode === 'rainbow'
+        ? 'Gives each layer a random hue. Sat sets how vivid.'
+        : 'A grayscale ramp from dark to light across the layers.';
 
   // --- color generation ---------------------------------------------------
 
   function generateColor(index: number, total: number): { h: number; s: number; l: number } {
     switch (colorMode) {
       case 'anchor': {
-        // Deterministic fan around the anchor hue — smooth when the slider moves.
-        const spread = 44;
-        const offset = total > 1 ? (index / (total - 1) - 0.5) * spread : 0;
+        // Deterministic fan around the anchor hue — smooth when the sliders move.
+        const offset =
+          total > 1 ? (index / (total - 1) - 0.5) * anchorSpread : 0;
         return {
           h: Math.round((anchorHue + offset + 360) % 360),
           s: Math.round(94 + (index % 3) * 2),
@@ -61,7 +75,7 @@
       case 'rainbow':
         return {
           h: Math.round(rnd(0, 360)),
-          s: Math.round(rnd(82, 100)),
+          s: rainbowSat,
           l: Math.round(rnd(54, 68))
         };
       case 'mono':
@@ -87,10 +101,20 @@
     recolorLayers();
   }
 
-  // In anchor mode, smoothly recolor as the hue slider moves.
-  $: if (colorMode === 'anchor' && anchorHue !== _prevHue) {
+  // In anchor mode, smoothly recolor as the hue / spread sliders move.
+  $: if (
+    colorMode === 'anchor' &&
+    (anchorHue !== _prevHue || anchorSpread !== _prevSpread)
+  ) {
     _prevHue = anchorHue;
+    _prevSpread = anchorSpread;
     recolorLayers();
+  }
+
+  // In rainbow mode, the Sat slider retints every layer without re-rolling hues.
+  $: if (colorMode === 'rainbow' && rainbowSat !== _prevRainbowSat) {
+    _prevRainbowSat = rainbowSat;
+    layers = layers.map((l) => ({ ...l, s: rainbowSat }));
   }
 
   // --- helpers ----------------------------------------------------------
@@ -136,11 +160,8 @@
   }
 
   function randomizeAll() {
-    const count = layers.length || 4;
-    layers = Array.from({ length: count }, (_, i) => ({
-      ...randomLayer(i, count),
-      open: layers[i]?.open ?? false
-    }));
+    const count = Math.floor(rnd(3, 9)); // 3–8 blobs, like shuffle
+    layers = Array.from({ length: count }, (_, i) => randomLayer(i, count));
   }
 
   // Shuffle re-rolls the color mode/hue, anchor, layer count, and every layer;
@@ -149,7 +170,12 @@
     const modes: ColorMode[] = ['anchor', 'rainbow', 'mono'];
     colorMode = modes[Math.floor(Math.random() * modes.length)];
     anchorHue = Math.round(rnd(0, 360));
-    _prevHue = anchorHue; // keep the hue-watch reactive from double-recoloring
+    anchorSpread = Math.round(rnd(20, 160));
+    rainbowSat = Math.round(rnd(70, 100));
+    // keep the recolor watches from double-firing after this manual reroll
+    _prevHue = anchorHue;
+    _prevSpread = anchorSpread;
+    _prevRainbowSat = rainbowSat;
     anchor = { x: round(rnd(0.2, 0.8), 2), y: round(rnd(0.15, 0.6), 2) };
     const count = Math.floor(rnd(3, 9)); // 3–8 layers
     layers = Array.from({ length: count }, (_, i) => randomLayer(i, count));
@@ -162,7 +188,11 @@
     bg = INITIAL.bg;
     colorMode = INITIAL.colorMode;
     anchorHue = INITIAL.anchorHue;
+    anchorSpread = INITIAL.anchorSpread;
+    rainbowSat = INITIAL.rainbowSat;
     _prevHue = anchorHue;
+    _prevSpread = anchorSpread;
+    _prevRainbowSat = rainbowSat;
   }
 
   // --- intensity curve graph ---------------------------------------------
@@ -196,6 +226,33 @@
   })();
 
   $: markerX = depth * 100;
+
+  // Click (or drag) anywhere on the curve to scrub depth to that scroll position.
+  function scrubDepth(e: PointerEvent) {
+    const rect = (e.currentTarget as SVGElement).getBoundingClientRect();
+    if (rect.width === 0) return;
+    depth = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+  }
+
+  function onCurvePointerDown(e: PointerEvent) {
+    (e.currentTarget as SVGElement).setPointerCapture(e.pointerId);
+    scrubDepth(e);
+  }
+
+  function onCurvePointerMove(e: PointerEvent) {
+    if (e.buttons === 0) return;
+    scrubDepth(e);
+  }
+
+  function onCurveKeyDown(e: KeyboardEvent) {
+    const step = e.shiftKey ? 0.1 : 0.01;
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') depth = Math.max(0, depth - step);
+    else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') depth = Math.min(1, depth + step);
+    else if (e.key === 'Home') depth = 0;
+    else if (e.key === 'End') depth = 1;
+    else return;
+    e.preventDefault();
+  }
 
   $: markerY = (() => {
     const { header: a, middle: m, footer: f } = intensity;
@@ -243,9 +300,10 @@ ${layerLines}
 
 <PlaygroundShell
   title="Glowfield"
-  subtitle="Tune the ambient cloud{dev ? ', then copy the config into your page' : ''}."
+  subtitle="Background ambient light generator"
 >
   <Section title="Scene">
+    <p class="hint">Where the field anchors and how the glow is colored.</p>
     <Slider label="Anchor X" bind:value={anchor.x} min={0} max={1} step={0.01} />
     <Slider label="Anchor Y" bind:value={anchor.y} min={0} max={1} step={0.01} />
     <label class="color-row">
@@ -262,34 +320,26 @@ ${layerLines}
         <button class="mode-btn" class:active={colorMode === 'mono'} on:click={() => applyColorMode('mono')}>B/W</button>
       </div>
     </div>
+    <p class="hint">{paletteHint}</p>
 
     {#if colorMode === 'anchor'}
       <div class="hue-row">
         <span class="hue-swatch" style="background: hsl({anchorHue}, 100%, 60%);"></span>
         <Slider label="Hue" bind:value={anchorHue} min={0} max={360} step={1} />
       </div>
+      <Slider label="Spread" bind:value={anchorSpread} min={0} max={360} step={1} unit="°" />
+    {:else if colorMode === 'rainbow'}
+      <Slider label="Sat" bind:value={rainbowSat} min={0} max={100} step={1} unit="%" />
     {/if}
+    <p class="hint">Any layer can still be recolored in Layers.</p>
   </Section>
 
-  <Section title="Scroll intensity" open={false}>
-    <svg class="curve" viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-label="Opacity across scroll depth">
-      <line x1="0" y1="36" x2="100" y2="36" class="axis" />
-      <path d={curvePath} class="trace" />
-      <line x1={markerX} y1="4" x2={markerX} y2="36" class="cursor" />
-      <circle cx={markerX} cy={markerY} r="2.4" class="dot" />
-    </svg>
-    <Slider label="Depth" bind:value={depth} min={0} max={1} step={0.001} />
-    <Slider label="Header" bind:value={intensity.header} min={0} max={1.2} step={0.01} />
-    <Slider label="Middle" bind:value={intensity.middle} min={0} max={1.2} step={0.01} />
-    <Slider label="Footer" bind:value={intensity.footer} min={0} max={1.2} step={0.01} />
-    <p class="hint">Depth simulates page scroll: 0 is the header, 1 is the footer.</p>
-  </Section>
-
-  <Section title={`Layers · ${layers.length}`}>
+  <Section title={`Layers (${layers.length})`}>
     <div slot="actions" class="group-actions">
       <button class="btn" on:click|preventDefault|stopPropagation={addLayer}>Add</button>
       <button class="btn" on:click|preventDefault|stopPropagation={randomizeAll}>Randomize</button>
     </div>
+    <p class="hint">Each layer is a soft blob of light. Stack and drift them for depth.</p>
     {#each layers as layer, i (layer)}
       <details class="layer" bind:open={layer.open}>
         <summary>
@@ -335,13 +385,41 @@ ${layerLines}
     {/each}
   </Section>
 
+  <Section title="Scroll intensity" open={false}>
+    <p class="hint">Depth simulates page scroll: 0 is the header, 1 is the footer.</p>
+    <p class="hint">Other sliders control opacity.</p>
+    <svg
+      class="curve"
+      viewBox="0 0 100 40"
+      preserveAspectRatio="none"
+      role="slider"
+      tabindex="0"
+      aria-label="Scroll depth"
+      aria-valuemin={0}
+      aria-valuemax={1}
+      aria-valuenow={depth}
+      on:pointerdown={onCurvePointerDown}
+      on:pointermove={onCurvePointerMove}
+      on:keydown={onCurveKeyDown}>
+      <line x1="0" y1="36" x2="100" y2="36" class="axis" />
+      <path d={curvePath} class="trace" />
+      <line x1={markerX} y1="4" x2={markerX} y2="36" class="cursor" />
+      <circle cx={markerX} cy={markerY} r="2.4" class="dot" />
+    </svg>
+    <Slider label="Depth" bind:value={depth} min={0} max={1} step={0.001} />
+    <Slider label="Header" bind:value={intensity.header} min={0} max={1.2} step={0.01} />
+    <Slider label="Middle" bind:value={intensity.middle} min={0} max={1.2} step={0.01} />
+    <Slider label="Footer" bind:value={intensity.footer} min={0} max={1.2} step={0.01} />
+  </Section>
+
   {#if dev}
-    <Section title="Config" open={false}>
+    <Section title="Code" open={false}>
       <button
         slot="actions"
         class="btn accent"
         on:click|preventDefault|stopPropagation={copyConfig}
       >{copied ? 'Copied' : 'Copy'}</button>
+      <p class="hint">Copy this into your page to reproduce the current field.</p>
       <pre class="config">{configText}</pre>
     </Section>
   {/if}
@@ -379,6 +457,12 @@ ${layerLines}
     background: #101016;
     border: 1px solid var(--pg-line);
     border-radius: 4px;
+    cursor: pointer;
+    touch-action: none;
+  }
+  .curve:focus-visible {
+    outline: 2px solid var(--pg-accent, #6ea8fe);
+    outline-offset: 2px;
   }
   .curve .axis {
     stroke: var(--pg-line);

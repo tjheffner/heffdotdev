@@ -56,7 +56,7 @@
       {:then tracks}
         {#each tracks as track}
           <div class="tracklist">
-            <img src={track.image.find(i => i.size === 'large')['#text']} alt={track.album['#text']}>
+            <img src={track.image.find(i => i.size === 'large')?.['#text']} alt={track.album['#text']}>
             <div>
               <strong>{track.name}</strong>
               <p>{track.artist['#text']}</p>
