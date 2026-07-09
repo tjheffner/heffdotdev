@@ -1,0 +1,35 @@
+name: CI
+
+# Fast, deterministic gate so formatting / type regressions are caught on PRs
+# instead of slipping through (the e2e workflow only runs against a deployed
+# Netlify preview, which also covers the build).
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    name: Format & typecheck
+    runs-on: ubuntu-latest
+    # `svelte-kit sync` (postinstall) generates the $env/static/private type
+    # declarations from whatever env vars exist, and svelte-check reads them.
+    # CI has no .env, so declare the referenced keys here (values are
+    # irrelevant — only their presence makes the typegen emit the members).
+    env:
+      GH_TOKEN: ci-placeholder
+      LASTFM_API_KEY: ci-placeholder
+      STEAM_API_KEY: ci-placeholder
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22 # matches netlify.toml
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Format check + svelte-check
+        run: npm run lint

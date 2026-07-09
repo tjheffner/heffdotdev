@@ -28,6 +28,18 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
 
+  /* Locally, boot the dev server so `npm test` is self-contained. In CI we
+   * point at a deployed Netlify preview via PLAYWRIGHT_TEST_BASE_URL, so skip
+   * starting a server there. */
+  webServer: process.env.PLAYWRIGHT_TEST_BASE_URL
+    ? undefined
+    : {
+        command: 'npm run start',
+        url: 'http://localhost:5173',
+        reuseExistingServer: !process.env.CI,
+        timeout: 120_000,
+      },
+
   /* Configure projects for major browsers */
   projects: [
     {

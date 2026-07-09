@@ -44,14 +44,14 @@
     }
     // svelte-ignore perf_avoid_nested_class
     class Snowflake {
-      x: any
-      y: any
-      xVel: any
-      yVel: any
-      angle: any
-      angleVel: any
-      size: any
-      sizeOsc: any
+      x: number
+      y: number
+      xVel: number
+      yVel: number
+      angle: number
+      angleVel: number
+      size: number
+      sizeOsc: number
       constructor() {
         this.spawn()
       }

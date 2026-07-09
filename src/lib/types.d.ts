@@ -88,6 +88,41 @@ export type GHUser = {
   site_admin: boolean
 }
 
+// Third-party activity-feed payloads consumed by /about/latest. Only the
+// fields actually read are modelled; everything is optional-friendly because
+// these are external APIs whose responses we don't control.
+export type LastfmTrack = {
+  name: string
+  artist: { '#text': string }
+  album: { '#text': string }
+  image: { size: string; '#text': string }[]
+}
+
+export type LetterboxdEntry = {
+  film: { title: string }
+  rating: { text: string }
+  review: string
+}
+
+export type SteamRecentlyPlayed = {
+  games?: {
+    name: string
+    playtime_2weeks: number
+    playtime_forever: number
+  }[]
+}
+
+export type DuolingoUser = {
+  streak?: number
+  streakData?: {
+    currentStreak?: { startDate: string } | null
+  }
+  courses?: {
+    title: string
+    learningLanguage: string
+  }[]
+}
+
 export type GithubIssue = {
   user: GHUser
   number: string

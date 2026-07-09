@@ -1,5 +1,7 @@
-body {
-  background-color: oklch(20.8% 0.042 265.755) !important;
+/* Gated to the (nowrapper) group so these body-level rules don't persist and
+   bleed onto (main) routes after a client-side navigation away from here. */
+body[data-group='nowrapper'] {
+  background-color: oklch(20.8% 0.042 265.755);
   text-align: center;
 }
 
@@ -7,21 +9,17 @@ body {
   CUSTOM SCROLLBARS!
   - https://css-tricks.com/strut-your-stuff-with-a-custom-scrollbar/
   */
-body::-webkit-scrollbar {
+body[data-group='nowrapper']::-webkit-scrollbar {
   width: 1rem;
   height: 1rem;
 }
-body::-webkit-scrollbar-thumb {
-  background: repeating-linear-gradient(
-    60deg,
-    red 0 9%,
-    white 10% 18%
-  ) !important;
-  border-radius: 100vw !important;
-  margin-block: 10px !important;
+body[data-group='nowrapper']::-webkit-scrollbar-thumb {
+  background: repeating-linear-gradient(60deg, red 0 9%, white 10% 18%);
+  border-radius: 100vw;
+  margin-block: 10px;
 }
-body::-webkit-scrollbar-track {
-  background: powderblue !important;
+body[data-group='nowrapper']::-webkit-scrollbar-track {
+  background: powderblue;
 }
 
 .serif {
@@ -31,10 +29,10 @@ body::-webkit-scrollbar-track {
   font-family: 'Pragati Narrow', sans-serif;
 }
 
-h1 {
+body[data-group='nowrapper'] h1 {
   font-size: 2.5rem;
 }
-h2 {
+body[data-group='nowrapper'] h2 {
   margin-bottom: 2rem;
   margin-top: 4rem;
   font-size: 1.5rem;
