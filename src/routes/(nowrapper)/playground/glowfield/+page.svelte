@@ -1,7 +1,7 @@
 <script lang="ts">
   import { dev } from '$app/environment';
   import { onMount, tick } from 'svelte';
-  import { moveInArray } from '$lib/playground/reorder';
+  import { moveInArray, dropIndexAt } from '$lib/playground/reorder';
   import { hslToHex } from '$lib/playground/color';
   import Glowfield from '$lib/components/playground/Glowfield.svelte';
   import Slider from '$lib/components/playground/Slider.svelte';
@@ -175,6 +175,7 @@
   let dragIndex: number | null = null;
   let overIndex: number | null = null;
   let handleEls: HTMLButtonElement[] = [];
+  let layerEls: HTMLElement[] = [];
 
   function onDragStart(e: DragEvent, i: number) {
     dragIndex = i;
@@ -185,14 +186,17 @@
       if (card) e.dataTransfer.setDragImage(card, 16, 16);
     }
   }
-  function onDragOver(e: DragEvent, i: number) {
+  // The whole list is the drop target, so the cursor snaps to the nearest slot
+  // even in the gaps between cards (dropping there used to cancel the move).
+  function onListDragOver(e: DragEvent) {
     if (dragIndex === null) return;
     e.preventDefault();
     if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
-    overIndex = i;
+    overIndex = dropIndexAt(layerEls.slice(0, layers.length), dragIndex, e.clientY);
   }
-  function onDrop(i: number) {
-    if (dragIndex !== null) layers = moveInArray(layers, dragIndex, i);
+  function onListDrop() {
+    if (dragIndex !== null && overIndex !== null)
+      layers = moveInArray(layers, dragIndex, overIndex);
     dragIndex = null;
     overIndex = null;
   }
@@ -539,16 +543,16 @@ ${layerLines}
       <button class="btn" on:click|preventDefault|stopPropagation={randomizeAll}>Randomize</button>
     </div>
     <p class="hint">Each layer is a soft blob of light. Stack and drift them for depth.</p>
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div class="reorder-list" on:dragover={onListDragOver} on:drop={onListDrop}>
     {#each layers as layer, i (layer)}
       <!-- Delete sits outside <summary> to avoid nested-interactive; it's
         overlaid on the header row and stays visible when the layer collapses. -->
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
         class="layer"
+        bind:this={layerEls[i]}
         class:dragging={dragIndex === i}
         class:drop-target={overIndex === i && dragIndex !== null && dragIndex !== i}
-        on:dragover={(e) => onDragOver(e, i)}
-        on:drop={() => onDrop(i)}
         on:dragend={onDragEnd}
       >
       <details bind:open={layer.open}>
@@ -604,6 +608,7 @@ ${layerLines}
         >×</button>
       </div>
     {/each}
+    </div>
   </Section>
 
   <Section title="Scroll intensity" open={false}>
@@ -713,6 +718,13 @@ ${layerLines}
 
   /* --- layers ------------------------------------------------------------ */
 
+  /* The list is one drop target so drags snap to the nearest slot; it also
+     owns the spacing the card-body flex gap used to provide. */
+  .reorder-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
   .layer {
     position: relative;
     border: 1px solid var(--pg-line);

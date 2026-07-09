@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, tick } from 'svelte';
-  import { moveInArray } from '$lib/playground/reorder';
+  import { moveInArray, dropIndexAt } from '$lib/playground/reorder';
   import Kaleidoscope, {
     KALE_SHAPES
   } from '$lib/components/playground/Kaleidoscope.svelte';
@@ -121,6 +121,7 @@
   let dragIndex: number | null = null;
   let overIndex: number | null = null;
   let handleEls: HTMLButtonElement[] = [];
+  let itemEls: HTMLElement[] = [];
 
   function onDragStart(e: DragEvent, i: number) {
     dragIndex = i;
@@ -131,14 +132,17 @@
       if (card) e.dataTransfer.setDragImage(card, 16, 16);
     }
   }
-  function onDragOver(e: DragEvent, i: number) {
+  // The whole list is the drop target, so the cursor snaps to the nearest slot
+  // even in the gaps between cards (dropping there used to cancel the move).
+  function onListDragOver(e: DragEvent) {
     if (dragIndex === null) return;
     e.preventDefault();
     if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
-    overIndex = i;
+    overIndex = dropIndexAt(itemEls.slice(0, items.length), dragIndex, e.clientY);
   }
-  function onDrop(i: number) {
-    if (dragIndex !== null) items = moveInArray(items, dragIndex, i);
+  function onListDrop() {
+    if (dragIndex !== null && overIndex !== null)
+      items = moveInArray(items, dragIndex, overIndex);
     dragIndex = null;
     overIndex = null;
   }
@@ -492,14 +496,14 @@
       <button class="btn" on:click|preventDefault|stopPropagation={randomizeItems}>Randomize</button>
     </div>
     <p class="hint">Each shape in the segment. It's mirrored across every seam, so tweaks ripple out symmetrically.</p>
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div class="reorder-list" on:dragover={onListDragOver} on:drop={onListDrop}>
     {#each items as item, i (item)}
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
         class="item"
+        bind:this={itemEls[i]}
         class:dragging={dragIndex === i}
         class:drop-target={overIndex === i && dragIndex !== null && dragIndex !== i}
-        on:dragover={(e) => onDragOver(e, i)}
-        on:drop={() => onDrop(i)}
         on:dragend={onDragEnd}
       >
         <details bind:open={item.open}>
@@ -558,6 +562,7 @@
         >×</button>
       </div>
     {/each}
+    </div>
   </Section>
 
   <SavedScenes
@@ -661,6 +666,13 @@
     border-color: var(--pg-dim);
   }
 
+  /* The list is one drop target so drags snap to the nearest slot; it also
+     owns the spacing the card-body flex gap used to provide. */
+  .reorder-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
   /* Item cards (mirrors Glowfield's layer list). */
   .item {
     position: relative;
