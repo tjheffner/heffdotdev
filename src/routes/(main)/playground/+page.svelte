@@ -30,7 +30,7 @@
 
 <Metatags
   title="Playground"
-  description="Interactive experiments and toys."
+  description="Interactive experiments and one-offs."
   ogMessage="Playground"
 />
 
