@@ -1,11 +1,10 @@
 <script lang="ts">
-  import { queryParam, ssp } from 'sveltekit-search-params'
+  import { queryParameters, ssp } from 'sveltekit-search-params'
   import PostItem from '$lib/components/PostItem.svelte'
   import SearchFilters from '$lib/components/SearchFilters.svelte';
   import Metatags from '$lib/components/Metatags.svelte'
   import { POST_CATEGORIES } from '$lib/siteConfig'
   import { fuzzySearch } from './fuzzySearch'
-  import type { Writable } from 'svelte/store'
 
   let { data } = $props();
   let { items } = data
@@ -17,29 +16,30 @@
   let isTruncated = $state(items?.length > LIST_DISPLAY_LENGTH);
 
   // https://github.com/paoloricciuti/sveltekit-search-params#how-to-use-it
-  let selectedCategories: Writable<string[] | null> = $state(queryParam(
-    'show',
+  // v4 returns a single reactive proxy (params.filter / params.show), not stores.
+  const params = queryParameters(
     {
-      encode: (arr) => arr?.toString(),
-      decode: (str) => str?.split(',')?.filter((e) => e) ?? []
+      filter: ssp.string(),
+      show: {
+        encode: (arr) => arr?.toString(),
+        decode: (str) => str?.split(',')?.filter((e) => e) ?? [],
+        defaultValue: [],
+      },
     },
-    { debounceHistory: 100 }
-  ));
-  let search = queryParam('filter', ssp.string(), {
-    debounceHistory: 500
-  });
+    { debounceHistory: 500, showDefaults: false }
+  );
 
   function focusSearch(e) {
     if (e.key === '/' && inputEl) inputEl.select();
   }
 
   function clearFilters(e) {
-    $search = ''
-    $selectedCategories = []
+    params.filter = ''
+    params.show = []
   }
 
   $effect.pre(() => {
-    fuzzySearch(items, $selectedCategories, $search).then(_items => {
+    fuzzySearch(items, params.show, params.filter).then(_items => {
       list = _items
     })
     // reset list position when filters change
@@ -94,8 +94,8 @@
   <SearchFilters 
     categories={POST_CATEGORIES} 
     bind:inputEl={inputEl}
-    bind:search={$search} 
-    bind:selectedCategories={selectedCategories} 
+    bind:search={params.filter}
+    bind:selectedCategories={params.show}
   />
 
   <!-- Results -->
@@ -121,12 +121,12 @@
           () => isTruncated = false
         )}
       {/if}
-    {:else if $search && $selectedCategories.length === 0}
+    {:else if params.filter && params.show.length === 0}
       {@render emptyResults(
         'No posts found for',
         'Clear your search',
-        () => ($search = ''),
-        $search
+        () => (params.filter = ''),
+        params.filter
       )}
     {:else}
       {@render emptyResults(
