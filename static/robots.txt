@@ -1,4 +1,4 @@
-Sitemap: https://www.heffner.dev/sitemap.xml
+Sitemap: https://heffner.dev/sitemap.xml
 
 # https://developers.google.com/search/docs/advanced/sitemaps/build-sitemap#addsitemap
 # https://www.robotstxt.org/robotstxt.html
