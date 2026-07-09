@@ -2,10 +2,11 @@
   import Currently from "$lib/components/Currently.svelte";
   import Metatags from "$lib/components/Metatags.svelte"
   import TableOfContents from "$lib/components/TableOfContents.svelte"
+  import type { PageData } from './$types'
 
   interface Props {
-    // data from +page.server.js, keeps api keys private
-    data: any;
+    // data from +page.server.ts, keeps api keys private
+    data: PageData;
   }
 
   let { data }: Props = $props();
