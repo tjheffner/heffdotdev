@@ -28,6 +28,7 @@
   export let warp = 0; // per-triangle vertex stretch, 0..1
   export let rotate = 0; // per-triangle rotation, max degrees 0..360
   export let skew = 0; // per-triangle shear (perspective shift), 0..1
+  export let fieldRotate = 0; // whole-sheet rotation about the center, 0..360 degrees
   export let fieldWarp = 0; // whole-sheet sine bow, -1..1
   export let taper = 0; // whole-sheet horizontal keystone, -1..1
   export let fieldSkewX = 0; // whole-sheet horizontal shear (x shifts with y), -1..1
@@ -159,6 +160,17 @@
       const cy = py - 0.5;
       px = 0.5 + cx + fieldSkewX * cy;
       py = 0.5 + cy + fieldSkewY * cx;
+    }
+    // Whole-sheet spin about the center. The scene is drawn square, so a plain
+    // rotation stays rigid (no aspect distortion).
+    if (fieldRotate !== 0) {
+      const a = fieldRotate * (Math.PI / 180);
+      const ca = Math.cos(a);
+      const sa = Math.sin(a);
+      const cx = px - 0.5;
+      const cy = py - 0.5;
+      px = 0.5 + cx * ca - cy * sa;
+      py = 0.5 + cx * sa + cy * ca;
     }
     return [px, py];
   }
@@ -399,7 +411,7 @@
   // opaque to the compiler.
   $: if (
     mounted &&
-    (void [shape, seed, grid, jitter, explode, warp, rotate, skew, fieldWarp, taper, fieldSkewX, fieldSkewY, zoom, hue, hueSpread, sat, light, colorMode, customColors, bg, transparent, stroke, outlineColor, strokeMatch], true)
+    (void [shape, seed, grid, jitter, explode, warp, rotate, skew, fieldRotate, fieldWarp, taper, fieldSkewX, fieldSkewY, zoom, hue, hueSpread, sat, light, colorMode, customColors, bg, transparent, stroke, outlineColor, strokeMatch], true)
   ) {
     redraw();
   }
