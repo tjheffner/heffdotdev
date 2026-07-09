@@ -7,6 +7,10 @@
   directory = "functions"
   node_bundler = "esbuild"
   external_node_modules = ["mdsvex", "@resvg/resvg-js"]
+  # adapter-netlify's read() from $app/server reads fonts via a runtime path
+  # string that esbuild can't trace, so the OG image's .ttf assets never get
+  # zipped into the Lambda -> ENOENT -> 500. Force them into the bundle.
+  included_files = [".netlify/server/**/*.ttf"]
 
 [build.environment]
   NODE_VERSION = "22"
