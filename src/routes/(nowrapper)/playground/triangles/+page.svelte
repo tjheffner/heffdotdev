@@ -101,6 +101,21 @@
   let copied = false;
   let copyTimer: ReturnType<typeof setTimeout>;
 
+  // Flip the overlay chrome against the actual pixels under it. The canvas can
+  // be zoomed past its background, so sampling beats keying off `bg`. Coalesced
+  // to one sample per frame so a drag (which repaints on every move) stays cheap.
+  let chromeLight = false;
+  let sampleQueued = false;
+  function onCanvasRendered() {
+    if (sampleQueued) return;
+    sampleQueued = true;
+    requestAnimationFrame(() => {
+      sampleQueued = false;
+      const l = renderer?.sampleLuminance();
+      if (l != null) chromeLight = l > 0.6;
+    });
+  }
+
   const WORDS = ['prism', 'shard', 'facet', 'quartz', 'glint', 'fracture', 'obsidian', 'kite', 'delta', 'origami'];
   function reseed() {
     const w = WORDS[Math.floor(Math.random() * WORDS.length)];
@@ -259,6 +274,7 @@
 <PlaygroundShell
   title="Triangle Wrangler"
   subtitle="Generate a faceted, low-poly triangle scene. On the canvas: scroll to zoom, drag to pan, double-click to recenter."
+  lightChrome={chromeLight}
 >
   <Section title="Layout">
     <p class="hint">These shape the whole canvas.</p>
@@ -359,14 +375,11 @@
     <Slider label="Skew" bind:value={skew} min={-1} max={1} step={0.01} />
   </Section>
 
-  <div class="scene-actions">
+  <svelte:fragment slot="footer">
     <button class="btn" on:click={shuffle}>Shuffle</button>
     <button class="btn" on:click={reset}>Reset</button>
-  </div>
-
-  <svelte:fragment slot="footer">
-    <button class="btn accent block" on:click={savePng}>Save PNG</button>
-    <button class="btn block" on:click={copyLink}>{copied ? 'Link copied' : 'Copy link'}</button>
+    <button class="btn accent" on:click={savePng}>Save PNG</button>
+    <button class="btn" on:click={copyLink}>{copied ? 'Link copied' : 'Copy link'}</button>
   </svelte:fragment>
 
   <main slot="preview" class="preview" class:checker={transparent} style={transparent ? '' : `background: ${bg};`}>
@@ -395,6 +408,7 @@
       {taper}
       {fieldSkewX}
       {fieldSkewY}
+      onRendered={onCanvasRendered}
       bind:zoom
       contained={true}
       interactive={true}

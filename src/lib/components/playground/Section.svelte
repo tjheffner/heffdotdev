@@ -1,95 +1,162 @@
 <script lang="ts">
-  // A collapsible sidebar group. Put controls in the default slot; optional
-  // summary buttons (e.g. Add / Copy) go in the "actions" slot.
+  // A control group rendered as a floating pill that expands into a drop-down
+  // card over the canvas. Pills sit in the shell's top row (flex order 0);
+  // open cards flow onto the line(s) below the row-break (flex order 2).
+  // Sections are independent — several can be open at once.
   export let title: string;
-  export let open = true;
+  export let open = false;
+
+  // Links the pill (button) to its card (region) for assistive tech.
+  const uid = `pg-sec-${Math.random().toString(36).slice(2, 8)}`;
+
+  const toggle = () => (open = !open);
 </script>
 
-<!-- Actions live *outside* <summary> (a summary is itself a button, so nesting
-  buttons in it fails axe's nested-interactive rule) but *inside* .group so they
-  overlay the header row. They sit outside <details> visually via absolute
-  positioning, which keeps them shown even when the section is collapsed. -->
-<div class="group">
-  <details class="collapsible" {open}>
-    <summary>
+<button
+  class="pill"
+  class:active={open}
+  aria-expanded={open}
+  aria-controls={uid}
+  on:click={toggle}
+>
+  <span class="pill-label">{title}</span>
+  <span class="chev" class:up={open} aria-hidden="true"></span>
+</button>
+
+{#if open}
+  <section class="card" id={uid} aria-label={title}>
+    <header class="card-head">
       <h2>{title}</h2>
-      <span class="chev" aria-hidden="true"></span>
-    </summary>
-    <div class="collapsible-body">
+      <slot name="actions" />
+      <button class="card-close" aria-label="Close {title}" on:click={toggle}>×</button>
+    </header>
+    <div class="card-body">
       <slot />
     </div>
-  </details>
-  {#if $$slots.actions}
-    <div class="section-actions">
-      <slot name="actions" />
-    </div>
-  {/if}
-</div>
+  </section>
+{/if}
 
 <style>
-  .group {
-    position: relative;
-    padding-top: 1rem;
-    border-top: 1px solid var(--pg-line);
+  /* --- pill (collapsed state, lives in the top row) ----------------------- */
+  .pill {
+    order: 0;
+    pointer-events: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font: inherit;
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    /* Chrome colors flip with canvas luminance (set on .playground). */
+    color: var(--pg-chrome-fg, var(--pg-text));
+    background: var(--pg-chrome-chip, rgba(10, 10, 14, 0.62));
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--pg-chrome-line, var(--pg-line));
+    border-radius: 999px;
+    padding: 0.34rem 0.7rem;
+    cursor: pointer;
+    transition: color 160ms ease, background 160ms ease, border-color 120ms ease;
   }
-  .collapsible {
+  .pill:hover {
+    border-color: var(--pg-chrome-fg, var(--pg-text));
+  }
+  /* Active = a solid monochrome swatch (no colored accent in the chrome). */
+  .pill.active {
+    color: var(--pg-chrome-on-solid, #16161c);
+    background: var(--pg-chrome-solid, #e8e8ec);
+    border-color: transparent;
+  }
+  .pill:focus-visible {
+    outline: 2px solid var(--pg-chrome-fg, var(--pg-text));
+    outline-offset: 2px;
+  }
+  .chev {
+    width: 6px;
+    height: 6px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 120ms ease;
+    opacity: 0.8;
+  }
+  .chev.up {
+    transform: rotate(-135deg);
+  }
+
+  /* --- card (expanded state, drops below the pill row) -------------------- */
+  .card {
+    order: 2;
+    align-self: flex-start;
+    pointer-events: auto;
+    flex: 0 0 clamp(248px, 24vw, 328px);
+    max-width: calc(100vw - 1.5rem);
+    max-height: calc(100dvh - 4.5rem);
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 0.55rem;
+    /* Opaque enough that control text keeps contrast over any canvas art. */
+    background: rgba(20, 20, 26, 0.94);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--pg-line);
+    border-radius: 10px;
+    padding: 0.7rem 0.8rem 0.85rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    scrollbar-width: thin;
+    scrollbar-color: var(--pg-line) transparent;
   }
-  .section-actions {
-    position: absolute;
-    top: 1rem;
-    right: 0.75rem;
+  .card::-webkit-scrollbar {
+    width: 6px;
+  }
+  .card::-webkit-scrollbar-thumb {
+    background: var(--pg-line);
+    border-radius: 3px;
+  }
+  .card-head {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    /* vertically center the (taller) action buttons on the summary text row */
-    height: 1.2rem;
   }
-  summary {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    min-height: 1.2rem;
-    cursor: pointer;
-    list-style: none;
-    user-select: none;
-  }
-  summary::-webkit-details-marker {
-    display: none;
-  }
-  summary:focus-visible {
-    outline: 2px solid var(--pg-accent);
-    outline-offset: 2px;
-    border-radius: 4px;
-  }
-  h2 {
+  .card-head h2 {
     margin: 0;
     flex: 1;
-    font-size: 0.82rem;
+    font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--pg-dim);
   }
-  .chev {
-    width: 7px;
-    height: 7px;
+  .card-close {
     flex: none;
-    border-right: 1.5px solid var(--pg-dim);
-    border-bottom: 1.5px solid var(--pg-dim);
-    transform: rotate(-45deg);
-    transition: transform 120ms ease;
+    width: 20px;
+    height: 20px;
+    display: grid;
+    place-items: center;
+    font: inherit;
+    font-size: 0.95rem;
+    line-height: 1;
+    color: var(--pg-dim);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 0;
   }
-  .collapsible[open] > summary .chev {
-    transform: rotate(45deg);
+  .card-close:hover {
+    color: var(--pg-text);
+    border-color: var(--pg-line);
   }
-  .collapsible-body {
+  .card-close:focus-visible {
+    outline: 2px solid var(--pg-accent);
+    outline-offset: 1px;
+  }
+  .card-body {
     display: flex;
     flex-direction: column;
     gap: 0.55rem;
-    padding-top: 0.55rem;
   }
   @media (prefers-reduced-motion: reduce) {
     .chev {
