@@ -12,71 +12,18 @@
   import Slider from '$lib/components/playground/Slider.svelte';
   import PlaygroundShell from '$lib/components/playground/PlaygroundShell.svelte';
   import Section from '$lib/components/playground/Section.svelte';
+  import SavedScenes from '$lib/components/playground/SavedScenes.svelte';
+  import { createPresetStore } from '$lib/playground/presets';
+  import { n36, p36, packHex, unpackHex } from '$lib/playground/token';
+  import { rand, randInt, pick, round } from '$lib/playground/math';
+  import { hslToHex } from '$lib/playground/color';
+  import { paletteColor, randomHex } from '$lib/playground/palette';
 
-  // --- helpers ------------------------------------------------------------
-  const rand = (min: number, max: number) => Math.round((min + Math.random() * (max - min)) * 100) / 100;
-  const randInt = (min: number, max: number) => Math.floor(min + Math.random() * (max - min + 1));
-  const pick = <T,>(arr: readonly T[]) => arr[Math.floor(Math.random() * arr.length)];
-  const round = (n: number, p = 3) => Math.round(n * 10 ** p) / 10 ** p;
-
-  function hslToHex(h: number, s: number, l: number) {
-    s /= 100;
-    l /= 100;
-    const a = s * Math.min(l, 1 - l);
-    const f = (n: number) => {
-      const k = (n + h / 30) % 12;
-      const c = l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1));
-      return Math.round(255 * c).toString(16).padStart(2, '0');
-    };
-    return `#${f(0)}${f(8)}${f(4)}`;
-  }
-  function hexToHsl(hex: string): { h: number; s: number; l: number } {
-    const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
-    if (!m) return { h: 0, s: 0, l: 60 };
-    const int = parseInt(m[1], 16);
-    const r = (int >> 16) / 255;
-    const g = ((int >> 8) & 255) / 255;
-    const b = (int & 255) / 255;
-    const max = Math.max(r, g, b);
-    const min = Math.min(r, g, b);
-    const l = (max + min) / 2;
-    let hh = 0;
-    let s = 0;
-    const d = max - min;
-    if (d !== 0) {
-      s = d / (1 - Math.abs(2 * l - 1));
-      if (max === r) hh = ((g - b) / d) % 6;
-      else if (max === g) hh = (b - r) / d + 2;
-      else hh = (r - g) / d + 4;
-      hh *= 60;
-      if (hh < 0) hh += 360;
-    }
-    return { h: hh, s: s * 100, l: l * 100 };
-  }
+  const presets = createPresetStore('kaleidoscope');
 
   // --- palette (drives item colors) ---------------------------------------
-  function paletteHsl(t: number): { h: number; s: number; l: number } {
-    switch (colorMode) {
-      case 'spectrum':
-        return { h: (hue + t * hueSpread + 360) % 360, s: sat, l: light };
-      case 'duo': {
-        const partner = (hue + hueSpread) % 360;
-        const d = ((partner - hue + 540) % 360) - 180;
-        const k = t < 0.5 ? 0 : 1;
-        return { h: (hue + d * k + 360) % 360, s: sat, l: light + (t - 0.5) * 20 };
-      }
-      case 'mono':
-        return { h: hue, s: sat * 0.5, l: light + (t - 0.5) * 44 };
-      case 'custom': {
-        if (!customColors.length) return { h: hue, s: sat, l: light };
-        const i = Math.min(customColors.length - 1, Math.floor(t * customColors.length));
-        const c = hexToHsl(customColors[i]);
-        return c;
-      }
-    }
-  }
   const paletteHex = (t: number) => {
-    const c = paletteHsl(t);
+    const c = paletteColor(colorMode, { hue, hueSpread, sat, light, customColors }, t);
     return hslToHex(c.h, c.s, c.l);
   };
   // Even spread across the current item count, so a palette lays out cleanly.
@@ -94,7 +41,7 @@
       skew: rand(-0.6, 0.6),
       warp: rand(0, 0.6),
       twist: rand(-0.5, 0.5),
-      seed: randInt(1, 1_000_000_000),
+      seed: randInt(1, 46655), // 36^3 - 1 → a 3-char base36 seed; plenty of jitter variety
       open: false
     };
   }
@@ -151,8 +98,6 @@
   let items: KaleItem[] = cloneItems(DEFAULT_ITEMS);
 
   let renderer: Kaleidoscope;
-  let copied = false;
-  let copyTimer: ReturnType<typeof setTimeout>;
 
   // Position sliders mean different things per mode; label them so.
   $: posULabel = mode === 'radial' ? 'Angle' : 'X';
@@ -170,7 +115,7 @@
       ...items[i],
       u: round(Math.min(1, items[i].u + 0.06), 3),
       v: round(Math.min(1, items[i].v + 0.06), 3),
-      seed: randInt(1, 1_000_000_000),
+      seed: randInt(1, 46655), // 36^3 - 1 → a 3-char base36 seed; plenty of jitter variety
       open: true
     };
     items = [...items.slice(0, i + 1), copy, ...items.slice(i + 1)];
@@ -193,9 +138,6 @@
   }
   function removeColor(i: number) {
     customColors = customColors.filter((_, idx) => idx !== i);
-  }
-  function randomHex() {
-    return hslToHex(Math.floor(Math.random() * 360), 55 + Math.random() * 35, 42 + Math.random() * 26);
   }
   function randomizeColors() {
     customColors = customColors.map(() => randomHex());
@@ -265,85 +207,74 @@
     renderer?.recenter();
   }
 
-  // --- shareable scene code -----------------------------------------------
-  const b64urlEncode = (s: string) =>
-    btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  const b64urlDecode = (s: string) => atob(s.replace(/-/g, '+').replace(/_/g, '/'));
-
-  function itemToken(it: KaleItem): string {
-    return [
-      Math.max(0, KALE_SHAPES.indexOf(it.shape)),
-      it.u, it.v, it.size,
-      it.color.replace(/^#/, ''),
-      it.rotate, it.skew, it.warp, it.twist,
-      it.seed
-    ].join(',');
-  }
-  function tokenToItem(str: string): KaleItem | null {
-    const p = str.split(',');
-    if (p.length < 10) return null;
-    const num = (i: number, d: number) => {
-      const v = parseFloat(p[i]);
-      return Number.isFinite(v) ? v : d;
-    };
-    return {
-      shape: KALE_SHAPES[+p[0]] ?? 'triangle',
-      u: num(1, 0.5),
-      v: num(2, 0.5),
-      size: num(3, 0.14),
-      color: `#${p[4] || 'ffffff'}`,
-      rotate: num(5, 0),
-      skew: num(6, 0),
-      warp: num(7, 0),
-      twist: num(8, 0),
-      seed: num(9, 1) | 0,
-      open: false
-    };
-  }
-
+  // --- shareable scene code (compact base36 token) ------------------------
   function encodeState(): string {
-    const globals = [
-      mode === 'prism' ? 1 : 0,
-      Math.max(0, PALETTES.indexOf(colorMode)),
-      hue, hueSpread, sat, light, stroke, segments, spin, animate, zoom,
-      outlineColor.replace(/^#/, ''),
-      strokeMatch ? 1 : 0,
-      customColors.map((c) => c.replace(/^#/, '')).join(','),
-      transparent ? 1 : 0,
-      bg.replace(/^#/, '')
-    ];
-    // Items go last (their commas/semicolons never collide with the '~' split).
-    return b64urlEncode(`${globals.join('~')}~${items.map(itemToken).join(';')}`);
+    const g = [
+      n36(mode === 'prism' ? 1 : 0),
+      n36(Math.max(0, PALETTES.indexOf(colorMode))),
+      n36(hue), n36(hueSpread), n36(sat), n36(light),
+      n36(stroke, 10), n36(segments), n36(spin, 100), n36(animate, 100), n36(zoom, 100),
+      n36(strokeMatch ? 1 : 0), n36(transparent ? 1 : 0),
+      outlineColor.replace(/^#/, ''), bg.replace(/^#/, ''),
+      packHex(customColors)
+    ].join('.');
+    const it = items
+      .map((i) =>
+        [
+          n36(Math.max(0, KALE_SHAPES.indexOf(i.shape))),
+          n36(i.u, 1000), n36(i.v, 1000), n36(i.size, 1000),
+          i.color.replace(/^#/, ''),
+          n36(i.rotate), n36(i.skew, 100), n36(i.warp, 100), n36(i.twist, 100),
+          n36(i.seed)
+        ].join('.')
+      )
+      .join('_');
+    return `k1~${g}~${it}`;
   }
 
   function decodeState(token: string) {
     try {
-      const b = b64urlDecode(token).split('~');
-      if (b.length < 17) return;
-      const num = (i: number, cur: number) => {
-        const v = parseFloat(b[i]);
-        return Number.isFinite(v) ? v : cur;
-      };
-      mode = b[0] === '1' ? 'prism' : 'radial';
-      colorMode = PALETTES[+b[1]] ?? colorMode;
-      hue = num(2, hue);
-      hueSpread = num(3, hueSpread);
-      sat = num(4, sat);
-      light = num(5, light);
-      stroke = num(6, stroke);
-      segments = num(7, segments);
-      spin = num(8, spin);
-      animate = num(9, animate);
-      zoom = num(10, zoom);
-      if (b[11]) outlineColor = `#${b[11]}`;
-      strokeMatch = b[12] === '1';
-      if (b[13]) customColors = b[13].split(',').map((c) => `#${c}`);
-      transparent = b[14] === '1';
-      bg = `#${b[15] || '0a0a12'}`;
-      const parsed = (b[16] || '').split(';').map(tokenToItem).filter(Boolean) as KaleItem[];
+      const parts = token.split('~');
+      if (parts[0] !== 'k1' || parts.length < 3) return;
+      const g = parts[1].split('.');
+      mode = p36(g[0]) === 1 ? 'prism' : 'radial';
+      colorMode = PALETTES[p36(g[1])] ?? colorMode;
+      hue = p36(g[2], 1, hue);
+      hueSpread = p36(g[3], 1, hueSpread);
+      sat = p36(g[4], 1, sat);
+      light = p36(g[5], 1, light);
+      stroke = p36(g[6], 10, stroke);
+      segments = p36(g[7], 1, segments);
+      spin = p36(g[8], 100, spin);
+      animate = p36(g[9], 100, animate);
+      zoom = p36(g[10], 100, zoom);
+      strokeMatch = p36(g[11]) === 1;
+      transparent = p36(g[12]) === 1;
+      if (g[13]) outlineColor = `#${g[13]}`;
+      if (g[14]) bg = `#${g[14]}`;
+      if (g[15]) customColors = unpackHex(g[15]);
+      const parsed = (parts[2] ? parts[2].split('_') : [])
+        .map((s): KaleItem | null => {
+          const f = s.split('.');
+          if (f.length < 10) return null;
+          return {
+            shape: KALE_SHAPES[p36(f[0])] ?? 'triangle',
+            u: p36(f[1], 1000, 0.5),
+            v: p36(f[2], 1000, 0.5),
+            size: p36(f[3], 1000, 0.14),
+            color: `#${f[4] || 'ffffff'}`,
+            rotate: p36(f[5], 1, 0),
+            skew: p36(f[6], 100, 0),
+            warp: p36(f[7], 100, 0),
+            twist: p36(f[8], 100, 0),
+            seed: p36(f[9], 1, 1) | 0,
+            open: false
+          };
+        })
+        .filter(Boolean) as KaleItem[];
       if (parsed.length) items = parsed;
     } catch {
-      // Malformed token — keep defaults.
+      // Malformed token — keep the current scene.
     }
   }
 
@@ -359,17 +290,15 @@
     renderer?.saveImage(`kaleidoscope-${shortId(encodeState())}.png`);
   }
 
-  async function copyLink() {
-    const url = `${window.location.origin}${window.location.pathname}?s=${encodeState()}`;
-    try {
-      await navigator.clipboard.writeText(url);
-      copied = true;
-      clearTimeout(copyTimer);
-      copyTimer = setTimeout(() => (copied = false), 1600);
-    } catch {
-      // Clipboard unavailable.
-    }
+  // --- saved scenes -------------------------------------------------------
+  function applyScene(token: string) {
+    decodeState(token);
+    _prevKey = paletteKeyNow(); // decoded scene carries its own item colors
+    renderer?.resetMotion();
+    renderer?.recenter();
   }
+  const sceneSnapshot = () => renderer?.snapshot(transparent ? '#16161c' : bg) ?? null;
+  $: sceneLabel = `${mode === 'prism' ? 'Prism' : 'Radial'} · ${segments} seg`;
 
   // Flip the overlay chrome against the actual pixels under it. Coalesced to one
   // sample per frame so a drag / animation stays cheap.
@@ -559,11 +488,19 @@
     {/each}
   </Section>
 
+  <SavedScenes
+    slot="saved"
+    store={presets}
+    encode={encodeState}
+    apply={applyScene}
+    snapshot={sceneSnapshot}
+    {savePng}
+    label={sceneLabel}
+  />
+
   <svelte:fragment slot="footer">
     <button class="btn" on:click={shuffle}>Shuffle</button>
     <button class="btn" on:click={reset}>Reset</button>
-    <button class="btn accent" on:click={savePng}>Save PNG</button>
-    <button class="btn" on:click={copyLink}>{copied ? 'Link copied' : 'Copy link'}</button>
   </svelte:fragment>
 
   <main slot="preview" class="preview" class:checker={transparent} style={transparent ? '' : `background: ${bg};`}>

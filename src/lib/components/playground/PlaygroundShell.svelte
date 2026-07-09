@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { collapseMenus } from '$lib/playground/ui';
+
   // Fullscreen canvas + a floating control layer over it.
   // Default slot: <Section> pills (they render a pill in the top row and an
   // expanding card below). "footer" slot: action buttons, shown as a cluster
@@ -29,16 +31,28 @@
   $: lightCanvas = lightChrome ?? isLight(bg);
 
   let controlsHidden = false;
-  const toggleControls = () => (controlsHidden = !controlsHidden);
+  let titleOpen = false;
+  const titleCardId = `pg-title-${Math.random().toString(36).slice(2, 8)}`;
+
+  // Hiding the controls also closes every open menu (the title card here, and
+  // each <Section> via the shared signal), so re-opening starts clean.
+  function setHidden(v: boolean) {
+    controlsHidden = v;
+    if (v) {
+      titleOpen = false;
+      collapseMenus();
+    }
+  }
+  const toggleControls = () => setHidden(!controlsHidden);
 
   // Esc hides the control layer for a clean full-canvas view; "/" toggles it
   // (matching the blog's search shortcut). Ignore "/" while typing in a field.
   function onKeydown(e: KeyboardEvent) {
     const t = e.target as HTMLElement | null;
     const typing = !!t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
-    if (e.key === 'Escape') controlsHidden = true;
+    if (e.key === 'Escape') setHidden(true);
     else if (e.key === '/' && !typing) {
-      controlsHidden = !controlsHidden;
+      setHidden(!controlsHidden);
       e.preventDefault(); // don't trigger the browser's quick-find
     }
   }
@@ -51,12 +65,32 @@
 
   <div class="control-layer" class:hidden={controlsHidden}>
     <div class="control-bar">
-      <h1 class="title-chip" title={subtitle}>{title}</h1>
+      <!-- Easter egg: reads as a plain title, but clicking it reveals an info
+           card with the description and a link back to all experiments. -->
+      <button
+        class="title-chip"
+        aria-expanded={titleOpen}
+        aria-controls={titleCardId}
+        on:click={() => (titleOpen = !titleOpen)}
+      >{title}</button>
+      {#if titleOpen}
+        <section class="title-card" id={titleCardId} aria-label={`About ${title}`}>
+          <header class="title-card-head">
+            <h2>{title}</h2>
+            <button class="card-close" aria-label="Close" on:click={() => (titleOpen = false)}>×</button>
+          </header>
+          {#if subtitle}<p class="title-sub">{subtitle}</p>{/if}
+          <a class="title-link" href="/playground">← All experiments</a>
+        </section>
+      {/if}
       <slot />
       <div class="row-break" aria-hidden="true"></div>
       {#if $$slots.footer}
         <div class="bar-actions"><slot name="footer" /></div>
       {/if}
+      <!-- Sits in the right cluster (after the action buttons, before Hide); its
+           card still drops below via the order-2 / row-break mechanism. -->
+      <slot name="saved" />
       <button class="chrome-pill hide-toggle" on:click={toggleControls} title="Hide controls">
         Hide (Esc)
       </button>
@@ -143,18 +177,100 @@
     height: 0;
   }
 
+  /* Easter egg: styled exactly like the old static title — no chip background,
+     no chevron, default cursor — so nothing hints it's clickable. */
   .title-chip {
     order: 0;
     pointer-events: auto;
     margin: 0;
     padding: 0.34rem 0.2rem;
+    font: inherit;
     font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--pg-chrome-fg);
-    transition: color 160ms ease;
+    background: none;
+    border: none;
     cursor: default;
+    transition: color 160ms ease;
+  }
+  .title-chip:focus-visible {
+    outline: 2px solid var(--pg-chrome-fg);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Info card — mirrors the <Section> card panel, drops below the bar (order 2). */
+  .title-card {
+    order: 2;
+    align-self: flex-start;
+    pointer-events: auto;
+    flex: 0 0 clamp(220px, 22vw, 300px);
+    max-width: calc(100vw - 1.5rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    background: rgba(20, 20, 26, 0.94);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--pg-line);
+    border-radius: 10px;
+    padding: 0.7rem 0.8rem 0.85rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  }
+  .title-card-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .title-card-head h2 {
+    margin: 0;
+    flex: 1;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pg-dim);
+  }
+  .title-sub {
+    margin: 0;
+    font-size: 0.72rem;
+    line-height: 1.55;
+    color: var(--pg-text);
+  }
+  .title-link {
+    font-size: 0.7rem;
+    color: var(--pg-accent);
+    text-decoration: none;
+    width: fit-content;
+  }
+  .title-link:hover {
+    text-decoration: underline;
+  }
+  .card-close {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    display: grid;
+    place-items: center;
+    font: inherit;
+    font-size: 0.95rem;
+    line-height: 1;
+    color: var(--pg-dim);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 0;
+  }
+  .card-close:hover {
+    color: var(--pg-text);
+    border-color: var(--pg-line);
+  }
+  .card-close:focus-visible {
+    outline: 2px solid var(--pg-accent);
+    outline-offset: 1px;
   }
   .bar-actions {
     order: 0;

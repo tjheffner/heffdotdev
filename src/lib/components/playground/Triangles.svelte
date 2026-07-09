@@ -5,6 +5,15 @@
 
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { makeRng, hashSeed } from '$lib/playground/rng';
+  import { hslString as hsl } from '$lib/playground/color';
+  import { paletteColor as palette } from '$lib/playground/palette';
+  import {
+    snapshotCanvas,
+    downloadCanvasPng,
+    sampleLuminance as sampleCanvasLuminance,
+    zoomAt
+  } from '$lib/playground/canvas';
 
   // --- color ---------------------------------------------------------------
   export let bg = '#0a0a12';
@@ -57,83 +66,11 @@
   let dragging = false;
 
   const TAU = Math.PI * 2;
-  const clamp = (n: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, n));
 
-  // --- seeded rng (mulberry32) --------------------------------------------
-  // Hash an arbitrary seed string to a uint32 (FNV-1a) so any word works.
-  function hashSeed(str: string) {
-    let h = 2166136261 >>> 0;
-    for (let i = 0; i < str.length; i++) {
-      h ^= str.charCodeAt(i);
-      h = Math.imul(h, 16777619);
-    }
-    return h >>> 0;
-  }
-
-  function makeRng(s: number) {
-    let a = (s >>> 0) || 1;
-    return () => {
-      a |= 0;
-      a = (a + 0x6d2b79f5) | 0;
-      let t = Math.imul(a ^ (a >>> 15), 1 | a);
-      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-    };
-  }
-
-  // Convert #rrggbb to an { h, s, l } triple so custom colors flow through the
-  // same lightness-jitter and stroke logic as the generated palettes.
-  function hexToHsl(hex: string): { h: number; s: number; l: number } {
-    const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
-    if (!m) return { h: 0, s: 0, l: 60 };
-    const int = parseInt(m[1], 16);
-    const r = (int >> 16) / 255;
-    const g = ((int >> 8) & 255) / 255;
-    const b = (int & 255) / 255;
-    const max = Math.max(r, g, b);
-    const min = Math.min(r, g, b);
-    const l = (max + min) / 2;
-    let h = 0;
-    let s = 0;
-    const d = max - min;
-    if (d !== 0) {
-      s = d / (1 - Math.abs(2 * l - 1));
-      if (max === r) h = ((g - b) / d) % 6;
-      else if (max === g) h = (b - r) / d + 2;
-      else h = (r - g) / d + 4;
-      h *= 60;
-      if (h < 0) h += 360;
-    }
-    return { h, s: s * 100, l: l * 100 };
-  }
-
-  // --- palette -------------------------------------------------------------
   // `t` is a random value per shard, so the palette controls the *range* of
   // colors while each triangle lands somewhere random within it.
-  function paletteColor(t: number): { h: number; s: number; l: number } {
-    switch (colorMode) {
-      case 'spectrum':
-        return { h: (hue + t * hueSpread + 360) % 360, s: sat, l: light };
-      case 'duo': {
-        const partner = (hue + hueSpread) % 360;
-        const d = ((partner - hue + 540) % 360) - 180; // short arc
-        const k = t < 0.5 ? 0 : 1; // hard split into two hues
-        return { h: (hue + d * k + 360) % 360, s: sat, l: light + (t - 0.5) * 20 };
-      }
-      case 'mono':
-        // Vary lightness per shard, but centered on the Light slider so it
-        // actually shifts the canvas (not just the sidebar swatch).
-        return { h: hue, s: sat * 0.5, l: light + (t - 0.5) * 44 };
-      case 'custom': {
-        if (!customColors.length) return { h: hue, s: sat, l: light };
-        const i = Math.min(customColors.length - 1, Math.floor(t * customColors.length));
-        return hexToHsl(customColors[i]);
-      }
-    }
-  }
-
-  const hsl = (c: { h: number; s: number; l: number }) =>
-    `hsl(${c.h.toFixed(0)}, ${c.s.toFixed(0)}%, ${clamp(c.l, 0, 100).toFixed(0)}%)`;
+  const paletteColor = (t: number) =>
+    palette(colorMode, { hue, hueSpread, sat, light, customColors }, t);
 
   // --- scene ---------------------------------------------------------------
   type Shard = { p: number[]; c: { h: number; s: number; l: number } };
@@ -352,54 +289,11 @@
   }
 
   // --- luminance sampling --------------------------------------------------
-  // Average perceived brightness of the top strip of the *rendered* canvas, so
-  // overlaid chrome can flip light/dark against whatever is actually under it
-  // (art included, and wherever the user has panned/zoomed to). Cheap: the
-  // strip is downscaled into a tiny scratch canvas via drawImage, so only a
-  // few hundred pixels are read back rather than the full multi-MB strip.
-  let scratch: HTMLCanvasElement | undefined;
-  let sctx: CanvasRenderingContext2D | null = null;
-
-  function hexRgb(hex: string): { r: number; g: number; b: number } {
-    const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
-    if (!m) return { r: 20, g: 20, b: 26 };
-    const int = parseInt(m[1], 16);
-    return { r: (int >> 16) & 255, g: (int >> 8) & 255, b: int & 255 };
-  }
-
-  // Returns 0..1 perceived luminance of the top `stripFrac` of the canvas, or
-  // null if it can't sample yet.
-  export function sampleLuminance(stripFrac = 0.16): number | null {
-    if (!canvas || canvas.width === 0 || canvas.height === 0) return null;
-    if (!scratch) {
-      scratch = document.createElement('canvas');
-      scratch.width = 48;
-      scratch.height = 8;
-      sctx = scratch.getContext('2d', { willReadFrequently: true });
-    }
-    if (!sctx) return null;
-    // Pre-fill with the effective backdrop so semi-transparent canvas pixels
-    // (transparent mode) composite over what actually shows behind them.
-    const bd = transparent ? { r: 0x23, g: 0x23, b: 0x29 } : hexRgb(bg);
-    sctx.clearRect(0, 0, 48, 8);
-    sctx.fillStyle = `rgb(${bd.r}, ${bd.g}, ${bd.b})`;
-    sctx.fillRect(0, 0, 48, 8);
-    const sh = Math.max(1, Math.round(canvas.height * stripFrac));
-    sctx.drawImage(canvas, 0, 0, canvas.width, sh, 0, 0, 48, 8);
-    let data: Uint8ClampedArray;
-    try {
-      data = sctx.getImageData(0, 0, 48, 8).data;
-    } catch {
-      return null;
-    }
-    let sum = 0;
-    let n = 0;
-    for (let i = 0; i < data.length; i += 4) {
-      sum += 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
-      n++;
-    }
-    return n ? sum / n / 255 : null;
-  }
+  // Perceived brightness of the canvas's top strip, so overlaid chrome can flip
+  // light/dark against whatever is under it. Transparent scenes composite over
+  // the checker color the preview shows.
+  export const sampleLuminance = (stripFrac = 0.16) =>
+    sampleCanvasLuminance(canvas, transparent ? '#232329' : bg, stripFrac);
 
   function redraw() {
     buildShards();
@@ -466,39 +360,27 @@
     if (!interactive) return;
     e.preventDefault();
     const rect = host.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
-    // Scene point currently under the cursor, so we can hold it in place.
-    const oldSize = Math.min(w, h) * 0.9 * zoom;
-    const oldOx = (w - oldSize) / 2 + panX;
-    const oldOy = (h - oldSize) / 2 + panY;
-    const nx = (mx - oldOx) / oldSize;
-    const ny = (my - oldOy) / oldSize;
-
-    const factor = Math.exp(-e.deltaY * 0.0015);
-    const nz = Math.min(zoomMax, Math.max(zoomMin, zoom * factor));
-    const newSize = Math.min(w, h) * 0.9 * nz;
-    panX = mx - nx * newSize - (w - newSize) / 2;
-    panY = my - ny * newSize - (h - newSize) / 2;
-    zoom = nz;
+    const cam = zoomAt(
+      { panX, panY, zoom },
+      e.clientX - rect.left,
+      e.clientY - rect.top,
+      e.deltaY,
+      w,
+      h,
+      zoomMin,
+      zoomMax
+    );
+    panX = cam.panX;
+    panY = cam.panY;
+    zoom = cam.zoom;
     render();
   }
 
-  // Public: download the current canvas as a PNG.
-  export function saveImage(
+  // Downscaled JPEG for the saved-scenes library; PNG download for export.
+  export const snapshot = (bgFill: string, maxDim = 128) => snapshotCanvas(canvas, bgFill, maxDim);
+  export const saveImage = (
     filename = `shatter-${String(seed).replace(/[^a-z0-9-_]+/gi, '-') || 'scene'}.png`
-  ) {
-    if (!canvas) return;
-    canvas.toBlob((blob) => {
-      if (!blob) return;
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
-      link.click();
-      URL.revokeObjectURL(url);
-    }, 'image/png');
-  }
+  ) => downloadCanvasPng(canvas, filename);
 
   onMount(() => {
     ctx = canvas.getContext('2d');

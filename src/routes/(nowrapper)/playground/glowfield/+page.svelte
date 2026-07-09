@@ -1,9 +1,15 @@
 <script lang="ts">
   import { dev } from '$app/environment';
+  import { onMount } from 'svelte';
   import Glowfield from '$lib/components/playground/Glowfield.svelte';
   import Slider from '$lib/components/playground/Slider.svelte';
   import PlaygroundShell from '$lib/components/playground/PlaygroundShell.svelte';
   import Section from '$lib/components/playground/Section.svelte';
+  import SavedScenes from '$lib/components/playground/SavedScenes.svelte';
+  import { createPresetStore } from '$lib/playground/presets';
+  import { n36, p36, unpackHex } from '$lib/playground/token';
+
+  const presets = createPresetStore('glowfield');
 
   type Layer = {
     sz: number; ox: number; oy: number; a: number;
@@ -292,6 +298,145 @@ ${layerLines}
       // Clipboard unavailable.
     }
   }
+
+  // --- shareable scene code (compact base36 token) ------------------------
+  const CM: ColorMode[] = ['anchor', 'rainbow', 'mono'];
+
+  function encodeState(): string {
+    const g = [
+      n36(Math.max(0, CM.indexOf(colorMode))),
+      n36(anchorHue), n36(anchorSpread), n36(rainbowSat),
+      n36(anchor.x, 1000), n36(anchor.y, 1000),
+      n36(intensity.header, 1000), n36(intensity.middle, 1000), n36(intensity.footer, 1000),
+      n36(depth, 1000),
+      bg.replace(/^#/, '')
+    ].join('.');
+    const ls = layers
+      .map((l) =>
+        [
+          n36(l.sz), n36(l.ox), n36(l.oy), n36(l.a, 1000), n36(l.h), n36(l.s), n36(l.l),
+          n36(l.fx, 1000), n36(l.fy, 1000), n36(l.ax), n36(l.ay), n36(l.ph, 1000)
+        ].join('.')
+      )
+      .join('_');
+    return `g1~${g}~${ls}`;
+  }
+
+  function decodeState(token: string) {
+    try {
+      const parts = token.split('~');
+      if (parts[0] !== 'g1' || parts.length < 3) return;
+      const g = parts[1].split('.');
+      colorMode = CM[p36(g[0])] ?? colorMode;
+      anchorHue = p36(g[1], 1, anchorHue);
+      anchorSpread = p36(g[2], 1, anchorSpread);
+      rainbowSat = p36(g[3], 1, rainbowSat);
+      anchor = { x: p36(g[4], 1000, anchor.x), y: p36(g[5], 1000, anchor.y) };
+      intensity = {
+        header: p36(g[6], 1000, intensity.header),
+        middle: p36(g[7], 1000, intensity.middle),
+        footer: p36(g[8], 1000, intensity.footer)
+      };
+      depth = p36(g[9], 1000, depth);
+      if (g[10]) bg = `#${g[10]}`;
+      const rows = (parts[2] ? parts[2].split('_') : [])
+        .map((s) => s.split('.'))
+        .filter((a) => a.length >= 12);
+      if (rows.length) {
+        layers = rows.map((a) => ({
+          sz: p36(a[0]), ox: p36(a[1]), oy: p36(a[2]), a: p36(a[3], 1000),
+          h: p36(a[4]), s: p36(a[5]), l: p36(a[6]),
+          fx: p36(a[7], 1000), fy: p36(a[8], 1000), ax: p36(a[9]), ay: p36(a[10]), ph: p36(a[11], 1000),
+          open: false
+        }));
+      }
+      // Keep the recolor watchers from firing on the freshly loaded values.
+      _prevHue = anchorHue;
+      _prevSpread = anchorSpread;
+      _prevRainbowSat = rainbowSat;
+    } catch {
+      // Malformed token — keep current scene.
+    }
+  }
+
+  // --- saved scenes -------------------------------------------------------
+  function applyScene(token: string) {
+    decodeState(token);
+  }
+  $: sceneLabel = `${colorMode} · ${layers.length} layer${layers.length === 1 ? '' : 's'}`;
+
+  const intensityAt = (p: number) =>
+    p < 0.5
+      ? intensity.header + (intensity.middle - intensity.header) * smooth(p / 0.5)
+      : intensity.middle + (intensity.footer - intensity.middle) * smooth((p - 0.5) / 0.5);
+
+  // Glowfield is DOM gradients (no canvas), so both the thumbnail and the PNG are
+  // synthesized by painting the layers onto a canvas at the given size.
+  function paintGlow(W: number, H: number): HTMLCanvasElement | null {
+    const c = document.createElement('canvas');
+    c.width = W;
+    c.height = H;
+    const cx = c.getContext('2d');
+    if (!cx) return null;
+    cx.fillStyle = bg;
+    cx.fillRect(0, 0, W, H);
+    cx.globalCompositeOperation = 'screen';
+    const v = Math.max(0, intensityAt(depth));
+    for (const l of layers) {
+      const r = Math.max(1, l.sz / 2);
+      const px = anchor.x * W + l.ox;
+      const py = anchor.y * H + l.oy;
+      const g = cx.createRadialGradient(px, py, 0, px, py, r);
+      g.addColorStop(0, `hsla(${l.h}, ${l.s}%, ${l.l}%, ${(l.a * v).toFixed(3)})`);
+      g.addColorStop(0.68, `hsla(${l.h}, ${l.s}%, ${l.l}%, 0)`);
+      cx.fillStyle = g;
+      cx.beginPath();
+      cx.arc(px, py, r, 0, Math.PI * 2);
+      cx.fill();
+    }
+    return c;
+  }
+  const viewportSize = () => ({
+    W: Math.max(1, Math.round(window.innerWidth)),
+    H: Math.max(1, Math.round(window.innerHeight))
+  });
+  function glowThumb(): string | null {
+    const { W, H } = viewportSize();
+    const src = paintGlow(W, H);
+    if (!src) return null;
+    const maxDim = 160;
+    const scale = Math.min(1, maxDim / Math.max(W, H));
+    const c = document.createElement('canvas');
+    c.width = Math.max(1, Math.round(W * scale));
+    c.height = Math.max(1, Math.round(H * scale));
+    const cx = c.getContext('2d');
+    if (!cx) return null;
+    cx.drawImage(src, 0, 0, c.width, c.height);
+    try {
+      return c.toDataURL('image/jpeg', 0.72);
+    } catch {
+      return null;
+    }
+  }
+  function savePng() {
+    const { W, H } = viewportSize();
+    const src = paintGlow(W, H);
+    if (!src) return;
+    src.toBlob((blob) => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `glowfield-${String(Date.now()).slice(-6)}.png`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  }
+
+  onMount(() => {
+    const token = new URLSearchParams(window.location.search).get('s');
+    if (token) decodeState(token);
+  });
 </script>
 
 <svelte:head>
@@ -417,17 +562,25 @@ ${layerLines}
     <Slider label="Footer" bind:value={intensity.footer} min={0} max={1.2} step={0.01} />
   </Section>
 
-  {#if dev}
-    <Section title="Code" open={false}>
-      <button
-        slot="actions"
-        class="btn accent"
-        on:click|preventDefault|stopPropagation={copyConfig}
-      >{copied ? 'Copied' : 'Copy'}</button>
-      <p class="hint">Copy this into your page to reproduce the current field.</p>
-      <pre class="config">{configText}</pre>
-    </Section>
-  {/if}
+  <SavedScenes
+    slot="saved"
+    store={presets}
+    encode={encodeState}
+    apply={applyScene}
+    snapshot={glowThumb}
+    {savePng}
+    label={sceneLabel}
+  >
+    {#if dev}
+      <div class="code-block">
+        <div class="code-head">
+          <span class="hint">Code to reproduce this field</span>
+          <button class="btn" on:click={copyConfig}>{copied ? 'Copied' : 'Copy code'}</button>
+        </div>
+        <pre class="config">{configText}</pre>
+      </div>
+    {/if}
+  </SavedScenes>
 
   <svelte:fragment slot="footer">
     <button class="btn" on:click={shuffle}>Shuffle</button>
@@ -591,5 +744,19 @@ ${layerLines}
     overflow-x: auto;
     white-space: pre;
     max-height: 220px;
+  }
+  .code-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--pg-line);
+  }
+  .code-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
   }
 </style>

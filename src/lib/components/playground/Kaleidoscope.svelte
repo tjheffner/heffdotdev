@@ -42,6 +42,14 @@
 
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { makeRng } from '$lib/playground/rng';
+  import { hexToHsl } from '$lib/playground/color';
+  import {
+    snapshotCanvas,
+    downloadCanvasPng,
+    sampleLuminance as sampleCanvasLuminance,
+    zoomAt
+  } from '$lib/playground/canvas';
 
   // --- appearance ----------------------------------------------------------
   export let bg = '#0a0a12';
@@ -87,43 +95,6 @@
 
   const TAU = Math.PI * 2;
   const DEG = Math.PI / 180;
-  const clamp = (n: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, n));
-
-  // --- seeded rng (mulberry32) --------------------------------------------
-  function makeRng(s: number) {
-    let a = (s >>> 0) || 1;
-    return () => {
-      a |= 0;
-      a = (a + 0x6d2b79f5) | 0;
-      let t = Math.imul(a ^ (a >>> 15), 1 | a);
-      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-    };
-  }
-
-  function hexToHsl(hex: string): { h: number; s: number; l: number } {
-    const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
-    if (!m) return { h: 0, s: 0, l: 60 };
-    const int = parseInt(m[1], 16);
-    const r = (int >> 16) / 255;
-    const g = ((int >> 8) & 255) / 255;
-    const b = (int & 255) / 255;
-    const max = Math.max(r, g, b);
-    const min = Math.min(r, g, b);
-    const l = (max + min) / 2;
-    let hh = 0;
-    let s = 0;
-    const d = max - min;
-    if (d !== 0) {
-      s = d / (1 - Math.abs(2 * l - 1));
-      if (max === r) hh = ((g - b) / d) % 6;
-      else if (max === g) hh = (b - r) / d + 2;
-      else hh = (r - g) / d + 4;
-      hh *= 60;
-      if (hh < 0) hh += 360;
-    }
-    return { h: hh, s: s * 100, l: l * 100 };
-  }
 
   // --- shape geometry ------------------------------------------------------
   function baseShape(kind: KaleShape, rng: () => number): number[][] {
@@ -419,45 +390,9 @@
   }
 
   // --- luminance sampling --------------------------------------------------
-  let scratch: HTMLCanvasElement | undefined;
-  let sctx: CanvasRenderingContext2D | null = null;
-
-  function hexRgb(hex: string): { r: number; g: number; b: number } {
-    const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
-    if (!m) return { r: 20, g: 20, b: 26 };
-    const int = parseInt(m[1], 16);
-    return { r: (int >> 16) & 255, g: (int >> 8) & 255, b: int & 255 };
-  }
-
-  export function sampleLuminance(stripFrac = 0.16): number | null {
-    if (!canvas || canvas.width === 0 || canvas.height === 0) return null;
-    if (!scratch) {
-      scratch = document.createElement('canvas');
-      scratch.width = 48;
-      scratch.height = 8;
-      sctx = scratch.getContext('2d', { willReadFrequently: true });
-    }
-    if (!sctx) return null;
-    const bd = transparent ? { r: 0x23, g: 0x23, b: 0x29 } : hexRgb(bg);
-    sctx.clearRect(0, 0, 48, 8);
-    sctx.fillStyle = `rgb(${bd.r}, ${bd.g}, ${bd.b})`;
-    sctx.fillRect(0, 0, 48, 8);
-    const sh = Math.max(1, Math.round(canvas.height * stripFrac));
-    sctx.drawImage(canvas, 0, 0, canvas.width, sh, 0, 0, 48, 8);
-    let data: Uint8ClampedArray;
-    try {
-      data = sctx.getImageData(0, 0, 48, 8).data;
-    } catch {
-      return null;
-    }
-    let sum = 0;
-    let n = 0;
-    for (let i = 0; i < data.length; i += 4) {
-      sum += 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
-      n++;
-    }
-    return n ? sum / n / 255 : null;
-  }
+  // Transparent scenes composite over the checker color the preview shows.
+  export const sampleLuminance = (stripFrac = 0.16) =>
+    sampleCanvasLuminance(canvas, transparent ? '#232329' : bg, stripFrac);
 
   // Rebuild + repaint whenever anything scene-defining changes. `spin`/`animate`
   // drive the RAF loop, not a static repaint, so they're absent here.
@@ -557,32 +492,26 @@
     if (!interactive) return;
     e.preventDefault();
     const rect = host.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
-    const relx = (mx - (w / 2 + panX)) / zoom;
-    const rely = (my - (h / 2 + panY)) / zoom;
-    const factor = Math.exp(-e.deltaY * 0.0015);
-    const nz = clamp(zoom * factor, zoomMin, zoomMax);
-    panX = mx - w / 2 - relx * nz;
-    panY = my - h / 2 - rely * nz;
-    zoom = nz;
+    const cam = zoomAt(
+      { panX, panY, zoom },
+      e.clientX - rect.left,
+      e.clientY - rect.top,
+      e.deltaY,
+      w,
+      h,
+      zoomMin,
+      zoomMax
+    );
+    panX = cam.panX;
+    panY = cam.panY;
+    zoom = cam.zoom;
     render();
   }
 
-  export function saveImage(
-    filename = `kaleidoscope-${String(Date.now()).slice(-6)}.png`
-  ) {
-    if (!canvas) return;
-    canvas.toBlob((blob) => {
-      if (!blob) return;
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
-      link.click();
-      URL.revokeObjectURL(url);
-    }, 'image/png');
-  }
+  // Downscaled JPEG for the saved-scenes library; PNG download for export.
+  export const snapshot = (bgFill: string, maxDim = 128) => snapshotCanvas(canvas, bgFill, maxDim);
+  export const saveImage = (filename = `kaleidoscope-${String(Date.now()).slice(-6)}.png`) =>
+    downloadCanvasPng(canvas, filename);
 
   onMount(() => {
     ctx = canvas.getContext('2d');
