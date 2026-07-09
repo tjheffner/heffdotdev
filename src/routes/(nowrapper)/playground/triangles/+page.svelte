@@ -27,6 +27,7 @@
     warp: 0,
     rotate: 0,
     skew: 0,
+    fieldRotate: 0, // whole-sheet rotation (canvas Rotate)
     fieldWarp: 0,
     taper: 0,
     fieldSkewX: 0, // whole-sheet horizontal shear (Skew X)
@@ -91,6 +92,7 @@
   let warp = DEFAULTS.warp;
   let rotate = DEFAULTS.rotate;
   let skew = DEFAULTS.skew;
+  let fieldRotate = DEFAULTS.fieldRotate;
   let fieldWarp = DEFAULTS.fieldWarp;
   let taper = DEFAULTS.taper;
   let fieldSkewX = DEFAULTS.fieldSkewX;
@@ -180,6 +182,7 @@
     warp = DEFAULTS.warp;
     rotate = DEFAULTS.rotate;
     skew = DEFAULTS.skew;
+    fieldRotate = DEFAULTS.fieldRotate;
     fieldWarp = DEFAULTS.fieldWarp;
     taper = DEFAULTS.taper;
     fieldSkewX = DEFAULTS.fieldSkewX;
@@ -201,7 +204,7 @@
       shape === 'square' ? 1 : 0,
       Math.max(0, PALETTES.indexOf(colorMode)),
       hue, hueSpread, sat, light, stroke, grid,
-      jitter, explode, warp, rotate, skew, zoom, fieldWarp, taper,
+      jitter, explode, warp, rotate, skew, zoom, fieldRotate, fieldWarp, taper,
       fieldSkewX, fieldSkewY,
       outlineColor.replace(/^#/, ''),
       strokeMatch ? 1 : 0,
@@ -215,7 +218,7 @@
   function decodeState(token: string) {
     try {
       const b = b64urlDecode(token).split('~');
-      if (b.length < 24) return;
+      if (b.length < 25) return;
       const num = (i: number, cur: number) => {
         const v = parseFloat(b[i]);
         return Number.isFinite(v) ? v : cur;
@@ -234,16 +237,17 @@
       rotate = num(11, rotate);
       skew = num(12, skew);
       zoom = num(13, zoom);
-      fieldWarp = num(14, fieldWarp);
-      taper = num(15, taper);
-      fieldSkewX = num(16, fieldSkewX);
-      fieldSkewY = num(17, fieldSkewY);
-      if (b[18]) outlineColor = `#${b[18]}`;
-      strokeMatch = b[19] === '1';
-      if (b[20]) customColors = b[20].split(',').map((c) => `#${c}`);
-      transparent = b[21] === '1';
-      bg = `#${b[22] || '0a0a12'}`;
-      seed = b.slice(23).join('~') || seed; // seed is the remainder (may hold '~')
+      fieldRotate = num(14, fieldRotate);
+      fieldWarp = num(15, fieldWarp);
+      taper = num(16, taper);
+      fieldSkewX = num(17, fieldSkewX);
+      fieldSkewY = num(18, fieldSkewY);
+      if (b[19]) outlineColor = `#${b[19]}`;
+      strokeMatch = b[20] === '1';
+      if (b[21]) customColors = b[21].split(',').map((c) => `#${c}`);
+      transparent = b[22] === '1';
+      bg = `#${b[23] || '0a0a12'}`;
+      seed = b.slice(24).join('~') || seed; // seed is the remainder (may hold '~')
     } catch {
       // Malformed token — keep defaults.
     }
@@ -277,7 +281,7 @@
   lightChrome={chromeLight}
 >
   <Section title="Layout">
-    <p class="hint">These shape the whole canvas.</p>
+    <p class="hint">These control the containing canvas.</p>
     <div class="mode-row">
       <span class="lab">Shape</span>
       <div class="mode-btns">
@@ -285,13 +289,18 @@
         <button class="mode-btn" class:active={shape === 'square'} on:click={() => (shape = 'square')}>Square</button>
       </div>
     </div>
-    <Slider label="Warp" bind:value={fieldWarp} min={-1} max={1} step={0.01} />
-    <Slider label="Taper" bind:value={taper} min={-1} max={1} step={0.01} />
+    <Slider label="Density" bind:value={grid} min={2} max={48} step={1} />
+    <Slider label="Rotate" bind:value={fieldRotate} min={0} max={360} step={1} unit="°" />
     <Slider label="Skew X" bind:value={fieldSkewX} min={-1} max={1} step={0.01} />
     <Slider label="Skew Y" bind:value={fieldSkewY} min={-1} max={1} step={0.01} />
+    <Slider label="Taper" bind:value={taper} min={-1} max={1} step={0.01} />
+    <Slider label="Warp" bind:value={fieldWarp} min={-1} max={1} step={0.01} />
     <Slider label="Zoom" bind:value={zoom} min={0.25} max={4} step={0.01} unit="×" />
+  </Section>
+
+  <Section title="Appearance">
     <label class="toggle-row">
-      <span class="lab">Transparent</span>
+      <span class="lab">Transparent BG</span>
       <input type="checkbox" bind:checked={transparent} />
     </label>
     {#if !transparent}
@@ -301,9 +310,6 @@
         <span class="val">{bg}</span>
       </label>
     {/if}
-  </Section>
-
-  <Section title="Appearance">
     <div class="mode-row">
       <span class="lab">Palette</span>
       <div class="mode-btns">
@@ -367,7 +373,6 @@
 
   <Section title="Triangles">
     <p class="hint">These control individual triangle properties.</p>
-    <Slider label="Density" bind:value={grid} min={2} max={48} step={1} />
     <Slider label="Jitter" bind:value={jitter} min={-1} max={1} step={0.01} />
     <Slider label="Explode" bind:value={explode} min={0} max={1} step={0.01} />
     <Slider label="Splay" bind:value={warp} min={0} max={1} step={0.01} />
@@ -404,6 +409,7 @@
       {warp}
       {rotate}
       {skew}
+      {fieldRotate}
       {fieldWarp}
       {taper}
       {fieldSkewX}
