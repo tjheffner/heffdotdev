@@ -56,6 +56,7 @@
       flex-direction: row;
       margin: var(--space-away) var(--space-near);
       padding: var(--space-near) 0 calc(var(--space-away) * 2);
+      gap: var(--space-near);
     }
     .left {
       flex: 1;

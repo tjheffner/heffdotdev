@@ -51,9 +51,11 @@
   {/if}
 
   {#if ogMessage}
-    <meta property="og:image" content={`${image}?message=${ogMessage}`} />
+    <!-- encode the message: a raw space (multi-word titles) is an invalid URL
+         and Slack silently drops the image, while Discord tolerates it -->
+    <meta property="og:image" content={`${image}?message=${encodeURIComponent(ogMessage)}`} />
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:image" content={`${image}?message=${ogMessage}`} />
+    <meta property="twitter:image" content={`${image}?message=${encodeURIComponent(ogMessage)}`} />
   {:else}
     <meta property="og:image" content={image} />
     <meta property="twitter:card" content="summary_large_image" />
