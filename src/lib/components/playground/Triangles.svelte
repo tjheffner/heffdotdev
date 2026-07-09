@@ -17,6 +17,7 @@
   export let customColors: string[] = ['#ff6b35', '#ffd23f', '#3bceac', '#0ead69', '#540d6e'];
   export let stroke = 0; // outline weight, 0 = none
   export let outlineColor = '#000000';
+  export let strokeMatch = false; // derive stroke from each triangle's own color
 
   // --- arrangement ---------------------------------------------------------
   export let shape: TriShape = 'triangle';
@@ -25,7 +26,7 @@
   export let jitter = 0.55; // point displacement, 0..1
   export let explode = 0.25; // outward shard displacement from impact
   export let warp = 0; // per-triangle vertex stretch, 0..1
-  export let rotate = 0; // per-triangle rotation, 0..1
+  export let rotate = 0; // per-triangle rotation, max degrees 0..360
   export let skew = 0; // per-triangle shear (perspective shift), 0..1
   export let fieldWarp = 0; // whole-sheet sine bow, 0..1
   export let taper = 0; // whole-sheet horizontal keystone, -1..1
@@ -116,7 +117,9 @@
         return { h: (hue + d * k + 360) % 360, s: sat, l: light + (t - 0.5) * 20 };
       }
       case 'mono':
-        return { h: hue, s: sat * 0.5, l: 30 + t * 50 };
+        // Vary lightness per shard, but centered on the Light slider so it
+        // actually shifts the canvas (not just the sidebar swatch).
+        return { h: hue, s: sat * 0.5, l: light + (t - 0.5) * 44 };
       case 'custom': {
         if (!customColors.length) return { h: hue, s: sat, l: light };
         const i = Math.min(customColors.length - 1, Math.floor(t * customColors.length));
@@ -247,7 +250,7 @@
       // Per-shard deformations about the triangle's own centroid, so each
       // triangle changes independently (like jitter, but shape not mesh).
       // Rotate: random spin. Skew: random shear. Warp: random vertex stretch.
-      const ang = angR * rotate * TAU;
+      const ang = angR * rotate * (Math.PI / 180);
       const cos = Math.cos(ang);
       const sin = Math.sin(ang);
       const shx = (shxR - 0.5) * skew * 0.8;
@@ -315,7 +318,9 @@
       ctx.fillStyle = hsl(sh.c);
       ctx.fill();
       if (stroke > 0) {
-        ctx.strokeStyle = outlineColor;
+        ctx.strokeStyle = strokeMatch
+          ? `hsla(${sh.c.h.toFixed(0)}, ${sh.c.s.toFixed(0)}%, ${(sh.c.l * 0.3).toFixed(0)}%, 0.85)`
+          : outlineColor;
         ctx.stroke();
       }
     }
@@ -331,7 +336,7 @@
   // opaque to the compiler.
   $: if (
     mounted &&
-    (void [shape, seed, grid, jitter, explode, warp, rotate, skew, fieldWarp, taper, zoom, hue, hueSpread, sat, light, colorMode, customColors, bg, transparent, stroke, outlineColor], true)
+    (void [shape, seed, grid, jitter, explode, warp, rotate, skew, fieldWarp, taper, zoom, hue, hueSpread, sat, light, colorMode, customColors, bg, transparent, stroke, outlineColor, strokeMatch], true)
   ) {
     redraw();
   }

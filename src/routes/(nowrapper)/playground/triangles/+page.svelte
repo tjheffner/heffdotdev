@@ -8,19 +8,20 @@
   const DEFAULTS = {
     bg: '#0a0a12',
     transparent: false,
-    hue: 210,
-    hueSpread: 140,
-    sat: 72,
-    light: 56,
+    hue: 341,
+    hueSpread: 127,
+    sat: 78,
+    light: 50,
     colorMode: 'spectrum' as TriColorMode,
     customColors: ['#ff6b35', '#ffd23f', '#3bceac', '#0ead69', '#540d6e'],
     stroke: 0,
     outlineColor: '#000000',
+    strokeMatch: true,
     shape: 'triangle' as TriShape,
     seed: 'shatter',
-    grid: 7,
-    jitter: 0.55,
-    explode: 0.25,
+    grid: 14,
+    jitter: 0,
+    explode: 0,
     warp: 0,
     rotate: 0,
     skew: 0,
@@ -40,6 +41,7 @@
   let customColors = [...DEFAULTS.customColors];
   let stroke = DEFAULTS.stroke;
   let outlineColor = DEFAULTS.outlineColor;
+  let strokeMatch = DEFAULTS.strokeMatch;
 
   function addColor() {
     customColors = [...customColors, '#ffffff'];
@@ -47,6 +49,34 @@
   function removeColor(i: number) {
     customColors = customColors.filter((_, idx) => idx !== i);
   }
+
+  function hslToHex(h: number, s: number, l: number) {
+    s /= 100;
+    l /= 100;
+    const a = s * Math.min(l, 1 - l);
+    const f = (n: number) => {
+      const k = (n + h / 30) % 12;
+      const c = l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1));
+      return Math.round(255 * c).toString(16).padStart(2, '0');
+    };
+    return `#${f(0)}${f(8)}${f(4)}`;
+  }
+  function randomHex() {
+    // Random hue with pleasant sat/light so palettes don't come out muddy.
+    return hslToHex(Math.floor(Math.random() * 360), 55 + Math.random() * 35, 42 + Math.random() * 26);
+  }
+  function randomizeColors() {
+    customColors = customColors.map(() => randomHex());
+  }
+
+  $: paletteHint =
+    colorMode === 'spectrum'
+      ? 'Spread determines how wide the spectrum is.'
+      : colorMode === 'duo'
+        ? 'Spread determines the second color via distance from the first.'
+        : colorMode === 'mono'
+          ? 'A single hue. Triangles vary only in lightness.'
+          : 'Each triangle is filled with a random color from this set.';
 
   // --- arrangement --------------------------------------------------------
   let shape: TriShape = DEFAULTS.shape;
@@ -71,6 +101,44 @@
     seed = `${w}-${Math.random().toString(36).slice(2, 6)}`;
   }
 
+  const rand = (min: number, max: number) => Math.round((min + Math.random() * (max - min)) * 100) / 100;
+  const randInt = (min: number, max: number) => Math.floor(min + Math.random() * (max - min + 1));
+  const pick = <T,>(arr: readonly T[]) => arr[Math.floor(Math.random() * arr.length)];
+
+  // Shuffle the colors and per-triangle variables, plus the seed. Layout
+  // (shape, warp, taper) and view/backdrop are left as-is.
+  function shuffle() {
+    colorMode = pick(PALETTES);
+    hue = randInt(0, 360);
+    hueSpread = randInt(0, 300);
+    sat = randInt(45, 100);
+    light = randInt(35, 70);
+    if (colorMode === 'custom') randomizeColors();
+    stroke = Math.random() < 0.5 ? 0 : rand(0.4, 2);
+    strokeMatch = Math.random() < 0.5;
+    outlineColor = randomHex();
+    grid = randInt(4, 28);
+    jitter = rand(-1, 1);
+    explode = rand(0, 0.6);
+    warp = rand(0, 1);
+    rotate = randInt(0, 360);
+    skew = rand(-1, 1);
+    reseed();
+  }
+
+  // A short hash of the full scene, so the PNG filename changes with any edit.
+  function shortId(s: string) {
+    let h = 2166136261 >>> 0;
+    for (let i = 0; i < s.length; i++) {
+      h ^= s.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return (h >>> 0).toString(36);
+  }
+  function savePng() {
+    renderer?.saveImage(`shatter-${shortId(encodeState())}.png`);
+  }
+
   function reset() {
     bg = DEFAULTS.bg;
     transparent = DEFAULTS.transparent;
@@ -82,6 +150,7 @@
     customColors = [...DEFAULTS.customColors];
     stroke = DEFAULTS.stroke;
     outlineColor = DEFAULTS.outlineColor;
+    strokeMatch = DEFAULTS.strokeMatch;
     shape = DEFAULTS.shape;
     seed = DEFAULTS.seed;
     grid = DEFAULTS.grid;
@@ -111,6 +180,7 @@
       hue, hueSpread, sat, light, stroke, grid,
       jitter, explode, warp, rotate, skew, zoom, fieldWarp, taper,
       outlineColor.replace(/^#/, ''),
+      strokeMatch ? 1 : 0,
       customColors.map((c) => c.replace(/^#/, '')).join(','),
       transparent ? 1 : 0,
       bg.replace(/^#/, '')
@@ -121,7 +191,7 @@
   function decodeState(token: string) {
     try {
       const b = b64urlDecode(token).split('~');
-      if (b.length < 21) return;
+      if (b.length < 22) return;
       const num = (i: number, cur: number) => {
         const v = parseFloat(b[i]);
         return Number.isFinite(v) ? v : cur;
@@ -143,10 +213,11 @@
       fieldWarp = num(14, fieldWarp);
       taper = num(15, taper);
       if (b[16]) outlineColor = `#${b[16]}`;
-      if (b[17]) customColors = b[17].split(',').map((c) => `#${c}`);
-      transparent = b[18] === '1';
-      bg = `#${b[19] || '0a0a12'}`;
-      seed = b.slice(20).join('~') || seed; // seed is the remainder (may hold '~')
+      strokeMatch = b[17] === '1';
+      if (b[18]) customColors = b[18].split(',').map((c) => `#${c}`);
+      transparent = b[19] === '1';
+      bg = `#${b[20] || '0a0a12'}`;
+      seed = b.slice(21).join('~') || seed; // seed is the remainder (may hold '~')
     } catch {
       // Malformed token — keep defaults.
     }
@@ -171,15 +242,15 @@
 </script>
 
 <svelte:head>
-  <title>Triangles playground</title>
+  <title>Triangle Wrangler | heffner.dev</title>
 </svelte:head>
 
 <div class="playground">
   <aside class="sidebar">
     <div class="sidebar-scroll">
       <header class="panel-head">
-        <h1>Shatter</h1>
-        <p>Generate a faceted, low-poly triangle scene.</p>
+        <h1>Triangle Wrangler</h1>
+        <p>Generate a faceted, low-poly triangle scene. On the canvas: scroll to zoom, drag to pan, double-click to recenter.</p>
       </header>
 
       <details class="group collapsible" open>
@@ -188,6 +259,7 @@
           <span class="chev" aria-hidden="true"></span>
         </summary>
         <div class="collapsible-body">
+          <p class="hint">These shape the whole canvas.</p>
           <div class="mode-row">
             <span class="lab">Shape</span>
             <div class="mode-btns">
@@ -209,7 +281,6 @@
               <span class="val">{bg}</span>
             </label>
           {/if}
-          <p class="hint">Warp and taper bend the whole field. On the canvas: scroll to zoom, drag to pan, double-click to recenter.</p>
         </div>
       </details>
 
@@ -228,6 +299,7 @@
               <button class="mode-btn" class:active={colorMode === 'custom'} on:click={() => (colorMode = 'custom')}>Custom</button>
             </div>
           </div>
+          <p class="hint">{paletteHint}</p>
           {#if colorMode === 'custom'}
             <div class="swatches">
               {#each customColors as _, i (i)}
@@ -243,7 +315,7 @@
               {/each}
               <button class="swatch-add" aria-label="Add color" on:click={addColor}>+</button>
             </div>
-            <p class="hint">Each triangle is filled with a random color from this set.</p>
+            <button class="btn block" on:click={randomizeColors}>Randomize colors</button>
           {:else}
             <div class="hue-row">
               <span class="hue-swatch" style="background: hsl({hue}, {sat}%, {light}%);"></span>
@@ -257,11 +329,25 @@
           {/if}
           <Slider label="Stroke" bind:value={stroke} min={0} max={3} step={0.1} />
           {#if stroke > 0}
-            <label class="color-row">
-              <span class="lab"></span>
-              <input type="color" bind:value={outlineColor} aria-label="Stroke color" />
-              <span class="val">{outlineColor}</span>
-            </label>
+            <div class="mode-row">
+              <span class="lab">Color</span>
+              <div class="mode-btns">
+                <button class="mode-btn" class:active={strokeMatch} on:click={() => (strokeMatch = true)}>Match</button>
+                <button class="mode-btn" class:active={!strokeMatch} on:click={() => (strokeMatch = false)}>Custom</button>
+              </div>
+            </div>
+            {#if !strokeMatch}
+              <label class="color-row">
+                <span class="lab"></span>
+                <input type="color" bind:value={outlineColor} aria-label="Stroke color" />
+                <span class="val">{outlineColor}</span>
+              </label>
+            {/if}
+            <p class="hint">
+              {strokeMatch
+                ? 'Match tints each edge from its own triangle’s color, so it plays nicely with a transparent backdrop.'
+                : 'Custom draws every edge in a single color.'}
+            </p>
           {/if}
         </div>
       </details>
@@ -272,23 +358,24 @@
           <span class="chev" aria-hidden="true"></span>
         </summary>
         <div class="collapsible-body">
+          <p class="hint">These control individual triangle properties.</p>
           <Slider label="Density" bind:value={grid} min={2} max={48} step={1} />
-          <Slider label="Jitter" bind:value={jitter} min={0} max={1} step={0.01} />
+          <Slider label="Jitter" bind:value={jitter} min={-1} max={1} step={0.01} />
           <Slider label="Explode" bind:value={explode} min={0} max={1} step={0.01} />
           <Slider label="Splay" bind:value={warp} min={0} max={1} step={0.01} />
-          <Slider label="Rotate" bind:value={rotate} min={0} max={1} step={0.01} />
+          <Slider label="Rotate" bind:value={rotate} min={0} max={360} step={1} unit="°" />
           <Slider label="Skew" bind:value={skew} min={-1} max={1} step={0.01} />
         </div>
       </details>
 
       <div class="scene-actions">
-        <button class="btn" on:click={reseed}>Shuffle</button>
+        <button class="btn" on:click={shuffle}>Shuffle</button>
         <button class="btn" on:click={reset}>Reset</button>
       </div>
     </div>
 
     <div class="sidebar-footer">
-      <button class="btn accent block" on:click={() => renderer?.saveImage()}>Save PNG</button>
+      <button class="btn accent block" on:click={savePng}>Save PNG</button>
       <button class="btn block" on:click={copyLink}>{copied ? 'Link copied' : 'Copy link'}</button>
     </div>
   </aside>
@@ -307,6 +394,7 @@
       {customColors}
       {stroke}
       {outlineColor}
+      {strokeMatch}
       {seed}
       {grid}
       {jitter}
@@ -414,9 +502,9 @@
   }
   .group h2 {
     margin: 0 0 0.2rem;
-    font-size: 0.66rem;
+    font-size: 0.82rem;
     font-weight: 600;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--pg-dim);
   }
@@ -645,9 +733,7 @@
     color: var(--pg-accent);
   }
   .btn.accent:hover {
-    background: var(--pg-accent);
-    color: #14141a;
-    border-color: var(--pg-accent);
+    border-color: #ff8a5c;
   }
   .btn.block {
     width: 100%;
