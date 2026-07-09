@@ -56,5 +56,5 @@ export const GET: RequestHandler = async ({ url, setHeaders }) => {
       : 's-maxage=31536000, stale-while-revalidate=31536000',
   })
 
-  return new Response(image.asPng())
+  return new Response(new Uint8Array(image.asPng()))
 }
