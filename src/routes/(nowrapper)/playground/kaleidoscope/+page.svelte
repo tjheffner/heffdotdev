@@ -50,13 +50,14 @@
 
   // A hand-tuned starting bouquet, so the default scene reads well immediately.
   const DEFAULT_ITEMS: KaleItem[] = [
-    { shape: 'star', u: 0.15, v: 0.72, size: 0.14, color: '#c56bff', rotate: 18, skew: 0.12, warp: 0.18, twist: 0.1, seed: 101, open: false },
-    { shape: 'circle', u: 0.5, v: 0.9, size: 0.1, color: '#ff5db1', rotate: 0, skew: 0, warp: 0.05, twist: 0, seed: 202, open: false },
-    { shape: 'wave', u: 0.78, v: 0.6, size: 0.16, color: '#4fd6e6', rotate: 120, skew: 0.2, warp: 0.1, twist: -0.2, seed: 303, open: false },
-    { shape: 'triangle', u: 0.3, v: 0.45, size: 0.12, color: '#6c8cff', rotate: 200, skew: -0.1, warp: 0.2, twist: 0.15, seed: 404, open: false },
-    { shape: 'burst', u: 0.62, v: 0.3, size: 0.1, color: '#ffd23f', rotate: 40, skew: 0, warp: 0.15, twist: 0, seed: 505, open: false },
-    { shape: 'hexagon', u: 0.45, v: 0.58, size: 0.09, color: '#3bceac', rotate: 15, skew: 0.15, warp: 0, twist: 0.1, seed: 606, open: false },
-    { shape: 'diamond', u: 0.22, v: 0.25, size: 0.08, color: '#ff8a5c', rotate: 60, skew: 0.1, warp: 0.1, twist: -0.1, seed: 707, open: false }
+    { shape: 'triangle', u: 0.567, v: 0.672, size: 0.187, color: '#c92cbc', rotate: 224, skew: -0.32, warp: 0.53, twist: -0.35, seed: 40598, open: false },
+    { shape: 'shard', u: 0.207, v: 0.127, size: 0.161, color: '#c92c63', rotate: 28, skew: -0.57, warp: 0.06, twist: -0.47, seed: 23712, open: false },
+    { shape: 'shard', u: 0.262, v: 0.652, size: 0.1, color: '#c94f2c', rotate: 192, skew: 0.28, warp: 0.38, twist: 0.45, seed: 11166, open: false },
+    { shape: 'shard', u: 0.628, v: 0.623, size: 0.116, color: '#c9a82c', rotate: 306, skew: 0.39, warp: 0.38, twist: -0.46, seed: 29991, open: false },
+    { shape: 'triangle', u: 0.204, v: 0.506, size: 0.178, color: '#90c92c', rotate: 67, skew: -0.14, warp: 0.4, twist: -0.16, seed: 14471, open: false },
+    { shape: 'hexagon', u: 0.758, v: 0.209, size: 0.02, color: '#37c92c', rotate: 212, skew: -0.28, warp: 0.05, twist: 0.15, seed: 9699, open: false },
+    { shape: 'diamond', u: 0.396, v: 0.07, size: 0.07, color: '#2cc97a', rotate: 229, skew: 0.26, warp: 0.13, twist: 0.06, seed: 8006, open: false },
+    { shape: 'diamond', u: 0.593, v: 0.476, size: 0.125, color: '#2cbec9', rotate: 200, skew: -0.59, warp: 0.57, twist: -0.11, seed: 12334, open: false }
   ];
   const cloneItems = (arr: KaleItem[]) => arr.map((it) => ({ ...it }));
 
@@ -64,20 +65,20 @@
   const DEFAULTS = {
     bg: '#0a0a12',
     transparent: false,
-    hue: 280,
-    hueSpread: 160,
-    sat: 74,
-    light: 56,
+    hue: 305,
+    hueSpread: 239,
+    sat: 64,
+    light: 48,
     colorMode: 'spectrum' as KaleColorMode,
     customColors: ['#ff6b35', '#ffd23f', '#3bceac', '#0ead69', '#540d6e'],
-    stroke: 0,
-    outlineColor: '#000000',
+    stroke: 2,
+    outlineColor: '#4566dd',
     strokeMatch: true,
     mode: 'radial' as KaleMode,
-    segments: 8,
-    spin: 0.12, // a slow default drift so the scene reads as alive on load
-    animate: 0,
-    zoom: 1
+    segments: 16,
+    spin: -0.12, // a slow default drift so the scene reads as alive on load
+    animate: 0.53, // segment shapes breathe on load
+    zoom: 1.0
   };
 
   // --- state --------------------------------------------------------------
