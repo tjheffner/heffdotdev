@@ -86,8 +86,25 @@ export function baseIssueContent(issue: GithubIssue): BaseContentItem {
   }
 }
 
+/**
+ * Normalize raw <img> HTML into markdown image syntax so every image gets the
+ * same treatment downstream (zoom wrapper + lazy loading via rehypeZoomImages),
+ * regardless of how GitHub embedded it. GitHub now pastes images as raw
+ * <img width height alt src /> tags instead of ![alt](src); without this those
+ * tags pass through as opaque HTML and never get wrapped. Runs before the
+ * youtube/tweet embeds below so it doesn't touch the <img> they generate.
+ */
+function normalizeRawImages(content: string): string {
+  return content.replace(/<img\b[^>]*?\/?>/gi, (tag) => {
+    const src = tag.match(/\bsrc\s*=\s*["']([^"']*)["']/i)?.[1]
+    if (!src) return tag // no src to work with — leave it alone
+    const alt = tag.match(/\balt\s*=\s*["']([^"']*)["']/i)?.[1] ?? ''
+    return `![${alt}](${src})`
+  })
+}
+
 export async function formatContent(content: string): Promise<string> {
-  const formatted = content
+  const formatted = normalizeRawImages(content)
     // replace youtube vids
     .replace(/\n{% youtube (.*?) %}/g, (_, x) => {
       // https://stackoverflow.com/a/27728417/1106414

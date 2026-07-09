@@ -45,10 +45,10 @@
   .post-nav {
     background-color: var(--c-background);
     position: sticky;
-    top: 85px;
+    top: 96px;
 
     @media (min-width: 668px) {
-      top: 100px;
+      top: 114px;
     }
   }
   .inside {
