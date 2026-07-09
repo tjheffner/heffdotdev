@@ -280,10 +280,14 @@
     pointer-events: none;
   }
   :global(.playground .preview-frame span) {
+    display: inline-block;
+    padding: .25rem 0.5rem;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.35);
     font-size: 0.62rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.35);
+    color: rgba(255, 255, 255, 0.85);
   }
 
   /* --- responsive --------------------------------------------------------- */

@@ -28,9 +28,11 @@
   export let warp = 0; // per-triangle vertex stretch, 0..1
   export let rotate = 0; // per-triangle rotation, max degrees 0..360
   export let skew = 0; // per-triangle shear (perspective shift), 0..1
-  export let fieldWarp = 0; // whole-sheet sine bow, 0..1
+  export let fieldWarp = 0; // whole-sheet sine bow, -1..1
   export let taper = 0; // whole-sheet horizontal keystone, -1..1
-  export let zoom = 1; // scales the scene about the canvas center
+  export let fieldSkewX = 0; // whole-sheet horizontal shear (x shifts with y), -1..1
+  export let fieldSkewY = 0; // whole-sheet vertical shear (y shifts with x), -1..1
+  export let zoom = 1; // scales the scene about the canvas center (interactive camera)
   export let zoomMin = 0.25;
   export let zoomMax = 4;
 
@@ -147,6 +149,15 @@
     }
     if (taper !== 0) {
       px = 0.5 + (px - 0.5) * (1 + taper * (py - 0.5));
+    }
+    // Whole-sheet shear about the center: the two skew angles taper (a keystone)
+    // doesn't cover. Skew X slants columns sideways with height; Skew Y slants
+    // rows vertically with width. Together they tilt the sheet into a parallelogram.
+    if (fieldSkewX !== 0 || fieldSkewY !== 0) {
+      const cx = px - 0.5;
+      const cy = py - 0.5;
+      px = 0.5 + cx + fieldSkewX * cy;
+      py = 0.5 + cy + fieldSkewY * cx;
     }
     return [px, py];
   }
@@ -336,7 +347,7 @@
   // opaque to the compiler.
   $: if (
     mounted &&
-    (void [shape, seed, grid, jitter, explode, warp, rotate, skew, fieldWarp, taper, zoom, hue, hueSpread, sat, light, colorMode, customColors, bg, transparent, stroke, outlineColor, strokeMatch], true)
+    (void [shape, seed, grid, jitter, explode, warp, rotate, skew, fieldWarp, taper, fieldSkewX, fieldSkewY, zoom, hue, hueSpread, sat, light, colorMode, customColors, bg, transparent, stroke, outlineColor, strokeMatch], true)
   ) {
     redraw();
   }

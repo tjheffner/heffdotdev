@@ -29,6 +29,8 @@
     skew: 0,
     fieldWarp: 0,
     taper: 0,
+    fieldSkewX: 0, // whole-sheet horizontal shear (Skew X)
+    fieldSkewY: 0, // whole-sheet vertical shear (Skew Y)
     zoom: 1
   };
 
@@ -91,6 +93,8 @@
   let skew = DEFAULTS.skew;
   let fieldWarp = DEFAULTS.fieldWarp;
   let taper = DEFAULTS.taper;
+  let fieldSkewX = DEFAULTS.fieldSkewX;
+  let fieldSkewY = DEFAULTS.fieldSkewY;
   let zoom = DEFAULTS.zoom;
 
   let renderer: Triangles;
@@ -163,6 +167,8 @@
     skew = DEFAULTS.skew;
     fieldWarp = DEFAULTS.fieldWarp;
     taper = DEFAULTS.taper;
+    fieldSkewX = DEFAULTS.fieldSkewX;
+    fieldSkewY = DEFAULTS.fieldSkewY;
     zoom = DEFAULTS.zoom;
     renderer?.recenter();
   }
@@ -181,19 +187,20 @@
       Math.max(0, PALETTES.indexOf(colorMode)),
       hue, hueSpread, sat, light, stroke, grid,
       jitter, explode, warp, rotate, skew, zoom, fieldWarp, taper,
+      fieldSkewX, fieldSkewY,
       outlineColor.replace(/^#/, ''),
       strokeMatch ? 1 : 0,
       customColors.map((c) => c.replace(/^#/, '')).join(','),
       transparent ? 1 : 0,
       bg.replace(/^#/, '')
     ];
-    return b64urlEncode(`${parts.join('~')}~${seed}`);
+    return b64urlEncode(`${parts.join('~')}~${seed}`); // seed is the trailing remainder
   }
 
   function decodeState(token: string) {
     try {
       const b = b64urlDecode(token).split('~');
-      if (b.length < 22) return;
+      if (b.length < 24) return;
       const num = (i: number, cur: number) => {
         const v = parseFloat(b[i]);
         return Number.isFinite(v) ? v : cur;
@@ -214,12 +221,14 @@
       zoom = num(13, zoom);
       fieldWarp = num(14, fieldWarp);
       taper = num(15, taper);
-      if (b[16]) outlineColor = `#${b[16]}`;
-      strokeMatch = b[17] === '1';
-      if (b[18]) customColors = b[18].split(',').map((c) => `#${c}`);
-      transparent = b[19] === '1';
-      bg = `#${b[20] || '0a0a12'}`;
-      seed = b.slice(21).join('~') || seed; // seed is the remainder (may hold '~')
+      fieldSkewX = num(16, fieldSkewX);
+      fieldSkewY = num(17, fieldSkewY);
+      if (b[18]) outlineColor = `#${b[18]}`;
+      strokeMatch = b[19] === '1';
+      if (b[20]) customColors = b[20].split(',').map((c) => `#${c}`);
+      transparent = b[21] === '1';
+      bg = `#${b[22] || '0a0a12'}`;
+      seed = b.slice(23).join('~') || seed; // seed is the remainder (may hold '~')
     } catch {
       // Malformed token — keep defaults.
     }
@@ -260,8 +269,10 @@
         <button class="mode-btn" class:active={shape === 'square'} on:click={() => (shape = 'square')}>Square</button>
       </div>
     </div>
-    <Slider label="Warp" bind:value={fieldWarp} min={0} max={1} step={0.01} />
+    <Slider label="Warp" bind:value={fieldWarp} min={-1} max={1} step={0.01} />
     <Slider label="Taper" bind:value={taper} min={-1} max={1} step={0.01} />
+    <Slider label="Skew X" bind:value={fieldSkewX} min={-1} max={1} step={0.01} />
+    <Slider label="Skew Y" bind:value={fieldSkewY} min={-1} max={1} step={0.01} />
     <Slider label="Zoom" bind:value={zoom} min={0.25} max={4} step={0.01} unit="×" />
     <label class="toggle-row">
       <span class="lab">Transparent</span>
@@ -382,13 +393,12 @@
       {skew}
       {fieldWarp}
       {taper}
+      {fieldSkewX}
+      {fieldSkewY}
       bind:zoom
       contained={true}
       interactive={true}
     />
-    <div class="preview-frame">
-      <span>preview · shatter</span>
-    </div>
   </main>
 </PlaygroundShell>
 

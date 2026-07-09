@@ -341,7 +341,10 @@ ${layerLines}
     </div>
     <p class="hint">Each layer is a soft blob of light. Stack and drift them for depth.</p>
     {#each layers as layer, i (layer)}
-      <details class="layer" bind:open={layer.open}>
+      <!-- Delete sits outside <summary> to avoid nested-interactive; it's
+        overlaid on the header row and stays visible when the layer collapses. -->
+      <div class="layer">
+      <details bind:open={layer.open}>
         <summary>
           <span
             class="swatch"
@@ -349,13 +352,6 @@ ${layerLines}
           ></span>
           <span class="layer-name">Layer {i + 1}</span>
           <span class="layer-meta">{layer.sz}px · h{Math.round(layer.h)}</span>
-          <button
-            class="layer-delete"
-            title="Delete layer {i + 1}"
-            aria-label="Delete layer {i + 1}"
-            disabled={layers.length <= 1}
-            on:click|preventDefault|stopPropagation={() => removeLayer(i)}
-          >×</button>
         </summary>
 
         <div class="layer-body">
@@ -382,6 +378,14 @@ ${layerLines}
           </div>
         </div>
       </details>
+        <button
+          class="layer-delete"
+          title="Delete layer {i + 1}"
+          aria-label="Delete layer {i + 1}"
+          disabled={layers.length <= 1}
+          on:click|preventDefault|stopPropagation={() => removeLayer(i)}
+        >×</button>
+      </div>
     {/each}
   </Section>
 
@@ -440,7 +444,7 @@ ${layerLines}
       progressOverride={depth}
     />
     <div class="preview-frame">
-      <span>preview · depth {depth.toFixed(2)}</span>
+      <span>depth {depth.toFixed(2)}</span>
     </div>
   </main>
 </PlaygroundShell>
@@ -486,6 +490,7 @@ ${layerLines}
   /* --- layers ------------------------------------------------------------ */
 
   .layer {
+    position: relative;
     border: 1px solid var(--pg-line);
     border-radius: 6px;
     background: #14141a;
@@ -494,7 +499,8 @@ ${layerLines}
     display: flex;
     align-items: center;
     gap: 0.55rem;
-    padding: 0.5rem 0.6rem;
+    /* right padding reserves room for the absolutely-positioned delete button */
+    padding: 0.5rem 1.8rem 0.5rem 0.6rem;
     cursor: pointer;
     list-style: none;
     font-size: 0.72rem;
@@ -523,6 +529,9 @@ ${layerLines}
     font-size: 0.64rem;
   }
   .layer-delete {
+    position: absolute;
+    top: 0.4rem;
+    right: 0.6rem;
     flex: none;
     width: 20px;
     height: 20px;

@@ -5,29 +5,53 @@
   export let open = true;
 </script>
 
-<details class="group collapsible" {open}>
-  <summary>
-    <h2>{title}</h2>
-    <slot name="actions" />
-    <span class="chev" aria-hidden="true"></span>
-  </summary>
-  <div class="collapsible-body">
-    <slot />
-  </div>
-</details>
+<!-- Actions live *outside* <summary> (a summary is itself a button, so nesting
+  buttons in it fails axe's nested-interactive rule) but *inside* .group so they
+  overlay the header row. They sit outside <details> visually via absolute
+  positioning, which keeps them shown even when the section is collapsed. -->
+<div class="group">
+  <details class="collapsible" {open}>
+    <summary>
+      <h2>{title}</h2>
+      <span class="chev" aria-hidden="true"></span>
+    </summary>
+    <div class="collapsible-body">
+      <slot />
+    </div>
+  </details>
+  {#if $$slots.actions}
+    <div class="section-actions">
+      <slot name="actions" />
+    </div>
+  {/if}
+</div>
 
 <style>
   .group {
+    position: relative;
+    padding-top: 1rem;
+    border-top: 1px solid var(--pg-line);
+  }
+  .collapsible {
     display: flex;
     flex-direction: column;
     gap: 0.55rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--pg-line);
+  }
+  .section-actions {
+    position: absolute;
+    top: 1rem;
+    right: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    /* vertically center the (taller) action buttons on the summary text row */
+    height: 1.2rem;
   }
   summary {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    min-height: 1.2rem;
     cursor: pointer;
     list-style: none;
     user-select: none;
