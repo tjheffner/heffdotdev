@@ -222,6 +222,14 @@ h2 > a,
     margin: var(--space-away) 0;
   }
 
+  /* Content images carry width/height attrs from markdown. Once the responsive
+     max-width caps their width, a fixed height attr distorts the box aspect
+     ratio and the global defensive `object-fit: cover` crops them. Letting
+     height track the width preserves aspect ratio and makes cover a no-op. */
+  img {
+    height: auto;
+  }
+
   h2 > a,
   h3 > a,
   h4 > a {
