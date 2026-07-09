@@ -1,27 +1,73 @@
 <script lang="ts">
-  // Shared sidebar + preview scaffolding for the playgrounds.
-  // Default slot: sidebar sections. "footer" slot: pinned action buttons.
-  // "preview" slot: the <main class="preview"> canvas area.
+  // Fullscreen canvas + a floating control layer over it.
+  // Default slot: <Section> pills (they render a pill in the top row and an
+  // expanding card below). "footer" slot: action buttons, shown as a cluster
+  // at the right of the pill row. "preview" slot: the <main class="preview">
+  // canvas, which fills the viewport behind the controls.
   export let title: string;
   export let subtitle = '';
+  // Hex color of the canvas backdrop, so the chrome can flip light/dark to stay
+  // legible over it. Pages pass their current bg (or a stand-in when transparent).
+  export let bg = '';
+  // Optional override: when a page samples the real canvas pixels under the
+  // chrome (e.g. Triangles, which can be zoomed past its background), it passes
+  // the result here and it wins over the bg-color guess.
+  export let lightChrome: boolean | undefined = undefined;
+
+  // Perceived luminance (Rec. 601). Light backdrop → dark chrome, and vice versa.
+  function isLight(hex: string): boolean {
+    const m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex.trim());
+    if (!m) return false;
+    let h = m[1];
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    const int = parseInt(h, 16);
+    const r = (int >> 16) & 255;
+    const g = (int >> 8) & 255;
+    const b = int & 255;
+    return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.6;
+  }
+  $: lightCanvas = lightChrome ?? isLight(bg);
+
+  let controlsHidden = false;
+  const toggleControls = () => (controlsHidden = !controlsHidden);
+
+  // Esc hides the control layer for a clean full-canvas view; "/" toggles it
+  // (matching the blog's search shortcut). Ignore "/" while typing in a field.
+  function onKeydown(e: KeyboardEvent) {
+    const t = e.target as HTMLElement | null;
+    const typing = !!t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
+    if (e.key === 'Escape') controlsHidden = true;
+    else if (e.key === '/' && !typing) {
+      controlsHidden = !controlsHidden;
+      e.preventDefault(); // don't trigger the browser's quick-find
+    }
+  }
 </script>
 
-<div class="playground">
-  <aside class="sidebar">
-    <div class="sidebar-scroll">
-      <header class="panel-head">
-        <h1>{title}</h1>
-        {#if subtitle}<p>{subtitle}</p>{/if}
-      </header>
-      <slot />
-    </div>
-    {#if $$slots.footer}
-      <div class="sidebar-footer">
-        <slot name="footer" />
-      </div>
-    {/if}
-  </aside>
+<svelte:window on:keydown={onKeydown} />
+
+<div class="playground" class:light-canvas={lightCanvas}>
   <slot name="preview" />
+
+  <div class="control-layer" class:hidden={controlsHidden}>
+    <div class="control-bar">
+      <h1 class="title-chip" title={subtitle}>{title}</h1>
+      <slot />
+      <div class="row-break" aria-hidden="true"></div>
+      {#if $$slots.footer}
+        <div class="bar-actions"><slot name="footer" /></div>
+      {/if}
+      <button class="chrome-pill hide-toggle" on:click={toggleControls} title="Hide controls">
+        Hide (Esc)
+      </button>
+    </div>
+  </div>
+
+  {#if controlsHidden}
+    <button class="chrome-pill show-toggle" on:click={toggleControls} title="Show controls">
+      Controls (/)
+    </button>
+  {/if}
 </div>
 
 <style>
@@ -38,71 +84,130 @@
     --pg-accent: #ff6b35;
     --pg-track: #2a2a31;
 
-    display: grid;
-    grid-template-columns: 340px 1fr;
+    /* Chrome colors flip with the canvas luminance (see .light-canvas). These
+     * drive the title and the pill/action chips so they read over any backdrop. */
+    --pg-chrome-fg: #e8e8ec;
+    --pg-chrome-chip: rgba(10, 10, 14, 0.62);
+    --pg-chrome-line: var(--pg-line);
+    /* Monochrome "selected" fill for the active pill (no colored accent up in
+     * the chrome): a solid swatch of the fg color with inverted text. */
+    --pg-chrome-solid: #e8e8ec;
+    --pg-chrome-on-solid: #16161c;
+
+    position: relative;
+    width: 100vw;
     height: 100vh;
     height: 100dvh;
+    overflow: hidden;
     font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
     color: var(--pg-text);
     background: var(--pg-bg);
   }
 
-  /* --- sidebar shell ------------------------------------------------------ */
+  /* Light canvas → dark chrome (light chip, dark text, darker hairline). */
+  .playground.light-canvas {
+    --pg-chrome-fg: #16161c;
+    --pg-chrome-chip: rgba(246, 246, 249, 0.66);
+    --pg-chrome-line: rgba(0, 0, 0, 0.18);
+    --pg-chrome-solid: #1c1c22;
+    --pg-chrome-on-solid: #f2f2f5;
+  }
 
-  .sidebar {
+  /* --- floating control layer --------------------------------------------- */
+  /* The layer spans the viewport but is click-through; only the pills, cards,
+   * and action cluster opt back into pointer events, so canvas drag/zoom keeps
+   * working everywhere except directly on a control. */
+  .control-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .control-layer.hidden {
+    display: none;
+  }
+  .control-bar {
+    position: absolute;
+    inset: 0.75rem 0.75rem auto 0.75rem;
     display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    border-right: 1px solid var(--pg-line);
-    background: var(--pg-panel);
-  }
-  .sidebar-scroll {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    /* Reserve the scrollbar's space so content doesn't shift when it appears. */
-    scrollbar-gutter: stable;
-    padding: 1.1rem 1rem 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    scrollbar-width: thin;
-    scrollbar-color: var(--pg-line) transparent;
-  }
-  .sidebar-scroll::-webkit-scrollbar {
-    width: 6px;
-  }
-  .sidebar-scroll::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .sidebar-scroll::-webkit-scrollbar-thumb {
-    background: var(--pg-line);
-    border-radius: 3px;
-  }
-  .sidebar-scroll::-webkit-scrollbar-thumb:hover {
-    background: var(--pg-dim);
-  }
-  .sidebar-footer {
-    display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    /* Center the pill row; open cards top-align themselves (.card align-self). */
+    align-items: center;
     gap: 0.5rem;
-    padding: 0.85rem 1rem;
-    border-top: 1px solid var(--pg-line);
-    background: var(--pg-panel);
+    pointer-events: none;
+  }
+  /* Forces open cards (order 2) onto the line(s) below the pill row (order 0). */
+  .row-break {
+    order: 1;
+    flex-basis: 100%;
+    height: 0;
   }
 
-  .panel-head h1 {
+  .title-chip {
+    order: 0;
+    pointer-events: auto;
     margin: 0;
-    font-size: 1.05rem;
+    padding: 0.34rem 0.2rem;
+    font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+    color: var(--pg-chrome-fg);
+    transition: color 160ms ease;
+    cursor: default;
   }
-  .panel-head p {
-    margin: 0.35rem 0 0;
-    font-size: 0.72rem;
-    line-height: 1.5;
-    color: var(--pg-dim);
+  .bar-actions {
+    order: 0;
+    pointer-events: auto;
+    margin-left: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  /* No wrapping pill (it isn't a collapsible menu); each button carries its own
+   * translucent chip so it stays legible over the canvas without adding a
+   * border-box that shifts the row when sections open/close. */
+  .bar-actions :global(.btn) {
+    color: var(--pg-chrome-fg);
+    background: var(--pg-chrome-chip);
+    border-color: var(--pg-chrome-line);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  /* Chrome pills: the Hide (in-bar) and Controls (when hidden) toggles. */
+  .chrome-pill {
+    pointer-events: auto;
+    font: inherit;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--pg-chrome-fg);
+    background: var(--pg-chrome-chip);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--pg-chrome-line);
+    border-radius: 999px;
+    padding: 0.34rem 0.7rem;
+    cursor: pointer;
+  }
+  .chrome-pill:hover {
+    border-color: var(--pg-chrome-fg);
+  }
+  .chrome-pill:focus-visible {
+    outline: 2px solid var(--pg-chrome-fg);
+    outline-offset: 2px;
+  }
+  .hide-toggle {
+    order: 0;
+  }
+  .show-toggle {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 3;
   }
 
   /* --- shared kit (styles the slotted sidebar content) -------------------- */
@@ -269,7 +374,9 @@
   /* --- preview ------------------------------------------------------------ */
 
   :global(.playground .preview) {
-    position: relative;
+    position: absolute;
+    inset: 0;
+    z-index: 1;
     overflow: hidden;
   }
   :global(.playground .preview-frame) {
@@ -292,20 +399,14 @@
 
   /* --- responsive --------------------------------------------------------- */
 
-  @media (max-width: 800px) {
-    .playground {
-      grid-template-columns: 1fr;
-      grid-template-rows: 45vh 1fr;
-      height: auto;
-      min-height: 100dvh;
+  @media (max-width: 640px) {
+    .control-bar {
+      inset: 0.5rem 0.5rem auto 0.5rem;
+      gap: 0.4rem;
     }
-    :global(.playground .preview) {
-      order: -1;
-      min-height: 45vh;
-    }
-    .sidebar {
-      border-right: none;
-      border-top: 1px solid var(--pg-line);
+    .title-chip {
+      /* On phones the pills need the width; keep the title compact. */
+      font-size: 0.72rem;
     }
   }
 </style>

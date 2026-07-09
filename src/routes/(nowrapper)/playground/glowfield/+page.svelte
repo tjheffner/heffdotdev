@@ -301,9 +301,10 @@ ${layerLines}
 <PlaygroundShell
   title="Glowfield"
   subtitle="Background ambient light generator"
+  {bg}
 >
   <Section title="Scene">
-    <p class="hint">Where the field anchors and how the glow is colored.</p>
+    <p class="hint">Where the field anchors and how the glow is initially colored.</p>
     <Slider label="Anchor X" bind:value={anchor.x} min={0} max={1} step={0.01} />
     <Slider label="Anchor Y" bind:value={anchor.y} min={0} max={1} step={0.01} />
     <label class="color-row">
@@ -429,10 +430,8 @@ ${layerLines}
   {/if}
 
   <svelte:fragment slot="footer">
-    <div class="scene-actions">
-      <button class="btn" on:click={shuffle}>Shuffle</button>
-      <button class="btn" on:click={reset}>Reset</button>
-    </div>
+    <button class="btn" on:click={shuffle}>Shuffle</button>
+    <button class="btn" on:click={reset}>Reset</button>
   </svelte:fragment>
 
   <main slot="preview" class="preview" style="background: {bg};">

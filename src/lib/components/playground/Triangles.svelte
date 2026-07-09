@@ -38,6 +38,7 @@
 
   export let contained = true;
   export let interactive = false; // enable drag-to-pan and scroll-to-zoom
+  export let onRendered: (() => void) | undefined = undefined; // fires after each paint
 
   let host: HTMLDivElement;
   let canvas: HTMLCanvasElement;
@@ -335,6 +336,57 @@
         ctx.stroke();
       }
     }
+    onRendered?.();
+  }
+
+  // --- luminance sampling --------------------------------------------------
+  // Average perceived brightness of the top strip of the *rendered* canvas, so
+  // overlaid chrome can flip light/dark against whatever is actually under it
+  // (art included, and wherever the user has panned/zoomed to). Cheap: the
+  // strip is downscaled into a tiny scratch canvas via drawImage, so only a
+  // few hundred pixels are read back rather than the full multi-MB strip.
+  let scratch: HTMLCanvasElement | undefined;
+  let sctx: CanvasRenderingContext2D | null = null;
+
+  function hexRgb(hex: string): { r: number; g: number; b: number } {
+    const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
+    if (!m) return { r: 20, g: 20, b: 26 };
+    const int = parseInt(m[1], 16);
+    return { r: (int >> 16) & 255, g: (int >> 8) & 255, b: int & 255 };
+  }
+
+  // Returns 0..1 perceived luminance of the top `stripFrac` of the canvas, or
+  // null if it can't sample yet.
+  export function sampleLuminance(stripFrac = 0.16): number | null {
+    if (!canvas || canvas.width === 0 || canvas.height === 0) return null;
+    if (!scratch) {
+      scratch = document.createElement('canvas');
+      scratch.width = 48;
+      scratch.height = 8;
+      sctx = scratch.getContext('2d', { willReadFrequently: true });
+    }
+    if (!sctx) return null;
+    // Pre-fill with the effective backdrop so semi-transparent canvas pixels
+    // (transparent mode) composite over what actually shows behind them.
+    const bd = transparent ? { r: 0x23, g: 0x23, b: 0x29 } : hexRgb(bg);
+    sctx.clearRect(0, 0, 48, 8);
+    sctx.fillStyle = `rgb(${bd.r}, ${bd.g}, ${bd.b})`;
+    sctx.fillRect(0, 0, 48, 8);
+    const sh = Math.max(1, Math.round(canvas.height * stripFrac));
+    sctx.drawImage(canvas, 0, 0, canvas.width, sh, 0, 0, 48, 8);
+    let data: Uint8ClampedArray;
+    try {
+      data = sctx.getImageData(0, 0, 48, 8).data;
+    } catch {
+      return null;
+    }
+    let sum = 0;
+    let n = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      sum += 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+      n++;
+    }
+    return n ? sum / n / 255 : null;
   }
 
   function redraw() {
