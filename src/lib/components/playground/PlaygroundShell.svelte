@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { collapseMenus } from '$lib/playground/ui';
+
   // Fullscreen canvas + a floating control layer over it.
   // Default slot: <Section> pills (they render a pill in the top row and an
   // expanding card below). "footer" slot: action buttons, shown as a cluster
@@ -14,6 +16,13 @@
   // the result here and it wins over the bg-color guess.
   export let lightChrome: boolean | undefined = undefined;
 
+  // Optional action hooks, wired to keyboard shortcuts (see onKeydown). A page
+  // supplies the ones it has; missing ones simply do nothing.
+  export let onShuffle: (() => void) | undefined = undefined;
+  export let onReset: (() => void) | undefined = undefined;
+  export let onSavePng: (() => void) | undefined = undefined;
+  export let onSaveScene: (() => void) | undefined = undefined;
+
   // Perceived luminance (Rec. 601). Light backdrop → dark chrome, and vice versa.
   function isLight(hex: string): boolean {
     const m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex.trim());
@@ -28,18 +37,60 @@
   }
   $: lightCanvas = lightChrome ?? isLight(bg);
 
-  let controlsHidden = false;
-  const toggleControls = () => (controlsHidden = !controlsHidden);
+  // The keyboard cheat-sheet shown in the title info card. Esc and "/" are
+  // always available; the action keys appear only when the page wired that hook.
+  $: shortcuts = [
+    { k: 'Esc', label: 'Hide controls' },
+    { k: '/', label: 'Toggle controls' },
+    ...(onShuffle ? [{ k: 'F', label: 'Shuffle' }] : []),
+    ...(onReset ? [{ k: 'R', label: 'Reset' }] : []),
+    ...(onSavePng ? [{ k: 'P', label: 'Save PNG' }] : []),
+    ...(onSaveScene ? [{ k: 'S', label: 'Save scene' }] : [])
+  ];
 
-  // Esc hides the control layer for a clean full-canvas view; "/" toggles it
-  // (matching the blog's search shortcut). Ignore "/" while typing in a field.
+  let controlsHidden = false;
+  let titleOpen = false;
+  const titleCardId = `pg-title-${Math.random().toString(36).slice(2, 8)}`;
+
+  // Hiding the controls also closes every open menu (the title card here, and
+  // each <Section> via the shared signal), so re-opening starts clean.
+  function setHidden(v: boolean) {
+    controlsHidden = v;
+    if (v) {
+      titleOpen = false;
+      collapseMenus();
+    }
+  }
+  const toggleControls = () => setHidden(!controlsHidden);
+
+  // Keyboard: Esc hides the controls; "/" toggles them. F/R/P/S run the scene
+  // actions (shuffle / reset / save PNG / save scene). All are ignored while
+  // typing in a field or when a modifier is held, so browser combos (Cmd+S,
+  // Cmd+R, Cmd+P) and text entry are never hijacked.
   function onKeydown(e: KeyboardEvent) {
     const t = e.target as HTMLElement | null;
     const typing = !!t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
-    if (e.key === 'Escape') controlsHidden = true;
-    else if (e.key === '/' && !typing) {
-      controlsHidden = !controlsHidden;
+    if (e.key === 'Escape') {
+      setHidden(true);
+      return;
+    }
+    if (typing || e.metaKey || e.ctrlKey || e.altKey) return;
+    const k = e.key.toLowerCase();
+    if (k === '/') {
+      setHidden(!controlsHidden);
       e.preventDefault(); // don't trigger the browser's quick-find
+    } else if (k === 'f' && onShuffle) {
+      onShuffle();
+      e.preventDefault();
+    } else if (k === 'r' && onReset) {
+      onReset();
+      e.preventDefault();
+    } else if (k === 'p' && onSavePng) {
+      onSavePng();
+      e.preventDefault();
+    } else if (k === 's' && onSaveScene) {
+      onSaveScene();
+      e.preventDefault();
     }
   }
 </script>
@@ -51,12 +102,40 @@
 
   <div class="control-layer" class:hidden={controlsHidden}>
     <div class="control-bar">
-      <h1 class="title-chip" title={subtitle}>{title}</h1>
+      <!-- Easter egg: reads as a plain title, but clicking it reveals an info
+           card with the description and a link back to all experiments. -->
+      <button
+        class="title-chip"
+        aria-expanded={titleOpen}
+        aria-controls={titleCardId}
+        on:click={() => (titleOpen = !titleOpen)}
+      >{title}</button>
+      {#if titleOpen}
+        <section class="title-card" id={titleCardId} aria-label={`About ${title}`}>
+          <header class="title-card-head">
+            <h2>{title}</h2>
+            <button class="card-close" aria-label="Close" on:click={() => (titleOpen = false)}>×</button>
+          </header>
+          {#if subtitle}<p class="title-sub">{subtitle}</p>{/if}
+          <div class="title-keys">
+            <h3>Shortcuts</h3>
+            <ul>
+              {#each shortcuts as s}
+                <li><kbd>{s.k}</kbd> <span>{s.label}</span></li>
+              {/each}
+            </ul>
+          </div>
+          <a class="title-link" href="/playground">← Playground</a>
+        </section>
+      {/if}
       <slot />
       <div class="row-break" aria-hidden="true"></div>
       {#if $$slots.footer}
         <div class="bar-actions"><slot name="footer" /></div>
       {/if}
+      <!-- Sits in the right cluster (after the action buttons, before Hide); its
+           card still drops below via the order-2 / row-break mechanism. -->
+      <slot name="saved" />
       <button class="chrome-pill hide-toggle" on:click={toggleControls} title="Hide controls">
         Hide (Esc)
       </button>
@@ -143,18 +222,135 @@
     height: 0;
   }
 
+  /* Easter egg: styled exactly like the old static title — no chip background,
+     no chevron, default cursor — so nothing hints it's clickable. */
   .title-chip {
     order: 0;
     pointer-events: auto;
     margin: 0;
     padding: 0.34rem 0.2rem;
+    font: inherit;
     font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--pg-chrome-fg);
-    transition: color 160ms ease;
+    background: none;
+    border: none;
     cursor: default;
+    transition: color 160ms ease;
+  }
+  .title-chip:focus-visible {
+    outline: 2px solid var(--pg-chrome-fg);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Info card — mirrors the <Section> card panel, drops below the bar (order 2). */
+  .title-card {
+    order: 2;
+    align-self: flex-start;
+    pointer-events: auto;
+    flex: 0 0 clamp(220px, 22vw, 300px);
+    max-width: calc(100vw - 1.5rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    background: rgba(20, 20, 26, 0.94);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--pg-line);
+    border-radius: 10px;
+    padding: 0.7rem 0.8rem 0.85rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  }
+  .title-card-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .title-card-head h2 {
+    margin: 0;
+    flex: 1;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pg-dim);
+  }
+  .title-sub {
+    margin: 0;
+    font-size: 0.72rem;
+    line-height: 1.55;
+    color: var(--pg-text);
+  }
+  .title-keys h3 {
+    margin: 0 0 0.35rem;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--pg-dim);
+  }
+  .title-keys ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.28rem;
+  }
+  .title-keys li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    color: var(--pg-text);
+  }
+  .title-keys kbd {
+    flex: none;
+    min-width: 1.7rem;
+    text-align: center;
+    font: inherit;
+    font-size: 0.62rem;
+    padding: 0.1rem 0.35rem;
+    color: var(--pg-dim);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--pg-line);
+    border-radius: 4px;
+  }
+  .title-link {
+    font-size: 0.7rem;
+    color: var(--pg-accent);
+    text-decoration: none;
+    width: fit-content;
+  }
+  .title-link:hover {
+    text-decoration: underline;
+  }
+  .card-close {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    display: grid;
+    place-items: center;
+    font: inherit;
+    font-size: 0.95rem;
+    line-height: 1;
+    color: var(--pg-dim);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 0;
+  }
+  .card-close:hover {
+    color: var(--pg-text);
+    border-color: var(--pg-line);
+  }
+  .card-close:focus-visible {
+    outline: 2px solid var(--pg-accent);
+    outline-offset: 1px;
   }
   .bar-actions {
     order: 0;

@@ -4,7 +4,15 @@
   import type { TriColorMode, TriShape } from '$lib/components/playground/Triangles.svelte';
   import Slider from '$lib/components/playground/Slider.svelte';
   import PlaygroundShell from '$lib/components/playground/PlaygroundShell.svelte';
+  import Metatags from '$lib/components/Metatags.svelte';
   import Section from '$lib/components/playground/Section.svelte';
+  import SavedScenes from '$lib/components/playground/SavedScenes.svelte';
+  import { createPresetStore } from '$lib/playground/presets';
+  import { n36, p36, packHex, unpackHex } from '$lib/playground/token';
+  import { rand, randInt, pick } from '$lib/playground/math';
+  import { randomHex } from '$lib/playground/palette';
+
+  const presets = createPresetStore('triangles');
 
   // Single source of truth for defaults, shared by initial state and Reset.
   const DEFAULTS = {
@@ -55,21 +63,6 @@
     customColors = customColors.filter((_, idx) => idx !== i);
   }
 
-  function hslToHex(h: number, s: number, l: number) {
-    s /= 100;
-    l /= 100;
-    const a = s * Math.min(l, 1 - l);
-    const f = (n: number) => {
-      const k = (n + h / 30) % 12;
-      const c = l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1));
-      return Math.round(255 * c).toString(16).padStart(2, '0');
-    };
-    return `#${f(0)}${f(8)}${f(4)}`;
-  }
-  function randomHex() {
-    // Random hue with pleasant sat/light so palettes don't come out muddy.
-    return hslToHex(Math.floor(Math.random() * 360), 55 + Math.random() * 35, 42 + Math.random() * 26);
-  }
   function randomizeColors() {
     customColors = customColors.map(() => randomHex());
   }
@@ -100,8 +93,7 @@
   let zoom = DEFAULTS.zoom;
 
   let renderer: Triangles;
-  let copied = false;
-  let copyTimer: ReturnType<typeof setTimeout>;
+  let savedScenes: SavedScenes;
 
   // Flip the overlay chrome against the actual pixels under it. The canvas can
   // be zoomed past its background, so sampling beats keying off `bg`. Coalesced
@@ -124,13 +116,10 @@
     seed = `${w}-${Math.random().toString(36).slice(2, 6)}`;
   }
 
-  const rand = (min: number, max: number) => Math.round((min + Math.random() * (max - min)) * 100) / 100;
-  const randInt = (min: number, max: number) => Math.floor(min + Math.random() * (max - min + 1));
-  const pick = <T,>(arr: readonly T[]) => arr[Math.floor(Math.random() * arr.length)];
-
-  // Shuffle the colors and per-triangle variables, plus the seed. Layout
-  // (shape, warp, taper) and view/backdrop are left as-is.
+  // Shuffle the shape, colors, and per-triangle variables, plus the seed. Field
+  // warp/taper and view/backdrop are left as-is.
   function shuffle() {
+    shape = pick(['triangle', 'square'] as const);
     colorMode = pick(PALETTES);
     hue = randInt(0, 360);
     hueSpread = randInt(0, 300);
@@ -142,7 +131,9 @@
     outlineColor = randomHex();
     grid = randInt(4, 28);
     jitter = rand(-1, 1);
-    explode = rand(0, 0.6);
+    // The clean, un-exploded look is the best one, so bias hard toward it:
+    // often exactly 0, otherwise a squared (low-weighted) amount.
+    explode = Math.random() < 0.35 ? 0 : Math.round(Math.random() ** 2 * 0.6 * 100) / 100;
     warp = rand(0, 1);
     rotate = randInt(0, 360);
     skew = rand(-1, 1);
@@ -195,75 +186,64 @@
   // The whole scene packs into one short token (?s=…). Nothing is written to
   // the URL as you tweak; the link is built only when you copy it.
   const PALETTES: TriColorMode[] = ['spectrum', 'duo', 'mono', 'custom'];
-  const b64urlEncode = (s: string) =>
-    btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  const b64urlDecode = (s: string) => atob(s.replace(/-/g, '+').replace(/_/g, '/'));
 
   function encodeState(): string {
-    const parts = [
-      shape === 'square' ? 1 : 0,
-      Math.max(0, PALETTES.indexOf(colorMode)),
-      hue, hueSpread, sat, light, stroke, grid,
-      jitter, explode, warp, rotate, skew, zoom, fieldRotate, fieldWarp, taper,
-      fieldSkewX, fieldSkewY,
-      outlineColor.replace(/^#/, ''),
-      strokeMatch ? 1 : 0,
-      customColors.map((c) => c.replace(/^#/, '')).join(','),
-      transparent ? 1 : 0,
-      bg.replace(/^#/, '')
-    ];
-    return b64urlEncode(`${parts.join('~')}~${seed}`); // seed is the trailing remainder
+    const g = [
+      n36(shape === 'square' ? 1 : 0),
+      n36(Math.max(0, PALETTES.indexOf(colorMode))),
+      n36(hue), n36(hueSpread), n36(sat), n36(light), n36(stroke, 10), n36(grid),
+      n36(jitter, 100), n36(explode, 100), n36(warp, 100), n36(rotate), n36(skew, 100),
+      n36(zoom, 100), n36(fieldRotate), n36(fieldWarp, 100), n36(taper, 100),
+      n36(fieldSkewX, 100), n36(fieldSkewY, 100),
+      n36(strokeMatch ? 1 : 0), n36(transparent ? 1 : 0),
+      outlineColor.replace(/^#/, ''), bg.replace(/^#/, ''),
+      packHex(customColors)
+    ].join('.');
+    return `t1~${g}~${seed}`; // seed is a word — kept raw as the trailing section
   }
 
   function decodeState(token: string) {
     try {
-      const b = b64urlDecode(token).split('~');
-      if (b.length < 25) return;
-      const num = (i: number, cur: number) => {
-        const v = parseFloat(b[i]);
-        return Number.isFinite(v) ? v : cur;
-      };
-      shape = b[0] === '1' ? 'square' : 'triangle';
-      colorMode = PALETTES[+b[1]] ?? colorMode;
-      hue = num(2, hue);
-      hueSpread = num(3, hueSpread);
-      sat = num(4, sat);
-      light = num(5, light);
-      stroke = num(6, stroke);
-      grid = num(7, grid);
-      jitter = num(8, jitter);
-      explode = num(9, explode);
-      warp = num(10, warp);
-      rotate = num(11, rotate);
-      skew = num(12, skew);
-      zoom = num(13, zoom);
-      fieldRotate = num(14, fieldRotate);
-      fieldWarp = num(15, fieldWarp);
-      taper = num(16, taper);
-      fieldSkewX = num(17, fieldSkewX);
-      fieldSkewY = num(18, fieldSkewY);
-      if (b[19]) outlineColor = `#${b[19]}`;
-      strokeMatch = b[20] === '1';
-      if (b[21]) customColors = b[21].split(',').map((c) => `#${c}`);
-      transparent = b[22] === '1';
-      bg = `#${b[23] || '0a0a12'}`;
-      seed = b.slice(24).join('~') || seed; // seed is the remainder (may hold '~')
+      const parts = token.split('~');
+      if (parts[0] !== 't1' || parts.length < 3) return;
+      const g = parts[1].split('.');
+      shape = p36(g[0]) === 1 ? 'square' : 'triangle';
+      colorMode = PALETTES[p36(g[1])] ?? colorMode;
+      hue = p36(g[2], 1, hue);
+      hueSpread = p36(g[3], 1, hueSpread);
+      sat = p36(g[4], 1, sat);
+      light = p36(g[5], 1, light);
+      stroke = p36(g[6], 10, stroke);
+      grid = p36(g[7], 1, grid);
+      jitter = p36(g[8], 100, jitter);
+      explode = p36(g[9], 100, explode);
+      warp = p36(g[10], 100, warp);
+      rotate = p36(g[11], 1, rotate);
+      skew = p36(g[12], 100, skew);
+      zoom = p36(g[13], 100, zoom);
+      fieldRotate = p36(g[14], 1, fieldRotate);
+      fieldWarp = p36(g[15], 100, fieldWarp);
+      taper = p36(g[16], 100, taper);
+      fieldSkewX = p36(g[17], 100, fieldSkewX);
+      fieldSkewY = p36(g[18], 100, fieldSkewY);
+      strokeMatch = p36(g[19]) === 1;
+      transparent = p36(g[20]) === 1;
+      if (g[21]) outlineColor = `#${g[21]}`;
+      if (g[22]) bg = `#${g[22]}`;
+      if (g[23]) customColors = unpackHex(g[23]);
+      seed = parts.slice(2).join('~') || seed; // remainder, in case a seed word holds '~'
     } catch {
       // Malformed token — keep defaults.
     }
   }
 
-  async function copyLink() {
-    const url = `${window.location.origin}${window.location.pathname}?s=${encodeState()}`;
-    try {
-      await navigator.clipboard.writeText(url);
-      copied = true;
-      clearTimeout(copyTimer);
-      copyTimer = setTimeout(() => (copied = false), 1600);
-    } catch {
-      // Clipboard unavailable.
-    }
+  // --- saved scenes -------------------------------------------------------
+  function applyScene(token: string) {
+    decodeState(token);
+    renderer?.recenter();
   }
+  const sceneSnapshot = () => renderer?.snapshot(transparent ? '#232329' : bg) ?? null;
+  $: sceneLabel = `${colorMode} · grid ${grid}`;
 
   onMount(() => {
     const token = new URLSearchParams(window.location.search).get('s');
@@ -271,14 +251,20 @@
   });
 </script>
 
-<svelte:head>
-  <title>Triangle Wrangler | heffner.dev</title>
-</svelte:head>
+<Metatags
+  title="Triangle Wrangler"
+  description="Generate a faceted, low-poly triangle scene."
+  ogMessage="Triangle Wrangler"
+/>
 
 <PlaygroundShell
   title="Triangle Wrangler"
   subtitle="Generate a faceted, low-poly triangle scene. On the canvas: scroll to zoom, drag to pan, double-click to recenter."
   lightChrome={chromeLight}
+  onShuffle={shuffle}
+  onReset={reset}
+  onSavePng={savePng}
+  onSaveScene={() => savedScenes?.saveCurrent()}
 >
   <Section title="Layout">
     <p class="hint">These control the containing canvas.</p>
@@ -380,11 +366,20 @@
     <Slider label="Skew" bind:value={skew} min={-1} max={1} step={0.01} />
   </Section>
 
+  <SavedScenes
+    bind:this={savedScenes}
+    slot="saved"
+    store={presets}
+    encode={encodeState}
+    apply={applyScene}
+    snapshot={sceneSnapshot}
+    {savePng}
+    label={sceneLabel}
+  />
+
   <svelte:fragment slot="footer">
-    <button class="btn" on:click={shuffle}>Shuffle</button>
-    <button class="btn" on:click={reset}>Reset</button>
-    <button class="btn accent" on:click={savePng}>Save PNG</button>
-    <button class="btn" on:click={copyLink}>{copied ? 'Link copied' : 'Copy link'}</button>
+    <button class="btn" on:click={shuffle}>Shuffle (F)</button>
+    <button class="btn" on:click={reset}>Reset (R)</button>
   </svelte:fragment>
 
   <main slot="preview" class="preview" class:checker={transparent} style={transparent ? '' : `background: ${bg};`}>

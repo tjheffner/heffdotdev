@@ -5,6 +5,10 @@
 
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { makeRng, hashSeed } from '$lib/playground/rng';
+  import { hslString as hsl } from '$lib/playground/color';
+  import { paletteColor as palette } from '$lib/playground/palette';
+  import CanvasStage, { type StageView } from './CanvasStage.svelte';
 
   // --- color ---------------------------------------------------------------
   export let bg = '#0a0a12';
@@ -41,99 +45,22 @@
   export let interactive = false; // enable drag-to-pan and scroll-to-zoom
   export let onRendered: (() => void) | undefined = undefined; // fires after each paint
 
-  let host: HTMLDivElement;
-  let canvas: HTMLCanvasElement;
+  // Camera/canvas live in CanvasStage; these mirror the current view so the
+  // draw helpers below can read them unchanged.
+  let stage: CanvasStage;
   let ctx: CanvasRenderingContext2D | null = null;
-  let ro: ResizeObserver | undefined;
-
   let mounted = false;
   let w = 0;
   let h = 0;
-  let dpr = 1;
-
-  // Pan offset (px), applied on top of the centered layout. Drag to move.
   let panX = 0;
   let panY = 0;
-  let dragging = false;
 
   const TAU = Math.PI * 2;
-  const clamp = (n: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, n));
 
-  // --- seeded rng (mulberry32) --------------------------------------------
-  // Hash an arbitrary seed string to a uint32 (FNV-1a) so any word works.
-  function hashSeed(str: string) {
-    let h = 2166136261 >>> 0;
-    for (let i = 0; i < str.length; i++) {
-      h ^= str.charCodeAt(i);
-      h = Math.imul(h, 16777619);
-    }
-    return h >>> 0;
-  }
-
-  function makeRng(s: number) {
-    let a = (s >>> 0) || 1;
-    return () => {
-      a |= 0;
-      a = (a + 0x6d2b79f5) | 0;
-      let t = Math.imul(a ^ (a >>> 15), 1 | a);
-      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-    };
-  }
-
-  // Convert #rrggbb to an { h, s, l } triple so custom colors flow through the
-  // same lightness-jitter and stroke logic as the generated palettes.
-  function hexToHsl(hex: string): { h: number; s: number; l: number } {
-    const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
-    if (!m) return { h: 0, s: 0, l: 60 };
-    const int = parseInt(m[1], 16);
-    const r = (int >> 16) / 255;
-    const g = ((int >> 8) & 255) / 255;
-    const b = (int & 255) / 255;
-    const max = Math.max(r, g, b);
-    const min = Math.min(r, g, b);
-    const l = (max + min) / 2;
-    let h = 0;
-    let s = 0;
-    const d = max - min;
-    if (d !== 0) {
-      s = d / (1 - Math.abs(2 * l - 1));
-      if (max === r) h = ((g - b) / d) % 6;
-      else if (max === g) h = (b - r) / d + 2;
-      else h = (r - g) / d + 4;
-      h *= 60;
-      if (h < 0) h += 360;
-    }
-    return { h, s: s * 100, l: l * 100 };
-  }
-
-  // --- palette -------------------------------------------------------------
   // `t` is a random value per shard, so the palette controls the *range* of
   // colors while each triangle lands somewhere random within it.
-  function paletteColor(t: number): { h: number; s: number; l: number } {
-    switch (colorMode) {
-      case 'spectrum':
-        return { h: (hue + t * hueSpread + 360) % 360, s: sat, l: light };
-      case 'duo': {
-        const partner = (hue + hueSpread) % 360;
-        const d = ((partner - hue + 540) % 360) - 180; // short arc
-        const k = t < 0.5 ? 0 : 1; // hard split into two hues
-        return { h: (hue + d * k + 360) % 360, s: sat, l: light + (t - 0.5) * 20 };
-      }
-      case 'mono':
-        // Vary lightness per shard, but centered on the Light slider so it
-        // actually shifts the canvas (not just the sidebar swatch).
-        return { h: hue, s: sat * 0.5, l: light + (t - 0.5) * 44 };
-      case 'custom': {
-        if (!customColors.length) return { h: hue, s: sat, l: light };
-        const i = Math.min(customColors.length - 1, Math.floor(t * customColors.length));
-        return hexToHsl(customColors[i]);
-      }
-    }
-  }
-
-  const hsl = (c: { h: number; s: number; l: number }) =>
-    `hsl(${c.h.toFixed(0)}, ${c.s.toFixed(0)}%, ${clamp(c.l, 0, 100).toFixed(0)}%)`;
+  const paletteColor = (t: number) =>
+    palette(colorMode, { hue, hueSpread, sat, light, customColors }, t);
 
   // --- scene ---------------------------------------------------------------
   type Shard = { p: number[]; c: { h: number; s: number; l: number } };
@@ -316,10 +243,15 @@
   }
 
   // --- drawing -------------------------------------------------------------
-  function render() {
-    if (!ctx) return;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, w, h);
+  // The stage clears + sets the dpr transform and passes the current camera; we
+  // mirror w/h/panX/panY so the layout math (which uses the `zoom` prop) is
+  // unchanged.
+  function draw(context: CanvasRenderingContext2D, view: StageView) {
+    ctx = context;
+    w = view.w;
+    h = view.h;
+    panX = view.panX;
+    panY = view.panY;
     if (!transparent) {
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, w, h);
@@ -348,214 +280,44 @@
         ctx.stroke();
       }
     }
-    onRendered?.();
-  }
-
-  // --- luminance sampling --------------------------------------------------
-  // Average perceived brightness of the top strip of the *rendered* canvas, so
-  // overlaid chrome can flip light/dark against whatever is actually under it
-  // (art included, and wherever the user has panned/zoomed to). Cheap: the
-  // strip is downscaled into a tiny scratch canvas via drawImage, so only a
-  // few hundred pixels are read back rather than the full multi-MB strip.
-  let scratch: HTMLCanvasElement | undefined;
-  let sctx: CanvasRenderingContext2D | null = null;
-
-  function hexRgb(hex: string): { r: number; g: number; b: number } {
-    const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
-    if (!m) return { r: 20, g: 20, b: 26 };
-    const int = parseInt(m[1], 16);
-    return { r: (int >> 16) & 255, g: (int >> 8) & 255, b: int & 255 };
-  }
-
-  // Returns 0..1 perceived luminance of the top `stripFrac` of the canvas, or
-  // null if it can't sample yet.
-  export function sampleLuminance(stripFrac = 0.16): number | null {
-    if (!canvas || canvas.width === 0 || canvas.height === 0) return null;
-    if (!scratch) {
-      scratch = document.createElement('canvas');
-      scratch.width = 48;
-      scratch.height = 8;
-      sctx = scratch.getContext('2d', { willReadFrequently: true });
-    }
-    if (!sctx) return null;
-    // Pre-fill with the effective backdrop so semi-transparent canvas pixels
-    // (transparent mode) composite over what actually shows behind them.
-    const bd = transparent ? { r: 0x23, g: 0x23, b: 0x29 } : hexRgb(bg);
-    sctx.clearRect(0, 0, 48, 8);
-    sctx.fillStyle = `rgb(${bd.r}, ${bd.g}, ${bd.b})`;
-    sctx.fillRect(0, 0, 48, 8);
-    const sh = Math.max(1, Math.round(canvas.height * stripFrac));
-    sctx.drawImage(canvas, 0, 0, canvas.width, sh, 0, 0, 48, 8);
-    let data: Uint8ClampedArray;
-    try {
-      data = sctx.getImageData(0, 0, 48, 8).data;
-    } catch {
-      return null;
-    }
-    let sum = 0;
-    let n = 0;
-    for (let i = 0; i < data.length; i += 4) {
-      sum += 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
-      n++;
-    }
-    return n ? sum / n / 255 : null;
   }
 
   function redraw() {
     buildShards();
-    render();
+    stage?.paint();
   }
 
-  // Rebuild + repaint whenever anything scene-defining changes. Deps are
-  // referenced explicitly so Svelte re-runs this block; the call itself is
-  // opaque to the compiler.
+  // Rebuild + repaint whenever anything scene-defining changes. `zoom` is left
+  // out — the stage repaints on zoom without needing to rebuild the shards.
   $: if (
     mounted &&
-    (void [shape, seed, grid, jitter, explode, warp, rotate, skew, fieldRotate, fieldWarp, taper, fieldSkewX, fieldSkewY, zoom, hue, hueSpread, sat, light, colorMode, customColors, bg, transparent, stroke, outlineColor, strokeMatch], true)
+    (void [shape, seed, grid, jitter, explode, warp, rotate, skew, fieldRotate, fieldWarp, taper, fieldSkewX, fieldSkewY, hue, hueSpread, sat, light, colorMode, customColors, bg, transparent, stroke, outlineColor, strokeMatch], true)
   ) {
     redraw();
   }
 
-  function resize() {
-    if (!canvas || !host) return;
-    dpr = Math.min(2, window.devicePixelRatio || 1);
-    const rect = contained
-      ? host.getBoundingClientRect()
-      : { width: window.innerWidth, height: window.innerHeight };
-    w = Math.max(1, rect.width);
-    h = Math.max(1, rect.height);
-    canvas.width = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
-    canvas.style.width = `${w}px`;
-    canvas.style.height = `${h}px`;
-    render();
-  }
-
-  // --- drag-to-pan ---------------------------------------------------------
-  let dragStartX = 0;
-  let dragStartY = 0;
-  let panStartX = 0;
-  let panStartY = 0;
-
-  function onPointerDown(e: PointerEvent) {
-    if (!interactive) return;
-    dragging = true;
-    dragStartX = e.clientX;
-    dragStartY = e.clientY;
-    panStartX = panX;
-    panStartY = panY;
-    host.setPointerCapture?.(e.pointerId);
-  }
-  function onPointerMove(e: PointerEvent) {
-    if (!dragging) return;
-    panX = panStartX + (e.clientX - dragStartX);
-    panY = panStartY + (e.clientY - dragStartY);
-    render();
-  }
-  function onPointerUp(e: PointerEvent) {
-    if (!dragging) return;
-    dragging = false;
-    host.releasePointerCapture?.(e.pointerId);
-  }
-  export function recenter() {
-    panX = 0;
-    panY = 0;
-    render();
-  }
-  function onWheel(e: WheelEvent) {
-    if (!interactive) return;
-    e.preventDefault();
-    const rect = host.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
-    // Scene point currently under the cursor, so we can hold it in place.
-    const oldSize = Math.min(w, h) * 0.9 * zoom;
-    const oldOx = (w - oldSize) / 2 + panX;
-    const oldOy = (h - oldSize) / 2 + panY;
-    const nx = (mx - oldOx) / oldSize;
-    const ny = (my - oldOy) / oldSize;
-
-    const factor = Math.exp(-e.deltaY * 0.0015);
-    const nz = Math.min(zoomMax, Math.max(zoomMin, zoom * factor));
-    const newSize = Math.min(w, h) * 0.9 * nz;
-    panX = mx - nx * newSize - (w - newSize) / 2;
-    panY = my - ny * newSize - (h - newSize) / 2;
-    zoom = nz;
-    render();
-  }
-
-  // Public: download the current canvas as a PNG.
-  export function saveImage(
+  // Camera + export helpers forward to the stage; luminance folds in the
+  // effective backdrop this scene shows.
+  export const recenter = () => stage?.recenter();
+  export const snapshot = (bgFill: string, maxDim = 128) => stage?.snapshot(bgFill, maxDim) ?? null;
+  export const saveImage = (
     filename = `shatter-${String(seed).replace(/[^a-z0-9-_]+/gi, '-') || 'scene'}.png`
-  ) {
-    if (!canvas) return;
-    canvas.toBlob((blob) => {
-      if (!blob) return;
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
-      link.click();
-      URL.revokeObjectURL(url);
-    }, 'image/png');
-  }
+  ) => stage?.saveImage(filename);
+  export const sampleLuminance = (stripFrac = 0.16) =>
+    stage?.sampleLuminance(transparent ? '#232329' : bg, stripFrac) ?? null;
 
   onMount(() => {
-    ctx = canvas.getContext('2d');
     mounted = true;
-    resize();
-    buildShards();
-    render();
-
-    window.addEventListener('resize', resize);
-    if (contained && typeof ResizeObserver !== 'undefined') {
-      ro = new ResizeObserver(() => resize());
-      ro.observe(host);
-    }
-
-    return () => {
-      window.removeEventListener('resize', resize);
-      ro?.disconnect();
-    };
   });
 </script>
 
-<div
-  class="tri-field"
-  class:contained
-  class:interactive
-  class:dragging
-  bind:this={host}
-  aria-hidden="true"
-  on:pointerdown={onPointerDown}
-  on:pointermove={onPointerMove}
-  on:pointerup={onPointerUp}
-  on:pointercancel={onPointerUp}
-  on:dblclick={recenter}
-  on:wheel={onWheel}
->
-  <canvas bind:this={canvas}></canvas>
-</div>
-
-<style>
-  .tri-field {
-    position: fixed;
-    inset: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-  .tri-field.contained {
-    position: absolute;
-  }
-  .tri-field.interactive {
-    pointer-events: auto;
-    cursor: grab;
-    touch-action: none;
-  }
-  .tri-field.interactive.dragging {
-    cursor: grabbing;
-  }
-  canvas {
-    display: block;
-  }
-</style>
+<CanvasStage
+  bind:this={stage}
+  {draw}
+  bind:zoom
+  {zoomMin}
+  {zoomMax}
+  {contained}
+  {interactive}
+  {onRendered}
+/>

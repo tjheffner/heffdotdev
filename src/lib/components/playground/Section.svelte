@@ -3,6 +3,8 @@
   // card over the canvas. Pills sit in the shell's top row (flex order 0);
   // open cards flow onto the line(s) below the row-break (flex order 2).
   // Sections are independent — several can be open at once.
+  import { collapseSignal } from '$lib/playground/ui';
+
   export let title: string;
   export let open = false;
 
@@ -10,6 +12,17 @@
   const uid = `pg-sec-${Math.random().toString(36).slice(2, 8)}`;
 
   const toggle = () => (open = !open);
+
+  // Close when the shell hides the controls, so re-opening starts collapsed.
+  let _collapseSeen: number | undefined;
+  $: {
+    const v = $collapseSignal;
+    if (_collapseSeen === undefined) _collapseSeen = v;
+    else if (v !== _collapseSeen) {
+      _collapseSeen = v;
+      open = false;
+    }
+  }
 </script>
 
 <button

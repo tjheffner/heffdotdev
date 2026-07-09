@@ -7,13 +7,14 @@
   import { fuzzySearch } from './fuzzySearch'
 
   let { data } = $props();
-  let { items } = data
+  let { items } = $derived(data)
   let inputEl: HTMLInputElement = $state();
   let resultsEl: HTMLElement = $state();
 
   let list: (typeof items) = $state()
   let LIST_DISPLAY_LENGTH = 10
-  let isTruncated = $state(items?.length > LIST_DISPLAY_LENGTH);
+  let expanded = $state(false);
+  let isTruncated = $derived(!expanded && items?.length > LIST_DISPLAY_LENGTH);
 
   // https://github.com/paoloricciuti/sveltekit-search-params#how-to-use-it
   // v4 returns a single reactive proxy (params.filter / params.show), not stores.
@@ -118,7 +119,7 @@
         {@render emptyResults(
           null,
           'See more posts',
-          () => isTruncated = false
+          () => expanded = true
         )}
       {/if}
     {:else if params.filter && params.show.length === 0}

@@ -32,7 +32,7 @@
       <p>
         it is built with <a href="https://svelte.dev/docs/kit/introduction" target="_blank">sveltekit</a>.
         the codebase is <a href="https://github.com/tjheffner/heffdotdev">public on github</a> and hosted via netlify.
-      <a href="/heffdotdev-technical-details">this post</a> explains more about the tools I chose and why.</p>
+      <a href="/heffdotdev-technical-details">this post</a> (and later, <a href="/2025-site-updates">this one</a>) explains more about the tools I chose and why.</p>
     </Details>
 
     <Details title="contact" linked>

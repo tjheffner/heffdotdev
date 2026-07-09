@@ -26,9 +26,9 @@
   }: Props = $props();
 
   const path = page.url.pathname;
-  const titleWithSuffix = (SITE_TITLE === title) ? title : (title ? title + ' | ' : '') + SITE_TITLE;
+  const titleWithSuffix = $derived((SITE_TITLE === title) ? title : (title ? title + ' | ' : '') + SITE_TITLE);
   const fullURI = `${SITE_URL}${path}`;
-  const fullCanonical = `${SITE_URL}/${canonical}` 
+  const fullCanonical = $derived(`${SITE_URL}/${canonical}`)
 </script>
 
 <svelte:head>

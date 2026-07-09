@@ -3,7 +3,7 @@
   import Metatags from "$lib/components/Metatags.svelte"
 
   let { data } = $props();
-  let { items } = data
+  let { items } = $derived(data)
 </script>
 
 <Metatags 

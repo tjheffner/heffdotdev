@@ -6,14 +6,19 @@
   // full-bleed immersive on their own.
   const experiments = [
     {
-      href: '/playground/glowfield',
-      title: 'Glowfield',
-      blurb: 'Tune an ambient, scroll-reactive cloud of light.',
+      href: '/playground/kaleidoscope',
+      title: 'Kaleidoscope',
+      blurb: 'Mirror a wedge of shapes into a symmetric bloom.',
     },
     {
       href: '/playground/triangles',
       title: 'Triangle Wrangler',
       blurb: 'Generate a faceted, low-poly triangle scene.',
+    },
+    {
+      href: '/playground/glowfield',
+      title: 'Glowfield',
+      blurb: 'Tune an ambient, scroll-reactive cloud of light.',
     },
     {
       href: '/christmas',
@@ -25,7 +30,7 @@
 
 <Metatags
   title="Playground"
-  description="Interactive experiments and toys."
+  description="Interactive experiments and one-offs."
   ogMessage="Playground"
 />
 
