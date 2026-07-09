@@ -12,6 +12,7 @@
       <div class="flex" data-density-shift>
         <NavLink href="/blog">Posts</NavLink>
         <NavLink href="/gallery">Gallery</NavLink>
+        <NavLink href="/playground">Playground</NavLink>
         <NavLink href="/about">About</NavLink>
       </div>
     </nav>
