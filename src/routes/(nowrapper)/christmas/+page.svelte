@@ -1,7 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import { DEFAULT_OG_IMAGE } from '$lib/siteConfig'
   import './christmas.css'
   let { data } = $props();
+
+  const ogImage = `${DEFAULT_OG_IMAGE}?message=christmas%20dinner!`
 
   // https://codepen.io/HektorW/pen/ZBryeV
   onMount(() => {
@@ -120,14 +123,8 @@
     href="https://fonts.googleapis.com/css2?family=Gloock&family=Pragati+Narrow"
   />
   <meta name="description" content="christmas dinner 2023" />
-  <meta
-    property="og:image"
-    content={`https://heffner.dev/og?message=christmas%20dinner!`}
-  />
-  <meta
-    name="twitter:image"
-    content={`https://heffner.dev/og?message=christmas%20dinner!`}
-  />
+  <meta property="og:image" content={ogImage} />
+  <meta name="twitter:image" content={ogImage} />
 </svelte:head>
 
 <canvas id="snow"></canvas>
