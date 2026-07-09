@@ -1,6 +1,8 @@
 <script lang="ts">
   import { dev } from '$app/environment';
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
+  import { moveInArray } from '$lib/playground/reorder';
+  import { hslToHex } from '$lib/playground/color';
   import Glowfield from '$lib/components/playground/Glowfield.svelte';
   import Slider from '$lib/components/playground/Slider.svelte';
   import PlaygroundShell from '$lib/components/playground/PlaygroundShell.svelte';
@@ -166,6 +168,46 @@
     layers = layers.filter((_, idx) => idx !== i);
   }
 
+  // --- reorder (drag & drop, plus keyboard) -------------------------------
+  // Order is paint order (screen-blended), so restacking changes the mix. Each
+  // layer has a grip handle; the whole card is a drop target.
+  let dragIndex: number | null = null;
+  let overIndex: number | null = null;
+  let handleEls: HTMLButtonElement[] = [];
+
+  function onDragStart(e: DragEvent, i: number) {
+    dragIndex = i;
+    if (e.dataTransfer) {
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', String(i));
+      const card = (e.currentTarget as HTMLElement).closest('.layer');
+      if (card) e.dataTransfer.setDragImage(card, 16, 16);
+    }
+  }
+  function onDragOver(e: DragEvent, i: number) {
+    if (dragIndex === null) return;
+    e.preventDefault();
+    if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+    overIndex = i;
+  }
+  function onDrop(i: number) {
+    if (dragIndex !== null) layers = moveInArray(layers, dragIndex, i);
+    dragIndex = null;
+    overIndex = null;
+  }
+  function onDragEnd() {
+    dragIndex = null;
+    overIndex = null;
+  }
+  async function onHandleKey(e: KeyboardEvent, i: number) {
+    const to = e.key === 'ArrowUp' ? i - 1 : e.key === 'ArrowDown' ? i + 1 : i;
+    if (to === i || to < 0 || to >= layers.length) return;
+    e.preventDefault();
+    layers = moveInArray(layers, i, to);
+    await tick();
+    handleEls[to]?.focus();
+  }
+
   function randomizeAll() {
     const count = Math.floor(rnd(3, 9)); // 3–8 blobs, like shuffle
     layers = Array.from({ length: count }, (_, i) => randomLayer(i, count));
@@ -184,6 +226,9 @@
     _prevSpread = anchorSpread;
     _prevRainbowSat = rainbowSat;
     anchor = { x: round(rnd(0.2, 0.8), 2), y: round(rnd(0.15, 0.6), 2) };
+    // A dark backdrop — the glow is screen-blended on top, so keep lightness very
+    // low with only a subtle tint.
+    bg = hslToHex(Math.round(rnd(0, 360)), Math.round(rnd(0, 40)), Math.round(rnd(4, 12)));
     const count = Math.floor(rnd(3, 9)); // 3–8 layers
     layers = Array.from({ length: count }, (_, i) => randomLayer(i, count));
   }
@@ -494,9 +539,27 @@ ${layerLines}
     {#each layers as layer, i (layer)}
       <!-- Delete sits outside <summary> to avoid nested-interactive; it's
         overlaid on the header row and stays visible when the layer collapses. -->
-      <div class="layer">
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <div
+        class="layer"
+        class:dragging={dragIndex === i}
+        class:drop-target={overIndex === i && dragIndex !== null && dragIndex !== i}
+        on:dragover={(e) => onDragOver(e, i)}
+        on:drop={() => onDrop(i)}
+        on:dragend={onDragEnd}
+      >
       <details bind:open={layer.open}>
         <summary>
+          <button
+            class="drag-handle"
+            bind:this={handleEls[i]}
+            draggable="true"
+            title="Drag to reorder (or ↑/↓)"
+            aria-label="Reorder layer {i + 1} of {layers.length}"
+            on:click|preventDefault|stopPropagation
+            on:dragstart={(e) => onDragStart(e, i)}
+            on:keydown={(e) => onHandleKey(e, i)}
+          >⠿</button>
           <span
             class="swatch"
             style="background: radial-gradient(circle, hsl({layer.h}, {layer.s}%, {layer.l}%) 0%, transparent 72%);"
@@ -652,6 +715,38 @@ ${layerLines}
     border: 1px solid var(--pg-line);
     border-radius: 6px;
     background: #14141a;
+    transition: border-color 120ms ease, opacity 120ms ease;
+  }
+  .layer.dragging {
+    opacity: 0.4;
+  }
+  .layer.drop-target {
+    border-color: var(--pg-accent, #ff6b35);
+  }
+  .drag-handle {
+    flex: none;
+    width: 16px;
+    margin: -0.2rem 0 -0.2rem -0.2rem;
+    padding: 0.2rem 0;
+    font: inherit;
+    font-size: 0.8rem;
+    line-height: 1;
+    color: var(--pg-dim);
+    background: transparent;
+    border: none;
+    cursor: grab;
+    touch-action: none;
+  }
+  .drag-handle:hover {
+    color: var(--pg-text);
+  }
+  .drag-handle:active {
+    cursor: grabbing;
+  }
+  .drag-handle:focus-visible {
+    outline: 2px solid var(--pg-accent);
+    outline-offset: 1px;
+    border-radius: 3px;
   }
   .layer summary {
     display: flex;

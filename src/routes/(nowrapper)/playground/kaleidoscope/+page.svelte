@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
+  import { moveInArray } from '$lib/playground/reorder';
   import Kaleidoscope, {
     KALE_SHAPES
   } from '$lib/components/playground/Kaleidoscope.svelte';
@@ -110,6 +111,46 @@
   }
   function removeItem(i: number) {
     items = items.filter((_, idx) => idx !== i);
+  }
+
+  // --- reorder (drag & drop, plus keyboard) -------------------------------
+  // Order is draw order, so reordering restacks the shapes. Each item carries a
+  // grip handle; the whole card is a drop target.
+  let dragIndex: number | null = null;
+  let overIndex: number | null = null;
+  let handleEls: HTMLButtonElement[] = [];
+
+  function onDragStart(e: DragEvent, i: number) {
+    dragIndex = i;
+    if (e.dataTransfer) {
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', String(i));
+      const card = (e.currentTarget as HTMLElement).closest('.item');
+      if (card) e.dataTransfer.setDragImage(card, 16, 16);
+    }
+  }
+  function onDragOver(e: DragEvent, i: number) {
+    if (dragIndex === null) return;
+    e.preventDefault();
+    if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+    overIndex = i;
+  }
+  function onDrop(i: number) {
+    if (dragIndex !== null) items = moveInArray(items, dragIndex, i);
+    dragIndex = null;
+    overIndex = null;
+  }
+  function onDragEnd() {
+    dragIndex = null;
+    overIndex = null;
+  }
+  async function onHandleKey(e: KeyboardEvent, i: number) {
+    const to = e.key === 'ArrowUp' ? i - 1 : e.key === 'ArrowDown' ? i + 1 : i;
+    if (to === i || to < 0 || to >= items.length) return;
+    e.preventDefault();
+    items = moveInArray(items, i, to);
+    await tick();
+    handleEls[to]?.focus(); // keep focus on the moved item so it can move again
   }
   function duplicateItem(i: number) {
     const copy: KaleItem = {
@@ -448,9 +489,27 @@
     </div>
     <p class="hint">Each shape in the segment. It's mirrored across every seam, so tweaks ripple out symmetrically.</p>
     {#each items as item, i (item)}
-      <div class="item">
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <div
+        class="item"
+        class:dragging={dragIndex === i}
+        class:drop-target={overIndex === i && dragIndex !== null && dragIndex !== i}
+        on:dragover={(e) => onDragOver(e, i)}
+        on:drop={() => onDrop(i)}
+        on:dragend={onDragEnd}
+      >
         <details bind:open={item.open}>
           <summary>
+            <button
+              class="drag-handle"
+              bind:this={handleEls[i]}
+              draggable="true"
+              title="Drag to reorder (or ↑/↓)"
+              aria-label="Reorder {SHAPE_LABELS[item.shape]}, item {i + 1} of {items.length}"
+              on:click|preventDefault|stopPropagation
+              on:dragstart={(e) => onDragStart(e, i)}
+              on:keydown={(e) => onHandleKey(e, i)}
+            >⠿</button>
             <span class="swatch" style="background: {item.color};"></span>
             <span class="item-name">{SHAPE_LABELS[item.shape]}</span>
             <span class="item-meta">{Math.round(item.size * 100) / 100}</span>
@@ -604,6 +663,38 @@
     border: 1px solid var(--pg-line);
     border-radius: 6px;
     background: #14141a;
+    transition: border-color 120ms ease, opacity 120ms ease;
+  }
+  .item.dragging {
+    opacity: 0.4;
+  }
+  .item.drop-target {
+    border-color: var(--pg-accent);
+  }
+  .drag-handle {
+    flex: none;
+    width: 16px;
+    margin: -0.2rem 0 -0.2rem -0.2rem;
+    padding: 0.2rem 0;
+    font: inherit;
+    font-size: 0.8rem;
+    line-height: 1;
+    color: var(--pg-dim);
+    background: transparent;
+    border: none;
+    cursor: grab;
+    touch-action: none;
+  }
+  .drag-handle:hover {
+    color: var(--pg-text);
+  }
+  .drag-handle:active {
+    cursor: grabbing;
+  }
+  .drag-handle:focus-visible {
+    outline: 2px solid var(--pg-accent);
+    outline-offset: 1px;
+    border-radius: 3px;
   }
   .item summary {
     display: flex;
