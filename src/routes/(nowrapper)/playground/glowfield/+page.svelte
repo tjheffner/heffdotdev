@@ -2,6 +2,8 @@
   import { dev } from '$app/environment';
   import Glowfield from '$lib/components/playground/Glowfield.svelte';
   import Slider from '$lib/components/playground/Slider.svelte';
+  import PlaygroundShell from '$lib/components/playground/PlaygroundShell.svelte';
+  import Section from '$lib/components/playground/Section.svelte';
 
   type Layer = {
     sz: number; ox: number; oy: number; a: number;
@@ -12,24 +14,34 @@
 
   type ColorMode = 'anchor' | 'rainbow' | 'mono';
 
-  // --- state ------------------------------------------------------------
-
-  let layers: Layer[] = [
+  // --- defaults (shared by initial state and Reset) ---------------------
+  const INITIAL_LAYERS: Layer[] = [
     { sz: 688, ox: 0,    oy: 0,    a: 0.5,  h: 16, s: 100, l: 60, fx: 0.31, fy: 0.26, ax: 120, ay: 95,  ph: 0.0, open: true },
     { sz: 569, ox: -210, oy: -88,  a: 0.38, h: 6,  s: 100, l: 57, fx: 0.23, fy: 0.37, ax: 130, ay: 105, ph: 1.7, open: false },
     { sz: 643, ox: 238,  oy: 104,  a: 0.4,  h: 28, s: 100, l: 62, fx: 0.27, fy: 0.18, ax: 125, ay: 110, ph: 3.1, open: false },
     { sz: 397, ox: 92,   oy: -212, a: 0.34, h: 13, s: 96,  l: 66, fx: 0.41, fy: 0.33, ax: 110, ay: 115, ph: 4.6, open: false }
   ];
+  const INITIAL = {
+    anchor: { x: 0.68, y: 0.3 },
+    intensity: { header: 1.0, middle: 0.34, footer: 0.9 },
+    depth: 0,
+    bg: '#0b0b0e',
+    colorMode: 'anchor' as ColorMode,
+    anchorHue: 16
+  };
 
-  let anchor = { x: 0.68, y: 0.3 };
-  let intensity = { header: 1.0, middle: 0.34, footer: 0.9 };
-  let depth = 0;
-  let bg = '#0b0b0e';
+  // --- state ------------------------------------------------------------
+
+  let layers: Layer[] = INITIAL_LAYERS.map((l) => ({ ...l }));
+  let anchor = { ...INITIAL.anchor };
+  let intensity = { ...INITIAL.intensity };
+  let depth = INITIAL.depth;
+  let bg = INITIAL.bg;
   let copied = false;
   let copyTimer: ReturnType<typeof setTimeout>;
 
-  let colorMode: ColorMode = 'anchor';
-  let anchorHue = 16;
+  let colorMode: ColorMode = INITIAL.colorMode;
+  let anchorHue = INITIAL.anchorHue;
   let _prevHue = anchorHue;
 
   // --- color generation ---------------------------------------------------
@@ -131,6 +143,28 @@
     }));
   }
 
+  // Shuffle re-rolls the color mode/hue, anchor, layer count, and every layer;
+  // Reset restores the defaults.
+  function shuffle() {
+    const modes: ColorMode[] = ['anchor', 'rainbow', 'mono'];
+    colorMode = modes[Math.floor(Math.random() * modes.length)];
+    anchorHue = Math.round(rnd(0, 360));
+    _prevHue = anchorHue; // keep the hue-watch reactive from double-recoloring
+    anchor = { x: round(rnd(0.2, 0.8), 2), y: round(rnd(0.15, 0.6), 2) };
+    const count = Math.floor(rnd(3, 9)); // 3–8 layers
+    layers = Array.from({ length: count }, (_, i) => randomLayer(i, count));
+  }
+  function reset() {
+    layers = INITIAL_LAYERS.map((l) => ({ ...l }));
+    anchor = { ...INITIAL.anchor };
+    intensity = { ...INITIAL.intensity };
+    depth = INITIAL.depth;
+    bg = INITIAL.bg;
+    colorMode = INITIAL.colorMode;
+    anchorHue = INITIAL.anchorHue;
+    _prevHue = anchorHue;
+  }
+
   // --- intensity curve graph ---------------------------------------------
   // The curve function reads `intensity` from closure, but Svelte's compiler
   // only tracks top-level variable references inside $: blocks — it can't
@@ -207,154 +241,119 @@ ${layerLines}
   <title>Glowfield playground</title>
 </svelte:head>
 
-<div class="playground">
-  <aside class="sidebar">
-    <header class="panel-head">
-      <h1>Glowfield</h1>
-      <p>Tune the ambient cloud{dev ? ', then copy the config into your page' : ''}.</p>
-    </header>
+<PlaygroundShell
+  title="Glowfield"
+  subtitle="Tune the ambient cloud{dev ? ', then copy the config into your page' : ''}."
+>
+  <Section title="Scene">
+    <Slider label="Anchor X" bind:value={anchor.x} min={0} max={1} step={0.01} />
+    <Slider label="Anchor Y" bind:value={anchor.y} min={0} max={1} step={0.01} />
+    <label class="color-row">
+      <span class="lab">Backdrop</span>
+      <input type="color" bind:value={bg} />
+      <span class="val">{bg}</span>
+    </label>
 
-    <details class="group collapsible" open>
-      <summary>
-        <h2>Scene</h2>
-        <span class="chev" aria-hidden="true"></span>
-      </summary>
-      <div class="collapsible-body">
-        <Slider label="Anchor X" bind:value={anchor.x} min={0} max={1} step={0.01} />
-        <Slider label="Anchor Y" bind:value={anchor.y} min={0} max={1} step={0.01} />
-        <label class="color-row">
-          <span class="lab">Backdrop</span>
-          <input type="color" bind:value={bg} />
-          <span class="val">{bg}</span>
-        </label>
-
-        <div class="mode-row">
-          <span class="lab">Color</span>
-          <div class="mode-btns">
-            <button
-              class="mode-btn"
-              class:active={colorMode === 'anchor'}
-              on:click={() => applyColorMode('anchor')}
-            >Anchor</button>
-            <button
-              class="mode-btn"
-              class:active={colorMode === 'rainbow'}
-              on:click={() => applyColorMode('rainbow')}
-            >Rainbow</button>
-            <button
-              class="mode-btn"
-              class:active={colorMode === 'mono'}
-              on:click={() => applyColorMode('mono')}
-            >B/W</button>
-          </div>
-        </div>
-
-        {#if colorMode === 'anchor'}
-          <div class="hue-row">
-            <span
-              class="hue-swatch"
-              style="background: hsl({anchorHue}, 100%, 60%);"
-            ></span>
-            <Slider label="Hue" bind:value={anchorHue} min={0} max={360} step={1} />
-          </div>
-        {/if}
+    <div class="mode-row">
+      <span class="lab">Color</span>
+      <div class="mode-btns">
+        <button class="mode-btn" class:active={colorMode === 'anchor'} on:click={() => applyColorMode('anchor')}>Anchor</button>
+        <button class="mode-btn" class:active={colorMode === 'rainbow'} on:click={() => applyColorMode('rainbow')}>Rainbow</button>
+        <button class="mode-btn" class:active={colorMode === 'mono'} on:click={() => applyColorMode('mono')}>B/W</button>
       </div>
-    </details>
+    </div>
 
-    <details class="group collapsible">
-      <summary>
-        <h2>Scroll intensity</h2>
-        <span class="chev" aria-hidden="true"></span>
-      </summary>
-      <div class="collapsible-body">
-        <svg class="curve" viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-label="Opacity across scroll depth">
-          <line x1="0" y1="36" x2="100" y2="36" class="axis" />
-          <path d={curvePath} class="trace" />
-          <line x1={markerX} y1="4" x2={markerX} y2="36" class="cursor" />
-          <circle cx={markerX} cy={markerY} r="2.4" class="dot" />
-        </svg>
-        <Slider label="Depth" bind:value={depth} min={0} max={1} step={0.001} />
-        <Slider label="Header" bind:value={intensity.header} min={0} max={1.2} step={0.01} />
-        <Slider label="Middle" bind:value={intensity.middle} min={0} max={1.2} step={0.01} />
-        <Slider label="Footer" bind:value={intensity.footer} min={0} max={1.2} step={0.01} />
-        <p class="hint">Depth simulates page scroll: 0 is the header, 1 is the footer.</p>
+    {#if colorMode === 'anchor'}
+      <div class="hue-row">
+        <span class="hue-swatch" style="background: hsl({anchorHue}, 100%, 60%);"></span>
+        <Slider label="Hue" bind:value={anchorHue} min={0} max={360} step={1} />
       </div>
-    </details>
+    {/if}
+  </Section>
 
-    <details class="group collapsible" open>
-      <summary>
-        <h2>Layers · {layers.length}</h2>
-        <div class="group-actions">
-          <button class="btn" on:click|preventDefault|stopPropagation={addLayer}>Add</button>
-          <button class="btn" on:click|preventDefault|stopPropagation={randomizeAll}>Randomize</button>
-        </div>
-        <span class="chev" aria-hidden="true"></span>
-      </summary>
-      <div class="collapsible-body">
-        {#each layers as layer, i (layer)}
-          <details class="layer" bind:open={layer.open}>
-            <summary>
-              <span
-                class="swatch"
-                style="background: radial-gradient(circle, hsl({layer.h}, {layer.s}%, {layer.l}%) 0%, transparent 72%);"
-              ></span>
-              <span class="layer-name">Layer {i + 1}</span>
-              <span class="layer-meta">{layer.sz}px · h{Math.round(layer.h)}</span>
-              <button
-                class="layer-delete"
-                title="Delete layer {i + 1}"
-                aria-label="Delete layer {i + 1}"
-                disabled={layers.length <= 1}
-                on:click|preventDefault|stopPropagation={() => removeLayer(i)}
-              >×</button>
-            </summary>
+  <Section title="Scroll intensity" open={false}>
+    <svg class="curve" viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-label="Opacity across scroll depth">
+      <line x1="0" y1="36" x2="100" y2="36" class="axis" />
+      <path d={curvePath} class="trace" />
+      <line x1={markerX} y1="4" x2={markerX} y2="36" class="cursor" />
+      <circle cx={markerX} cy={markerY} r="2.4" class="dot" />
+    </svg>
+    <Slider label="Depth" bind:value={depth} min={0} max={1} step={0.001} />
+    <Slider label="Header" bind:value={intensity.header} min={0} max={1.2} step={0.01} />
+    <Slider label="Middle" bind:value={intensity.middle} min={0} max={1.2} step={0.01} />
+    <Slider label="Footer" bind:value={intensity.footer} min={0} max={1.2} step={0.01} />
+    <p class="hint">Depth simulates page scroll: 0 is the header, 1 is the footer.</p>
+  </Section>
 
-            <div class="layer-body">
-              <h3>Shape</h3>
-              <Slider label="Size" bind:value={layer.sz} min={100} max={1200} step={1} unit="px" />
-              <Slider label="Offset X" bind:value={layer.ox} min={-600} max={600} step={1} unit="px" />
-              <Slider label="Offset Y" bind:value={layer.oy} min={-600} max={600} step={1} unit="px" />
-              <Slider label="Weight" bind:value={layer.a} min={0} max={1} step={0.01} />
-
-              <h3>Color</h3>
-              <Slider label="Hue" bind:value={layer.h} min={0} max={360} step={1} />
-              <Slider label="Sat" bind:value={layer.s} min={0} max={100} step={1} unit="%" />
-              <Slider label="Light" bind:value={layer.l} min={20} max={90} step={1} unit="%" />
-
-              <h3>Drift</h3>
-              <Slider label="Freq X" bind:value={layer.fx} min={0.05} max={1} step={0.01} />
-              <Slider label="Freq Y" bind:value={layer.fy} min={0.05} max={1} step={0.01} />
-              <Slider label="Amp X" bind:value={layer.ax} min={0} max={300} step={1} unit="px" />
-              <Slider label="Amp Y" bind:value={layer.ay} min={0} max={300} step={1} unit="px" />
-              <Slider label="Phase" bind:value={layer.ph} min={0} max={6.28} step={0.01} />
-
-              <div class="layer-actions">
-                <button class="btn" on:click={() => duplicateLayer(i)}>Duplicate</button>
-              </div>
-            </div>
-          </details>
-        {/each}
-      </div>
-    </details>
-
-    {#if dev}
-      <details class="group collapsible">
+  <Section title={`Layers · ${layers.length}`}>
+    <div slot="actions" class="group-actions">
+      <button class="btn" on:click|preventDefault|stopPropagation={addLayer}>Add</button>
+      <button class="btn" on:click|preventDefault|stopPropagation={randomizeAll}>Randomize</button>
+    </div>
+    {#each layers as layer, i (layer)}
+      <details class="layer" bind:open={layer.open}>
         <summary>
-          <h2>Config</h2>
+          <span
+            class="swatch"
+            style="background: radial-gradient(circle, hsl({layer.h}, {layer.s}%, {layer.l}%) 0%, transparent 72%);"
+          ></span>
+          <span class="layer-name">Layer {i + 1}</span>
+          <span class="layer-meta">{layer.sz}px · h{Math.round(layer.h)}</span>
           <button
-            class="btn accent"
-            on:click|preventDefault|stopPropagation={copyConfig}
-          >{copied ? 'Copied' : 'Copy'}</button>
-          <span class="chev" aria-hidden="true"></span>
+            class="layer-delete"
+            title="Delete layer {i + 1}"
+            aria-label="Delete layer {i + 1}"
+            disabled={layers.length <= 1}
+            on:click|preventDefault|stopPropagation={() => removeLayer(i)}
+          >×</button>
         </summary>
-        <div class="collapsible-body">
-          <pre class="config">{configText}</pre>
+
+        <div class="layer-body">
+          <h3>Shape</h3>
+          <Slider label="Size" bind:value={layer.sz} min={100} max={1200} step={1} unit="px" />
+          <Slider label="Offset X" bind:value={layer.ox} min={-600} max={600} step={1} unit="px" />
+          <Slider label="Offset Y" bind:value={layer.oy} min={-600} max={600} step={1} unit="px" />
+          <Slider label="Weight" bind:value={layer.a} min={0} max={1} step={0.01} />
+
+          <h3>Color</h3>
+          <Slider label="Hue" bind:value={layer.h} min={0} max={360} step={1} />
+          <Slider label="Sat" bind:value={layer.s} min={0} max={100} step={1} unit="%" />
+          <Slider label="Light" bind:value={layer.l} min={20} max={90} step={1} unit="%" />
+
+          <h3>Drift</h3>
+          <Slider label="Freq X" bind:value={layer.fx} min={0.05} max={1} step={0.01} />
+          <Slider label="Freq Y" bind:value={layer.fy} min={0.05} max={1} step={0.01} />
+          <Slider label="Amp X" bind:value={layer.ax} min={0} max={300} step={1} unit="px" />
+          <Slider label="Amp Y" bind:value={layer.ay} min={0} max={300} step={1} unit="px" />
+          <Slider label="Phase" bind:value={layer.ph} min={0} max={6.28} step={0.01} />
+
+          <div class="layer-actions">
+            <button class="btn" on:click={() => duplicateLayer(i)}>Duplicate</button>
+          </div>
         </div>
       </details>
-    {/if}
-  </aside>
+    {/each}
+  </Section>
 
-  <main class="preview" style="background: {bg};">
+  {#if dev}
+    <Section title="Config" open={false}>
+      <button
+        slot="actions"
+        class="btn accent"
+        on:click|preventDefault|stopPropagation={copyConfig}
+      >{copied ? 'Copied' : 'Copy'}</button>
+      <pre class="config">{configText}</pre>
+    </Section>
+  {/if}
+
+  <svelte:fragment slot="footer">
+    <div class="scene-actions">
+      <button class="btn" on:click={shuffle}>Shuffle</button>
+      <button class="btn" on:click={reset}>Reset</button>
+    </div>
+  </svelte:fragment>
+
+  <main slot="preview" class="preview" style="background: {bg};">
     <Glowfield
       {layers}
       {anchor}
@@ -366,210 +365,10 @@ ${layerLines}
       <span>preview · depth {depth.toFixed(2)}</span>
     </div>
   </main>
-</div>
+</PlaygroundShell>
 
 <style>
-  :global(html, body) {
-    margin: 0;
-  }
-
-  .playground {
-    --pg-bg: #101015;
-    --pg-panel: #16161c;
-    --pg-line: #26262e;
-    --pg-text: #e8e8ec;
-    --pg-dim: #8a8a93;
-    --pg-accent: #ff6b35;
-    --pg-track: #2a2a31;
-
-    display: grid;
-    grid-template-columns: 340px 1fr;
-    height: 100vh;
-    height: 100dvh;
-    font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
-    color: var(--pg-text);
-    background: var(--pg-bg);
-  }
-
-  /* --- sidebar --------------------------------------------------------- */
-
-  .sidebar {
-    overflow-y: auto;
-    border-right: 1px solid var(--pg-line);
-    background: var(--pg-panel);
-    padding: 1.1rem 1rem 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    scrollbar-width: thin;
-    scrollbar-color: var(--pg-line) transparent;
-  }
-  .sidebar::-webkit-scrollbar {
-    width: 6px;
-  }
-  .sidebar::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .sidebar::-webkit-scrollbar-thumb {
-    background: var(--pg-line);
-    border-radius: 3px;
-  }
-  .sidebar::-webkit-scrollbar-thumb:hover {
-    background: var(--pg-dim);
-  }
-
-  .panel-head h1 {
-    margin: 0;
-    font-size: 0.95rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-  .panel-head p {
-    margin: 0.35rem 0 0;
-    font-size: 0.72rem;
-    line-height: 1.5;
-    color: var(--pg-dim);
-  }
-
-  .group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--pg-line);
-  }
-  .group h2 {
-    margin: 0 0 0.2rem;
-    font-size: 0.66rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--pg-dim);
-  }
-  .group-actions {
-    display: flex;
-    gap: 0.4rem;
-  }
-
-  .hint {
-    margin: 0.1rem 0 0;
-    font-size: 0.66rem;
-    line-height: 1.5;
-    color: var(--pg-dim);
-  }
-
-  /* --- collapsible sidebar groups ---------------------------------------- */
-
-  .collapsible > summary {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    list-style: none;
-    user-select: none;
-  }
-  .collapsible > summary::-webkit-details-marker {
-    display: none;
-  }
-  .collapsible > summary:focus-visible {
-    outline: 2px solid var(--pg-accent);
-    outline-offset: 2px;
-    border-radius: 4px;
-  }
-  .collapsible > summary h2 {
-    margin: 0;
-    flex: 1;
-  }
-  .chev {
-    width: 7px;
-    height: 7px;
-    flex: none;
-    border-right: 1.5px solid var(--pg-dim);
-    border-bottom: 1.5px solid var(--pg-dim);
-    transform: rotate(-45deg);
-    transition: transform 120ms ease;
-  }
-  .collapsible[open] > summary .chev {
-    transform: rotate(45deg);
-  }
-  .collapsible-body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-    padding-top: 0.55rem;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .chev {
-      transition: none;
-    }
-  }
-
-  /* --- color mode -------------------------------------------------------- */
-
-  .mode-row {
-    display: grid;
-    grid-template-columns: 3.4rem 1fr;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.7rem;
-  }
-  .mode-row .lab {
-    color: var(--pg-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-  .mode-btns {
-    display: flex;
-    gap: 0;
-    border: 1px solid var(--pg-line);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  .mode-btn {
-    flex: 1;
-    font: inherit;
-    font-size: 0.62rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--pg-dim);
-    background: transparent;
-    border: none;
-    border-right: 1px solid var(--pg-line);
-    padding: 0.3rem 0;
-    cursor: pointer;
-    transition: background 100ms ease, color 100ms ease;
-  }
-  .mode-btn:last-child {
-    border-right: none;
-  }
-  .mode-btn:hover {
-    color: var(--pg-text);
-  }
-  .mode-btn.active {
-    background: var(--pg-line);
-    color: var(--pg-text);
-  }
-  .mode-btn:focus-visible {
-    outline: 2px solid var(--pg-accent);
-    outline-offset: -2px;
-  }
-
-  .hue-row {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .hue-swatch {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    flex: none;
-    box-shadow: 0 0 6px 1px currentColor;
-  }
-  .hue-row :global(.slider) {
-    flex: 1;
-  }
+  /* Glowfield-specific bits; shared sidebar styling lives in PlaygroundShell. */
 
   /* --- intensity curve --------------------------------------------------- */
 
@@ -688,62 +487,6 @@ ${layerLines}
     margin-top: 0.5rem;
   }
 
-  /* --- buttons & inputs ---------------------------------------------------- */
-
-  .btn {
-    font: inherit;
-    font-size: 0.66rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--pg-text);
-    background: transparent;
-    border: 1px solid var(--pg-line);
-    border-radius: 4px;
-    padding: 0.3rem 0.6rem;
-    cursor: pointer;
-  }
-  .btn:hover {
-    border-color: var(--pg-dim);
-  }
-  .btn:focus-visible {
-    outline: 2px solid var(--pg-accent);
-    outline-offset: 2px;
-  }
-  .btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-  .btn.accent {
-    border-color: var(--pg-accent);
-    color: var(--pg-accent);
-  }
-
-  .color-row {
-    display: grid;
-    grid-template-columns: 3.4rem auto 1fr;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.7rem;
-  }
-  .color-row .lab {
-    color: var(--pg-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-  .color-row .val {
-    color: var(--pg-text);
-    text-align: right;
-  }
-  .color-row input[type='color'] {
-    width: 34px;
-    height: 22px;
-    padding: 0;
-    border: 1px solid var(--pg-line);
-    border-radius: 4px;
-    background: none;
-    cursor: pointer;
-  }
-
   .config {
     margin: 0;
     padding: 0.6rem;
@@ -756,44 +499,5 @@ ${layerLines}
     overflow-x: auto;
     white-space: pre;
     max-height: 220px;
-  }
-
-  /* --- preview ------------------------------------------------------------ */
-
-  .preview {
-    position: relative;
-    overflow: hidden;
-  }
-  .preview-frame {
-    position: absolute;
-    left: 0.9rem;
-    bottom: 0.75rem;
-    z-index: 1;
-    pointer-events: none;
-  }
-  .preview-frame span {
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.35);
-  }
-
-  /* --- responsive ---------------------------------------------------------- */
-
-  @media (max-width: 800px) {
-    .playground {
-      grid-template-columns: 1fr;
-      grid-template-rows: 45vh 1fr;
-      height: auto;
-      min-height: 100dvh;
-    }
-    .preview {
-      order: -1;
-      min-height: 45vh;
-    }
-    .sidebar {
-      border-right: none;
-      border-top: 1px solid var(--pg-line);
-    }
   }
 </style>

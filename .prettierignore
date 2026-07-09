@@ -4,3 +4,4 @@ build/**
 node_modules/**
 .netlify/**
 .github/ISSUE_TEMPLATE/**
+.claude/**

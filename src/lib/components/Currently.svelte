@@ -6,14 +6,17 @@
     duolingo
   } = $props();
 
-  // duolingo math
-  const streakStartDate = new Date(duolingo.streakData.currentStreak.startDate);
+  // duolingo math — duolingo may be an empty object if the (unofficial) API
+  // was unreachable at load time, so guard every access.
+  const currentStreak = duolingo?.streakData?.currentStreak;
+  const streakStartDate = currentStreak ? new Date(currentStreak.startDate) : null;
   const formattedDate = streakStartDate
-    .toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric'})
+    ? streakStartDate.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric'})
+    : '';
   const today = new Date();
-  const diff = Math.abs(today.valueOf() - streakStartDate.valueOf())
+  const diff = streakStartDate ? Math.abs(today.valueOf() - streakStartDate.valueOf()) : 0
   const days = Math.floor(diff/(86400 * 1000))
-  const freezes = days - duolingo.streak
+  const freezes = days - (duolingo?.streak ?? 0)
 
   // https://dev.to/jorik/country-code-to-flag-emoji-a21
   function getFlagEmoji(countryCode) {

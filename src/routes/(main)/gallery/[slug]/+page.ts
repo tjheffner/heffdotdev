@@ -1,5 +1,5 @@
 import type { GalleryItem } from '$lib/types'
-import type { PageLoadEvent } from '../$types'
+import type { PageLoadEvent } from './$types'
 
 import { error } from '@sveltejs/kit'
 import { REPO_URL } from '$lib/siteConfig'

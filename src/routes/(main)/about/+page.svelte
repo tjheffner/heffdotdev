@@ -25,7 +25,7 @@
     <Details title="about this site" tall linked>
       <p>heffner.dev is perpetually under construction, same as me 🏄‍♂️</p>
 
-      <p>parts <a href="/blog">blog,</a> and <a href="/gallery">photo gallery,</a> a dash of <a href="/about/latest">activity tracker,</a> and some <a href="/christmas">playground</a> too. 
+      <p>parts <a href="/blog">blog,</a> and <a href="/gallery">photo gallery,</a> a dash of <a href="/about/latest">activity tracker,</a> and some <a href="/playground">playground</a> too. 
          this website is my own personal <a href="https://joelhooks.com/digital-garden" target="_blank">digital garden</a>
       </p>
 

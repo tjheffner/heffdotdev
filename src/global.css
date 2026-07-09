@@ -41,7 +41,7 @@
     interpolate-size: allow-keywords;
   }
 }
-body {
+body:not([data-group='nowrapper']) {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 
@@ -64,25 +64,14 @@ select {
   font: inherit;
 }
 
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+body:not([data-group='nowrapper']) :is(p, h1, h2, h3, h4, h5, h6) {
   overflow-wrap: break-word;
   color: var(--c-text);
 }
 p {
   text-wrap: pretty;
 }
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+body:not([data-group='nowrapper']) :is(h1, h2, h3, h4, h5, h6) {
   text-wrap: balance;
   font-family: 'Merriweather', serif;
 }
@@ -92,23 +81,19 @@ h6 {
 }
 
 /* type scale */
-h1,
-.h1 {
+body:not([data-group='nowrapper']) :is(h1, .h1) {
   font-size: 2.75em;
   line-height: 1.1;
   margin-bottom: var(--space-away);
 }
-h2,
-.h2 {
+body:not([data-group='nowrapper']) :is(h2, .h2) {
   font-size: 1.6583em;
 }
-h3,
-.h3, h4, h5, h6 {
+body:not([data-group='nowrapper']) :is(h3, .h3, h4, h5, h6) {
   font-size: 1.401em;
   margin-bottom: var(--space-near);
 }
-small,
-.small {
+body:not([data-group='nowrapper']) :is(small, .small) {
   font-size: 0.8448em;
   display: block;
   margin-bottom: var(--space-near);
@@ -151,13 +136,13 @@ body [data-density-shift] [data-density-shift] {
   color: var(--c-accent);
 }
 
-hr {
+body:not([data-group='nowrapper']) hr {
   width: 100%;
   border: 1px solid var(--c-accent);
   margin: var(--space-away) 0;
 }
 
-img {
+body:not([data-group='nowrapper']) img {
   /* https://ishadeed.com/article/defensive-css */
   max-width: 100%;
   object-fit: cover;
@@ -229,7 +214,7 @@ h2 > a,
   p {
     margin: var(--space-near) 0;
   }
-  ul, 
+  ul,
   ol,
   img,
   table,
@@ -253,7 +238,8 @@ h2 > a,
   tr:nth-child(even) {
     background-color: var(--c-secondary-brighter);
   }
-  th, td {
+  th,
+  td {
     padding: var(--space-near);
   }
 
@@ -263,10 +249,10 @@ h2 > a,
     font-size: 1.6583em;
   }
   blockquote p:first-of-type::before {
-    content: '',
+    content: '';
   }
   blockquote p:last-of-type::after {
-    content: '',
+    content: '';
   }
 
   pre {
