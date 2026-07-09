@@ -125,7 +125,7 @@
   /* Overlay panel: pulled out of flow so it floats over page content instead
      of pushing it down. */
   .links {
-    display: none;
+    display: flex;
     position: absolute;
     top: 100%;
     left: 0;
@@ -136,9 +136,25 @@
     padding: var(--space-away) 0;
     background-color: var(--c-background);
     border-bottom: 2px solid var(--c-accent);
+
+    /* Hidden until open; fade + slide down. visibility is delayed on close so
+       the fade-out can play before it leaves the a11y tree / tab order. */
+    opacity: 0;
+    transform: translateY(-0.5rem);
+    visibility: hidden;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      visibility 0s linear 0.2s;
   }
   .links.open {
-    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      visibility 0s;
   }
 
   /* At/above the site breakpoint: inline row, no toggle, no overlay. */
@@ -160,11 +176,17 @@
       padding: 0;
       background-color: transparent;
       border-bottom: none;
+      /* Reset the mobile overlay's animated-hidden state. */
+      opacity: 1;
+      transform: none;
+      visibility: visible;
+      transition: none;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .line {
+    .line,
+    .links {
       transition: none;
     }
   }
