@@ -43,15 +43,15 @@
     <p class="pillbox-label"> Category: </p>
     <div class="pills">
       {#each categories as availableCategory}
-        <div 
+        <div
           class="filter"
-          class:active={$selectedCategories.includes(availableCategory)}
+          class:active={selectedCategories.includes(availableCategory)}
         >
           <input
             id="category-{availableCategory}"
             class="sr-only"
             type="checkbox"
-            bind:group={$selectedCategories}
+            bind:group={selectedCategories}
             value={availableCategory}
           />
           <label
