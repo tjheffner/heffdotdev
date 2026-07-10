@@ -108,13 +108,17 @@
   <div class="control-layer" class:hidden={controlsHidden}>
     <div class="control-bar">
       <!-- Easter egg: reads as a plain title, but clicking it reveals an info
-           card with the description and a link back to all experiments. -->
-      <button
-        class="title-chip"
-        aria-expanded={titleOpen}
-        aria-controls={titleCardId}
-        on:click={() => (titleOpen = !titleOpen)}
-      >{title}</button>
+           card with the description and a link back to all experiments. Wrapped
+           in an <h1> so each immersive page has a proper top-level heading (the
+           heading wraps the button, which stays the interactive/visual chip). -->
+      <h1 class="title-heading">
+        <button
+          class="title-chip"
+          aria-expanded={titleOpen}
+          aria-controls={titleCardId}
+          on:click={() => (titleOpen = !titleOpen)}
+        >{title}</button>
+      </h1>
       {#if titleOpen}
         <section class="title-card" id={titleCardId} aria-label={`About ${title}`}>
           <header class="title-card-head">
@@ -225,6 +229,17 @@
     order: 1;
     flex-basis: 100%;
     height: 0;
+  }
+
+  /* The heading wraps the chip but stays layout-neutral: it becomes the flex
+     item (order 0, where the chip used to sit) and imposes no box of its own. */
+  .title-heading {
+    order: 0;
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    font: inherit;
   }
 
   /* Easter egg: styled exactly like the old static title — no chip background,
