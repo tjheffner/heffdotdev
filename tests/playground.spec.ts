@@ -32,7 +32,11 @@ test('Playground index renders without a11y errors', async ({
 const experiments = [
   { name: 'Poolside', path: '/playground/poolside', preview: 'canvas' },
   { name: 'Kaleidoscope', path: '/playground/kaleidoscope', preview: 'canvas' },
-  { name: 'Triangle Wrangler', path: '/playground/triangles', preview: 'canvas' },
+  {
+    name: 'Triangle Wrangler',
+    path: '/playground/triangles',
+    preview: 'canvas',
+  },
   { name: 'Glowfield', path: '/playground/glowfield', preview: '.glow-field' },
 ] as const
 
