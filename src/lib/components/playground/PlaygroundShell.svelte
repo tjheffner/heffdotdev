@@ -21,6 +21,7 @@
   export let onShuffle: (() => void) | undefined = undefined;
   export let onReset: (() => void) | undefined = undefined;
   export let onSavePng: (() => void) | undefined = undefined;
+  export let onSaveVideo: (() => void) | undefined = undefined;
   export let onSaveScene: (() => void) | undefined = undefined;
 
   // Perceived luminance (Rec. 601). Light backdrop → dark chrome, and vice versa.
@@ -45,6 +46,7 @@
     ...(onShuffle ? [{ k: 'F', label: 'Shuffle' }] : []),
     ...(onReset ? [{ k: 'R', label: 'Reset' }] : []),
     ...(onSavePng ? [{ k: 'P', label: 'Save PNG' }] : []),
+    ...(onSaveVideo ? [{ k: 'V', label: 'Save video' }] : []),
     ...(onSaveScene ? [{ k: 'S', label: 'Save scene' }] : [])
   ];
 
@@ -88,6 +90,9 @@
     } else if (k === 'p' && onSavePng) {
       onSavePng();
       e.preventDefault();
+    } else if (k === 'v' && onSaveVideo) {
+      onSaveVideo();
+      e.preventDefault();
     } else if (k === 's' && onSaveScene) {
       onSaveScene();
       e.preventDefault();
@@ -103,13 +108,17 @@
   <div class="control-layer" class:hidden={controlsHidden}>
     <div class="control-bar">
       <!-- Easter egg: reads as a plain title, but clicking it reveals an info
-           card with the description and a link back to all experiments. -->
-      <button
-        class="title-chip"
-        aria-expanded={titleOpen}
-        aria-controls={titleCardId}
-        on:click={() => (titleOpen = !titleOpen)}
-      >{title}</button>
+           card with the description and a link back to all experiments. Wrapped
+           in an <h1> so each immersive page has a proper top-level heading (the
+           heading wraps the button, which stays the interactive/visual chip). -->
+      <h1 class="title-heading">
+        <button
+          class="title-chip"
+          aria-expanded={titleOpen}
+          aria-controls={titleCardId}
+          on:click={() => (titleOpen = !titleOpen)}
+        >{title}</button>
+      </h1>
       {#if titleOpen}
         <section class="title-card" id={titleCardId} aria-label={`About ${title}`}>
           <header class="title-card-head">
@@ -220,6 +229,17 @@
     order: 1;
     flex-basis: 100%;
     height: 0;
+  }
+
+  /* The heading wraps the chip but stays layout-neutral: it becomes the flex
+     item (order 0, where the chip used to sit) and imposes no box of its own. */
+  .title-heading {
+    order: 0;
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    font: inherit;
   }
 
   /* Easter egg: styled exactly like the old static title — no chip background,
@@ -450,11 +470,14 @@
     padding: 0.5rem 0.6rem;
   }
   :global(.playground .scene-actions) {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 0.5rem;
   }
-  :global(.playground .scene-actions .btn) {
-    flex: 1;
+  /* An odd trailing button spans the full width, so 3-button playgrounds don't
+     leave a lonely half-width cell (4-button Poolside stays a clean 2×2). */
+  :global(.playground .scene-actions .btn:last-child:nth-child(odd)) {
+    grid-column: 1 / -1;
   }
   :global(.playground .group-actions) {
     display: flex;

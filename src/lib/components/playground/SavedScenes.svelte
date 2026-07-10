@@ -12,6 +12,18 @@
   export let apply: (token: string) => void; // load a token back into the scene
   export let snapshot: (() => string | null) | undefined = undefined; // thumbnail dataURL
   export let savePng: (() => void) | undefined = undefined; // canvas export, if the playground has one
+  export let saveVideo: (() => void) | undefined = undefined; // video export, if the playground has one
+  export let videoLabel = 'Video (V)'; // page-supplied (shows recording progress)
+  export let videoBusy = false; // disable while a clip is encoding
+  export let videoSeconds = 6; // bindable clip length (seconds); the page reads it when recording
+  export let showLoop = false; // whether this playground supports seamless-loop clips
+  export let videoLoop = false; // bindable: record a seamless loop
+
+  // Keep the free-entry length a sane whole number of seconds.
+  function clampSeconds() {
+    const n = Math.round(Number(videoSeconds));
+    videoSeconds = Number.isFinite(n) ? Math.min(60, Math.max(1, n)) : 6;
+  }
   export let label = 'Scene'; // short name for the scene being saved
   export let param = 's'; // URL query key the page reads on load
   export let open = false;
@@ -86,11 +98,38 @@
 <Section title={`Saved (${presets.length})`} {open}>
   <div class="scene-actions">
     <button class="btn" on:click={saveCurrent}>Save (S)</button>
+    <button class="btn" on:click={copyCurrent}>{currentCopied ? 'Copied' : 'Copy link'}</button>
     {#if savePng}
       <button class="btn" on:click={savePng}>Save PNG (P)</button>
     {/if}
-    <button class="btn" on:click={copyCurrent}>{currentCopied ? 'Copied' : 'Copy link'}</button>
+    {#if saveVideo}
+      <button class="btn" on:click={saveVideo} disabled={videoBusy}>{videoLabel}</button>
+    {/if}
   </div>
+
+  {#if saveVideo}
+    <div class="video-opts">
+      <span class="lab">Clip</span>
+      <input
+        class="video-secs"
+        type="number"
+        min="1"
+        max="60"
+        step="1"
+        bind:value={videoSeconds}
+        on:blur={clampSeconds}
+        disabled={videoBusy}
+        aria-label="Clip length in seconds"
+      />
+      <span class="unit">s</span>
+      {#if showLoop}
+        <label class="loop-toggle">
+          <input type="checkbox" bind:checked={videoLoop} disabled={videoBusy} />
+          <span>Loop</span>
+        </label>
+      {/if}
+    </div>
+  {/if}
 
   {#if !presets.length}
     <p class="hint">
@@ -131,6 +170,52 @@
 </Section>
 
 <style>
+  .video-opts {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.7rem;
+  }
+  .video-opts .lab {
+    color: var(--pg-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .video-secs {
+    width: 2.6rem;
+    font: inherit;
+    font-size: 0.66rem;
+    color: var(--pg-text);
+    background: var(--pg-panel);
+    border: 1px solid var(--pg-line);
+    border-radius: 4px;
+    padding: 0.2rem 0.35rem;
+  }
+  .video-secs:focus-visible {
+    outline: 2px solid var(--pg-accent);
+    outline-offset: 1px;
+  }
+  .video-secs:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .video-opts .unit {
+    color: var(--pg-dim);
+    margin-left: -0.15rem;
+  }
+  .loop-toggle {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    cursor: pointer;
+    color: var(--pg-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .loop-toggle input {
+    accent-color: var(--pg-accent);
+  }
   .saved-list {
     list-style: none;
     margin: 0;

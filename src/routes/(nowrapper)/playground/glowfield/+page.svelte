@@ -10,6 +10,7 @@
   import Section from '$lib/components/playground/Section.svelte';
   import SavedScenes from '$lib/components/playground/SavedScenes.svelte';
   import { createPresetStore } from '$lib/playground/presets';
+  import { recordViewportClip } from '$lib/playground/video';
   import { n36, p36, unpackHex } from '$lib/playground/token';
 
   const presets = createPresetStore('glowfield');
@@ -26,20 +27,24 @@
 
   // --- defaults (shared by initial state and Reset) ---------------------
   const INITIAL_LAYERS: Layer[] = [
-    { sz: 688, ox: 0,    oy: 0,    a: 0.5,  h: 16, s: 100, l: 60, fx: 0.31, fy: 0.26, ax: 120, ay: 95,  ph: 0.0, open: true },
-    { sz: 569, ox: -210, oy: -88,  a: 0.38, h: 6,  s: 100, l: 57, fx: 0.23, fy: 0.37, ax: 130, ay: 105, ph: 1.7, open: false },
-    { sz: 643, ox: 238,  oy: 104,  a: 0.4,  h: 28, s: 100, l: 62, fx: 0.27, fy: 0.18, ax: 125, ay: 110, ph: 3.1, open: false },
-    { sz: 397, ox: 92,   oy: -212, a: 0.34, h: 13, s: 96,  l: 66, fx: 0.41, fy: 0.33, ax: 110, ay: 115, ph: 4.6, open: false }
+    { sz: 710, ox: -29,  oy: -227, a: 0.43, h: 9,   s: 86, l: 59, fx: 0.3,  fy: 0.18, ax: 104, ay: 91,  ph: 4.12, open: true },
+    { sz: 710, ox: -139, oy: -165, a: 0.31, h: 38,  s: 86, l: 59, fx: 0.24, fy: 0.17, ax: 103, ay: 88,  ph: 2.02, open: false },
+    { sz: 387, ox: -34,  oy: 181,  a: 0.4,  h: 220, s: 86, l: 57, fx: 0.35, fy: 0.38, ax: 114, ay: 99,  ph: 2.14, open: false },
+    { sz: 501, ox: 34,   oy: -216, a: 0.49, h: 343, s: 86, l: 54, fx: 0.41, fy: 0.38, ax: 156, ay: 85,  ph: 2.98, open: false },
+    { sz: 359, ox: 187,  oy: -122, a: 0.44, h: 276, s: 86, l: 61, fx: 0.41, fy: 0.22, ax: 126, ay: 86,  ph: 3.5,  open: false },
+    { sz: 815, ox: 178,  oy: -24,  a: 0.44, h: 1,   s: 86, l: 67, fx: 0.17, fy: 0.27, ax: 101, ay: 126, ph: 3.21, open: false },
+    { sz: 501, ox: -5,   oy: 3,    a: 0.5,  h: 64,  s: 86, l: 68, fx: 0.4,  fy: 0.15, ax: 133, ay: 90,  ph: 0.78, open: false },
+    { sz: 397, ox: 265,  oy: -216, a: 0.35, h: 48,  s: 86, l: 58, fx: 0.25, fy: 0.25, ax: 136, ay: 98,  ph: 2.62, open: false }
   ];
   const INITIAL = {
-    anchor: { x: 0.68, y: 0.3 },
+    anchor: { x: 0.29, y: 0.46 },
     intensity: { header: 1.0, middle: 0.34, footer: 0.9 },
     depth: 0,
-    bg: '#0b0b0e',
-    colorMode: 'anchor' as ColorMode,
-    anchorHue: 16,
-    anchorSpread: 44,
-    rainbowSat: 90
+    bg: '#110d10',
+    colorMode: 'rainbow' as ColorMode,
+    anchorHue: 133,
+    anchorSpread: 278,
+    rainbowSat: 86
   };
 
   // --- state ------------------------------------------------------------
@@ -421,22 +426,27 @@ ${layerLines}
       ? intensity.header + (intensity.middle - intensity.header) * smooth(p / 0.5)
       : intensity.middle + (intensity.footer - intensity.middle) * smooth((p - 0.5) / 0.5);
 
-  // Glowfield is DOM gradients (no canvas), so both the thumbnail and the PNG are
-  // synthesized by painting the layers onto a canvas at the given size.
-  function paintGlow(W: number, H: number): HTMLCanvasElement | null {
-    const c = document.createElement('canvas');
-    c.width = W;
-    c.height = H;
-    const cx = c.getContext('2d');
-    if (!cx) return null;
+  // Glowfield is DOM gradients (no canvas), so the thumbnail, PNG and video are
+  // synthesized by painting the layers onto a canvas at the given size. `e` is
+  // the elapsed seconds of drift (0 = the static rest layout used by the PNG);
+  // the video passes an advancing `e` to reproduce the live wander (same formula
+  // as the renderer's `place()`).
+  function renderGlow(cx: CanvasRenderingContext2D, W: number, H: number, e = 0) {
+    cx.globalCompositeOperation = 'source-over';
     cx.fillStyle = bg;
     cx.fillRect(0, 0, W, H);
     cx.globalCompositeOperation = 'screen';
     const v = Math.max(0, intensityAt(depth));
     for (const l of layers) {
       const r = Math.max(1, l.sz / 2);
-      const px = anchor.x * W + l.ox;
-      const py = anchor.y * H + l.oy;
+      let dx = 0;
+      let dy = 0;
+      if (e) {
+        dx = (Math.sin(e * l.fx + l.ph) + 0.6 * Math.sin(e * l.fx * 1.73 + l.ph * 1.3)) * l.ax;
+        dy = (Math.cos(e * l.fy + l.ph) + 0.6 * Math.cos(e * l.fy * 1.91 + l.ph * 0.7)) * l.ay;
+      }
+      const px = anchor.x * W + l.ox + dx;
+      const py = anchor.y * H + l.oy + dy;
       const g = cx.createRadialGradient(px, py, 0, px, py, r);
       g.addColorStop(0, `hsla(${l.h}, ${l.s}%, ${l.l}%, ${(l.a * v).toFixed(3)})`);
       g.addColorStop(0.68, `hsla(${l.h}, ${l.s}%, ${l.l}%, 0)`);
@@ -445,6 +455,14 @@ ${layerLines}
       cx.arc(px, py, r, 0, Math.PI * 2);
       cx.fill();
     }
+  }
+  function paintGlow(W: number, H: number): HTMLCanvasElement | null {
+    const c = document.createElement('canvas');
+    c.width = W;
+    c.height = H;
+    const cx = c.getContext('2d');
+    if (!cx) return null;
+    renderGlow(cx, W, H);
     return c;
   }
   const viewportSize = () => ({
@@ -484,6 +502,35 @@ ${layerLines}
     }, 'image/png');
   }
 
+  // --- video capture ------------------------------------------------------
+  const CLIP_FPS = 30;
+  let videoSeconds = 6;
+  let recording = false;
+  let recordPct = 0;
+  let videoErr = false;
+
+  async function saveVideo() {
+    if (recording) return;
+    recording = true;
+    recordPct = 0;
+    videoErr = false;
+    try {
+      await recordViewportClip({
+        seconds: videoSeconds,
+        fps: CLIP_FPS,
+        filename: `glowfield-${String(Date.now()).slice(-6)}`,
+        draw: (ctx, i, W, H) => renderGlow(ctx, W, H, i / CLIP_FPS),
+        onProgress: (f) => (recordPct = Math.round(f * 100))
+      });
+    } catch (e) {
+      console.error('video export failed', e);
+      videoErr = true;
+      setTimeout(() => (videoErr = false), 2500);
+    } finally {
+      recording = false;
+    }
+  }
+
   onMount(() => {
     const token = new URLSearchParams(window.location.search).get('s');
     if (token) decodeState(token);
@@ -503,6 +550,7 @@ ${layerLines}
   onShuffle={shuffle}
   onReset={reset}
   onSavePng={savePng}
+  onSaveVideo={saveVideo}
   onSaveScene={() => savedScenes?.saveCurrent()}
 >
   <Section title="Scene">
@@ -646,6 +694,10 @@ ${layerLines}
     apply={applyScene}
     snapshot={glowThumb}
     {savePng}
+    {saveVideo}
+    videoLabel={recording ? `Rec ${recordPct}%` : videoErr ? 'No video' : 'Video (V)'}
+    videoBusy={recording}
+    bind:videoSeconds
     label={sceneLabel}
   >
     {#if dev}
