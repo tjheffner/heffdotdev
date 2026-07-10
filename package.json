@@ -24,6 +24,7 @@
     "hast-util-from-selector": "^3.0.0",
     "hast-util-select": "^6.0.2",
     "letterboxd": "^3.1.1",
+    "mp4-muxer": "^5.2.2",
     "parse-link-header": "^2.0.0",
     "remark": "^15.0.1",
     "remark-unwrap-images": "^4.0.0",

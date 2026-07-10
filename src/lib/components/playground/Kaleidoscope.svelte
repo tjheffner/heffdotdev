@@ -188,19 +188,43 @@
   let rafId = 0;
   let lastTs = 0;
 
+  // --- seamless-loop capture ----------------------------------------------
+  // For a seamless loop every time-varying sinusoid must complete a whole number
+  // of cycles over the clip. We can't pick one duration that closes them all
+  // (spin/drift/morph run at incommensurate rates, and morph's rate is per-item),
+  // so instead each sinusoid's total advance is *snapped* to an integer number of
+  // cycles: `phase(u) = base + round(advance·rate / 2π)·2π·u`. The round() makes
+  // the loop exactly seamless no matter what the advances are; the advances only
+  // decide how much motion the loop shows.
+  let looping = false;
+  let loopU = 0;
+  let spinClock0 = 0;
+  let morphClock0 = 0;
+  let spinAdvance = 0;
+  let morphAdvance = 0;
+  const spinPhase = (rate: number) =>
+    looping
+      ? spinClock0 * rate + Math.round((spinAdvance * rate) / TAU) * TAU * loopU
+      : spinClock * rate;
+  const morphPhase = (rate: number) =>
+    looping
+      ? morphClock0 * rate + Math.round((morphAdvance * rate) / TAU) * TAU * loopU
+      : morphClock * rate;
+
   // Per-item effective deform for this frame: the item's own value plus a sine
   // of the morph clock. Every sine is 0 at clock 0, so a still scene (clock
   // frozen at 0) is exactly the base values; once running, the clock advances
   // and the pattern breathes, holding in place whenever the speed returns to 0.
   function morphed(p: Prepared) {
     const it = p.it;
-    if (morphClock === 0) return { rot: it.rotate, skew: it.skew, warp: it.warp, twist: it.twist };
+    if (!looping && morphClock === 0)
+      return { rot: it.rotate, skew: it.skew, warp: it.warp, twist: it.twist };
     const f = p.freqMul;
     return {
-      rot: it.rotate + Math.sin(morphClock * 0.8 * f) * 45,
-      skew: it.skew + Math.sin(morphClock * 0.53 * f) * 0.3,
-      warp: it.warp + Math.sin(morphClock * 0.4 * f) * 0.25,
-      twist: it.twist + Math.sin(morphClock * 0.3 * f) * 0.4
+      rot: it.rotate + Math.sin(morphPhase(0.8 * f)) * 45,
+      skew: it.skew + Math.sin(morphPhase(0.53 * f)) * 0.3,
+      warp: it.warp + Math.sin(morphPhase(0.4 * f)) * 0.25,
+      twist: it.twist + Math.sin(morphPhase(0.3 * f)) * 0.4
     };
   }
 
@@ -291,7 +315,7 @@
     const a = TAU / slices;
     // Clock is frozen at 0 while still, so this is 0 for a static scene and
     // simply holds its angle whenever spin returns to 0 — no snap at the seam.
-    const fieldRot = spinClock * 0.7;
+    const fieldRot = spinPhase(0.7);
 
     ctx.save();
     ctx.translate(cx, cy);
@@ -327,8 +351,8 @@
     }
     // Both sines are 0 at clock 0, so a still sheet is undrifted; different
     // frequencies make it wander in 2D. Holds in place when spin returns to 0.
-    const driftX = Math.sin(spinClock * 0.2) * Math.min(w, h) * 0.15;
-    const driftY = Math.sin(spinClock * 0.17) * Math.min(w, h) * 0.15;
+    const driftX = Math.sin(spinPhase(0.2)) * Math.min(w, h) * 0.15;
+    const driftY = Math.sin(spinPhase(0.17)) * Math.min(w, h) * 0.15;
     const originX = w / 2 + panX + driftX;
     const originY = h / 2 + panY + driftY;
 
@@ -411,6 +435,7 @@
   }
 
   function syncAnimation(_a: number = animate, _s: number = spin) {
+    if (capturing) return; // recording drives the clocks itself
     const active = (spin !== 0 || animate > 0) && !prefersReducedMotion();
     if (active && !rafId) {
       lastTs = 0;
@@ -439,6 +464,73 @@
     stage?.saveImage(filename);
   export const sampleLuminance = (stripFrac = 0.16) =>
     stage?.sampleLuminance(transparent ? '#232329' : bg, stripFrac) ?? null;
+
+  // --- video capture -------------------------------------------------------
+  // draw() reads the shared motion clocks, so recording pauses the live loop and
+  // steps the clocks by hand. `startCapture` snapshots the current clocks; each
+  // `captureFrame(ctx, W, H, elapsed)` advances them at the live rate for a clip
+  // that matches what's on screen, painting centered at W×H.
+  let capturing = false;
+  let capSpin0 = 0;
+  let capMorph0 = 0;
+
+  export function startCapture() {
+    capturing = true;
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = 0;
+    capSpin0 = spinClock;
+    capMorph0 = morphClock;
+  }
+  export function endCapture() {
+    capturing = false;
+    spinClock = capSpin0;
+    morphClock = capMorph0;
+    syncAnimation();
+    stage?.paint();
+  }
+  export function captureFrame(
+    context: CanvasRenderingContext2D,
+    W: number,
+    H: number,
+    elapsed: number
+  ) {
+    spinClock = capSpin0 + elapsed * spin * 1.3;
+    morphClock = capMorph0 + elapsed * (animate * 1.6 + animate * animate * 2.2);
+    context.fillStyle = bg; // opaque frame even when the scene is transparent
+    context.fillRect(0, 0, W, H);
+    draw(context, { w: W, h: H, dpr: 1, panX: 0, panY: 0, zoom });
+  }
+
+  // Seamless-loop variant: `u` runs 0→1 over the clip. The phase helpers snap
+  // each sinusoid to whole cycles, so frame at u=1 equals frame at u=0.
+  export function startLoopCapture(seconds: number) {
+    capturing = true;
+    looping = true;
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = 0;
+    spinClock0 = spinClock;
+    morphClock0 = morphClock;
+    // Advances only decide how much motion the loop shows (round() guarantees the
+    // seam). Give the field at least one full turn when spinning, and the morph at
+    // least ~one cycle when animating, so short clips still read as moving.
+    const spinTurns = spin === 0 ? 0 : Math.sign(spin) * Math.max(1, Math.round(Math.abs(spin) * seconds * 0.5));
+    spinAdvance = spin === 0 ? 0 : (spinTurns * TAU) / 0.7; // fieldRot = spinTurns full turns
+    const morphRate = animate * 1.6 + animate * animate * 2.2;
+    morphAdvance = animate > 0 ? Math.max(morphRate * seconds, TAU / 0.8) : 0;
+  }
+  export function endLoopCapture() {
+    capturing = false;
+    looping = false;
+    loopU = 0;
+    syncAnimation();
+    stage?.paint();
+  }
+  export function captureLoopFrame(context: CanvasRenderingContext2D, W: number, H: number, u: number) {
+    loopU = u;
+    context.fillStyle = bg;
+    context.fillRect(0, 0, W, H);
+    draw(context, { w: W, h: H, dpr: 1, panX: 0, panY: 0, zoom });
+  }
 
   onMount(() => {
     mounted = true;

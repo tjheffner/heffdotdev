@@ -6,9 +6,14 @@
   // full-bleed immersive on their own.
   const experiments = [
     {
+      href: '/playground/poolside',
+      title: 'Poolside',
+      blurb: 'Shimmering light on a pool surface.',
+    },
+    {
       href: '/playground/kaleidoscope',
       title: 'Kaleidoscope',
-      blurb: 'Mirror a wedge of shapes into a symmetric bloom.',
+      blurb: 'Build your own symmetric bloom.',
     },
     {
       href: '/playground/triangles',

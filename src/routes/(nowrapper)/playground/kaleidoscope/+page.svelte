@@ -16,6 +16,7 @@
   import Section from '$lib/components/playground/Section.svelte';
   import SavedScenes from '$lib/components/playground/SavedScenes.svelte';
   import { createPresetStore } from '$lib/playground/presets';
+  import { recordViewportClip } from '$lib/playground/video';
   import { n36, p36, packHex, unpackHex } from '$lib/playground/token';
   import { rand, randInt, pick, round } from '$lib/playground/math';
   import { hslToHex } from '$lib/playground/color';
@@ -342,6 +343,41 @@
     renderer?.saveImage(`kaleidoscope-${shortId(encodeState())}.png`);
   }
 
+  // --- video capture ------------------------------------------------------
+  const CLIP_FPS = 30;
+  let videoSeconds = 6;
+  let videoLoop = false;
+  let recording = false;
+  let recordPct = 0;
+  let videoErr = false;
+
+  async function saveVideo() {
+    if (recording || !renderer) return;
+    recording = true;
+    recordPct = 0;
+    videoErr = false;
+    const loop = videoLoop;
+    try {
+      await recordViewportClip({
+        seconds: videoSeconds,
+        fps: CLIP_FPS,
+        filename: `kaleidoscope-${shortId(encodeState())}${loop ? '-loop' : ''}`,
+        before: () => (loop ? renderer.startLoopCapture(videoSeconds) : renderer.startCapture()),
+        after: () => (loop ? renderer.endLoopCapture() : renderer.endCapture()),
+        draw: loop
+          ? (ctx, i, W, H, frames) => renderer.captureLoopFrame(ctx, W, H, i / frames)
+          : (ctx, i, W, H) => renderer.captureFrame(ctx, W, H, i / CLIP_FPS),
+        onProgress: (f) => (recordPct = Math.round(f * 100))
+      });
+    } catch (e) {
+      console.error('video export failed', e);
+      videoErr = true;
+      setTimeout(() => (videoErr = false), 2500);
+    } finally {
+      recording = false;
+    }
+  }
+
   // --- saved scenes -------------------------------------------------------
   function applyScene(token: string) {
     decodeState(token);
@@ -398,6 +434,7 @@
   onShuffle={shuffle}
   onReset={reset}
   onSavePng={savePng}
+  onSaveVideo={saveVideo}
   onSaveScene={() => savedScenes?.saveCurrent()}
 >
   <Section title="Layout">
@@ -573,6 +610,12 @@
     apply={applyScene}
     snapshot={sceneSnapshot}
     {savePng}
+    {saveVideo}
+    videoLabel={recording ? `Rec ${recordPct}%` : videoErr ? 'No video' : 'Video (V)'}
+    videoBusy={recording}
+    bind:videoSeconds
+    showLoop
+    bind:videoLoop
     label={sceneLabel}
   />
 

@@ -21,6 +21,7 @@
   export let onShuffle: (() => void) | undefined = undefined;
   export let onReset: (() => void) | undefined = undefined;
   export let onSavePng: (() => void) | undefined = undefined;
+  export let onSaveVideo: (() => void) | undefined = undefined;
   export let onSaveScene: (() => void) | undefined = undefined;
 
   // Perceived luminance (Rec. 601). Light backdrop → dark chrome, and vice versa.
@@ -45,6 +46,7 @@
     ...(onShuffle ? [{ k: 'F', label: 'Shuffle' }] : []),
     ...(onReset ? [{ k: 'R', label: 'Reset' }] : []),
     ...(onSavePng ? [{ k: 'P', label: 'Save PNG' }] : []),
+    ...(onSaveVideo ? [{ k: 'V', label: 'Save video' }] : []),
     ...(onSaveScene ? [{ k: 'S', label: 'Save scene' }] : [])
   ];
 
@@ -87,6 +89,9 @@
       e.preventDefault();
     } else if (k === 'p' && onSavePng) {
       onSavePng();
+      e.preventDefault();
+    } else if (k === 'v' && onSaveVideo) {
+      onSaveVideo();
       e.preventDefault();
     } else if (k === 's' && onSaveScene) {
       onSaveScene();
@@ -450,11 +455,14 @@
     padding: 0.5rem 0.6rem;
   }
   :global(.playground .scene-actions) {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 0.5rem;
   }
-  :global(.playground .scene-actions .btn) {
-    flex: 1;
+  /* An odd trailing button spans the full width, so 3-button playgrounds don't
+     leave a lonely half-width cell (4-button Poolside stays a clean 2×2). */
+  :global(.playground .scene-actions .btn:last-child:nth-child(odd)) {
+    grid-column: 1 / -1;
   }
   :global(.playground .group-actions) {
     display: flex;
