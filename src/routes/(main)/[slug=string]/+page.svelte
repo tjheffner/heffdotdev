@@ -3,6 +3,7 @@
   import Comments from '$lib/components/Comments.svelte'
   import Metatags from '$lib/components/Metatags.svelte'
   import TableOfContents from '$lib/components/TableOfContents.svelte';
+  import { lightbox } from '$lib/actions/lightbox';
   import { Toc } from '@svelte-put/toc';
 
   import '$lib/code-highlight.css'
@@ -49,7 +50,7 @@
 
   <hr />
 
-  <div class="prose">
+  <div class="prose" use:lightbox>
     {@html json.content}
   </div>
 </article>

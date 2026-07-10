@@ -6,10 +6,6 @@ export default function rehypeZoomImages(options = { selector: 'img' }) {
   return (tree) => {
     for (const match of selectAll(options.selector, tree)) {
       visit(tree, match, (node, i, parent) => {
-        const wrapper = fromSelector('div.zoom ')
-        const label = fromSelector('label')
-        const checkbox = fromSelector('input[type="checkbox"]')
-
         node.properties.loading = 'lazy'
         // add class for bg color before loading
         node.properties.class = 'lazy-image'
@@ -20,12 +16,17 @@ export default function rehypeZoomImages(options = { selector: 'img' }) {
         // copy alt to title for caption on hover
         node.properties.title = node.properties.alt
 
-        // add id to checkbox
-        checkbox.properties.name = `image-${i}`
+        // wrap in a focusable button so the image can be opened in the
+        // lightbox dialog by both pointer and keyboard. The interactive
+        // behavior is wired up client-side by the `lightbox` action.
+        const trigger = fromSelector('button.zoom-trigger')
+        trigger.properties.type = 'button'
+        trigger.properties['aria-label'] = node.properties.alt
+          ? `Enlarge image: ${node.properties.alt}`
+          : 'Enlarge image'
 
-        label.children = [checkbox, node]
-        wrapper.children = [label]
-        parent.children[i] = wrapper
+        trigger.children = [node]
+        parent.children[i] = trigger
       })
     }
   }
