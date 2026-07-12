@@ -252,13 +252,13 @@
 </script>
 
 <Metatags
-  title="Triangle Wrangler"
+  title="Shatter"
   description="Generate a faceted, low-poly triangle scene."
-  ogMessage="Triangle Wrangler"
+  ogMessage="Shatter"
 />
 
 <PlaygroundShell
-  title="Triangle Wrangler"
+  title="Shatter"
   subtitle="Generate a faceted, low-poly triangle scene. On the canvas: scroll to zoom, drag to pan, double-click to recenter."
   lightChrome={chromeLight}
   onShuffle={shuffle}

@@ -17,7 +17,7 @@
     },
     {
       href: '/playground/triangles',
-      title: 'Triangle Wrangler',
+      title: 'Shatter',
       blurb: 'Generate a faceted, low-poly triangle scene.',
     },
     {
