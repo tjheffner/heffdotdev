@@ -27,7 +27,7 @@
     "mp4-muxer": "^5.2.2",
     "parse-link-header": "^2.0.0",
     "remark": "^15.0.1",
-    "remark-unwrap-images": "^4.0.0",
+    "remark-unwrap-images": "^5.0.0",
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
