@@ -20,6 +20,7 @@
   // supplies the ones it has; missing ones simply do nothing.
   export let onShuffle: (() => void) | undefined = undefined;
   export let onReset: (() => void) | undefined = undefined;
+  export let onUndo: (() => void) | undefined = undefined;
   export let onSavePng: (() => void) | undefined = undefined;
   export let onSaveVideo: (() => void) | undefined = undefined;
   export let onSaveScene: (() => void) | undefined = undefined;
@@ -45,6 +46,7 @@
     { k: '/', label: 'Toggle controls' },
     ...(onShuffle ? [{ k: 'F', label: 'Shuffle' }] : []),
     ...(onReset ? [{ k: 'R', label: 'Reset' }] : []),
+    ...(onUndo ? [{ k: 'Z', label: 'Undo' }] : []),
     ...(onSavePng ? [{ k: 'P', label: 'Save PNG' }] : []),
     ...(onSaveVideo ? [{ k: 'V', label: 'Save video' }] : []),
     ...(onSaveScene ? [{ k: 'S', label: 'Save scene' }] : [])
@@ -86,6 +88,9 @@
       e.preventDefault();
     } else if (k === 'r' && onReset) {
       onReset();
+      e.preventDefault();
+    } else if (k === 'z' && onUndo) {
+      onUndo();
       e.preventDefault();
     } else if (k === 'p' && onSavePng) {
       onSavePng();
@@ -139,8 +144,13 @@
       {/if}
       <slot />
       <div class="row-break" aria-hidden="true"></div>
-      {#if $$slots.footer}
-        <div class="bar-actions"><slot name="footer" /></div>
+      {#if $$slots.footer || onUndo}
+        <div class="bar-actions">
+          <slot name="footer" />
+          {#if onUndo}
+            <button class="btn" on:click={onUndo} title="Return to the previous scene — works across a refresh">Undo (Z)</button>
+          {/if}
+        </div>
       {/if}
       <!-- Sits in the right cluster (after the action buttons, before Hide); its
            card still drops below via the order-2 / row-break mechanism. -->

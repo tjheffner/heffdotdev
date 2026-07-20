@@ -8,6 +8,7 @@
   import Section from '$lib/components/playground/Section.svelte';
   import SavedScenes from '$lib/components/playground/SavedScenes.svelte';
   import { createPresetStore } from '$lib/playground/presets';
+  import { createHistory } from '$lib/playground/history';
   import { n36, p36, packHex, unpackHex } from '$lib/playground/token';
   import { rand, randInt, pick } from '$lib/playground/math';
   import { randomHex } from '$lib/playground/palette';
@@ -249,6 +250,14 @@
     const token = new URLSearchParams(window.location.search).get('s');
     if (token) decodeState(token);
   });
+
+  // Record scene edits (debounced) so Undo can step back — even across a refresh.
+  const history = createHistory('triangles');
+  $: (void [shape, colorMode, hue, hueSpread, sat, light, stroke, grid, jitter, explode, warp, rotate, skew, zoom, fieldRotate, fieldWarp, taper, fieldSkewX, fieldSkewY, strokeMatch, transparent, outlineColor, bg, customColors, seed], history.touch(encodeState));
+  function undoScene() {
+    const tok = history.undo(encodeState());
+    if (tok) applyScene(tok);
+  }
 </script>
 
 <Metatags
@@ -263,6 +272,7 @@
   lightChrome={chromeLight}
   onShuffle={shuffle}
   onReset={reset}
+  onUndo={undoScene}
   onSavePng={savePng}
   onSaveScene={() => savedScenes?.saveCurrent()}
 >

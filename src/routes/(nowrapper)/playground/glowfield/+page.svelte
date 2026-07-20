@@ -10,6 +10,7 @@
   import Section from '$lib/components/playground/Section.svelte';
   import SavedScenes from '$lib/components/playground/SavedScenes.svelte';
   import { createPresetStore } from '$lib/playground/presets';
+  import { createHistory } from '$lib/playground/history';
   import { recordViewportClip } from '$lib/playground/video';
   import { n36, p36, unpackHex } from '$lib/playground/token';
 
@@ -535,6 +536,14 @@ ${layerLines}
     const token = new URLSearchParams(window.location.search).get('s');
     if (token) decodeState(token);
   });
+
+  // Record scene edits (debounced) so Undo can step back — even across a refresh.
+  const history = createHistory('glowfield');
+  $: (void [colorMode, anchorHue, anchorSpread, rainbowSat, anchor, intensity, depth, bg, layers], history.touch(encodeState));
+  function undoScene() {
+    const tok = history.undo(encodeState());
+    if (tok) applyScene(tok);
+  }
 </script>
 
 <Metatags
@@ -549,6 +558,7 @@ ${layerLines}
   {bg}
   onShuffle={shuffle}
   onReset={reset}
+  onUndo={undoScene}
   onSavePng={savePng}
   onSaveVideo={saveVideo}
   onSaveScene={() => savedScenes?.saveCurrent()}
