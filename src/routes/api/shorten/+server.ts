@@ -7,8 +7,8 @@ import type { RequestHandler } from './$types'
 // database to provision. The key is derived from a hash of the token, so
 // re-sharing the same scene reuses its code (no unbounded growth).
 
-// Tokens are our compact base36 scene codes: `k1~…` / `t1~…` / `g1~…` / `w1~…` / `p1~…`.
-const TOKEN_RE = /^[gktwp]1[~._\-a-z0-9]+$/i
+// Tokens are our compact base36 scene codes: `k1~…` / `t1~…` / `g1~…` / `w1~…` / `p1~…` / `m1~…`.
+const TOKEN_RE = /^[gktwpm]1[~._\-a-z0-9]+$/i
 // Only ever redirect back to a playground page (guards against open redirects).
 const PAGE_RE = /^\/playground\/[a-z-]+$/
 const ALPHABET =

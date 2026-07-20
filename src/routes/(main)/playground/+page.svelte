@@ -6,6 +6,11 @@
   // full-bleed immersive on their own.
   const experiments = [
     {
+      href: '/playground/mosaic',
+      title: 'Mosaic',
+      blurb: 'A seeded grid of shapes — every cell rolls its own.',
+    },
+    {
       href: '/playground/plotter',
       title: 'Plotter',
       blurb: 'Layered pen-plotter line art.',

@@ -30,6 +30,7 @@ test('Playground index renders without a11y errors', async ({
 // (not an <h1>), and the visualization mounts into a full-bleed `preview` — a
 // <canvas> for the canvas playgrounds, DOM gradient divs for Glowfield.
 const experiments = [
+  { name: 'Mosaic', path: '/playground/mosaic', preview: 'canvas' },
   { name: 'Plotter', path: '/playground/plotter', preview: 'canvas' },
   { name: 'Poolside', path: '/playground/poolside', preview: 'canvas' },
   { name: 'Kaleidoscope', path: '/playground/kaleidoscope', preview: 'canvas' },
