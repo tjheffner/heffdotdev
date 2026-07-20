@@ -24,7 +24,9 @@ export function createHistory(page: string, debounceMs = 600): SceneHistory {
     try {
       const parsed = JSON.parse(localStorage.getItem(key) || '[]')
       if (Array.isArray(parsed))
-        stack = parsed.filter((t): t is string => typeof t === 'string').slice(-LIMIT)
+        stack = parsed
+          .filter((t): t is string => typeof t === 'string')
+          .slice(-LIMIT)
     } catch {
       // Corrupt entry — start fresh.
     }
@@ -74,6 +76,6 @@ export function createHistory(page: string, debounceMs = 600): SceneHistory {
       stack.pop()
       save()
       return stack[stack.length - 1]
-    }
+    },
   }
 }
