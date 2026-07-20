@@ -8,12 +8,12 @@
     {
       href: '/playground/mosaic',
       title: 'Mosaic',
-      blurb: 'A seeded grid of shapes — every cell rolls its own.',
+      blurb: 'Seed a grid of shapes.',
     },
     {
       href: '/playground/plotter',
       title: 'Plotter',
-      blurb: 'Layered pen-plotter line art.',
+      blurb: 'Layered pen-plotter line art',
     },
     {
       href: '/playground/poolside',
