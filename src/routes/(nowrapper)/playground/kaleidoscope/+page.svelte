@@ -16,6 +16,7 @@
   import Section from '$lib/components/playground/Section.svelte';
   import SavedScenes from '$lib/components/playground/SavedScenes.svelte';
   import { createPresetStore } from '$lib/playground/presets';
+  import { createHistory } from '$lib/playground/history';
   import { recordViewportClip } from '$lib/playground/video';
   import { n36, p36, packHex, unpackHex } from '$lib/playground/token';
   import { rand, randInt, pick, round } from '$lib/playground/math';
@@ -419,6 +420,14 @@
     _prevKey = paletteKeyNow();
     hydrated = true;
   });
+
+  // Record scene edits (debounced) so Undo can step back — even across a refresh.
+  const history = createHistory('kaleidoscope');
+  $: (void [mode, colorMode, hue, hueSpread, sat, light, stroke, segments, spin, animate, zoom, strokeMatch, transparent, outlineColor, bg, customColors, items], history.touch(encodeState));
+  function undoScene() {
+    const tok = history.undo(encodeState());
+    if (tok) applyScene(tok);
+  }
 </script>
 
 <Metatags
@@ -433,6 +442,7 @@
   lightChrome={chromeLight}
   onShuffle={shuffle}
   onReset={reset}
+  onUndo={undoScene}
   onSavePng={savePng}
   onSaveVideo={saveVideo}
   onSaveScene={() => savedScenes?.saveCurrent()}
