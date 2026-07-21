@@ -42,18 +42,20 @@
   // The keyboard cheat-sheet shown in the title info card. Esc and "/" are
   // always available; the action keys appear only when the page wired that hook.
   $: shortcuts = [
-    { k: 'Esc', label: 'Hide controls' },
-    { k: '/', label: 'Toggle controls' },
+    { k: 'Esc', label: 'Hide UI' },
+    { k: '/', label: 'Toggle UI' },
     ...(onShuffle ? [{ k: 'F', label: 'Shuffle' }] : []),
     ...(onReset ? [{ k: 'R', label: 'Reset' }] : []),
     ...(onUndo ? [{ k: 'Z', label: 'Undo' }] : []),
+    ...(onSaveScene ? [{ k: 'S', label: 'Save' }] : []),
     ...(onSavePng ? [{ k: 'P', label: 'Save PNG' }] : []),
-    ...(onSaveVideo ? [{ k: 'V', label: 'Save video' }] : []),
-    ...(onSaveScene ? [{ k: 'S', label: 'Save scene' }] : [])
+    ...(onSaveVideo ? [{ k: 'V', label: 'Save video' }] : [])
   ];
 
   let controlsHidden = false;
-  let titleOpen = false;
+  // Open on arrival so visitors meet the description + shortcut list before
+  // the controls; closing it (×, Esc, or toggling the title) is one click.
+  let titleOpen = true;
   const titleCardId = `pg-title-${Math.random().toString(36).slice(2, 8)}`;
 
   // Hiding the controls also closes every open menu (the title card here, and
@@ -540,6 +542,51 @@
   :global(.playground .mode-btn:focus-visible) {
     outline: 2px solid var(--pg-accent);
     outline-offset: -2px;
+  }
+
+  /* Toggle chips on a wrapping grid — roomier than the segmented .mode-btns
+   * pill. Used for multi-selects (Mosaic shapes/motions) and for 3-4-way
+   * pickers that would otherwise cramp (palettes, hatch style). .chip-field
+   * stacks a label above the grid. */
+  :global(.playground .chip-grid) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: 0.35rem;
+  }
+  :global(.playground .chip) {
+    font: inherit;
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--pg-dim);
+    background: transparent;
+    border: 1px solid var(--pg-line);
+    border-radius: 4px;
+    padding: 0.35rem 0;
+    cursor: pointer;
+  }
+  :global(.playground .chip:hover) {
+    color: var(--pg-text);
+    border-color: var(--pg-dim);
+  }
+  :global(.playground .chip.active) {
+    background: var(--pg-line);
+    color: var(--pg-text);
+  }
+  :global(.playground .chip:focus-visible) {
+    outline: 2px solid var(--pg-accent);
+    outline-offset: -2px;
+  }
+  :global(.playground .chip-field) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.7rem;
+  }
+  :global(.playground .chip-field .lab) {
+    color: var(--pg-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
   }
 
   :global(.playground .hue-row) {

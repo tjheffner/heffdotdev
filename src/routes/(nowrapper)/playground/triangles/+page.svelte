@@ -306,13 +306,13 @@
         <span class="val">{bg}</span>
       </label>
     {/if}
-    <div class="mode-row">
+    <div class="chip-field">
       <span class="lab">Palette</span>
-      <div class="mode-btns">
-        <button class="mode-btn" class:active={colorMode === 'spectrum'} on:click={() => (colorMode = 'spectrum')}>Spectrum</button>
-        <button class="mode-btn" class:active={colorMode === 'duo'} on:click={() => (colorMode = 'duo')}>Duo</button>
-        <button class="mode-btn" class:active={colorMode === 'mono'} on:click={() => (colorMode = 'mono')}>Mono</button>
-        <button class="mode-btn" class:active={colorMode === 'custom'} on:click={() => (colorMode = 'custom')}>Custom</button>
+      <div class="chip-grid">
+        <button class="chip" class:active={colorMode === 'spectrum'} aria-pressed={colorMode === 'spectrum'} on:click={() => (colorMode = 'spectrum')}>Spectrum</button>
+        <button class="chip" class:active={colorMode === 'duo'} aria-pressed={colorMode === 'duo'} on:click={() => (colorMode = 'duo')}>Duo</button>
+        <button class="chip" class:active={colorMode === 'mono'} aria-pressed={colorMode === 'mono'} on:click={() => (colorMode = 'mono')}>Mono</button>
+        <button class="chip" class:active={colorMode === 'custom'} aria-pressed={colorMode === 'custom'} on:click={() => (colorMode = 'custom')}>Custom</button>
       </div>
     </div>
     <p class="hint">{paletteHint}</p>

@@ -6,14 +6,19 @@
   // full-bleed immersive on their own.
   const experiments = [
     {
+      href: '/playground/plotter',
+      title: 'Plotter',
+      blurb: 'Rule-driven pens travel a grid.',
+    },
+    {
+      href: '/playground/feather',
+      title: 'Feather',
+      blurb: 'Layered ink sweeps from curves you draw.',
+    },
+    {
       href: '/playground/mosaic',
       title: 'Mosaic',
       blurb: 'Seed a grid of shapes.',
-    },
-    {
-      href: '/playground/plotter',
-      title: 'Plotter',
-      blurb: 'Layered pen-plotter line art',
     },
     {
       href: '/playground/poolside',
