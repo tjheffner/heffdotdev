@@ -1,8 +1,15 @@
 <script lang="ts">
   import { onMount, tick } from 'svelte';
   import Plotter from '$lib/components/playground/Plotter.svelte';
-  import type { PaperTexture, PenLayer } from '$lib/components/playground/Plotter.svelte';
-  import CurvePad from '$lib/components/playground/CurvePad.svelte';
+  import type {
+    PlotMode,
+    PlotSpawn,
+    PlotHop,
+    PlotHatchStyle,
+    PlotGrid,
+    PlotMotion,
+    PlotRule
+  } from '$lib/components/playground/Plotter.svelte';
   import Slider from '$lib/components/playground/Slider.svelte';
   import PlaygroundShell from '$lib/components/playground/PlaygroundShell.svelte';
   import Metatags from '$lib/components/Metatags.svelte';
@@ -10,157 +17,171 @@
   import SavedScenes from '$lib/components/playground/SavedScenes.svelte';
   import { createPresetStore } from '$lib/playground/presets';
   import { createHistory } from '$lib/playground/history';
+  import { recordViewportClip } from '$lib/playground/video';
   import { moveInArray, dropIndexAt } from '$lib/playground/reorder';
   import { hexRgb, hslToHex } from '$lib/playground/color';
   import { n36, p36 } from '$lib/playground/token';
-  import { packPath, unpackPath } from '$lib/playground/path';
-  import { rand, randInt, pick, round } from '$lib/playground/math';
+  import { rand, randInt, pick } from '$lib/playground/math';
 
   const presets = createPresetStore('plotter');
   let savedScenes: SavedScenes;
   let renderer: Plotter;
 
-  const TAU = Math.PI * 2;
-  const TEXTURES: PaperTexture[] = ['none', 'grain', 'weave'];
-  const TEXTURE_LABELS: Record<PaperTexture, string> = {
+  const MODES: PlotMode[] = ['turtle', 'hatch', 'flow'];
+  const MODE_LABELS: Record<PlotMode, string> = {
+    turtle: 'Turtle',
+    hatch: 'Hatch',
+    flow: 'Flow'
+  };
+  const SPAWNS: PlotSpawn[] = ['edge', 'corner', 'center', 'scatter'];
+  const SPAWN_LABELS: Record<PlotSpawn, string> = {
+    edge: 'Edge',
+    corner: 'Corner',
+    center: 'Center',
+    scatter: 'Scatter'
+  };
+  const HOPS: PlotHop[] = ['near', 'scatter'];
+  const HOP_LABELS: Record<PlotHop, string> = {
+    near: 'Near',
+    scatter: 'Scatter'
+  };
+  const HATCH_STYLES: PlotHatchStyle[] = ['lines', 'halves', 'quarters'];
+  const HATCH_STYLE_LABELS: Record<PlotHatchStyle, string> = {
+    lines: 'Lines',
+    halves: 'Halves',
+    quarters: 'Quarters'
+  };
+  const GRIDS: PlotGrid[] = ['none', 'dots', 'lines'];
+  const GRID_LABELS: Record<PlotGrid, string> = {
     none: 'None',
-    grain: 'Grain',
-    weave: 'Weave'
+    dots: 'Dots',
+    lines: 'Lines'
   };
 
-  // --- starter curves -------------------------------------------------------
-  // Pens hold freeform pad drawings; defaults and Shuffle synthesize polylines
-  // so the first paint (and every reroll) looks drawn-with-intent.
-  function sampled(fn: (t: number) => [number, number], n = 72): number[] {
-    const pts: number[] = [];
-    for (let i = 0; i < n; i++) {
-      const t = i / (n - 1);
-      const [x, y] = fn(t);
-      pts.push(round(x, 3), round(y, 3));
-    }
-    return pts;
-  }
-  // Simple open curves — the sweep does the work, so the strokes stay plain.
-  // Weighted toward C/U arcs and hooks; full-width waves (sway/ess/ridge) are
-  // the minority — deep partial curves sweep into more pleasing forms.
-  function randomPath(): number[][] {
-    const roll = Math.random();
-    const kind =
-      roll < 0.45 ? 'arc' : roll < 0.7 ? 'hook' : roll < 0.82 ? 'ess' : roll < 0.92 ? 'sway' : 'ridge';
-    switch (kind) {
-      case 'arc': {
-        // A deep partial arc — reads as a C or U depending on orientation.
-        const span = rand(1.6, 3.6);
-        const a0 = rand(0, 6.28);
-        const rr = rand(0.5, 0.9);
-        return [
-          sampled((t) => {
-            const a = a0 + (t - 0.5) * span;
-            return [rr * Math.cos(a), rr * Math.sin(a)];
-          })
-        ];
-      }
-      case 'sway': {
-        const a1 = rand(0.12, 0.4);
-        const f1 = rand(0.4, 1.6);
-        const p1 = rand(0, 6.28);
-        const a2 = rand(0, 0.15);
-        const f2 = rand(1.5, 3.5);
-        const p2 = rand(0, 6.28);
-        return [
-          sampled((t) => [2 * t - 1, a1 * Math.sin(TAU * f1 * t + p1) + a2 * Math.sin(TAU * f2 * t + p2)])
-        ];
-      }
-      case 'ess': {
-        const a = rand(0.3, 0.55);
-        const k = rand(0.7, 1.1);
-        return [sampled((t) => [2 * t - 1, a * Math.sin((2 * t - 1) * Math.PI * k)])];
-      }
-      case 'ridge': {
-        // A mountain silhouette: a few soft bumps on a baseline.
-        const bumps = Array.from({ length: randInt(2, 4) }, () => ({
-          a: rand(0.15, 0.5),
-          c: rand(0.15, 0.85),
-          w: rand(0.07, 0.2)
-        }));
-        return [
-          sampled((t) => {
-            let y = 0.25;
-            for (const b of bumps) y -= b.a * Math.exp(-(((t - b.c) / b.w) ** 2));
-            return [2 * t - 1, y];
-          })
-        ];
-      }
-      case 'hook': {
-        // An open hook: the radius eases in over a partial turn — not a spiral.
-        const span = rand(2, 4);
-        const a0 = rand(0, 6.28);
-        const r1 = rand(0.25, 0.55);
-        return [
-          sampled((t) => {
-            const a = a0 + t * span;
-            const rr = 0.85 - (0.85 - r1) * t;
-            return [rr * Math.cos(a), rr * Math.sin(a)];
-          }, 84)
-        ];
-      }
-    }
-  }
+  // Every rule carries the full field set so switching modes keeps tuning and
+  // token rows stay fixed-width; the base fills whatever an override omits.
+  const RULE_BASE: PlotRule = {
+    mode: 'turtle',
+    color: '#2f6f5e',
+    width: 2,
+    ink: 0.85,
+    wob: 0.1,
+    angle45: true,
+    pens: 6,
+    spawn: 'edge',
+    straight: 0.7,
+    bias: 0,
+    turnEvery: 0,
+    fill: 1,
+    hop: 'near',
+    hatchStyle: 'lines',
+    hatchAngle: 45,
+    spacing: 1.6,
+    cross: false,
+    warp: 0.35,
+    warpDetail: 0.35,
+    dash: 0.15,
+    density: 0.6,
+    breadth: 0,
+    press: 0.35,
+    jit: 0.25,
+    flowDetail: 0.35,
+    swirl: 0.5,
+    flowAngle: 0,
+    flowSteps: 60,
+    open: false
+  };
+  const makeRule = (over: Partial<PlotRule>): PlotRule => ({ ...RULE_BASE, ...over });
 
-  // Single source of truth for defaults, shared by initial state and Reset.
-  // The paths are hand-drawn pad strokes, kept verbatim as point data.
-  const INITIAL_LAYERS: PenLayer[] = [
-    {
-      reps: 29, size: 0.86, rot: -0.68, spin: 0, grow: 0.79, dx: -1.7, dy: 5.7, ox: 47, oy: -27, swell: 0.55, rip: 2.9, trav: -2.2, relax: 0.29, env: 0.22, press: 0.27, bleed: 0.13, nib: 81, jit: 0.37, wob: 0.03, color: '#64d8b7',
-      path: [
-        [-1, -0.147, -0.972, -0.185, -0.944, -0.219, -0.915, -0.253, -0.887, -0.283, -0.859, -0.314, -0.832, -0.342, -0.802, -0.367, -0.775, -0.392, -0.747, -0.412, -0.717, -0.43, -0.69, -0.446, -0.662, -0.458, -0.634, -0.469, -0.606, -0.475, -0.577, -0.48, -0.549, -0.48, -0.521, -0.478, -0.493, -0.473, -0.466, -0.464, -0.436, -0.453, -0.408, -0.439, -0.381, -0.422, -0.351, -0.402, -0.324, -0.381, -0.296, -0.356, -0.268, -0.33, -0.239, -0.3, -0.211, -0.269, -0.183, -0.239, -0.155, -0.205, -0.127, -0.168, -0.1, -0.132, -0.07, -0.095, -0.042, -0.056, -0.015, -0.019, 0.015, 0.019, 0.042, 0.056, 0.07, 0.095, 0.1, 0.132, 0.127, 0.168, 0.155, 0.205, 0.183, 0.239, 0.211, 0.269, 0.239, 0.3, 0.268, 0.33, 0.296, 0.356, 0.324, 0.381, 0.351, 0.402, 0.381, 0.422, 0.408, 0.439, 0.436, 0.453, 0.466, 0.464, 0.493, 0.473, 0.521, 0.478, 0.549, 0.48, 0.577, 0.48, 0.606, 0.475, 0.634, 0.469, 0.662, 0.458, 0.69, 0.446, 0.717, 0.43, 0.747, 0.412, 0.775, 0.392, 0.802, 0.367, 0.832, 0.342, 0.859, 0.314, 0.887, 0.283, 0.915, 0.253, 0.944, 0.219, 0.972, 0.185, 1, 0.147]
-      ],
-      open: true
-    },
-    {
-      reps: 31, size: 0.8, rot: 0.53, spin: 0, grow: -0.76, dx: -0.9, dy: -2.1, ox: 19, oy: 75, swell: 0.35, rip: 5.9, trav: -10.4, relax: 0.1, env: 0.15, press: 0.18, bleed: 0.47, nib: 129.8, jit: 0.39, wob: 0.12, color: '#90e4be',
-      path: [
-        [-0.415, 0.742, -0.435, 0.725, -0.455, 0.707, -0.473, 0.69, -0.492, 0.671, -0.51, 0.651, -0.527, 0.632, -0.543, 0.612, -0.558, 0.591, -0.574, 0.571, -0.588, 0.549, -0.602, 0.527, -0.612, 0.506, -0.625, 0.484, -0.636, 0.463, -0.646, 0.439, -0.656, 0.418, -0.663, 0.395, -0.673, 0.371, -0.679, 0.348, -0.685, 0.325, -0.691, 0.3, -0.696, 0.279, -0.7, 0.256, -0.703, 0.232, -0.705, 0.209, -0.707, 0.185, -0.708, 0.161, -0.708, 0.14, -0.708, 0.117, -0.707, 0.093, -0.703, 0.072, -0.702, 0.05, -0.697, 0.029, -0.694, 0.005, -0.69, -0.015, -0.683, -0.036, -0.679, -0.056, -0.673, -0.078, -0.663, -0.098, -0.656, -0.117, -0.648, -0.137, -0.639, -0.157, -0.629, -0.174, -0.619, -0.192, -0.609, -0.209, -0.598, -0.226, -0.586, -0.243, -0.574, -0.26, -0.561, -0.276, -0.549, -0.29, -0.537, -0.305, -0.521, -0.319, -0.507, -0.333, -0.493, -0.347, -0.48, -0.358, -0.464, -0.37, -0.449, -0.381, -0.435, -0.392, -0.418, -0.402, -0.402, -0.412, -0.385, -0.419, -0.37, -0.429, -0.354, -0.436, -0.337, -0.442, -0.32, -0.45, -0.303, -0.456, -0.288, -0.461, -0.271, -0.466, -0.263, -0.47, -0.237, -0.473, -0.222, -0.476, -0.205, -0.48, -0.188, -0.48, -0.171, -0.483, -0.155, -0.483, -0.138, -0.483, -0.121, -0.483, -0.106, -0.481, -0.09, -0.48, -0.075, -0.478, -0.059, -0.475, -0.044, -0.473, -0.029, -0.469]
-      ],
-      open: false
-    },
-    {
-      reps: 59, size: 0.82, rot: -1.36, spin: 0, grow: 0.15, dx: 0.3, dy: 2, ox: 37, oy: -107, swell: 0.28, rip: 4, trav: 29, relax: 0.69, env: 0.56, press: 0.46, bleed: 0.42, nib: 22.7, jit: 0.31, wob: 0.3, color: '#9df1ca',
-      path: [],
-      open: false
-    },
-    {
-      reps: 46, size: 1.23, rot: 2.53, spin: -60, grow: 0.68, dx: 2.8, dy: 3.8, ox: -94, oy: -61, swell: 0.3, rip: 4.4, trav: -12.9, relax: 0.25, env: 0.08, press: 0.32, bleed: 0.17, nib: 50.7, jit: 0.58, wob: 0.06, color: '#6685f5',
-      path: [
-        [-1, 0.225, -0.972, 0.215, -0.944, 0.206, -0.915, 0.192, -0.887, 0.178, -0.859, 0.161, -0.832, 0.143, -0.802, 0.123, -0.775, 0.101, -0.747, 0.078, -0.717, 0.056, -0.69, 0.033, -0.662, 0.012, -0.634, -0.007, -0.606, -0.022, -0.577, -0.036, -0.549, -0.046, -0.521, -0.052, -0.493, -0.055, -0.466, -0.055, -0.436, -0.053, -0.408, -0.049, -0.381, -0.046, -0.351, -0.042, -0.324, -0.039, -0.296, -0.039, -0.268, -0.042, -0.239, -0.046, -0.211, -0.053, -0.183, -0.063, -0.155, -0.075, -0.127, -0.087, -0.1, -0.103, -0.07, -0.115, -0.042, -0.127, -0.015, -0.14, 0.015, -0.147, 0.042, -0.152, 0.07, -0.154, 0.1, -0.152, 0.127, -0.146, 0.155, -0.137, 0.183, -0.121, 0.211, -0.106, 0.239, -0.086, 0.268, -0.064, 0.296, -0.039, 0.324, -0.015, 0.351, 0.01, 0.381, -0.208, 0.408, -0.185, 0.436, -0.158, 0.466, -0.134, 0.493, -0.109, 0.521, -0.083, 0.549, -0.058, 0.577, -0.033, 0.606, -0.008, 0.634, 0.018, 0.662, 0.042, 0.69, 0.066, 0.717, 0.09, 0.747, 0.115, 0.775, 0.14, 0.802, 0.161, 0.832, 0.185, 0.859, 0.208, 0.887, 0.229, 0.915, 0.251, 0.944, 0.273, 0.972, 0.291, 1, 0.31]
-      ],
-      open: false
-    }
+  // Single source of truth for defaults, shared by initial state and Reset —
+  // a hand-tuned scene: one blue cross-hatched underlay plus 24 stacked pink
+  // turtle walkers (each rule index seeds its own walk, so the duplicates
+  // layer 24 distinct mazes).
+  const DEFAULT_HATCH: Partial<PlotRule> = {
+    mode: 'hatch',
+    color: '#6087dc',
+    width: 3.6,
+    ink: 0.1,
+    wob: 0.49,
+    angle45: true,
+    pens: 2,
+    spawn: 'scatter',
+    straight: 0.82,
+    bias: 0.16,
+    turnEvery: 0,
+    fill: 0.59,
+    hop: 'near',
+    hatchStyle: 'halves',
+    hatchAngle: 33,
+    spacing: 0.5,
+    cross: true,
+    warp: 0.59,
+    warpDetail: 0.19,
+    dash: 0.3,
+    density: 0.77,
+    breadth: 0.29,
+    flowDetail: 0.16,
+    swirl: 0.26,
+    flowAngle: 85,
+    flowSteps: 38
+  };
+  const DEFAULT_TURTLE: Partial<PlotRule> = {
+    mode: 'turtle',
+    color: '#f84983',
+    width: 3.4,
+    ink: 0.7,
+    wob: 0.17,
+    angle45: true,
+    pens: 5,
+    spawn: 'edge',
+    straight: 0.76,
+    bias: -0.48,
+    turnEvery: 0,
+    fill: 0.35,
+    hop: 'near',
+    hatchStyle: 'lines',
+    hatchAngle: 100,
+    spacing: 1.72,
+    cross: false,
+    warp: 0.33,
+    warpDetail: 0.47,
+    dash: 0.04,
+    density: 0.91,
+    breadth: 0,
+    flowDetail: 0.7,
+    swirl: 0.45,
+    flowAngle: 336,
+    flowSteps: 113
+  };
+  const INITIAL_RULES: Partial<PlotRule>[] = [
+    DEFAULT_HATCH,
+    ...Array.from({ length: 24 }, () => DEFAULT_TURTLE)
   ];
   const DEFAULTS = {
-    bg: '#2a2919',
-    inkBlend: true,
-    texture: 'grain' as PaperTexture,
-    texAmount: 0.5,
-    seed: 'sumi-wg0d',
-    zoom: 1.65
+    bg: '#100e16',
+    cols: 25,
+    grid: 'none' as PlotGrid,
+    gridAmount: 0.36,
+    motion: 'plot' as PlotMotion,
+    speed: 1,
+    zoom: 0.91,
+    seed: 'axis-fw5k'
   };
 
-  const cloneLayers = (ls: PenLayer[]) =>
-    ls.map((l) => ({ ...l, path: l.path.map((s) => s.slice()) }));
-
-  // --- state --------------------------------------------------------------
-  let layers: PenLayer[] = cloneLayers(INITIAL_LAYERS);
+  // --- state ----------------------------------------------------------------
+  let rules: PlotRule[] = INITIAL_RULES.map(makeRule);
   let bg = DEFAULTS.bg;
-  let inkBlend = DEFAULTS.inkBlend;
-  let texture = DEFAULTS.texture;
-  let texAmount = DEFAULTS.texAmount;
-  let seed = DEFAULTS.seed;
+  let cols = DEFAULTS.cols;
+  let grid = DEFAULTS.grid;
+  let gridAmount = DEFAULTS.gridAmount;
+  let motion = DEFAULTS.motion;
+  let speed = DEFAULTS.speed;
   let zoom = DEFAULTS.zoom;
+  let seed = DEFAULTS.seed;
 
   // Flip the overlay chrome against the actual pixels under it (the default
   // paper is light, so this matters from the first paint). Coalesced to one
-  // sample per frame so drags stay cheap.
+  // sample per frame so the replay stays cheap.
   let chromeLight = false;
   let sampleQueued = false;
   function onCanvasRendered() {
@@ -173,7 +194,7 @@
     });
   }
 
-  // --- layer management ---------------------------------------------------
+  // --- rule management ------------------------------------------------------
   // Perceived luminance, not HSL lightness — saturated mid-tones read dark.
   const paperIsLight = () => {
     const { r, g, b } = hexRgb(bg);
@@ -187,76 +208,70 @@
       : hslToHex(randInt(0, 360), randInt(60, 95), randInt(60, 85));
   }
 
-  function randomLayer(): PenLayer {
-    const reps = randInt(16, 60);
-    const dx = rand(-5, 5);
-    const dy = Math.random() < 0.7 ? rand(2, 8) : rand(-8, -2);
-    return {
-      path: randomPath(),
-      reps,
-      size: rand(0.6, 1.3),
-      rot: rand(-3, 3),
-      grow: rand(-1.5, 1),
-      dx,
-      dy,
-      // Center the whole sweep on the page so shuffles land composed.
-      ox: Math.round(-dx * reps * 0.5) + randInt(-60, 60),
-      oy: Math.round(-dy * reps * 0.5) + randInt(-60, 60),
-      swell: rand(0.1, 0.6),
-      rip: rand(1, 6),
-      trav: rand(-30, 30),
-      relax: rand(0, 0.7),
-      env: rand(0, 0.8),
-      spin: Math.random() < 0.4 ? 0 : rand(-90, 90),
-      press: rand(0.15, 0.65),
-      bleed: rand(0.1, 0.7),
-      nib: randInt(0, 180),
-      jit: rand(0.15, 0.6),
-      wob: rand(0, 0.2),
+  function randomRule(): PlotRule {
+    const roll = Math.random();
+    const mode: PlotMode = roll < 0.5 ? 'turtle' : roll < 0.75 ? 'hatch' : 'flow';
+    return makeRule({
+      mode,
       color: inkColor(),
-      open: false
-    };
+      width: rand(1, 5),
+      ink: rand(0.5, 0.95),
+      wob: rand(0, 0.3),
+      angle45: Math.random() < 0.6,
+      pens: randInt(2, 10),
+      spawn: pick(SPAWNS),
+      straight: rand(0.45, 0.9),
+      bias: rand(-0.7, 0.7),
+      turnEvery: Math.random() < 0.25 ? randInt(2, 14) : 0,
+      fill: Math.random() < 0.6 ? 1 : rand(0.3, 0.9),
+      hop: pick(HOPS),
+      hatchStyle: pick(['lines', 'lines', 'halves', 'quarters'] as PlotHatchStyle[]),
+      hatchAngle: randInt(0, 180),
+      spacing: rand(0.8, 3),
+      cross: Math.random() < 0.3,
+      warp: rand(0, 0.8),
+      warpDetail: rand(0.15, 0.7),
+      dash: rand(0, 0.5),
+      density: rand(0.35, 1),
+      breadth: Math.random() < 0.5 ? 0 : rand(0.2, 0.8),
+      press: rand(0.2, 0.9),
+      jit: rand(0.1, 0.7),
+      flowDetail: rand(0.15, 0.7),
+      swirl: rand(0.25, 0.9),
+      flowAngle: randInt(0, 360),
+      flowSteps: randInt(25, 120)
+    });
   }
 
-  function addLayer() {
-    layers = [...layers, { ...randomLayer(), open: true }];
+  function addRule() {
+    rules = [...rules, { ...randomRule(), open: true }];
   }
-  function duplicateLayer(i: number) {
-    const src = layers[i];
-    const copy = {
-      ...src,
-      path: src.path.map((s) => s.slice()),
-      ox: src.ox + 30,
-      oy: src.oy + 30,
-      open: true
-    };
-    layers = [...layers.slice(0, i + 1), copy, ...layers.slice(i + 1)];
+  function duplicateRule(i: number) {
+    rules = [...rules.slice(0, i + 1), { ...rules[i], open: true }, ...rules.slice(i + 1)];
   }
-  function removeLayer(i: number) {
-    layers = layers.filter((_, idx) => idx !== i);
+  function removeRule(i: number) {
+    rules = rules.filter((_, idx) => idx !== i);
   }
   function randomizeAll() {
-    const count = randInt(2, 5);
-    layers = Array.from({ length: count }, () => randomLayer());
+    rules = Array.from({ length: randInt(2, 4) }, () => randomRule());
+    renderer?.replay();
   }
 
-  // Pad edits: each drag adds a stroke; these trim back.
-  function undoStroke(i: number) {
-    layers[i].path = layers[i].path.slice(0, -1);
-  }
-  function clearStrokes(i: number) {
-    layers[i].path = [];
-  }
-  function rerollCurve(i: number) {
-    layers[i].path = randomPath();
+  function ruleMeta(r: PlotRule): string {
+    if (r.mode === 'turtle')
+      return `${Math.round(r.pens)} pens · ${Math.round(r.fill * 100)}% fill`;
+    if (r.mode === 'hatch')
+      return `${HATCH_STYLE_LABELS[r.hatchStyle].toLowerCase()} · ${Math.round(r.hatchAngle)}°${r.cross ? ' cross' : ''}`;
+    return `${Math.round(r.density * 100)}% seeds`;
   }
 
-  // --- reorder (drag & drop, plus keyboard) -------------------------------
-  // Order is paint order (ink stacks), so restacking changes the overlap.
+  // --- reorder (drag & drop, plus keyboard) ---------------------------------
+  // Order is plot order: earlier rules go down first and lower rules ink over
+  // them — and the replay draws them in this sequence, pen-swap style.
   let dragIndex: number | null = null;
   let overIndex: number | null = null;
   let handleEls: HTMLButtonElement[] = [];
-  let layerEls: HTMLElement[] = [];
+  let ruleEls: HTMLElement[] = [];
 
   function onDragStart(e: DragEvent, i: number) {
     dragIndex = i;
@@ -271,11 +286,11 @@
     if (dragIndex === null) return;
     e.preventDefault();
     if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
-    overIndex = dropIndexAt(layerEls.slice(0, layers.length), dragIndex, e.clientY);
+    overIndex = dropIndexAt(ruleEls.slice(0, rules.length), dragIndex, e.clientY);
   }
   function onListDrop() {
     if (dragIndex !== null && overIndex !== null)
-      layers = moveInArray(layers, dragIndex, overIndex);
+      rules = moveInArray(rules, dragIndex, overIndex);
     dragIndex = null;
     overIndex = null;
   }
@@ -285,103 +300,123 @@
   }
   async function onHandleKey(e: KeyboardEvent, i: number) {
     const to = e.key === 'ArrowUp' ? i - 1 : e.key === 'ArrowDown' ? i + 1 : i;
-    if (to === i || to < 0 || to >= layers.length) return;
+    if (to === i || to < 0 || to >= rules.length) return;
     e.preventDefault();
-    layers = moveInArray(layers, i, to);
+    rules = moveInArray(rules, i, to);
     await tick();
     handleEls[to]?.focus();
   }
 
-  // --- shuffle / reset ----------------------------------------------------
-  const WORDS = ['nib', 'quill', 'stylus', 'india', 'sumi', 'vellum', 'bristol', 'gouache'];
+  // --- shuffle / reset ------------------------------------------------------
+  const WORDS = ['gantry', 'servo', 'carriage', 'stepper', 'vector', 'gcode', 'axis', 'nib'];
   function reseed() {
     const w = WORDS[Math.floor(Math.random() * WORDS.length)];
     seed = `${w}-${Math.random().toString(36).slice(2, 6)}`;
   }
 
-  // Shuffle re-rolls the paper, the seed, and every pen; Reset restores defaults.
   function shuffle() {
     bg =
       Math.random() < 0.6
         ? hslToHex(randInt(30, 55), randInt(15, 45), randInt(88, 96)) // paper tones
         : hslToHex(randInt(0, 360), randInt(10, 30), randInt(5, 13)); // dark boards
-    texture = pick(TEXTURES);
-    texAmount = rand(0.2, 0.8);
-    randomizeAll();
+    grid = Math.random() < 0.5 ? 'none' : pick(['dots', 'lines'] as PlotGrid[]);
+    gridAmount = rand(0.15, 0.6);
+    cols = randInt(12, 44);
+    rules = Array.from({ length: randInt(2, 4) }, () => randomRule());
     reseed();
+    renderer?.replay();
   }
   function reset() {
-    layers = cloneLayers(INITIAL_LAYERS);
+    rules = INITIAL_RULES.map(makeRule);
     bg = DEFAULTS.bg;
-    inkBlend = DEFAULTS.inkBlend;
-    texture = DEFAULTS.texture;
-    texAmount = DEFAULTS.texAmount;
-    seed = DEFAULTS.seed;
+    cols = DEFAULTS.cols;
+    grid = DEFAULTS.grid;
+    gridAmount = DEFAULTS.gridAmount;
+    motion = DEFAULTS.motion;
+    speed = DEFAULTS.speed;
     zoom = DEFAULTS.zoom;
+    seed = DEFAULTS.seed;
     renderer?.recenter();
+    renderer?.replay();
   }
 
-  // --- shareable scene code (compact base36 token) ------------------------
+  // --- shareable scene code (compact base36 token) --------------------------
   function encodeState(): string {
     const g = [
-      n36(inkBlend ? 1 : 0),
+      n36(cols),
+      n36(Math.max(0, GRIDS.indexOf(grid))),
+      n36(gridAmount, 1000),
+      n36(motion === 'plot' ? 1 : 0),
+      n36(speed, 1000),
       n36(zoom, 100),
-      n36(Math.max(0, TEXTURES.indexOf(texture))),
-      n36(texAmount, 1000),
       bg.replace(/^#/, '')
     ].join('.');
-    const ls = layers
-      .map((l) =>
+    const rs = rules
+      .map((r) =>
         [
-          n36(l.reps), n36(l.size, 1000),
-          n36(l.rot, 100), n36(l.spin, 10), n36(l.grow, 100),
-          n36(l.dx, 10), n36(l.dy, 10), n36(l.ox), n36(l.oy),
-          n36(l.swell, 1000), n36(l.rip, 10), n36(l.trav, 10), n36(l.relax, 1000), n36(l.env, 1000),
-          n36(l.press, 1000), n36(l.bleed, 1000), n36(l.nib, 10), n36(l.wob, 1000), n36(l.jit, 1000),
-          l.color.replace(/^#/, ''),
-          packPath(l.path)
+          n36(Math.max(0, MODES.indexOf(r.mode))),
+          n36(r.width, 100), n36(r.ink, 1000), n36(r.wob, 1000),
+          n36(r.angle45 ? 1 : 0), n36(r.pens),
+          n36(Math.max(0, SPAWNS.indexOf(r.spawn))),
+          n36(r.straight, 1000), n36(r.bias, 1000), n36(r.turnEvery),
+          n36(r.fill, 1000), n36(Math.max(0, HOPS.indexOf(r.hop))),
+          n36(Math.max(0, HATCH_STYLES.indexOf(r.hatchStyle))),
+          n36(r.hatchAngle, 10), n36(r.spacing, 100), n36(r.cross ? 1 : 0),
+          n36(r.warp, 1000), n36(r.warpDetail, 1000), n36(r.dash, 1000),
+          n36(r.density, 1000), n36(r.breadth, 1000), n36(r.press, 1000), n36(r.jit, 1000),
+          n36(r.flowDetail, 1000), n36(r.swirl, 1000), n36(r.flowAngle, 10), n36(r.flowSteps),
+          r.color.replace(/^#/, '')
         ].join('.')
       )
       .join('_');
-    return `p1~${g}~${ls}~${seed}`; // seed is a word — kept raw as the trailing section
+    return `r1~${g}~${rs}~${seed}`; // seed is a word — kept raw as the trailing section
   }
 
   function decodeState(token: string) {
     try {
       const parts = token.split('~');
-      if (parts[0] !== 'p1' || parts.length < 3) return;
+      if (parts[0] !== 'r1' || parts.length < 3) return;
       const g = parts[1].split('.');
-      inkBlend = p36(g[0], 1, inkBlend ? 1 : 0) === 1;
-      zoom = p36(g[1], 100, zoom);
-      texture = TEXTURES[p36(g[2])] ?? texture;
-      texAmount = p36(g[3], 1000, texAmount);
-      if (g[4]) bg = `#${g[4]}`;
+      cols = p36(g[0], 1, cols);
+      grid = GRIDS[p36(g[1])] ?? grid;
+      gridAmount = p36(g[2], 1000, gridAmount);
+      motion = p36(g[3]) === 1 ? 'plot' : 'finished';
+      speed = p36(g[4], 1000, speed);
+      zoom = p36(g[5], 100, zoom);
+      if (g[6]) bg = `#${g[6]}`;
       const rows = (parts[2] ? parts[2].split('_') : [])
         .map((s) => s.split('.'))
-        .filter((a) => a.length >= 21);
+        .filter((a) => a.length >= 28);
       if (rows.length) {
-        layers = rows.map((a) => ({
-          reps: p36(a[0], 1, 1),
-          size: p36(a[1], 1000, 0.5),
-          rot: p36(a[2], 100),
-          spin: p36(a[3], 10),
-          grow: p36(a[4], 100),
-          dx: p36(a[5], 10),
-          dy: p36(a[6], 10),
-          ox: p36(a[7]),
-          oy: p36(a[8]),
-          swell: p36(a[9], 1000),
-          rip: p36(a[10], 10, 3),
-          trav: p36(a[11], 10),
-          relax: p36(a[12], 1000),
-          env: p36(a[13], 1000),
-          press: p36(a[14], 1000, 0.4),
-          bleed: p36(a[15], 1000, 0.35),
-          nib: p36(a[16], 10, 40),
-          wob: p36(a[17], 1000),
-          jit: p36(a[18], 1000),
-          color: a[19] ? `#${a[19]}` : '#1a1a1a',
-          path: unpackPath(a[20] ?? ''),
+        rules = rows.map((a) => ({
+          mode: MODES[p36(a[0])] ?? 'turtle',
+          width: p36(a[1], 100, 1.5),
+          ink: p36(a[2], 1000, 0.85),
+          wob: p36(a[3], 1000),
+          angle45: p36(a[4]) === 1,
+          pens: p36(a[5], 1, 4),
+          spawn: SPAWNS[p36(a[6])] ?? 'edge',
+          straight: p36(a[7], 1000, 0.7),
+          bias: p36(a[8], 1000),
+          turnEvery: p36(a[9]),
+          fill: p36(a[10], 1000, 1),
+          hop: HOPS[p36(a[11])] ?? 'near',
+          hatchStyle: HATCH_STYLES[p36(a[12])] ?? 'lines',
+          hatchAngle: p36(a[13], 10, 45),
+          spacing: p36(a[14], 100, 1.5),
+          cross: p36(a[15]) === 1,
+          warp: p36(a[16], 1000),
+          warpDetail: p36(a[17], 1000, 0.35),
+          dash: p36(a[18], 1000),
+          density: p36(a[19], 1000, 0.6),
+          breadth: p36(a[20], 1000),
+          press: p36(a[21], 1000),
+          jit: p36(a[22], 1000),
+          flowDetail: p36(a[23], 1000, 0.35),
+          swirl: p36(a[24], 1000, 0.5),
+          flowAngle: p36(a[25], 10),
+          flowSteps: p36(a[26], 1, 60),
+          color: a[27] ? `#${a[27]}` : '#1a1a1a',
           open: false
         }));
       }
@@ -391,7 +426,7 @@
     }
   }
 
-  // --- export / saved scenes ----------------------------------------------
+  // --- export / saved scenes ------------------------------------------------
   // A short hash of the full scene, so the PNG filename changes with any edit.
   function shortId(s: string) {
     let h = 2166136261 >>> 0;
@@ -407,12 +442,42 @@
   function applyScene(token: string) {
     decodeState(token);
     renderer?.recenter();
+    renderer?.replay();
   }
   const sceneSnapshot = () => renderer?.snapshot(bg) ?? null;
-  $: sceneLabel = `${layers.length} pen${layers.length === 1 ? '' : 's'} · ${layers.reduce(
-    (s, l) => s + Math.max(1, Math.round(l.reps)),
-    0
-  )} passes`;
+  $: sceneLabel = `${rules.length} rule${rules.length === 1 ? '' : 's'} · ${cols} cols`;
+
+  // --- video capture ----------------------------------------------------------
+  const CLIP_FPS = 30;
+  let videoSeconds = 10;
+  let recording = false;
+  let recordPct = 0;
+  let videoErr = false;
+
+  // A clip is always one full plot run swept over the chosen length, with the
+  // finished sheet held at the tail — independent of the live replay's speed.
+  async function saveVideo() {
+    if (recording) return;
+    recording = true;
+    recordPct = 0;
+    videoErr = false;
+    try {
+      await recordViewportClip({
+        seconds: videoSeconds,
+        fps: CLIP_FPS,
+        filename: `plotter-${shortId(encodeState())}`,
+        draw: (ctx, i, W, H, frames) =>
+          renderer?.captureFrame(ctx, W, H, frames > 1 ? i / (frames - 1) : 1),
+        onProgress: (f) => (recordPct = Math.round(f * 100))
+      });
+    } catch (e) {
+      console.error('video export failed', e);
+      videoErr = true;
+      setTimeout(() => (videoErr = false), 2500);
+    } finally {
+      recording = false;
+    }
+  }
 
   onMount(() => {
     const token = new URLSearchParams(window.location.search).get('s');
@@ -421,7 +486,7 @@
 
   // Record scene edits (debounced) so Undo can step back — even across a refresh.
   const history = createHistory('plotter');
-  $: (void [inkBlend, zoom, texture, texAmount, bg, layers, seed], history.touch(encodeState));
+  $: (void [bg, cols, grid, gridAmount, motion, speed, zoom, rules, seed], history.touch(encodeState));
   function undoScene() {
     const tok = history.undo(encodeState());
     if (tok) applyScene(tok);
@@ -430,158 +495,244 @@
 
 <Metatags
   title="Plotter"
-  description="Layered pen-plotter line art from curves you draw yourself."
+  description="A pen plotter you program with rules: pens travel a grid and draw as they go."
   ogMessage="Plotter"
 />
 
 <PlaygroundShell
   title="Plotter"
-  subtitle="Pen-plotter line art: draw a curve on each pen's pad and repeat it across the paper. On the canvas: scroll to zoom, drag to pan, double-click to recenter."
+  subtitle="A simulated pen plotter: each rule sends pens traveling across the grid — watch the carriage draw, or jump to the finished sheet. On the canvas: scroll to zoom, drag to pan, double-click to recenter."
   lightChrome={chromeLight}
   onShuffle={shuffle}
   onReset={reset}
   onUndo={undoScene}
   onSavePng={savePng}
+  onSaveVideo={saveVideo}
   onSaveScene={() => savedScenes?.saveCurrent()}
 >
   <Section title="Paper">
-    <p class="hint">The sheet the pens draw on.</p>
     <label class="color-row">
       <span class="lab">Paper</span>
       <input type="color" bind:value={bg} />
       <span class="val">{bg}</span>
     </label>
     <div class="mode-row">
-      <span class="lab">Texture</span>
+      <span class="lab">Grid</span>
       <div class="mode-btns">
-        {#each TEXTURES as t}
-          <button class="mode-btn" class:active={texture === t} on:click={() => (texture = t)}>
-            {TEXTURE_LABELS[t]}
+        {#each GRIDS as g}
+          <button class="mode-btn" class:active={grid === g} on:click={() => (grid = g)}>
+            {GRID_LABELS[g]}
           </button>
         {/each}
       </div>
     </div>
-    {#if texture !== 'none'}
-      <Slider label="Amount" bind:value={texAmount} min={0} max={1} step={0.01} />
+    {#if grid !== 'none'}
+      <Slider label="Amount" bind:value={gridAmount} min={0} max={1} step={0.01} />
     {/if}
-    <label class="toggle-row">
-      <span class="lab">Ink blend</span>
-      <input type="checkbox" bind:checked={inkBlend} />
-    </label>
-    <p class="hint">
-      {inkBlend
-        ? 'Overlapping ink deepens on light paper and glows on dark paper.'
-        : 'Strokes stack plainly, with no ink mixing.'}
-    </p>
+    <Slider label="Columns" bind:value={cols} min={6} max={60} step={1} />
     <Slider label="Zoom" bind:value={zoom} min={0.25} max={4} step={0.01} unit="×" />
+    <p class="hint">
+      The grid is the lattice every rule travels on — more columns means finer
+      moves. Dots and lines just make it visible, graph-paper style.
+    </p>
   </Section>
 
-  <Section title={`Pens (${layers.length})`}>
+  <Section title="Motion">
+    <div class="mode-row">
+      <span class="lab">Mode</span>
+      <div class="mode-btns">
+        <button class="mode-btn" class:active={motion === 'finished'} on:click={() => (motion = 'finished')}>Finished</button>
+        <button class="mode-btn" class:active={motion === 'plot'} on:click={() => (motion = 'plot')}>Plot</button>
+      </div>
+    </div>
+    {#if motion === 'plot'}
+      <Slider label="Speed" bind:value={speed} min={0.25} max={4} step={0.05} unit="×" />
+      <button class="btn block" on:click={() => renderer?.replay()}>Replay</button>
+    {/if}
+    <p class="hint">
+      {motion === 'plot'
+        ? 'Rules plot one after another, like swapping pens on the carriage.'
+        : 'Just the finished sheet — edits repaint instantly.'}
+    </p>
+  </Section>
+
+  <Section title={`Rules (${rules.length})`}>
     <div slot="actions" class="group-actions">
-      <button class="btn" on:click|preventDefault|stopPropagation={addLayer}>Add</button>
+      <button class="btn" on:click|preventDefault|stopPropagation={addRule}>Add</button>
       <button class="btn" on:click|preventDefault|stopPropagation={randomizeAll}>Randomize</button>
     </div>
-    <p class="hint">Each pen sweeps its drawn curve across the paper, morphing a little each pass.</p>
+    <p class="hint">
+      Each rule is one pen program. Order is plot order — later rules ink over
+      earlier ones.
+    </p>
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div class="reorder-list" on:dragover={onListDragOver} on:drop={onListDrop}>
-      {#each layers as layer, i (layer)}
+      {#each rules as rule, i (rule)}
         <div
           class="layer"
-          bind:this={layerEls[i]}
+          bind:this={ruleEls[i]}
           class:dragging={dragIndex === i}
           class:drop-target={overIndex === i && dragIndex !== null && dragIndex !== i}
           on:dragend={onDragEnd}
         >
-          <details bind:open={layer.open}>
+          <details bind:open={rule.open}>
             <summary>
               <button
                 class="drag-handle"
                 bind:this={handleEls[i]}
                 draggable="true"
                 title="Drag to reorder (or ↑/↓)"
-                aria-label="Reorder pen {i + 1} of {layers.length}"
+                aria-label="Reorder rule {i + 1} of {rules.length}"
                 on:click|preventDefault|stopPropagation
                 on:dragstart={(e) => onDragStart(e, i)}
                 on:keydown={(e) => onHandleKey(e, i)}
               >⠿</button>
-              <span class="swatch" style="background: {layer.color};"></span>
-              <span class="layer-name">Pen {i + 1}</span>
-              <span class="layer-meta">
-                {layer.path.length} stroke{layer.path.length === 1 ? '' : 's'} · ×{Math.round(layer.reps)}
-              </span>
+              <span class="swatch" style="background: {rule.color};"></span>
+              <span class="layer-name">Rule {i + 1}</span>
+              <span class="layer-meta">{MODE_LABELS[rule.mode]} · {ruleMeta(rule)}</span>
             </summary>
 
             <div class="layer-body">
-              <h3>Curve</h3>
-              <p class="hint">
-                Draw on the pad — each drag adds a stroke. Simple open curves sweep best; the
-                passes do the rest.
-              </p>
-              <CurvePad
-                bind:path={layer.path}
-                color={layer.color}
-                paper={bg}
-                label="Drawing pad for pen {i + 1}"
-              />
-              <div class="pad-actions">
-                <button class="btn" disabled={!layer.path.length} on:click={() => undoStroke(i)}>Undo</button>
-                <button class="btn" disabled={!layer.path.length} on:click={() => clearStrokes(i)}>Clear</button>
-                <button class="btn" on:click={() => rerollCurve(i)}>Random curve</button>
+              <div class="mode-row">
+                <span class="lab">Travel</span>
+                <div class="mode-btns">
+                  {#each MODES as m}
+                    <button class="mode-btn" class:active={rule.mode === m} on:click={() => (rule.mode = m)}>
+                      {MODE_LABELS[m]}
+                    </button>
+                  {/each}
+                </div>
               </div>
-              <Slider label="Size" bind:value={layer.size} min={0.05} max={1.4} step={0.01} />
-
-              <h3>Sweep</h3>
-              <Slider label="Count" bind:value={layer.reps} min={1} max={80} step={1} />
-              <Slider label="Sweep X" bind:value={layer.dx} min={-30} max={30} step={0.5} unit="px" />
-              <Slider label="Sweep Y" bind:value={layer.dy} min={-30} max={30} step={0.5} unit="px" />
-              <Slider label="Spin" bind:value={layer.spin} min={-180} max={180} step={1} unit="°" />
-              <Slider label="Swell" bind:value={layer.swell} min={0} max={1} step={0.01} />
-              <Slider label="Ripples" bind:value={layer.rip} min={0} max={12} step={0.1} />
-              <Slider label="Travel" bind:value={layer.trav} min={-180} max={180} step={1} unit="°" />
-              <Slider label="Envelope" bind:value={layer.env} min={0} max={1} step={0.01} />
-              <Slider label="Relax" bind:value={layer.relax} min={0} max={1} step={0.01} />
-              <Slider label="Rotate" bind:value={layer.rot} min={-5} max={5} step={0.1} unit="°" />
-              <Slider label="Grow" bind:value={layer.grow} min={-5} max={5} step={0.1} unit="%" />
-              <Slider label="Offset X" bind:value={layer.ox} min={-1600} max={1600} step={1} unit="px" />
-              <Slider label="Offset Y" bind:value={layer.oy} min={-1600} max={1600} step={1} unit="px" />
               <p class="hint">
-                Sweep slides each pass across the paper; Spin turns the whole swept layer as one
-                piece. Swell ripples the line — Ripples sets the
-                wave count, Travel rolls the wave from pass to pass, and Envelope makes the swell
-                rise and die over the sweep. Relax settles the curve toward a straight line by the
-                end of the sweep. Rotate and Grow twist each pass in place.
+                {rule.mode === 'turtle'
+                  ? 'Pens walk the lattice node to node, rolling at each step whether to hold the heading or turn.'
+                  : rule.mode === 'hatch'
+                    ? 'Ruled shading passes swept back and forth across the sheet.'
+                    : 'Pens drop in and ride a direction field quantized to the grid.'}
               </p>
+
+              {#if rule.mode === 'turtle'}
+                <div class="mode-row">
+                  <span class="lab">Angles</span>
+                  <div class="mode-btns">
+                    <button class="mode-btn" class:active={!rule.angle45} on:click={() => (rule.angle45 = false)}>90°</button>
+                    <button class="mode-btn" class:active={rule.angle45} on:click={() => (rule.angle45 = true)}>45°</button>
+                  </div>
+                </div>
+                <div class="mode-row">
+                  <span class="lab">Start</span>
+                  <div class="mode-btns">
+                    {#each SPAWNS as s}
+                      <button class="mode-btn" class:active={rule.spawn === s} on:click={() => (rule.spawn = s)}>
+                        {SPAWN_LABELS[s]}
+                      </button>
+                    {/each}
+                  </div>
+                </div>
+                <Slider label="Pens" bind:value={rule.pens} min={1} max={24} step={1} />
+                <Slider label="Fill" bind:value={rule.fill} min={0.05} max={1} step={0.01} />
+                <Slider label="Straight" bind:value={rule.straight} min={0} max={1} step={0.01} />
+                <Slider label="Bias" bind:value={rule.bias} min={-1} max={1} step={0.01} />
+                <Slider label="Turn every" bind:value={rule.turnEvery} min={0} max={40} step={1} />
+                <div class="mode-row">
+                  <span class="lab">Hop</span>
+                  <div class="mode-btns">
+                    {#each HOPS as hp}
+                      <button class="mode-btn" class:active={rule.hop === hp} on:click={() => (rule.hop = hp)}>
+                        {HOP_LABELS[hp]}
+                      </button>
+                    {/each}
+                  </div>
+                </div>
+                <p class="hint">
+                  Fill is how much of the grid this rule inks — at 1 the pens hit every
+                  node. Straight is the odds of holding course; Bias leans the turns
+                  left or right, and Turn every forces one on a cadence (0 = off). Boxed
+                  in, the pen lifts and hops — Near keeps growing the same region,
+                  Scatter starts fresh patches.
+                </p>
+              {:else if rule.mode === 'hatch'}
+                <div class="mode-row">
+                  <span class="lab">Style</span>
+                  <div class="mode-btns">
+                    {#each HATCH_STYLES as hs}
+                      <button class="mode-btn" class:active={rule.hatchStyle === hs} on:click={() => (rule.hatchStyle = hs)}>
+                        {HATCH_STYLE_LABELS[hs]}
+                      </button>
+                    {/each}
+                  </div>
+                </div>
+                <Slider label="Angle" bind:value={rule.hatchAngle} min={0} max={180} step={1} unit="°" />
+                <Slider label="Spacing" bind:value={rule.spacing} min={0.4} max={4} step={0.05} />
+                <label class="toggle-row">
+                  <span class="lab">Cross</span>
+                  <input type="checkbox" bind:checked={rule.cross} />
+                </label>
+                {#if rule.hatchStyle === 'lines'}
+                  <Slider label="Warp" bind:value={rule.warp} min={0} max={1} step={0.01} />
+                  <Slider label="Detail" bind:value={rule.warpDetail} min={0} max={1} step={0.01} />
+                  <Slider label="Dash" bind:value={rule.dash} min={0} max={0.9} step={0.01} />
+                  <p class="hint">
+                    Ruled lines across the whole sheet. Spacing is the gap in grid
+                    cells; Cross adds a second pass at 90°. Warp bends the lines
+                    through noise (Detail sets how fine), and Dash lifts the pen in
+                    runs for broken coverage.
+                  </p>
+                {:else}
+                  <Slider label="Skip" bind:value={rule.dash} min={0} max={0.9} step={0.01} />
+                  <p class="hint">
+                    Every cell rolls a {rule.hatchStyle === 'halves' ? 'half' : 'quarter'}-triangle
+                    of itself and shades it with short strokes at the angle — Spacing
+                    sets how dense, Cross crosshatches, Skip leaves a share of cells
+                    empty.
+                  </p>
+                {/if}
+              {:else}
+                <Slider label="Seeds" bind:value={rule.density} min={0.05} max={1} step={0.01} />
+                <Slider label="Length" bind:value={rule.flowSteps} min={5} max={200} step={1} />
+                <Slider label="Breadth" bind:value={rule.breadth} min={0} max={1} step={0.01} />
+                <Slider label="Pressure" bind:value={rule.press} min={0} max={1} step={0.01} />
+                <Slider label="Jitter" bind:value={rule.jit} min={0} max={1} step={0.01} />
+                <Slider label="Detail" bind:value={rule.flowDetail} min={0} max={1} step={0.01} />
+                <Slider label="Swirl" bind:value={rule.swirl} min={0} max={1} step={0.01} />
+                <Slider label="Angle" bind:value={rule.flowAngle} min={0} max={360} step={1} unit="°" />
+                <p class="hint">
+                  Every grid cell holds a heading, and Seeds is the share of cells that
+                  launch a stream — 1 floods the whole sheet. Breadth widens each
+                  stream into side-by-side plotter passes: a flat brush that turns
+                  streams into thick ribbon fills. Pressure leans on the pen by region
+                  — strokes swell and the ink bleeds where it presses hard; Jitter
+                  roughens the width point to point and pass to pass. Angle is the base
+                  heading, Swirl how far cells stray from it, Detail how fast the field
+                  changes cell to cell.
+                </p>
+              {/if}
 
               <h3>Pen</h3>
               <label class="color-row">
                 <span class="lab">Ink</span>
-                <input type="color" bind:value={layer.color} />
-                <span class="val">{layer.color}</span>
+                <input type="color" bind:value={rule.color} />
+                <span class="val">{rule.color}</span>
               </label>
-              <Slider label="Pressure" bind:value={layer.press} min={0.05} max={1} step={0.01} />
-              <Slider label="Bleed" bind:value={layer.bleed} min={0} max={1} step={0.01} />
-              <Slider label="Nib" bind:value={layer.nib} min={0} max={180} step={1} unit="°" />
-              <Slider label="Jitter" bind:value={layer.jit} min={0} max={1} step={0.01} />
-              <Slider label="Wobble" bind:value={layer.wob} min={0} max={1} step={0.01} />
+              <Slider label="Width" bind:value={rule.width} min={0.3} max={10} step={0.1} unit="px" />
+              <Slider label="Opacity" bind:value={rule.ink} min={0.1} max={1} step={0.01} />
+              <Slider label="Wobble" bind:value={rule.wob} min={0} max={1} step={0.01} />
               <p class="hint">
-                Pressure sets line weight and ink density — a light pen runs dry across the passes
-                and the nib starts skipping. Bleed soaks the ink outward so tight passes flow
-                together. Nib is the pen's cut angle: strokes run thin along it, thick across it
-                (light pressure sharpens the contrast). Jitter varies the pressure between and
-                along strokes; Wobble shakes the hand.
+                Semi-transparent ink pools where paths cross, like a real pen. Wobble
+                shakes the servo.
               </p>
 
               <div class="layer-actions">
-                <button class="btn" on:click={() => duplicateLayer(i)}>Duplicate</button>
+                <button class="btn" on:click={() => duplicateRule(i)}>Duplicate</button>
               </div>
             </div>
           </details>
           <button
             class="layer-delete"
-            title="Delete pen {i + 1}"
-            aria-label="Delete pen {i + 1}"
-            disabled={layers.length <= 1}
-            on:click|preventDefault|stopPropagation={() => removeLayer(i)}
+            title="Delete rule {i + 1}"
+            aria-label="Delete rule {i + 1}"
+            disabled={rules.length <= 1}
+            on:click|preventDefault|stopPropagation={() => removeRule(i)}
           >×</button>
         </div>
       {/each}
@@ -596,6 +747,10 @@
     apply={applyScene}
     snapshot={sceneSnapshot}
     {savePng}
+    {saveVideo}
+    videoLabel={recording ? `Rec ${recordPct}%` : videoErr ? 'No video' : 'Video (V)'}
+    videoBusy={recording}
+    bind:videoSeconds
     label={sceneLabel}
   />
 
@@ -608,11 +763,13 @@
     <Plotter
       bind:this={renderer}
       {bg}
-      {inkBlend}
-      {texture}
-      {texAmount}
       {seed}
-      {layers}
+      {cols}
+      {grid}
+      {gridAmount}
+      {rules}
+      {motion}
+      {speed}
       onRendered={onCanvasRendered}
       bind:zoom
       contained={true}
@@ -622,14 +779,9 @@
 </PlaygroundShell>
 
 <style>
-  /* Plotter-specific bits; shared sidebar styling lives in PlaygroundShell. */
+  /* Plotter-specific bits; shared sidebar styling lives in PlaygroundShell.
+     The rule cards reuse Feather's layer-card look. */
 
-  .pad-actions {
-    display: flex;
-    gap: 0.4rem;
-  }
-
-  /* The list is one drop target so drags snap to the nearest slot. */
   .reorder-list {
     display: flex;
     flex-direction: column;

@@ -42,18 +42,20 @@
   // The keyboard cheat-sheet shown in the title info card. Esc and "/" are
   // always available; the action keys appear only when the page wired that hook.
   $: shortcuts = [
-    { k: 'Esc', label: 'Hide controls' },
-    { k: '/', label: 'Toggle controls' },
+    { k: 'Esc', label: 'Hide UI' },
+    { k: '/', label: 'Toggle UI' },
     ...(onShuffle ? [{ k: 'F', label: 'Shuffle' }] : []),
     ...(onReset ? [{ k: 'R', label: 'Reset' }] : []),
     ...(onUndo ? [{ k: 'Z', label: 'Undo' }] : []),
+    ...(onSaveScene ? [{ k: 'S', label: 'Save' }] : []),
     ...(onSavePng ? [{ k: 'P', label: 'Save PNG' }] : []),
-    ...(onSaveVideo ? [{ k: 'V', label: 'Save video' }] : []),
-    ...(onSaveScene ? [{ k: 'S', label: 'Save scene' }] : [])
+    ...(onSaveVideo ? [{ k: 'V', label: 'Save video' }] : [])
   ];
 
   let controlsHidden = false;
-  let titleOpen = false;
+  // Open on arrival so visitors meet the description + shortcut list before
+  // the controls; closing it (×, Esc, or toggling the title) is one click.
+  let titleOpen = true;
   const titleCardId = `pg-title-${Math.random().toString(36).slice(2, 8)}`;
 
   // Hiding the controls also closes every open menu (the title card here, and
