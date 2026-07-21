@@ -652,11 +652,16 @@
                   Scatter starts fresh patches.
                 </p>
               {:else if rule.mode === 'hatch'}
-                <div class="mode-row">
+                <div class="chip-field">
                   <span class="lab">Style</span>
-                  <div class="mode-btns">
+                  <div class="chip-grid">
                     {#each HATCH_STYLES as hs}
-                      <button class="mode-btn" class:active={rule.hatchStyle === hs} on:click={() => (rule.hatchStyle = hs)}>
+                      <button
+                        class="chip"
+                        class:active={rule.hatchStyle === hs}
+                        aria-pressed={rule.hatchStyle === hs}
+                        on:click={() => (rule.hatchStyle = hs)}
+                      >
                         {HATCH_STYLE_LABELS[hs]}
                       </button>
                     {/each}

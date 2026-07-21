@@ -467,13 +467,14 @@
       <input type="color" bind:value={bg} />
       <span class="val">{bg}</span>
     </label>
-    <div class="mode-row">
+    <div class="chip-field">
       <span class="lab">Palette</span>
-      <div class="mode-btns">
+      <div class="chip-grid">
         {#each PALETTES as m}
           <button
-            class="mode-btn"
+            class="chip"
             class:active={colorMode === m}
+            aria-pressed={colorMode === m}
             on:click={() => (colorMode = m)}
           >{m[0].toUpperCase() + m.slice(1)}</button>
         {/each}
@@ -608,40 +609,9 @@
 </PlaygroundShell>
 
 <style>
-  /* Mosaic-specific bits; shared sidebar styling lives in PlaygroundShell. */
-
-  /* Toggle chips on a wrapping grid — used for shapes and motions, which are
-     independent multi-selects the shared .mode-btns segmented pill can't hold
-     legibly. */
-  .chip-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
-    gap: 0.35rem;
-  }
-  .chip {
-    font: inherit;
-    font-size: 0.62rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--pg-dim);
-    background: transparent;
-    border: 1px solid var(--pg-line);
-    border-radius: 4px;
-    padding: 0.35rem 0;
-    cursor: pointer;
-  }
-  .chip:hover {
-    color: var(--pg-text);
-    border-color: var(--pg-dim);
-  }
-  .chip.active {
-    background: var(--pg-line);
-    color: var(--pg-text);
-  }
-  .chip:focus-visible {
-    outline: 2px solid var(--pg-accent);
-    outline-offset: -2px;
-  }
+  /* Mosaic-specific bits; shared sidebar styling lives in PlaygroundShell
+     (including the .chip-grid/.chip kit the shapes, motions and palette
+     selectors use). */
 
   .swatches {
     display: flex;
