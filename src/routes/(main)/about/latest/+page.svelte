@@ -15,7 +15,7 @@
 
 <Metatags title="Recent activity" />
 
-<TableOfContents type="about" toc={{items: []}} />
+<TableOfContents type="about" withToc={false} />
 
 <h1>Recent activity</h1>
 <div id='content'>

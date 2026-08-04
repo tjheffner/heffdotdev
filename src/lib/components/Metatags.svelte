@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Metatags } from '@hyzer-labs/ui'
   import { page } from '$app/state';
   import { dev } from '$app/environment';
   import {
@@ -16,7 +17,7 @@
     ogMessage?: string;
     image?: string;
 	}
-  let { 
+  let {
     type = 'website', // or article, or music.album etc. See https://ogp.me/#types
     title = SITE_TITLE,
     description = SITE_DESCRIPTION,
@@ -25,40 +26,20 @@
     image = dev ? 'localhost:5173/api/og.png' : DEFAULT_OG_IMAGE
   }: Props = $props();
 
-  const path = page.url.pathname;
-  const titleWithSuffix = $derived((SITE_TITLE === title) ? title : (title ? title + ' | ' : '') + SITE_TITLE);
-  const fullURI = `${SITE_URL}${path}`;
-  const fullCanonical = $derived(`${SITE_URL}/${canonical}`)
+  // encode the message: a raw space (multi-word titles) is an invalid URL
+  // and Slack silently drops the image, while Discord tolerates it
+  const fullImage = $derived(ogMessage ? `${image}?message=${encodeURIComponent(ogMessage)}` : image)
 </script>
 
-<svelte:head>
-  <meta property="og:type" content={type} />
-  <meta property="og:url" content={fullURI} />
-  <meta property="twitter:url" content={fullURI} />
-  <link rel="canonical" href={canonical ? fullCanonical : fullURI} />
-
-  {#if titleWithSuffix}
-    <title>{titleWithSuffix}</title>
-    <meta name="title" content={titleWithSuffix} />
-    <meta property="og:title" content={titleWithSuffix} />
-    <meta property="twitter:title" content={titleWithSuffix} />
-  {/if}
-
-  {#if description}
-    <meta name="description" content={description} />
-    <meta property="og:description" content={description} />
-    <meta property="twitter:description" content={description} />
-  {/if}
-
-  {#if ogMessage}
-    <!-- encode the message: a raw space (multi-word titles) is an invalid URL
-         and Slack silently drops the image, while Discord tolerates it -->
-    <meta property="og:image" content={`${image}?message=${encodeURIComponent(ogMessage)}`} />
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:image" content={`${image}?message=${encodeURIComponent(ogMessage)}`} />
-  {:else}
-    <meta property="og:image" content={image} />
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:image" content={image} />
-  {/if}
-</svelte:head>
+<Metatags
+  siteUrl={SITE_URL}
+  url={page.url.pathname}
+  siteName={SITE_TITLE}
+  title={title === SITE_TITLE ? undefined : title}
+  {type}
+  {description}
+  canonical={canonical && (canonical.startsWith('/') ? canonical : `/${canonical}`)}
+  image={fullImage}
+  imageAlt={ogMessage ?? title}
+  twitterCard="summary_large_image"
+/>

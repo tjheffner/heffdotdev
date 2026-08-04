@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Split, Cluster } from '@hyzer-labs/ui'
   import type {
     LastfmTrack,
     LetterboxdEntry,
@@ -48,26 +49,29 @@
 </script>
 
 <ul class="clean-list">
-  <li class="list-item grid">
+  <li class="list-item">
+    <Split fraction="1/4" gap="near">
     <p class="h1">🎶</p>
     <div class="contents" data-density-shift>
       {#await recentlyListened}
         <p class="small">Loading…</p>
       {:then tracks}
         {#each tracks as track}
-          <div class="tracklist">
+          <Cluster gap="near" class="tracklist">
             <img src={track.image.find(i => i.size === 'large')?.['#text']} alt={track.album['#text']}>
             <div>
               <strong>{track.name}</strong>
               <p>{track.artist['#text']}</p>
             </div>
-          </div>
+          </Cluster>
         {/each}
       {/await}
     </div>
+    </Split>
   </li>
 
-  <li class="list-item grid">
+  <li class="list-item">
+    <Split fraction="1/4" gap="near">
     <p class="h1">🍿</p>
     <div class="contents" data-density-shift>
       {#await recentlyWatched}
@@ -81,12 +85,14 @@
         {/each}
       {/await}
     </div>
+    </Split>
   </li>
 
   {#await duolingo then d}
     {#if d.courses}
       {@const stats = duolingoStats(d)}
-      <li class="list-item grid">
+      <li class="list-item">
+        <Split fraction="1/4" gap="near">
         <p class="h1">🦉</p>
         <div class="contents" data-density-shift>
           {#each d.courses as course}
@@ -99,11 +105,13 @@
             <span class="accent">*</span>{stats.freezes} days missed. Duolingo plays fast and loose with the meaning of the word "streak"
           </span>
         </div>
+        </Split>
       </li>
     {/if}
   {/await}
 
-  <li class="list-item grid">
+  <li class="list-item">
+    <Split fraction="1/4" gap="near">
     <p class="h1">📚</p>
     <div class="contents" data-density-shift>
       <p class="m-0">The last three books I read were:</p>
@@ -119,9 +127,11 @@
         </li>
       </ol>
     </div>
+    </Split>
   </li>
 
-  <li class="list-item grid">
+  <li class="list-item">
+    <Split fraction="1/4" gap="near">
     <p class="h1">🎮</p>
     <div class="contents" data-density-shift>
       {#await recentlyPlayed}
@@ -137,19 +147,15 @@
         {/if}
       {/await}
     </div>
+    </Split>
   </li>
 </ul>
 
 
 <style>
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(1, 1fr);
-    gap: var(--space-near);
-  }
-  .contents {
-    grid-column: span 4 / span 4;
+  /* icon | contents at every width — zero threshold means Split never stacks */
+  .list-item :global(.hz-split) {
+    --hz-width-sm: 0px;
   }
 
   .list-item {
@@ -157,7 +163,8 @@
     padding-bottom: var(--space-away);
     border-bottom: 1px dashed var(--c-secondary);
 
-    > .h1 {
+    /* the emoji column sits inside the Split now, so no longer a direct child */
+    .h1 {
       margin-bottom: 0;
     }
   }
@@ -166,13 +173,10 @@
     margin-bottom: var(--space-near);
   }
 
-  .tracklist {
-    display: flex;
-    flex-direction: row;
-    gap: var(--space-near);
+  .contents :global(.tracklist) {
     margin-bottom: var(--space-near);
-    img {
-      max-width: 75px;
-    }
+  }
+  .contents :global(.tracklist img) {
+    max-width: 75px;
   }
 </style>

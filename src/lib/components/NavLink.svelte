@@ -1,23 +1,13 @@
 <script lang="ts">
+  import { Link } from '@hyzer-labs/ui'
   import { page } from '$app/state'
-  let { ...props } = $props();
-  let isActive = $derived(page.url.pathname === props.href)
+
+  let { href, children }: { href: string; children?: import('svelte').Snippet } = $props();
+  // aria-current both marks the active page and drives the active style
+  // (global.css .nav-link[aria-current])
+  let isActive = $derived(page.url.pathname === href)
 </script>
 
-<a
-  class={isActive
-    ? 'nav-link active'
-    : 'nav-link'}
-  href={props.href}
->
-  {@render props.children?.()}
-</a>
-
-<style>
-  .nav-link {
-    display: block;
-    width: fit-content;
-    font-weight: bold;
-    line-height: 1.5rem;
-  }
-</style>
+<Link {href} class="nav-link" ariaCurrent={isActive ? 'page' : undefined}>
+  {@render children?.()}
+</Link>

@@ -116,6 +116,18 @@ body [data-density-shift] [data-density-shift] {
   --space-away: calc(var(--density) * 2);
 }
 
+/* @hyzer-labs/ui components speak --hz-space-*; alias them to the site's
+   density scale at every shift level so gap="near"/"away" on Split/Stack/etc
+   resolve to the same distances the handwritten CSS used. Selectors mirror
+   tokens.css exactly (same specificity, loaded after) so these win. */
+body,
+body [data-density-shift],
+body [data-density-shift] [data-density-shift],
+body [data-density-shift] [data-density-shift] [data-density-shift] {
+  --hz-space-near: var(--space-near);
+  --hz-space-away: var(--space-away);
+}
+
 /* colors */
 :focus-visible {
   outline-color: var(--c-accent);
@@ -209,8 +221,11 @@ dialog.lightbox::backdrop {
   backdrop-filter: blur(2px);
 }
 
-/* Links that highlight from bottom */
+/* Links that highlight from bottom. Header nav links are rendered by
+   @hyzer-labs/ui's Nav (hz-link, no class hook per item), hence the
+   .site-header selector. */
 .nav-link,
+.site-header .hz-link,
 .gallery-link,
 .prose a {
   color: var(--c-accent);
@@ -228,10 +243,19 @@ dialog.lightbox::backdrop {
   transition: all 0.3s linear;
 
   &.active,
+  &[aria-current],
   &:hover {
     background-size: 2px 50px;
     color: var(--c-background);
   }
+}
+/* nav links (rendered by @hyzer-labs/ui Link, so styled here, not scoped) */
+.nav-link,
+.site-header .hz-link {
+  display: block;
+  width: fit-content;
+  font-weight: bold;
+  line-height: 1.5rem;
 }
 h2 > a,
 .link-unset {

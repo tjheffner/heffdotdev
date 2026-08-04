@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Split } from '@hyzer-labs/ui'
   import type { BlogItem } from '$lib/types'
 
   interface Props {
@@ -13,25 +14,21 @@
 
 <li data-density-shift class="post">
   <a data-sveltekit-prefetch class="post-link" href={'/' + href}>
-    <div class="left">
-      <h2>
-        {item.title}
-      </h2>
+    <Split fraction="3/4" gap="none" class="post-split">
+      <div>
+        <h2>
+          {item.title}
+        </h2>
 
-      <p>
-        {@render children?.()}
-      </p>
-    </div>
+        <p>
+          {@render children?.()}
+        </p>
+      </div>
 
-    <div class="right">
-      <small>{new Date(item.date).toISOString().slice(0, 10)}</small>
-
-      <!-- {#if item.category}
-        <span class="category">
-          {item.category}
-        </span>
-      {/if} -->
-    </div>
+      <div class="right">
+        <small>{new Date(item.date).toISOString().slice(0, 10)}</small>
+      </div>
+    </Split>
   </a>
 </li>
 
@@ -51,33 +48,22 @@
     width: 100%;
     padding: var(--space-away) var(--space-near);
     margin-bottom: var(--space-away);
-    display: flex;
-    flex-direction: column;
+    display: block;
     color: var(--c-text);
-
-    @media (min-width: 668px) {
-      flex-direction: row;
-    }
   }
   .post:hover {
     & h2 {
       color: var(--c-secondary);
     }
   }
-  /* .category {
-    width: fit-content;
-    border-radius: 2rem;
-    background: var(--c-secondary);
-    padding: .25rem .5rem;
-    color: var(--c-background);
-    font-weight: bold;
-  } */
 
-  .left {
-    flex-grow: 1;
+  /* ponytail: the site column is ~596px at the old 668px viewport breakpoint,
+     so retune Split's stack threshold to match; bump if the row flips at the
+     wrong width */
+  .post-link :global(.hz-split) {
+    --hz-width-sm: 600px;
   }
   .right {
     text-align: right;
-    flex-shrink: 0;
   }
 </style>

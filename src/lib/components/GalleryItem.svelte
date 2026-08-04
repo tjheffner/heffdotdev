@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Split } from '@hyzer-labs/ui'
   import type { GalleryItem } from '$lib/types'
 
   interface Props {
@@ -11,32 +12,33 @@
 </script>
 
 <li class="gallery-item">
-  <div class="left">
-    <h2>{item.title}</h2>
-    <small>{new Date(item.date).toISOString().slice(0, 4)}</small>
-  </div>
+  <Split fraction="1/3" gap="near">
+    <div>
+      <h2>{item.title}</h2>
+      <small>{new Date(item.date).toISOString().slice(0, 4)}</small>
+    </div>
 
-  <div class="right">
-    <a data-sveltekit-prefetch  data-density-shift class="gallery-link" href={'/gallery/' + href}>
-      <img 
-        class="gallery-image lazy-image" 
-        loading="lazy" 
-        src={item.image} alt={item.alt}
-        height="100%" width="100%" 
-      />
+    <div>
+      <a data-sveltekit-prefetch class="gallery-link" href={'/gallery/' + href}>
+        <img
+          class="gallery-image lazy-image"
+          loading="lazy"
+          src={item.image} alt={item.alt}
+          height="100%" width="100%"
+        />
 
-      {item.description}
+        {item.description}
 
-      {@render children?.()}
-    </a>
-  </div>
-
+        {@render children?.()}
+      </a>
+    </div>
+  </Split>
 </li>
 
 <style>
   .gallery-item {
     margin-bottom: var(--space-near);
-    padding: var(--space-near) 0 var(--space-away);
+    padding: var(--space-near) 0 calc(var(--space-away) * 2);
     border-bottom: 1px var(--c-secondary) dashed;
   }
   .gallery-image {
@@ -49,20 +51,15 @@
   .gallery-link:hover {
     background-size: 4px 100px;
   }
+  /* ponytail: same retuned stack threshold as PostItem — the old breakpoint
+     was 668px of viewport, ~596px of column */
+  .gallery-item :global(.hz-split) {
+    --hz-width-sm: 600px;
+  }
 
   @media (min-width: 668px) {
     .gallery-item {
-      display: flex;
-      flex-direction: row;
       margin: var(--space-away) var(--space-near);
-      padding: var(--space-near) 0 calc(var(--space-away) * 2);
-      gap: var(--space-near);
-    }
-    .left {
-      flex: 1;
-    }
-    .right {
-      flex: 2;
     }
   }
 </style>

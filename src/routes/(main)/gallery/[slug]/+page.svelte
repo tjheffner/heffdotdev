@@ -4,11 +4,7 @@
   import Metatags from '$lib/components/Metatags.svelte'
   import TableOfContents from '$lib/components/TableOfContents.svelte';
   import { lightbox } from '$lib/actions/lightbox';
-  import { Toc } from '@svelte-put/toc';
 
-  // table of contents
-  const toc = new Toc({ observe: true, anchor: false, selector: ':where(h1, h2, h3)' });
-  
   let { data } = $props();
   let json: BaseContentItem = $derived(data.json) // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
 </script>
@@ -20,11 +16,10 @@
   canonical={'gallery/' + json.slug}
 />
 
-<TableOfContents {toc} type='gallery'/>
+<TableOfContents type='gallery'/>
 
 <article
   data-density-shift
-  use:toc.actions.root
   class="article"
   id="content"
   tabindex="-1"

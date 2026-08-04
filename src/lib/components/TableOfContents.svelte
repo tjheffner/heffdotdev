@@ -1,7 +1,8 @@
 <script lang="ts">
-  let { toc, type } = $props();
+  import { Toc } from '@hyzer-labs/ui'
 
-  // let isOpen = $state(false);
+  // withToc=false renders just the sticky back-link bar (about/latest)
+  let { type, withToc = true }: { type: string; withToc?: boolean } = $props();
 </script>
 
 <section class="full-width post-nav">
@@ -11,31 +12,11 @@
       <a href={`/${type}`} class="back-link">Back</a>
 
       <!-- Only appears on larger screen sizes -->
-      <div class="toc" data-density-shift>
-        <!-- Dynamic table of contents via @svelte-put/toc -->
-        {#if toc.items.size > 1}
-          <ul class="toc-list clean-list">
-            {#each toc.items.values() as { id, text, element }, index}
-              <li>
-                <a
-                  class="toc-list-item"
-                  class:active={toc.activeItem?.id === id}
-                  class:parent={element.nodeName === 'H1' || element.nodeName === 'H2'}
-                  class:child={element.nodeName === 'H3'}
-                  class:grandchild={element.nodeName === 'H4'}
-                  href="#{id}"
-                >
-                {#if index === 0}
-                  Introduction
-                {:else}
-                  {text}
-                {/if}
-                </a>
-              </li>
-            {/each}
-          </ul>
-        {/if}
-      </div>
+      {#if withToc}
+        <div class="toc" data-density-shift>
+          <Toc container=".article" levels={[1, 2, 3]} title="" minEntries={2} />
+        </div>
+      {/if}
 
     </div>
   </div>
@@ -73,17 +54,22 @@
   .toc {
     position: relative;
   }
-  .toc-list {
+  .toc :global(.hz-toc) {
     display: none;
-    margin-left: calc(var(--space-away) * 2);
-    padding-left: var(--space-near);
 
     @media (min-width: 1200px) {
       display: block;
       position: absolute;
+      margin-left: calc(var(--space-away) * 2);
+      padding-left: var(--space-near);
     }
   }
-  .toc-list-item {
+  .toc :global(.hz-toc-panel ul) {
+    padding: 0;
+    list-style-type: none;
+  }
+  .toc :global(.hz-toc-link) {
+    display: inline-block;
     font-size: 0.8448em;
     text-decoration: none;
     margin: calc(var(--space-near) / 2) 0;
@@ -101,14 +87,13 @@
     background-size: 0px 0px;
     transition: all 0.5s linear;
   }
-  .toc-list-item.active {
+  /* scroll-spy active entry */
+  .toc :global(.hz-toc-link[aria-current='location']) {
     background-size: 2px 50px;
     color: var(--c-background);
   }
-  .child {
-    margin-left: var(--space-away)
-  }
-  .grandchild {
-    margin-left: var(--space-away) * 2;
+  /* h3 entries indent one step (h4+ aren't collected) */
+  .toc :global(.hz-toc-link[data-level='3']) {
+    margin-left: var(--space-away);
   }
 </style>

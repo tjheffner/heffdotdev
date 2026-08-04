@@ -2,6 +2,10 @@
   // App root. Owns the truly-global CSS (reset, :root vars, fonts) so it's
   // always present on every route — deterministic, regardless of which route
   // group you land on or navigate through.
+  // tokens.css is @hyzer-labs/ui's required import: custom properties only
+  // (--hz-*), no visual rules, so it can't leak styles into either group.
+  // global.css loads after it so the --hz-space aliases there win.
+  import '@hyzer-labs/ui/tokens.css'
   import '../global.css'
   import { page } from '$app/state'
 
