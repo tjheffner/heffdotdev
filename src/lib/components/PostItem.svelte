@@ -14,7 +14,8 @@
 
 <li data-density-shift class="post">
   <a data-sveltekit-prefetch class="post-link" href={'/' + href}>
-    <Split fraction="3/4" gap="none" class="post-split">
+    <!-- auto-end: title/description grows, the date column hugs its content -->
+    <Split fraction="auto-end" gap="none" class="post-split">
       <div>
         <h2>
           {item.title}

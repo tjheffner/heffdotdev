@@ -21,10 +21,17 @@
 
 <a class="skip-link" href="#content">Skip to main content</a>
 
-<!-- keyed on pathname so the drawer (which only closes on Esc/toggle) resets
-     when a drawer link navigates — the remount replaces afterNavigate. -->
-{#key page.url.pathname}
-  <Header {items} sticky mobileBreakpoint="sm" ariaLabel="Primary" class="site-header">
+<!-- measured breakpoint matches the old 668px media query; the drawer closes
+     itself on link activation, so no remount needed -->
+<Header
+  {items}
+  sticky
+  mobileBreakpoint={668}
+  ariaLabel="Primary"
+  navItemClass="nav-link"
+  id="header"
+  class="site-header"
+>
     {#snippet logo()}
       <NavLink href="/">heffner.dev</NavLink>
     {/snippet}
@@ -49,7 +56,6 @@
       </svg>
     {/snippet}
   </Header>
-{/key}
 
 <style>
   :global(.site-header) {

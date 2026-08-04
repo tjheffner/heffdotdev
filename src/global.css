@@ -221,11 +221,8 @@ dialog.lightbox::backdrop {
   backdrop-filter: blur(2px);
 }
 
-/* Links that highlight from bottom. Header nav links are rendered by
-   @hyzer-labs/ui's Nav (hz-link, no class hook per item), hence the
-   .site-header selector. */
+/* Links that highlight from bottom */
 .nav-link,
-.site-header .hz-link,
 .gallery-link,
 .prose a {
   color: var(--c-accent);
@@ -250,8 +247,7 @@ dialog.lightbox::backdrop {
   }
 }
 /* nav links (rendered by @hyzer-labs/ui Link, so styled here, not scoped) */
-.nav-link,
-.site-header .hz-link {
+.nav-link {
   display: block;
   width: fit-content;
   font-weight: bold;

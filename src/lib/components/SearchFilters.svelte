@@ -8,23 +8,17 @@
       categories,
       inputEl = $bindable(),
   } = $props();
-
-  // TextInput doesn't expose its <input>, and the blog page's `/` shortcut
-  // needs the element — so grab it from the wrapper.
-  let searchWrap: HTMLDivElement | undefined = $state()
-  $effect(() => {
-    inputEl = searchWrap?.querySelector('input') ?? undefined
-  })
 </script>
 
 <div class="blog-search" data-density-shift id="filters">
   <!-- Search Bar -->
-  <div class="search" bind:this={searchWrap}>
+  <div class="search">
     <TextInput
       name="search"
       label="Search articles"
       hideLabel
       bind:value={search}
+      bind:element={inputEl}
       placeholder="Hit / to search"
     >
       {#snippet suffix()}

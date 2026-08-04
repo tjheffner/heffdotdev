@@ -14,7 +14,12 @@
       <!-- Only appears on larger screen sizes -->
       {#if withToc}
         <div class="toc" data-density-shift>
-          <Toc container=".article" levels={[1, 2, 3]} title="" minEntries={2} />
+          <Toc container=".article" levels={[1, 2, 3]} title="" minEntries={2}>
+            <!-- the level-1 entry is the post title; label it as the top jump -->
+            {#snippet entry(e)}
+              {e.level === 1 ? 'Introduction' : e.label}
+            {/snippet}
+          </Toc>
         </div>
       {/if}
 

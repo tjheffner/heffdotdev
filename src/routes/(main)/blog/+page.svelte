@@ -45,10 +45,9 @@
     })
     // reset list position when filters change
     if (resultsEl) {
-      // the hz Header has no id — find it by its class
-      const header = document.querySelector<HTMLElement>('.site-header');
+      const header = document.getElementById('header');
       const filters = document.getElementById('filters');
-      const stickyHeight = (header?.offsetHeight ?? 0) + (filters?.offsetHeight ?? 0);
+      const stickyHeight = header.offsetHeight + filters.offsetHeight;
 
       if (window.scrollY === 0) {
         return;

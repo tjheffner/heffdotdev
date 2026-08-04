@@ -50,7 +50,7 @@
 
 <ul class="clean-list">
   <li class="list-item">
-    <Split fraction="1/4" gap="near">
+    <Split fraction="1/4" gap="near" stackBelow="none">
     <p class="h1">🎶</p>
     <div class="contents" data-density-shift>
       {#await recentlyListened}
@@ -71,7 +71,7 @@
   </li>
 
   <li class="list-item">
-    <Split fraction="1/4" gap="near">
+    <Split fraction="1/4" gap="near" stackBelow="none">
     <p class="h1">🍿</p>
     <div class="contents" data-density-shift>
       {#await recentlyWatched}
@@ -92,7 +92,7 @@
     {#if d.courses}
       {@const stats = duolingoStats(d)}
       <li class="list-item">
-        <Split fraction="1/4" gap="near">
+        <Split fraction="1/4" gap="near" stackBelow="none">
         <p class="h1">🦉</p>
         <div class="contents" data-density-shift>
           {#each d.courses as course}
@@ -111,7 +111,7 @@
   {/await}
 
   <li class="list-item">
-    <Split fraction="1/4" gap="near">
+    <Split fraction="1/4" gap="near" stackBelow="none">
     <p class="h1">📚</p>
     <div class="contents" data-density-shift>
       <p class="m-0">The last three books I read were:</p>
@@ -131,7 +131,7 @@
   </li>
 
   <li class="list-item">
-    <Split fraction="1/4" gap="near">
+    <Split fraction="1/4" gap="near" stackBelow="none">
     <p class="h1">🎮</p>
     <div class="contents" data-density-shift>
       {#await recentlyPlayed}
@@ -153,11 +153,6 @@
 
 
 <style>
-  /* icon | contents at every width — zero threshold means Split never stacks */
-  .list-item :global(.hz-split) {
-    --hz-width-sm: 0px;
-  }
-
   .list-item {
     margin: var(--space-away) 0;
     padding-bottom: var(--space-away);
