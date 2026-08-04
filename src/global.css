@@ -11,6 +11,13 @@
 
   --density: 0.4rem; /* ~10pt grid */
 
+  /* the sticky header's rendered height: its vertical padding (2 × the
+     body-level --space-near, written via --density since --space-near
+     shifts inside density regions) + the taller of nav text and toggle.
+     Sticky bars below the header offset by this instead of magic pixels,
+     so they track the root font clamp. */
+  --header-height: calc(var(--density) * 10 + 2rem);
+
   accent-color: var(--c-accent);
 }
 

@@ -31,11 +31,8 @@
   .post-nav {
     background-color: var(--c-background);
     position: sticky;
-    top: 96px;
-
-    @media (min-width: 668px) {
-      top: 114px;
-    }
+    /* tracks the root font clamp, replacing the old 96px/114px hand-tuning */
+    top: var(--header-height);
   }
   .inside {
     display: flex;

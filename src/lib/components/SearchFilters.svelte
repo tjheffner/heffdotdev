@@ -58,7 +58,7 @@
 <style>
   .blog-search {
     position: sticky;
-    top: 90px;
+    top: var(--header-height);
     background-color: var(--c-background);
     padding: var(--space-away) 0;
     border-bottom: 2px solid var(--c-accent);

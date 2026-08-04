@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Header } from '@hyzer-labs/ui'
+  import { resize } from '@hyzer-labs/ui/observers'
   import NavLink from '$lib/components/NavLink.svelte'
   import { page } from '$app/state'
 
@@ -17,6 +18,39 @@
       ariaCurrent: page.url.pathname === l.href ? ('page' as const) : undefined,
     }))
   )
+
+  // Publish the header's real occluding height so sticky bars below it
+  // (blog filters, post-nav) sit flush underneath. Measuring beats deriving —
+  // the bar mixes rem text with a px-sized toggle. The open drawer is
+  // absolutely positioned (invisible to offsetHeight), so its bottom edge is
+  // included while it's open. The :root CSS formula is only the
+  // pre-hydration fallback.
+  let open = $state(false)
+  let headerEl: HTMLElement | null = null
+
+  function publish() {
+    if (!headerEl) return
+    let h = headerEl.offsetHeight
+    const drawer = headerEl.querySelector<HTMLElement>('.hz-header-drawer')
+    if (drawer && drawer.offsetHeight > 0) {
+      h = drawer.getBoundingClientRect().bottom - headerEl.getBoundingClientRect().top
+    }
+    document.documentElement.style.setProperty('--header-height', `${Math.round(h)}px`)
+  }
+
+  // rides the component's restProps onto the <header> element; fires on
+  // mount and any bar resize. offsetHeight (not entry.contentRect, which
+  // would miss the padding) is read in publish().
+  const measure = resize((entry) => {
+    headerEl = entry.target as HTMLElement
+    publish()
+  })
+
+  // re-measure when the drawer toggles — effects run after the DOM updates
+  $effect(() => {
+    open
+    publish()
+  })
 </script>
 
 <a class="skip-link" href="#content">Skip to main content</a>
@@ -31,6 +65,8 @@
   navItemClass="nav-link"
   id="header"
   class="site-header"
+  bind:open
+  {@attach measure}
 >
     {#snippet logo()}
       <NavLink href="/">heffner.dev</NavLink>
