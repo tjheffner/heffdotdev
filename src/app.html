@@ -22,7 +22,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     %sveltekit.head%
   </head>
-  <body>
+  <!-- hooks.server.ts fills these in per request (see src/lib/theme.ts). They
+       are declared here, valueless, so the substitution has one unambiguous
+       target: matching a bare "<body" would instead hit the first such text
+       anywhere in the document, including inside inlined CSS in <head>. -->
+  <body data-group data-theme>
     <div id="svelte">%sveltekit.body%</div>
   </body>
 </html>

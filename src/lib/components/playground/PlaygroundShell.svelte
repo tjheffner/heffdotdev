@@ -176,13 +176,17 @@
   }
 
   .playground {
-    --pg-bg: #101015;
-    --pg-panel: #16161c;
-    --pg-line: #26262e;
-    --pg-text: #e8e8ec;
-    --pg-dim: #8a8a93;
-    --pg-accent: #ff6b35;
-    --pg-track: #2a2a31;
+    /* The semantic layer, now sourced from the "playground" theme block in
+     * hyzer-tokens.css (authored in hyzer.config.ts) rather than repeating
+     * hexes. A data-theme="playground" body is what activates it — stamped
+     * during SSR in hooks.server.ts, so it is live on the first paint. */
+    --pg-bg: var(--hz-color-surface);
+    --pg-panel: var(--hz-color-surface-muted);
+    --pg-line: var(--hz-color-border);
+    --pg-text: var(--hz-color-text);
+    --pg-dim: var(--hz-color-text-muted);
+    --pg-accent: var(--hz-intent-primary);
+    --pg-track: var(--hz-palette-track);
 
     /* Chrome colors flip with the canvas luminance (see .light-canvas). These
      * drive the title and the pill/action chips so they read over any backdrop. */
