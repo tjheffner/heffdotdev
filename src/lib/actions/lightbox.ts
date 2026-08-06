@@ -18,7 +18,9 @@ export const lightbox: Action<HTMLElement> = (node) => {
   document.body.append(dialog)
 
   function open(source: HTMLImageElement) {
-    img.src = source.currentSrc || source.src
+    // data-zoom is the large CDN variant rehypeZoomImages stashes; without it
+    // we'd enlarge whichever small srcset candidate the layout picked
+    img.src = source.dataset.zoom || source.currentSrc || source.src
     img.alt = source.alt
     dialog.showModal()
     document.documentElement.classList.add('lightbox-open')

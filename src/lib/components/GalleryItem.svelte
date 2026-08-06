@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Split } from '@hyzer-labs/ui'
+  import { cdnImage, cdnSrcset } from '$lib/image'
   import type { GalleryItem } from '$lib/types'
 
   interface Props {
@@ -23,7 +24,10 @@
         <img
           class="gallery-image lazy-image"
           loading="lazy"
-          src={item.image} alt={item.alt}
+          src={cdnImage(item.image)}
+          srcset={cdnSrcset(item.image)}
+          sizes="(min-width: 600px) 66vw, 100vw"
+          alt={item.alt}
           height="100%" width="100%"
         />
 

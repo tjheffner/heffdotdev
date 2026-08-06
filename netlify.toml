@@ -15,6 +15,15 @@
 [build.environment]
   NODE_VERSION = "22"
 
+# Image CDN allowlist. Post and gallery images are GitHub issue attachments, so
+# /.netlify/images has to be told these hosts are ours to proxy — anything not
+# matched here comes back 400. See src/lib/image.ts.
+[images]
+  remote_images = [
+    "https://github\\.com/user-attachments/assets/.*",
+    "https://.*\\.githubusercontent\\.com/.*"
+  ]
+
 [[headers]]
   ## https://answers.netlify.com/t/content-type-header-not-working-in-netlify-toml/7718
   for = "/*"
