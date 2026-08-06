@@ -4,7 +4,7 @@
 
 <Metatags />
 
-<section class="container" id="content" tabindex="-1">
+<section class="hero" id="content" tabindex="-1">
   <h1 class="big-boi">
     Creative technologist passionate about design systems, responsive web
     design and accessibility.
@@ -12,15 +12,26 @@
 </section>
 
 <style>
-  .container {
-    /* leftover viewport: the header publishes its measured height; the
-       footer is its 90px icon row plus near + away margins (density * 15).
-       dvh, not vh — a mobile URL bar inflates vh and adds phantom space. */
-    height: calc(100dvh - var(--header-height) - (90px + var(--density) * 15));
+  /* The hero takes whatever the header and footer leave over: body becomes a
+     column, main absorbs the slack, the heading centers in it. No measured
+     header/footer heights to keep in sync, and min-height (not height) means a
+     tall heading on a short screen grows the page instead of clipping. */
+  :global(body:has(> main > .hero)) {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+  }
+  :global(main:has(> .hero)) {
     display: flex;
   }
+  .hero {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
   .big-boi {
-    flex-grow: 1;
-    align-self: center;
+    /* the type scale's bottom margin would sit inside the centering box and
+       push the heading visibly above center */
+    margin-bottom: 0;
   }
 </style>

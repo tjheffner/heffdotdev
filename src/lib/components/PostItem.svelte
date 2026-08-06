@@ -14,8 +14,10 @@
 
 <li data-density-shift class="post">
   <a data-sveltekit-prefetch class="post-link" href={'/' + href}>
-    <!-- auto-end: title/description grows, the date column hugs its content -->
-    <Split fraction="auto-end" gap="none" class="post-split">
+    <!-- auto-end: title/description grows, the date column hugs its content.
+         stackBelow="none": the date stays on the right at every width — stacked
+         it read as a stray line under the description. -->
+    <Split fraction="auto-end" gap="none" stackBelow="none" class="post-split">
       <div>
         <h2>
           {item.title}
@@ -58,13 +60,10 @@
     }
   }
 
-  /* ponytail: the site column is ~596px at the old 668px viewport breakpoint,
-     so retune Split's stack threshold to match; bump if the row flips at the
-     wrong width */
-  .post-link :global(.hz-split) {
-    --hz-width-sm: 600px;
-  }
   .right {
     text-align: right;
+    /* the date shouldn't wrap once the title column squeezes it on mobile */
+    white-space: nowrap;
+    padding-left: var(--space-near);
   }
 </style>
