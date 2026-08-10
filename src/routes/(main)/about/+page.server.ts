@@ -28,7 +28,7 @@ async function safeJson(
     if (!res.ok) throw new Error(`${label} responded ${res.status}`)
     return await res.json()
   } catch (error) {
-    console.error(`[about/latest] ${label} fetch failed:`, error)
+    console.error(`[about] ${label} fetch failed:`, error)
     return null
   }
 }
@@ -51,7 +51,7 @@ async function getRecentlyWatched(): Promise<LetterboxdEntry[]> {
     const items = await letterboxd(LETTERBOXD_ID)
     return items.slice(0, 5)
   } catch (error) {
-    console.error('[about/latest] letterboxd fetch failed:', error)
+    console.error('[about] letterboxd fetch failed:', error)
     return []
   }
 }

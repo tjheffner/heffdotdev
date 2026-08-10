@@ -74,7 +74,11 @@
   // typing in a field or when a modifier is held, so browser combos (Cmd+S,
   // Cmd+R, Cmd+P) and text entry are never hijacked.
   function onKeydown(e: KeyboardEvent) {
-    const t = e.target as HTMLElement | null;
+    // composedPath()[0], not e.target: an event from inside an open shadow root
+    // is retargeted to the host, so a field there reads as a plain <div> and the
+    // typing guard below waves it through. Injected extension UI (hyzer-annotate)
+    // and any future web component land in exactly that case.
+    const t = (e.composedPath()[0] ?? e.target) as HTMLElement | null;
     const typing = !!t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
     if (e.key === 'Escape') {
       setHidden(true);
@@ -273,7 +277,7 @@
     color: var(--pg-chrome-fg);
     background: none;
     border: none;
-    cursor: default;
+    cursor: pointer;
     transition: color 160ms ease;
   }
   .title-chip:focus-visible {
