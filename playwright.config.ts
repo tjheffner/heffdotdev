@@ -26,7 +26,6 @@ export default defineConfig({
    * stays for the uploaded artifact. */
   reporter: process.env.CI ? [['list'], ['html']] : 'html',
 
-
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */

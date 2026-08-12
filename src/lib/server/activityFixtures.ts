@@ -21,20 +21,51 @@ import type {
 // because the page does arithmetic on it.
 export const ACTIVITY_FIXTURES = {
   recentlyListened: [
-    { name: 'Fixture Track One', artist: { '#text': 'Fixture Artist' }, album: { '#text': 'Fixture Album' }, image: [{ size: 'large', '#text': '' }] },
-    { name: 'Fixture Track Two', artist: { '#text': 'Fixture Artist' }, album: { '#text': 'Fixture Album' }, image: [{ size: 'large', '#text': '' }] },
-    { name: 'Fixture Track Three', artist: { '#text': 'Fixture Artist' }, album: { '#text': 'Fixture Album' }, image: [{ size: 'large', '#text': '' }] },
+    {
+      name: 'Fixture Track One',
+      artist: { '#text': 'Fixture Artist' },
+      album: { '#text': 'Fixture Album' },
+      image: [{ size: 'large', '#text': '' }],
+    },
+    {
+      name: 'Fixture Track Two',
+      artist: { '#text': 'Fixture Artist' },
+      album: { '#text': 'Fixture Album' },
+      image: [{ size: 'large', '#text': '' }],
+    },
+    {
+      name: 'Fixture Track Three',
+      artist: { '#text': 'Fixture Artist' },
+      album: { '#text': 'Fixture Album' },
+      image: [{ size: 'large', '#text': '' }],
+    },
   ] satisfies LastfmTrack[],
 
   recentlyWatched: [
-    { film: { title: 'Fixture Film One' }, rating: { text: '★★★' }, review: '' },
-    { film: { title: 'Fixture Film Two' }, rating: { text: '★★★★' }, review: 'A fixture review, present so the review branch renders.' },
-    { film: { title: 'Fixture Film Three' }, rating: { text: '★★' }, review: '' },
+    {
+      film: { title: 'Fixture Film One' },
+      rating: { text: '★★★' },
+      review: '',
+    },
+    {
+      film: { title: 'Fixture Film Two' },
+      rating: { text: '★★★★' },
+      review: 'A fixture review, present so the review branch renders.',
+    },
+    {
+      film: { title: 'Fixture Film Three' },
+      rating: { text: '★★' },
+      review: '',
+    },
   ] satisfies LetterboxdEntry[],
 
   recentlyPlayed: {
     games: [
-      { name: 'Fixture Game One', playtime_2weeks: 120, playtime_forever: 2040 },
+      {
+        name: 'Fixture Game One',
+        playtime_2weeks: 120,
+        playtime_forever: 2040,
+      },
       { name: 'Fixture Game Two', playtime_2weeks: 0, playtime_forever: 60 },
     ],
   } satisfies SteamRecentlyPlayed,
