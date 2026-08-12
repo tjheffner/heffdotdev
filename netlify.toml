@@ -15,6 +15,23 @@
 [build.environment]
   NODE_VERSION = "22"
 
+# Deploy previews only: lets /about answer with fixed activity payloads when a
+# request carries the x-activity-fixtures header, so the Playwright a11y scan
+# doesn't hang on last.fm / Letterboxd / Steam / Duolingo. Scoped to this
+# context, so production never sets it and the guard there fails closed.
+# See src/routes/(main)/about/+page.server.ts.
+[context.deploy-preview.environment]
+  ALLOW_ACTIVITY_FIXTURES = "true"
+
+# Image CDN allowlist. Post and gallery images are GitHub issue attachments, so
+# /.netlify/images has to be told these hosts are ours to proxy — anything not
+# matched here comes back 400. See src/lib/image.ts.
+[images]
+  remote_images = [
+    "https://github\\.com/user-attachments/assets/.*",
+    "https://.*\\.githubusercontent\\.com/.*"
+  ]
+
 [[headers]]
   ## https://answers.netlify.com/t/content-type-header-not-working-in-netlify-toml/7718
   for = "/*"

@@ -11,6 +11,13 @@
 
   --density: 0.4rem; /* ~10pt grid */
 
+  /* the sticky header's rendered height: its vertical padding (2 × the
+     body-level --space-near, written via --density since --space-near
+     shifts inside density regions) + the taller of nav text and toggle.
+     Sticky bars below the header offset by this instead of magic pixels,
+     so they track the root font clamp. */
+  --header-height: calc(var(--density) * 10 + 2rem);
+
   accent-color: var(--c-accent);
 }
 
@@ -114,6 +121,18 @@ body [data-density-shift] {
 body [data-density-shift] [data-density-shift] {
   --space-near: calc(var(--density) * 1);
   --space-away: calc(var(--density) * 2);
+}
+
+/* @hyzer-labs/ui components speak --hz-space-*; alias them to the site's
+   density scale at every shift level so gap="near"/"away" on Split/Stack/etc
+   resolve to the same distances the handwritten CSS used. Selectors mirror
+   tokens.css exactly (same specificity, loaded after) so these win. */
+body,
+body [data-density-shift],
+body [data-density-shift] [data-density-shift],
+body [data-density-shift] [data-density-shift] [data-density-shift] {
+  --hz-space-near: var(--space-near);
+  --hz-space-away: var(--space-away);
 }
 
 /* colors */
@@ -228,10 +247,18 @@ dialog.lightbox::backdrop {
   transition: all 0.3s linear;
 
   &.active,
+  &[aria-current],
   &:hover {
     background-size: 2px 50px;
     color: var(--c-background);
   }
+}
+/* nav links (rendered by @hyzer-labs/ui Link, so styled here, not scoped) */
+.nav-link {
+  display: block;
+  width: fit-content;
+  font-weight: bold;
+  line-height: 1.5rem;
 }
 h2 > a,
 .link-unset {

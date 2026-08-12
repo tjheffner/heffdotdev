@@ -21,7 +21,11 @@ jobs:
     needs: prepare
     name: Run tests against PR environment
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    # The suite runs serially-ish against a deployed preview, so every
+    # navigation is a network round trip plus a possible function cold start.
+    # 5 minutes had no headroom over `npm ci` + the browser install and the job
+    # was being cancelled mid-run.
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -30,8 +34,27 @@ jobs:
           cache: npm
       - name: install dependencies
         run: npm ci
+
+      # Browser binaries are the biggest fixed cost in this job. They're
+      # version-locked, so key the cache on the resolved Playwright version and
+      # it only re-downloads on an upgrade.
+      - name: cache playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+          restore-keys: ${{ runner.os }}-playwright-
+
+      # `--with-deps` does two things: download browsers (into the cached dir)
+      # and apt-install system libraries (into system paths, which the cache
+      # can't hold). On a hit we still need the apt half or webkit won't launch.
       - name: install playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps
+      - name: install playwright system deps
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps
       - name: run tests
         run: npm run test
         env:

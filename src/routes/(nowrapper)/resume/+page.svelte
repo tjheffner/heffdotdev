@@ -1,4 +1,5 @@
 <script>
+  import { Stack, Cluster } from '@hyzer-labs/ui'
   import './resume.css'
 </script>
 
@@ -17,7 +18,7 @@
 
 <section>
   <h2>Contact</h2>
-  <ul class="contact">
+  <Stack as="ul" gap="xs" class="contact">
     <li>
       <a data-i="e" href="mailto:tanner@hyzer.sh">tanner@hyzer.sh</a>
     </li>
@@ -27,7 +28,7 @@
     <li>
       <a data-i="w" href="https://heffner.dev">https://heffner.dev</a>
     </li>
-  </ul>
+  </Stack>
 </section>
 
 <main>
@@ -38,61 +39,61 @@
     <h4>Founder & Principal Engineer</h4>
     <p>June 2025 — Present</p>
     <p>Independent consultancy providing full-stack engineering and design leadership to agencies, startups, and direct clients.</p>
-    <ul>
+    <Stack as="ul" gap="xs">
       <li>Shipped four mobile app prototypes for a Fortune 500 client over multiple engagements totaling one year. A 40-person focus group tested the second prototype to strong reception.</li>
       <li>Partnered with an agency on multiple production launches, including a three-week animation-heavy brand rebuild and realtime messaging and notification features for a social platform.</li>
       <li>Extended a retailer's headless Shopify codebase into a B2B storefront, forking from their existing D2C site and adding context-aware catalogs and pricing for different company and region segments. Also built a customer intake form integrated with Shopify.</li>
       <li>Stood up the design system for an early-stage startup over two months, migrating existing code into an accessible navigation system, a consistent type scale, and shared tokens.</li>
-    </ul>
+    </Stack>
 
     <h3 id="Agile Six TL">Agile Six</h3>
     <h4>Technical Lead</h4>
     <p>June 2023 — May 2025</p>
     <p>Led a cross-functional team of six engineers spanning frontend, backend, and DevOps.</p>
-    <ul>
+    <Stack as="ul" gap="xs">
       <li>Architected the modern headless foundation for <a href="https://va.gov">VA.gov</a>, cutting content publishing times for thousands of editors from hours to under twenty minutes. Named Key Personnel on the Accelerated Publishing contract.</li>
       <li>Led discovery and technical research for a new Accredited Representatives workflow supporting Veterans through the claims process, coordinating changes across multiple siloed VA departments where legal jurisdiction restricted direct API access. Named Key Personnel on the contract.</li>
       <li>Delivered rapid technical prototypes for two successful government contract bids, VA's SPRUCE and HHS SWIFT, each earning the highest technical marks from government evaluators. For SPRUCE, built an example form with full validation using the VA design system and external USPS address verification, in five days.</li>
       <li>Prototyped an experimental no-code form builder using Drupal as the source of truth, shipped for evaluation on a separate contract team.</li>
-    </ul>
+    </Stack>
 
     <h3 id="Coforma">Coforma</h3>
     <h4>Senior Software Engineer</h4>
     <p>January 2023 — June 2023 (Contract)</p>
-    <ul>
+    <Stack as="ul" gap="xs">
       <li>Architected the <a href="https://www.cms.gov/medical-bill-rights">Medical Bill Rights</a> portal for CMS.gov in support of the No Surprises Act, shipping under a tight legislative deadline within six months with fully localized English and Spanish content.</li>
       <li>Owned front-end implementation and mentored junior engineers while building the React form architecture, including localization, field and schema validation, and Salesforce and Drupal integration.</li>
-    </ul>
+    </Stack>
 
     <h3 id="Agile Six SSE">Agile Six</h3>
     <h4>Senior Software Engineer</h4>
     <p>September 2021 — January 2023</p>
-    <ul>
+    <Stack as="ul" gap="xs">
       <li>Led the upgrade of VA.gov's Drupal admin theme from Seven to a VA-branded theme based on Claro, dramatically improving accessibility and day-to-day usability for hundreds of content editors, many of them hospital staff without web admin backgrounds. Built an extensible foundation for custom field widgets and established content modeling standards adopted across three CMS teams.</li>
       <li>Delivered features across the CMS, including email notifications, preview improvements, editor workflow refinements, and updates to the internal editor knowledge base, all reducing editor confusion and support complaints.</li>
       <li>Contributed to benefits claims processing improvements across the VA stack as part of the PACT Act, including accessibility updates to custom React form inputs and Python-based OCR improvements for both scanned claim forms and generated PDFs from digital submissions.</li>
-    </ul>
+    </Stack>
 
     <h3 id="Instrument">Instrument</h3>
     <h4>Senior Developer</h4>
     <p>October 2019 — March 2021</p>
-    <ul>
+    <Stack as="ul" gap="xs">
       <li>Designed a bespoke responsive component library paired with an A/B testing system in Craft CMS for Greenhouse.com, enabling their marketing team to continuously optimize conversions by running tests against every component on every page.</li>
       <li>Prototyped brand explorations in React and Storybook for the former Twitter.com design team.</li>
       <li>Launched custom responsive components for <a href="https://google.org">Google.org</a> using Python and vanilla JavaScript.</li>
       <li>Shipped React components to production for <a href="https://business.pinterest.com/getting-started/">Pinterest Business</a>.</li>
       <li>Contributed to the achievements and social sharing system for the Epic Games launcher, an event-driven React overlay that integrates with game SDKs platform-wide. Worked primarily on the state management layer for achievement lifecycle events.</li>
-    </ul>
+    </Stack>
 
     <h3 id="Phase2">Phase2</h3>
     <h4>Senior Developer</h4>
     <p>June 2015 — August 2019</p>
     <p>Started as part of Phase2's first intern class and grew into a Senior Developer over four years, later mentoring new interns through the same program.</p>
-    <ul>
+    <Stack as="ul" gap="xs">
       <li>Co-maintained our agency's front-end toolkit, enabling the rapid stand-up of new sites with atomic design principles and consistent processes.</li>
       <li>Contributed to Drupal 7 to Drupal 8 migrations for at least five enterprise organizations, including Al Jazeera, Weight Watchers, and Memorial Sloan Kettering Cancer Center.</li>
       <li>Won a Webby Award as part of the team shipping the revamped <a href="https://arsenal.com">Arsenal.com</a>.</li>
-    </ul>
+    </Stack>
 
     <h2 id="recent-projects">Highlighted Projects</h2>
 
@@ -116,7 +117,7 @@
 
 <section class="skills">
   <h2>Skills & Tools</h2>
-  <ul class="tags">
+  <Cluster as="ul" gap="xs" align="stretch" class="tags">
     <li>TypeScript</li>
     <li>JavaScript</li>
     <li>Swift</li>
@@ -132,5 +133,5 @@
     <li>Accessibility</li>
     <li>Figma</li>
     <li>Storybook</li>
-  </ul>
+  </Cluster>
 </section>

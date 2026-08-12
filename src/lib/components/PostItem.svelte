@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Split } from '@hyzer-labs/ui'
   import type { BlogItem } from '$lib/types'
 
   interface Props {
@@ -13,25 +14,24 @@
 
 <li data-density-shift class="post">
   <a data-sveltekit-prefetch class="post-link" href={'/' + href}>
-    <div class="left">
-      <h2>
-        {item.title}
-      </h2>
+    <!-- auto-end: title/description grows, the date column hugs its content.
+         stackBelow="none": the date stays on the right at every width — stacked
+         it read as a stray line under the description. -->
+    <Split fraction="auto-end" gap="none" stackBelow="none" class="post-split">
+      <div>
+        <h2>
+          {item.title}
+        </h2>
 
-      <p>
-        {@render children?.()}
-      </p>
-    </div>
+        <p>
+          {@render children?.()}
+        </p>
+      </div>
 
-    <div class="right">
-      <small>{new Date(item.date).toISOString().slice(0, 10)}</small>
-
-      <!-- {#if item.category}
-        <span class="category">
-          {item.category}
-        </span>
-      {/if} -->
-    </div>
+      <div class="right">
+        <small>{new Date(item.date).toISOString().slice(0, 10)}</small>
+      </div>
+    </Split>
   </a>
 </li>
 
@@ -51,33 +51,19 @@
     width: 100%;
     padding: var(--space-away) var(--space-near);
     margin-bottom: var(--space-away);
-    display: flex;
-    flex-direction: column;
+    display: block;
     color: var(--c-text);
-
-    @media (min-width: 668px) {
-      flex-direction: row;
-    }
   }
   .post:hover {
     & h2 {
       color: var(--c-secondary);
     }
   }
-  /* .category {
-    width: fit-content;
-    border-radius: 2rem;
-    background: var(--c-secondary);
-    padding: .25rem .5rem;
-    color: var(--c-background);
-    font-weight: bold;
-  } */
 
-  .left {
-    flex-grow: 1;
-  }
   .right {
     text-align: right;
-    flex-shrink: 0;
+    /* the date shouldn't wrap once the title column squeezes it on mobile */
+    white-space: nowrap;
+    padding-left: var(--space-near);
   }
 </style>

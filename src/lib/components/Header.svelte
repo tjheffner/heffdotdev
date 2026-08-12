@@ -1,95 +1,123 @@
 <script lang="ts">
+  import { Header } from '@hyzer-labs/ui'
+  import { resize } from '@hyzer-labs/ui/observers'
   import NavLink from '$lib/components/NavLink.svelte'
-  import { afterNavigate } from '$app/navigation'
+  import { page } from '$app/state'
 
-  // Below 668px the links collapse behind a toggle; at/above it they sit inline
-  // and the toggle is hidden (see the media query). `open` only matters on mobile.
+  const links = [
+    { label: 'Posts', href: '/blog' },
+    { label: 'Gallery', href: '/gallery' },
+    { label: 'Playground', href: '/playground' },
+    { label: 'About', href: '/about' },
+  ]
+  // ariaCurrent marks the active page and drives the active style
+  // (global.css [aria-current] on the shared nav-link rule)
+  const items = $derived(
+    links.map((l) => ({
+      ...l,
+      ariaCurrent: page.url.pathname === l.href ? ('page' as const) : undefined,
+    }))
+  )
+
+  // Publish the header's real occluding height so sticky bars below it
+  // (blog filters, post-nav) sit flush underneath. Measuring beats deriving —
+  // the bar mixes rem text with a px-sized toggle. The open drawer is
+  // absolutely positioned (invisible to offsetHeight), so its bottom edge is
+  // included while it's open. The :root CSS formula is only the
+  // pre-hydration fallback.
   let open = $state(false)
+  let headerEl: HTMLElement | null = null
 
-  // Close on any navigation — covers link taps (NavLink doesn't forward onclick)
-  // as well as back/forward.
-  afterNavigate(() => {
-    open = false
+  function publish() {
+    if (!headerEl) return
+    let h = headerEl.offsetHeight
+    const drawer = headerEl.querySelector<HTMLElement>('.hz-header-drawer')
+    if (drawer && drawer.offsetHeight > 0) {
+      h = drawer.getBoundingClientRect().bottom - headerEl.getBoundingClientRect().top
+    }
+    document.documentElement.style.setProperty('--header-height', `${Math.round(h)}px`)
+  }
+
+  // rides the component's restProps onto the <header> element; fires on
+  // mount and any bar resize. offsetHeight (not entry.contentRect, which
+  // would miss the padding) is read in publish().
+  const measure = resize((entry) => {
+    headerEl = entry.target as HTMLElement
+    publish()
+  })
+
+  // re-measure when the drawer toggles — effects run after the DOM updates
+  $effect(() => {
+    open
+    publish()
   })
 </script>
 
-<svelte:window
-  onkeydown={(e) => {
-    if (e.key === 'Escape') open = false
-  }}
-/>
+<a class="skip-link" href="#content">Skip to main content</a>
 
-<header class="header" id="header">
-  <a class="skip-link" href="#content">Skip to main content</a>
+<!-- measured breakpoint matches the old 668px media query; the drawer closes
+     itself on link activation, so no remount needed -->
+<Header
+  {items}
+  sticky
+  mobileBreakpoint={668}
+  ariaLabel="Primary"
+  navItemClass="nav-link"
+  id="header"
+  class="site-header"
+  bind:open
+  {@attach measure}
+>
+    {#snippet logo()}
+      <NavLink href="/">heffner.dev</NavLink>
+    {/snippet}
 
-  <div class="wrapper">
-    <nav class="nav" data-density-shift aria-label="Primary">
-      <div class="bar">
-        <NavLink href="/">heffner.dev</NavLink>
-
-        <button
-          type="button"
-          class="menu-toggle"
-          aria-expanded={open}
-          aria-controls="primary-links"
-          aria-label={open ? 'Close menu' : 'Open menu'}
-          onclick={() => (open = !open)}
-        >
-          <!-- All three lines always render so they can transition; the two
-               outer lines rotate/translate into an X, the middle fades out. -->
-          <svg
-            class="menu-icon"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            aria-hidden="true"
-          >
-            <line class="line top" x1="4" y1="6" x2="20" y2="6" />
-            <line class="line middle" x1="4" y1="12" x2="20" y2="12" />
-            <line class="line bottom" x1="4" y1="18" x2="20" y2="18" />
-          </svg>
-        </button>
-      </div>
-
-      <div class="links" id="primary-links" class:open data-density-shift>
-        <NavLink href="/blog">Posts</NavLink>
-        <NavLink href="/gallery">Gallery</NavLink>
-        <NavLink href="/playground">Playground</NavLink>
-        <NavLink href="/about">About</NavLink>
-      </div>
-    </nav>
-  </div>
-</header>
+    {#snippet menuIcon()}
+      <!-- All three lines always render so they can transition; the two
+           outer lines rotate/translate into an X, the middle fades out. -->
+      <svg
+        class="menu-icon"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <line class="line top" x1="4" y1="6" x2="20" y2="6" />
+        <line class="line middle" x1="4" y1="12" x2="20" y2="12" />
+        <line class="line bottom" x1="4" y1="18" x2="20" y2="18" />
+      </svg>
+    {/snippet}
+  </Header>
 
 <style>
-  .header {
-    position: sticky;
-    top: 0;
+  :global(.site-header) {
     padding: var(--space-near) 0;
     background-color: var(--c-background);
-    z-index: 10;
   }
 
-  /* Mobile-first: the bar sits alone; the links float below it as an overlay. */
-  .nav {
-    position: relative;
-    display: flex;
-    flex-direction: column;
+  /* the page-width wrapper, applied to the header's inner bar */
+  :global(.site-header .hz-header-inner) {
+    max-width: 65ch;
+    margin: 0 var(--space-near);
   }
-  .bar {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+  @media (width >= 768px) {
+    :global(.site-header .hz-header-inner) {
+      margin: 0 auto;
+    }
+  }
+
+  /* bar links: right-aligned row, same gap as before */
+  :global(.site-header .hz-nav-links) {
+    justify-content: flex-end;
     gap: 1rem;
   }
 
-  .menu-toggle {
-    display: inline-flex;
+  /* button reset only — the component owns the toggle's show/hide */
+  :global(.site-header .hz-header-toggle) {
     align-items: center;
     justify-content: center;
     padding: 0.25rem;
@@ -112,81 +140,50 @@
   }
   /* Hamburger -> X: top drops to the middle and tilts, bottom rises and
      counter-tilts, middle fades. Driven off the button's aria-expanded. */
-  .menu-toggle[aria-expanded='true'] .top {
+  :global(.site-header .hz-header-toggle[aria-expanded='true']) .top {
     transform: translateY(6px) rotate(45deg);
   }
-  .menu-toggle[aria-expanded='true'] .middle {
+  :global(.site-header .hz-header-toggle[aria-expanded='true']) .middle {
     opacity: 0;
   }
-  .menu-toggle[aria-expanded='true'] .bottom {
+  :global(.site-header .hz-header-toggle[aria-expanded='true']) .bottom {
     transform: translateY(-6px) rotate(-45deg);
   }
 
-  /* Overlay panel: pulled out of flow so it floats over page content instead
-     of pushing it down. */
-  .links {
-    display: flex;
+  /* Drawer as overlay panel: pulled out of flow so it floats over page
+     content instead of pushing it down. Geometry matches the old .links
+     overlay: inset to the wrapper column, hung from the nav bar (100% of the
+     header includes its bottom padding, hence the subtraction), and padded at
+     the old second-density-shift distance (0.8rem). */
+  :global(.site-header .hz-header-drawer) {
     position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    flex-direction: row;
-    justify-content: space-around;
-    gap: 1rem;
-    padding: var(--space-away) 0;
+    top: calc(100% - var(--space-near));
+    padding: calc(var(--density) * 2) 0;
     background-color: var(--c-background);
     border-bottom: 2px solid var(--c-accent);
-
-    /* Hidden until open; fade + slide down. visibility is delayed on close so
-       the fade-out can play before it leaves the a11y tree / tab order. */
-    opacity: 0;
-    transform: translateY(-0.5rem);
-    visibility: hidden;
+  }
+  /* drawer links: same row layout the old mobile menu had */
+  :global(.site-header .hz-header-drawer .hz-nav[data-orientation='vertical'] .hz-nav-links) {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-inline: var(--space-near);
+    gap: 1rem;
+  }
+  /* fade + slide on open. The drawer is display:none while closed, so the
+     close direction can't animate — @starting-style covers open only. */
+  :global(.site-header .hz-header-drawer[data-state='open']) {
     transition:
       opacity 0.2s ease,
-      transform 0.2s ease,
-      visibility 0s linear 0.2s;
-  }
-  .links.open {
-    opacity: 1;
-    transform: translateY(0);
-    visibility: visible;
-    transition:
-      opacity 0.2s ease,
-      transform 0.2s ease,
-      visibility 0s;
-  }
-
-  /* At/above the site breakpoint: inline row, no toggle, no overlay. */
-  @media (min-width: 668px) {
-    .nav {
-      position: static;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .menu-toggle {
-      display: none;
-    }
-    .links {
-      display: flex;
-      position: static;
-      flex-direction: row;
-      gap: 1rem;
-      padding: 0;
-      background-color: transparent;
-      border-bottom: none;
-      /* Reset the mobile overlay's animated-hidden state. */
-      opacity: 1;
-      transform: none;
-      visibility: visible;
-      transition: none;
+      transform 0.2s ease;
+    @starting-style {
+      opacity: 0;
+      transform: translateY(-0.5rem);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .line,
-    .links {
+    :global(.site-header .hz-header-drawer[data-state='open']) {
       transition: none;
     }
   }

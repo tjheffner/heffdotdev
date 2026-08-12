@@ -15,10 +15,16 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   retries: 2,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  /* No CI worker override: Playwright's default is half the available cores,
+   * which is 2 on a standard GitHub runner. Forcing 1 made the suite serial and
+   * it ran past the job timeout. 2 is also about as much concurrency as the
+   * deployed preview wants — /about fans out to four third-party APIs per
+   * request, so piling on more parallel hits invites rate limiting. */
+
+  /* `list` so a CI log shows per-test progress — with html alone the run prints
+   * nothing on a non-TTY runner, and a cancelled job is undiagnosable. `html`
+   * stays for the uploaded artifact. */
+  reporter: process.env.CI ? [['list'], ['html']] : 'html',
 
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -26,6 +32,12 @@ export default defineConfig({
     baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:5173',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+
+    /* Ask /about for fixed activity payloads instead of its four third-party
+     * APIs — see about/+page.server.ts. Applies to every request because no
+     * other route reads the header, which keeps this to one line instead of a
+     * duplicated set of per-browser projects. A production deploy refuses it. */
+    extraHTTPHeaders: { 'x-activity-fixtures': '1' },
   },
 
   /* Locally, boot the dev server so `npm test` is self-contained. In CI we
@@ -38,6 +50,9 @@ export default defineConfig({
         url: 'http://localhost:5173',
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
+        /* Lets the locally-booted server honour the fixture header, so
+         * `npm test` needs no setup. Deployed environments opt in themselves. */
+        env: { ALLOW_ACTIVITY_FIXTURES: 'true' },
       },
 
   /* Configure projects for major browsers */

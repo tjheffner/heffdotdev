@@ -1,41 +1,30 @@
 <script lang="ts">
-  let { 
+  import { TextInput } from '@hyzer-labs/ui'
+  import IconSearch from '@hyzer-labs/ui/icons/search'
+
+  let {
       search = $bindable(),
       selectedCategories = $bindable(),
       categories,
       inputEl = $bindable(),
-      ...props 
   } = $props();
-  
 </script>
 
 <div class="blog-search" data-density-shift id="filters">
   <!-- Search Bar -->
   <div class="search">
-    <input
-      aria-label="Search articles"
-      id="search"
-      type="text"
+    <TextInput
+      name="search"
+      label="Search articles"
+      hideLabel
       bind:value={search}
-      bind:this={inputEl}
+      bind:element={inputEl}
       placeholder="Hit / to search"
-      class="input"
-    />
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      aria-hidden="true"
-      focusable="false"
     >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-      />
-    </svg>
+      {#snippet suffix()}
+        <IconSearch size={20} />
+      {/snippet}
+    </TextInput>
   </div>
 
   <!-- Filter Buttons -->
@@ -69,27 +58,27 @@
 <style>
   .blog-search {
     position: sticky;
-    top: 90px;
+    top: var(--header-height);
     background-color: var(--c-background);
     padding: var(--space-away) 0;
     border-bottom: 2px solid var(--c-accent);
   }
-  .search {
-    position: relative;
-  }
-  .input {
-    width: 100%;
+  /* the old .input pill styling, moved onto the field's bordered box — the
+     wrapper carries the border so the suffix icon sits inside it */
+  .search :global(.hz-input-wrapper) {
     height: 2.5rem;
     border-radius: 2rem;
     border: 1px solid;
     padding: 0 var(--space-away);
+    background-color: field;
   }
-  svg {
-    position: absolute;
-    top: .6rem;
-    right: var(--space-away);
-    height: 1.25rem;
-    width: 1.25rem;
+  .search :global(.hz-input-wrapper input) {
+    border: none;
+    background: none;
+    outline: none;
+  }
+  .search :global(.hz-input-wrapper:focus-within) {
+    outline: 2px solid var(--c-accent);
   }
 
   .pillbox {

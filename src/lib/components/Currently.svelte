@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Carousel, Stack } from '@hyzer-labs/ui'
   import type {
     LastfmTrack,
     LetterboxdEntry,
@@ -8,7 +9,7 @@
 
   // Props are promises: the server load streams each source in as it resolves,
   // so this component renders its shell immediately and fills each section on
-  // arrival (see routes/(main)/about/latest/+page.server.ts).
+  // arrival (see routes/(main)/about/+page.server.ts).
   interface Props {
     recentlyListened: Promise<LastfmTrack[]>
     recentlyWatched: Promise<LetterboxdEntry[]>
@@ -22,6 +23,21 @@
     recentlyPlayed,
     duolingo
   }: Props = $props();
+
+  // Every group is always a slide, even the ones whose data may never arrive:
+  // the count has to be stable or the rail's dots would appear one at a time as
+  // each third-party call settles. Each slide awaits its own source inside, so
+  // the streaming load survives.
+  // `rows` marks the groups that are genuinely a list of peer entries, so the
+  // dashed rule goes between them. Duolingo is one entry plus the footnote
+  // explaining its asterisk — a rule there would cut the note off its own line.
+  const groups = [
+    { id: 'music', emoji: '🎶', label: 'recently listened', rows: true },
+    { id: 'movies', emoji: '🍿', label: 'recently watched', rows: true },
+    { id: 'duolingo', emoji: '🦉', label: 'language learning', rows: false },
+    { id: 'books', emoji: '📚', label: 'recently read', rows: true },
+    { id: 'games', emoji: '🎮', label: 'recently played', rows: true },
+  ]
 
   // duolingo math — duolingo may be an empty object if the (unofficial) API
   // was unreachable at load time, so guard every access.
@@ -47,132 +63,185 @@
   }
 </script>
 
-<ul class="clean-list">
-  <li class="list-item grid">
-    <p class="h1">🎶</p>
-    <div class="contents" data-density-shift>
-      {#await recentlyListened}
-        <p class="small">Loading…</p>
-      {:then tracks}
-        {#each tracks as track}
-          <div class="tracklist">
-            <img src={track.image.find(i => i.size === 'large')?.['#text']} alt={track.album['#text']}>
-            <div>
-              <strong>{track.name}</strong>
-              <p>{track.artist['#text']}</p>
-            </div>
-          </div>
-        {/each}
-      {/await}
-    </div>
-  </li>
+<Carousel
+  items={groups}
+  layout="rail"
+  loop
+  ariaLabel="Recent activity"
+  slideLabel={(g) => g.label}
+  class="activity-rail"
+>
+  {#snippet slide(group)}
+    <section class="group" data-density-shift data-rows={group.rows ? '' : undefined}>
+      <!-- The emoji leads the slide on its own; the title stays in the heading
+           for structure and to name the emoji, just not on screen. -->
+      <h3 class="group-head">
+        <span class="emoji" aria-hidden="true">{group.emoji}</span>
+        <span class="label sr-only">{group.label}</span>
+      </h3>
 
-  <li class="list-item grid">
-    <p class="h1">🍿</p>
-    <div class="contents" data-density-shift>
-      {#await recentlyWatched}
-        <p class="small">Loading…</p>
-      {:then movies}
-        {#each movies as movie}
-           <p><strong>{movie.film.title}</strong> - <span class="secondary"> {movie.rating.text}</span></p>
-           {#if movie.review.length > 0}
-            <p class="small">{movie.review}</p>
-           {/if}
-        {/each}
-      {/await}
-    </div>
-  </li>
+      {#if group.id === 'music'}
+        {#await recentlyListened}
+          <p class="small">Loading…</p>
+        {:then tracks}
+          <Stack gap="none">
+            {#each tracks as track}
+              <p><strong>{track.name}</strong> <span class="secondary">— {track.artist['#text']}</span></p>
+            {/each}
+          </Stack>
+        {/await}
 
-  {#await duolingo then d}
-    {#if d.courses}
-      {@const stats = duolingoStats(d)}
-      <li class="list-item grid">
-        <p class="h1">🦉</p>
-        <div class="contents" data-density-shift>
-          {#each d.courses as course}
-            <strong>{course.title} {getFlagEmoji(course.learningLanguage)}</strong>
-          {/each}
+      {:else if group.id === 'movies'}
+        {#await recentlyWatched}
+          <p class="small">Loading…</p>
+        {:then movies}
+          <Stack gap="none">
+            {#each movies as movie}
+              <p>
+                <strong>{movie.film.title}</strong>
+                <span class="secondary">{movie.rating.text}</span>
+                {#if movie.review.length > 0}<span class="small secondary">— {movie.review}</span>{/if}
+              </p>
+            {/each}
+          </Stack>
+        {/await}
 
-          <p><strong>Current streak:</strong>&nbsp;<strong class="secondary">{d.streak}</strong><sup class="accent">*</sup> days!</p>
-          <p>Streak began: <span class="accent">{stats.formattedDate}</span></p>
-          <span class="secondary small">
-            <span class="accent">*</span>{stats.freezes} days missed. Duolingo plays fast and loose with the meaning of the word "streak"
-          </span>
-        </div>
-      </li>
-    {/if}
-  {/await}
+      {:else if group.id === 'duolingo'}
+        {#await duolingo}
+          <p class="small">Loading…</p>
+        {:then d}
+          {#if d.courses}
+            {@const stats = duolingoStats(d)}
+            <Stack gap="none">
+              {#each d.courses as course}
+                <p>
+                  <strong>{course.title} {getFlagEmoji(course.learningLanguage)}</strong>
+                  <span class="secondary">· {d.streak} day streak<sup class="accent">*</sup> since {stats.formattedDate}</span>
+                </p>
+              {/each}
+              <p class="small secondary">
+                <span class="accent">*</span>{stats.freezes} days missed. Duolingo plays fast and loose with the meaning of the word "streak"
+              </p>
+            </Stack>
+          {:else}
+            <p class="secondary">Duolingo isn't answering right now.</p>
+          {/if}
+        {/await}
 
-  <li class="list-item grid">
-    <p class="h1">📚</p>
-    <div class="contents" data-density-shift>
-      <p class="m-0">The last three books I read were:</p>
-      <ol>
-              <li>
-          <strong class="secondary">Trading in the Zone</strong> by <span class="">Mark Douglas</span>
-        </li>
-        <li>
-          <strong class="secondary">Debt: The First 5,000 Years</strong> by <span class="">David Graeber</span>
-        </li>
-                <li>
-          <strong class="secondary">This is How You Lose The Time War</strong> by <span class="">Amal El-Mohtar and Max Gladstone</span>
-        </li>
-      </ol>
-    </div>
-  </li>
+      {:else if group.id === 'books'}
+        <Stack gap="none">
+          <p><strong class="secondary">Trading in the Zone</strong> — Mark Douglas</p>
+          <p><strong class="secondary">Debt: The First 5,000 Years</strong> — David Graeber</p>
+          <p><strong class="secondary">This is How You Lose The Time War</strong> — Amal El-Mohtar and Max Gladstone</p>
+        </Stack>
 
-  <li class="list-item grid">
-    <p class="h1">🎮</p>
-    <div class="contents" data-density-shift>
-      {#await recentlyPlayed}
-        <p class="small">Loading…</p>
-      {:then played}
-        {#if played.games}
-          {#each played.games.slice(0, 5) as game }
-            <p><strong>{game.name}</strong></p>
-            <p class="small"><span class="secondary">{(game.playtime_2weeks / 60).toFixed(0)}</span> hours out of <span class="accent">{(game.playtime_forever / 60).toFixed(0)}</span> total hours played</p>
-          {/each}
-        {:else}
-          <p>No playtime logged on Steam in the last two weeks.</p>
-        {/if}
-      {/await}
-    </div>
-  </li>
-</ul>
-
+      {:else}
+        {#await recentlyPlayed}
+          <p class="small">Loading…</p>
+        {:then played}
+          {#if played.games}
+            <Stack gap="none">
+              {#each played.games.slice(0, 5) as game }
+                <p>
+                  <strong>{game.name}</strong>
+                  <span class="secondary stat">{(game.playtime_2weeks / 60).toFixed(0)}h played / {(game.playtime_forever / 60).toFixed(0)}h total</span>
+                </p>
+              {/each}
+            </Stack>
+          {:else}
+            <p>No playtime logged on Steam in the last two weeks.</p>
+          {/if}
+        {/await}
+      {/if}
+    </section>
+  {/snippet}
+</Carousel>
 
 <style>
-  .grid {
+  /* The rail's default slide is clamp(9rem, 20%, 18rem) — sized for thumbnails,
+     far too narrow for a track list. This gives ~2 groups in view inside the
+     65ch wrapper with the third peeking as the "keep scrolling" affordance. */
+  :global(.activity-rail) {
+    /* 48%, not 45%: the icon column costs each row ~58px, and the playtime line
+       needs most of it back to hold one line. Two slides still don't quite fill
+       the viewport, so the peeking third stays as the "keep scrolling" cue. */
+    --hz-carousel-item-width: clamp(16rem, 48%, 21rem);
+    /* clear the accordion summary — the rail's first row would otherwise start
+       immediately under "recent activity" */
+    margin-top: var(--space-away);
+  }
+
+  /* A looping rail hides its scrollbar — the thumb describes a position in a
+     fixed range, which is meaningless on content that wraps. @hyzer-labs/ui
+     ships exactly this rule, but in theme/components/carousel.css, and this app
+     deliberately loads only the token sheet (see routes/+layout.svelte) so the
+     library's visual rules can't leak across route groups. So: copied, not
+     imported. Drop it if the theme sheet ever does get loaded. */
+  :global(.activity-rail .hz-carousel-viewport) {
+    scrollbar-width: none;
+  }
+  :global(.activity-rail .hz-carousel-viewport::-webkit-scrollbar) {
+    display: none;
+  }
+
+  /* The default ghost Button reads as generic app chrome — a bordered grey box.
+     Match the footer's social icons instead: bare accent glyph, filled on hover.
+     Only margin-top here: the row's own justify-content/gap are set by the
+     library's scoped rules at equal specificity and would win anyway. */
+  :global(.activity-rail .hz-carousel-controls) {
+    margin-top: var(--space-near);
+  }
+  :global(.activity-rail .hz-button) {
+    border: 0;
+    border-radius: 8px;
+    padding: 0.25rem;
+    background: none;
+    color: var(--c-accent);
+    transition: all ease-in-out 0.3s;
+  }
+  :global(.activity-rail .hz-button:hover) {
+    background-color: var(--c-secondary);
+    color: var(--c-background);
+  }
+
+  /* Two columns, both starting on row 1: the icon leads the first row and every
+     row after it clears the icon's width. That indent is the point — it reads as
+     a wider gap between groups than the actual spacing provides. */
+  .group {
+    /* slides stretch to the tallest in the row; keep each one's content top-aligned */
+    height: 100%;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(1, 1fr);
+    grid-template-columns: auto 1fr;
     gap: var(--space-near);
-  }
-  .contents {
-    grid-column: span 4 / span 4;
+    align-items: start;
   }
 
-  .list-item {
-    margin: var(--space-away) 0;
-    padding-bottom: var(--space-away);
-    border-bottom: 1px dashed var(--c-secondary);
-
-    > .h1 {
-      margin-bottom: 0;
-    }
+  /* The rule separates entries from each other, so it goes between rows rather
+     than capping the group. `p + p` means the first row never gets one. */
+  .group[data-rows] p + p {
+    border-top: 1px dashed var(--c-secondary);
+    padding-top: var(--space-near);
+    margin-top: var(--space-near);
+  }
+  .group-head {
+    margin: 0;
+  }
+  .group-head .emoji {
+    display: block;
+    font-size: 1.5em;
+    line-height: 1;
   }
 
-  span.small {
-    margin-bottom: var(--space-near);
+  /* Stack owns the rhythm between rows; the type scale's paragraph margin would
+     stack on top of its gap and undo the tightening. */
+  .group p {
+    margin: 0;
   }
 
-  .tracklist {
-    display: flex;
-    flex-direction: row;
-    gap: var(--space-near);
-    margin-bottom: var(--space-near);
-    img {
-      max-width: 75px;
-    }
+  /* Game titles come from Steam, so a long one will always be able to force a
+     wrap. Keeping the stats unbreakable means the line breaks before them
+     rather than through them — "0h of" / "34h played" was the ugly part. */
+  .group .stat {
+    white-space: nowrap;
   }
 </style>

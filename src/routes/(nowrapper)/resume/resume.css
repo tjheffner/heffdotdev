@@ -72,9 +72,11 @@ h4 {
 ul {
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
+  /* Every list here is a Stack or a Cluster, which own display/direction and
+     read their gap from this token. Defined in em, not the token default's
+     rem, so the rhythm keeps tracking font-size — the print block relies on
+     that when it shrinks the type. */
+  --hz-space-xs: 0.5em;
 }
 .contact {
   list-style: none;
@@ -96,8 +98,6 @@ ul {
 
 ul.tags {
   list-style: none;
-  flex-wrap: wrap;
-  flex-direction: row;
 }
 
 .tags li {
@@ -107,12 +107,6 @@ ul.tags {
   border: 1px solid #d5d5d5;
   padding: 0.2em 0.7em;
   -webkit-print-color-adjust: exact;
-}
-
-ul:not(.tags) {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
 }
 
 ul:not(.tags) li {
@@ -186,7 +180,7 @@ p {
   }
 
   ul {
-    gap: 0.25em;
+    --hz-space-xs: 0.25em;
   }
 
   p {
