@@ -26,11 +26,6 @@ export default defineConfig({
    * stays for the uploaded artifact. */
   reporter: process.env.CI ? [['list'], ['html']] : 'html',
 
-  /* /about is excluded in CI: its server load hits last.fm, Letterboxd, Steam
-   * and Duolingo on every request, which is both the slowest page to load from
-   * a cold function and the one most able to fail for reasons that have nothing
-   * to do with this codebase. It's still covered locally by `npm test`. */
-  testIgnore: process.env.CI ? ['**/about.spec.ts'] : [],
 
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -38,6 +33,12 @@ export default defineConfig({
     baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:5173',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+
+    /* Ask /about for fixed activity payloads instead of its four third-party
+     * APIs — see about/+page.server.ts. Applies to every request because no
+     * other route reads the header, which keeps this to one line instead of a
+     * duplicated set of per-browser projects. A production deploy refuses it. */
+    extraHTTPHeaders: { 'x-activity-fixtures': '1' },
   },
 
   /* Locally, boot the dev server so `npm test` is self-contained. In CI we
@@ -50,6 +51,9 @@ export default defineConfig({
         url: 'http://localhost:5173',
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
+        /* Lets the locally-booted server honour the fixture header, so
+         * `npm test` needs no setup. Deployed environments opt in themselves. */
+        env: { ALLOW_ACTIVITY_FIXTURES: 'true' },
       },
 
   /* Configure projects for major browsers */
