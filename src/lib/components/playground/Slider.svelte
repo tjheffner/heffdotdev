@@ -1,60 +1,66 @@
 <script lang="ts">
-  export let label: string;
-  export let value: number;
-  export let min = 0;
-  export let max = 100;
-  export let step = 1;
-  export let unit = '';
+  import { Slider } from '@hyzer-labs/ui'
 
-  // Clamp on blur so partial/out-of-range typing is tidied without fighting
-  // the user mid-keystroke (clamping on every input blocks typing e.g. "100").
-  function sanitize(e: Event) {
-    const el = e.currentTarget as HTMLInputElement;
-    let n = Number(el.value);
-    if (Number.isNaN(n)) n = min;
-    value = Math.min(max, Math.max(min, n));
-  }
+  // Thin wrapper over @hyzer-labs/ui's Slider, the same shape every other
+  // component here takes over a hyzer primitive. It exists for two reasons:
+  // the ~40 call sites across the playgrounds pass only `label`, and hyzer's
+  // FieldBase requires a `name`; and the playground chrome is a compact
+  // three-column row (label | track | value) rather than the stacked field
+  // the library renders by default.
+  let {
+    label,
+    value = $bindable(),
+    min = 0,
+    max = 100,
+    step = 1,
+    unit = '',
+  }: {
+    label: string
+    value: number
+    min?: number
+    max?: number
+    step?: number
+    unit?: string
+  } = $props()
+
+  // Never submitted — these controls drive a canvas, not a form — so a slug of
+  // the label is name enough, and it keeps the call sites to just `label`.
+  let name = $derived(label.toLowerCase().replace(/[^a-z0-9]+/g, '-'))
 </script>
 
-<label class="slider">
-  <span class="lab">{label}</span>
-  <input class="range" type="range" bind:value {min} {max} {step} />
-  <span class="num">
-    <input
-      class="field"
-      type="number"
-      bind:value
-      {min}
-      {max}
-      {step}
-      on:blur={sanitize}
-      aria-label={label}
-    />
-    {#if unit}<span class="unit">{unit}</span>{/if}
-  </span>
-</label>
+<div class="slider">
+  <Slider {label} {name} {min} {max} {step} {unit} showInput bind:value />
+</div>
 
 <style>
-  .slider {
+  /* Collapse the stacked field into the playground's one-line row. The label
+     is a real <label for> from hyzer's Field, so this is layout only. */
+  .slider :global(.hz-field--slider) {
     display: grid;
-    grid-template-columns: 3.4rem 1fr auto;
+    grid-template-columns: 3.4rem 1fr;
     align-items: center;
     gap: 0.5rem;
     font-size: 0.7rem;
   }
-  .lab {
+
+  .slider :global(.hz-field-label) {
     color: var(--pg-dim, #8a8a93);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     white-space: nowrap;
   }
-  .num {
-    display: flex;
-    align-items: baseline;
-    justify-content: flex-end;
-    gap: 1px;
+
+  .slider :global(.hz-slider-row) {
+    gap: 0.5rem;
   }
-  .field {
+
+  .slider :global(.hz-slider-track) {
+    flex: 1;
+  }
+
+  /* The exact-entry number field: bare, right-aligned, tabular so the digits
+     don't jitter as you drag. */
+  .slider :global(.hz-slider-number) {
     width: 3rem;
     font: inherit;
     font-variant-numeric: tabular-nums;
@@ -68,23 +74,26 @@
     appearance: textfield;
     -moz-appearance: textfield;
   }
-  .field::-webkit-outer-spin-button,
-  .field::-webkit-inner-spin-button {
+  .slider :global(.hz-slider-number::-webkit-outer-spin-button),
+  .slider :global(.hz-slider-number::-webkit-inner-spin-button) {
     -webkit-appearance: none;
     margin: 0;
   }
-  .field:hover {
+  .slider :global(.hz-slider-number:hover) {
     border-bottom-color: var(--pg-line, #26262e);
   }
-  .field:focus {
+  .slider :global(.hz-slider-number:focus) {
     outline: none;
     border-bottom-color: var(--pg-accent, #ff6b35);
   }
-  .unit {
+
+  .slider :global(.hz-slider-unit) {
     color: var(--pg-dim, #8a8a93);
     flex: none;
   }
-  input[type='range'] {
+
+  /* Hairline track, dot thumb. */
+  .slider :global(.hz-slider) {
     width: 100%;
     height: 2px;
     appearance: none;
@@ -93,7 +102,7 @@
     border-radius: 1px;
     cursor: pointer;
   }
-  input[type='range']::-webkit-slider-thumb {
+  .slider :global(.hz-slider::-webkit-slider-thumb) {
     appearance: none;
     -webkit-appearance: none;
     width: 12px;
@@ -102,14 +111,14 @@
     background: var(--pg-accent, #ff6b35);
     border: none;
   }
-  input[type='range']::-moz-range-thumb {
+  .slider :global(.hz-slider::-moz-range-thumb) {
     width: 12px;
     height: 12px;
     border-radius: 50%;
     background: var(--pg-accent, #ff6b35);
     border: none;
   }
-  input[type='range']:focus-visible {
+  .slider :global(.hz-slider:focus-visible) {
     outline: 2px solid var(--pg-accent, #ff6b35);
     outline-offset: 4px;
   }
