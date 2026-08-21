@@ -135,7 +135,7 @@
   .pad {
     width: 100%;
     aspect-ratio: 1 / 1;
-    border: 1px solid var(--pg-line);
+    border: 1px solid var(--hz-color-border);
     border-radius: 6px;
     overflow: hidden;
   }

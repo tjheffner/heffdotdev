@@ -3,10 +3,13 @@
   // always present on every route — deterministic, regardless of which route
   // group you land on or navigate through.
   // The generated token sheet stands in for @hyzer-labs/ui/tokens.css: the
-  // same custom properties (--hz-*, no visual rules, so it can't leak styles
-  // into either group) plus our three [data-theme] blocks. Authored in
-  // hyzer.config.ts, regenerated with `npm run tokens`, committed by hand.
-  // global.css loads after it so the --hz-space aliases there win.
+  // same custom properties (--hz-*, no visual rules beyond the density
+  // cascade, so it can't leak styles into either group) plus our three
+  // [data-theme] blocks. Every token the site uses -- palette, type scale,
+  // font stacks, spacing rhythm and density grid -- is authored in
+  // hyzer.config.ts; global.css consumes them and adds only what a token
+  // sheet cannot express (@font-face and layout).
+  // Regenerate with `npm run tokens`, commit by hand.
   import '../hyzer-tokens.css'
   import '../global.css'
   import { page } from '$app/state'
@@ -30,6 +33,26 @@
     const id = page.route.id
     document.body.dataset.group = groupFor(id)
     document.body.dataset.theme = themeFor(id)
+  })
+
+  // Images start on a grey placeholder (global.css). Clear it once the image
+  // actually paints, so a transparent PNG isn't left sitting on a grey card.
+  // `load` does not bubble, but it does fire on the way down, so a single
+  // capture-phase listener covers every image on every page — markdown
+  // content, gallery thumbs, anything added later — with no per-image wiring.
+  // A broken image never fires load and so keeps its placeholder, which is
+  // exactly the defensive-CSS behavior we want to hold on to.
+  $effect(() => {
+    const onLoad = (e: Event) => {
+      if (e.target instanceof HTMLImageElement) e.target.dataset.loaded = ''
+    }
+    document.addEventListener('load', onLoad, true)
+    // Anything already decoded before hydration will never fire load for us.
+    // `complete` is true for a broken image too, hence the naturalWidth check.
+    for (const img of document.querySelectorAll('img')) {
+      if (img.complete && img.naturalWidth > 0) img.dataset.loaded = ''
+    }
+    return () => document.removeEventListener('load', onLoad, true)
   })
 </script>
 

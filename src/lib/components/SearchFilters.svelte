@@ -59,9 +59,9 @@
   .blog-search {
     position: sticky;
     top: var(--header-height);
-    background-color: var(--c-background);
-    padding: var(--space-away) 0;
-    border-bottom: 2px solid var(--c-accent);
+    background-color: var(--hz-color-surface);
+    padding: var(--hz-space-away) 0;
+    border-bottom: 2px solid var(--hz-intent-primary);
   }
   /* the old .input pill styling, moved onto the field's bordered box — the
      wrapper carries the border so the suffix icon sits inside it */
@@ -69,7 +69,7 @@
     height: 2.5rem;
     border-radius: 2rem;
     border: 1px solid;
-    padding: 0 var(--space-away);
+    padding: 0 var(--hz-space-away);
     background-color: field;
   }
   .search :global(.hz-input-wrapper input) {
@@ -78,7 +78,7 @@
     outline: none;
   }
   .search :global(.hz-input-wrapper:focus-within) {
-    outline: 2px solid var(--c-accent);
+    outline: 2px solid var(--hz-intent-primary);
   }
 
   .pillbox {
@@ -87,12 +87,12 @@
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    margin: var(--space-away) 0;
-    gap: var(--space-near);
+    margin: var(--hz-space-away) 0;
+    gap: var(--hz-space-near);
   }
   .pillbox-label {
     width: 100%;
-    margin: var(--space-near) 0;
+    margin: var(--hz-space-near) 0;
 
     @media (min-width: 668px) {
       width: fit-content;
@@ -102,7 +102,7 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: var(--space-near);
+    gap: var(--hz-space-near);
   }
 
 
@@ -114,16 +114,16 @@
     border-radius: 2rem;
     transition: .3s all ease-in-out;
     cursor: pointer;
-    background-color: var(--c-secondary-brighter);
+    background-color: var(--hz-palette-secondary-tint);
 
     &:hover {
-        background-color: var(--c-secondary);
-        color: var(--c-background);
+        background-color: var(--hz-intent-secondary);
+        color: var(--hz-color-surface);
     }
   }
   .active label {
-    background-color: var(--c-secondary);
-    color: var(--c-background);
+    background-color: var(--hz-intent-secondary);
+    color: var(--hz-color-surface);
   }
 
 </style>

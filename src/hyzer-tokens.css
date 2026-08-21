@@ -61,18 +61,18 @@
 	/* =====================================================================
 	 * Type scale
 	 * ===================================================================== */
-	--hz-font-size-sm: 0.875rem;
+	--hz-font-size-sm: 0.8448em;
 	--hz-font-size-base: 1rem;
-	--hz-font-size-lg: 1.4rem;
-	--hz-font-size-xl: 1.65rem;
-	--hz-font-size-2xl: 2.75rem;
+	--hz-font-size-lg: 1.401em;
+	--hz-font-size-xl: 1.6583em;
+	--hz-font-size-2xl: 2.75em;
 	--hz-font-size-3xl: 3.5rem;
 
 	/* =====================================================================
 	 * Supporting type tokens
 	 * ===================================================================== */
-	--hz-font-family-sans: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-	--hz-font-family-serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+	--hz-font-family-sans: 'Mulish', sans-serif;
+	--hz-font-family-serif: 'Merriweather', serif;
 	--hz-font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 	--hz-font-weight-normal: 400;
 	--hz-font-weight-medium: 500;
@@ -175,23 +175,23 @@
  * body; depth 4 is three data-density-shift ancestors deep.
  * ========================================================================== */
 body {
-	--hz-space-near: var(--hz-density-ladder-depth-1, calc(var(--hz-density) * 10));
-	--hz-space-away: calc(var(--hz-density-ladder-depth-1, calc(var(--hz-density) * 10)) * 2);
+	--hz-space-near: var(--hz-density-ladder-depth-1, calc(var(--hz-density) * 5));
+	--hz-space-away: calc(var(--hz-density-ladder-depth-1, calc(var(--hz-density) * 5)) * 2);
 }
 
 body [data-density-shift] {
-	--hz-space-near: var(--hz-density-ladder-depth-2, calc(var(--hz-density) * 5));
-	--hz-space-away: var(--hz-density-ladder-depth-1, calc(var(--hz-density) * 10));
+	--hz-space-near: var(--hz-density-ladder-depth-2, calc(var(--hz-density) * 2));
+	--hz-space-away: var(--hz-density-ladder-depth-1, calc(var(--hz-density) * 5));
 }
 
 body [data-density-shift] [data-density-shift] {
-	--hz-space-near: var(--hz-density-ladder-depth-3, calc(var(--hz-density) * 2));
-	--hz-space-away: var(--hz-density-ladder-depth-2, calc(var(--hz-density) * 5));
+	--hz-space-near: var(--hz-density-ladder-depth-3, calc(var(--hz-density) * 1));
+	--hz-space-away: var(--hz-density-ladder-depth-2, calc(var(--hz-density) * 2));
 }
 
 body [data-density-shift] [data-density-shift] [data-density-shift] {
 	--hz-space-near: var(--hz-density-ladder-depth-4, calc(var(--hz-density) * 1));
-	--hz-space-away: var(--hz-density-ladder-depth-3, calc(var(--hz-density) * 2));
+	--hz-space-away: var(--hz-density-ladder-depth-3, calc(var(--hz-density) * 1));
 }
 
 /* ==========================================================================
@@ -264,10 +264,12 @@ body [data-density-shift] [data-density-shift] [data-density-shift] {
 	--hz-color-border: var(--hz-palette-primary);
 	--hz-color-surface-muted: #ffffff;
 
-	--hz-palette-primary: #d81d4e;
-	--hz-palette-secondary: #1d4ed8;
-	--hz-palette-black: #1d293d;
-	--hz-palette-white: #f1f5f9;
+	--hz-palette-primary: oklch(57.057% 0.21474 14.568);
+	--hz-palette-secondary: oklch(48.821% 0.21724 264.392);
+	--hz-palette-black: oklch(27.9% 0.041 260.031);
+	--hz-palette-white: oklch(96.8% 0.007 247.896);
+	--hz-palette-primary-tint: oklch(from var(--hz-palette-primary) l c h / calc(alpha - 0.75));
+	--hz-palette-secondary-tint: oklch(from var(--hz-palette-secondary) l c h / calc(alpha - 0.75));
 	--hz-palette-gray: #646b78;
 
 	--hz-intent-primary: var(--hz-palette-primary);
@@ -299,6 +301,8 @@ body [data-density-shift] [data-density-shift] [data-density-shift] {
 	--hz-palette-white: #ffffff;
 
 	--hz-intent-primary: var(--hz-palette-black);
+
+	--hz-space-xs: 0.5em;
 
 	/* Derived chain, re-declared. Layer 2 is var() indirection, and var() in a
 	 * custom property resolves on the element the declaration applies to. So a
@@ -332,6 +336,8 @@ body [data-density-shift] [data-density-shift] [data-density-shift] {
 	--hz-palette-info: #22d3ee;
 
 	--hz-intent-primary: var(--hz-palette-primary);
+
+	--hz-font-family-mono: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
 
 	/* Derived chain, re-declared. Layer 2 is var() indirection, and var() in a
 	 * custom property resolves on the element the declaration applies to. So a
@@ -378,6 +384,10 @@ body [data-density-shift] [data-density-shift] [data-density-shift] {
 	--hz-intent-warning: var(--hz-palette-warning);
 	--hz-intent-success: var(--hz-palette-success);
 	--hz-intent-info: var(--hz-palette-info);
+	--hz-font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+	--hz-space-xs: 0.5rem;
+	--hz-palette-primary-tint: initial;
+	--hz-palette-secondary-tint: initial;
 	--hz-palette-primary-bright: initial;
 	--hz-palette-track: initial;
 }

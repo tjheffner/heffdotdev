@@ -6,9 +6,9 @@
 
   // type="single" keeps only one panel open at a time — the old `linked` behavior
   const items = [
-    { id: 'about-me', title: 'about me' },
+    { id: 'about', title: 'about' },
     { id: 'recent-activity', title: 'recent activity' },
-    { id: 'about-this-site', title: 'about this site' },
+    { id: 'colophon', title: 'colophon' },
     { id: 'contact', title: 'contact' },
   ]
 
@@ -21,10 +21,20 @@
 <section class="prose" id="content" tabindex="-1">
     <h1>information kiosk</h1>
 
-    <Accordion {items} type="single" defaultOpen="about-me" headingLevel={2} class="about-accordion">
+    <Accordion {items} type="single" defaultOpen="about" headingLevel={2} class="about-accordion">
       {#snippet panel(item)}
-        {#if item.id === 'about-me'}
-          <p>My name is <strong>tanner heffner</strong> and I am based out of <strong>portland, oregon</strong>.</p>
+        {#if item.id === 'about'}
+          <p>heffner.dev is perpetually under construction, same as me <span class="surfer">🏄‍♂️</span></p>
+
+          <p>parts <a href="/blog">blog,</a> <a href="/gallery">photo gallery,</a> and some <a href="/playground">playground</a> too.
+             this website is my own personal <a href="https://joelhooks.com/digital-garden" target="_blank">digital garden</a>
+          </p>
+
+          <p>
+            My name is <strong>tanner heffner</strong>, a software engineer of over a decade
+            based out of <strong>portland, oregon</strong>. I still love the feeling when
+            launching a fresh <strong>hello world!</strong>
+          </p>
 
           <p>
             I enjoy disc golf, cooking, gardening, making art, riding bikes and plenty more.
@@ -32,23 +42,16 @@
             There's beauty in the struggle.
           </p>
 
-          <p>A software engineer for over a decade and I still love the feeling when launching a fresh <strong>hello world!</strong></p>
+          <a href="https://hyzer.sh" target="_blank">business</a>
+          <a href="/resume" target="_blank">resume</a>
+        {:else if item.id === 'colophon'}
+          <p>this site is built with <a href="https://svelte.dev/docs/kit/introduction" target="_blank">sveltekit</a>. the codebase is <a href="https://github.com/tjheffner/heffdotdev">public on github</a>.</p>
 
-          <a href="https://hyzer.sh" target="_blank">[business]</a>
-          <a href="/resume" target="_blank">[resume]</a>
-        {:else if item.id === 'about-this-site'}
-          <div class="tall">
-            <p>heffner.dev is perpetually under construction, same as me <span class="surfer">🏄‍♂️</span></p>
+          <p>the ui comes from my design system, <a href="https://design.hyzer.sh" target="_blank">@hyzer-labs/ui</a>.</p>
 
-            <p>parts <a href="/blog">blog,</a> <a href="/gallery">photo gallery,</a> and some <a href="/playground">playground</a> too.
-               this website is my own personal <a href="https://joelhooks.com/digital-garden" target="_blank">digital garden</a>
-            </p>
+          <p>type is <a href="https://fonts.google.com/specimen/Merriweather" target="_blank">merriweather</a> and <a href="https://fonts.google.com/specimen/Mulish" target="_blank">mulish</a>, both from google fonts.</p>
 
-            <p>
-              it is built with <a href="https://svelte.dev/docs/kit/introduction" target="_blank">sveltekit</a>.
-              the codebase is <a href="https://github.com/tjheffner/heffdotdev">public on github</a> and hosted via netlify.
-            <a href="/heffdotdev-technical-details">this post</a> (and later, <a href="/2025-site-updates">this one</a>) explains more about the tools I chose and why.</p>
-          </div>
+          <p><a href="/heffdotdev-technical-details">this post</a> (and later, <a href="/2025-site-updates">this one</a>) explains more about the tools I chose and why.</p>
         {:else if item.id === 'recent-activity'}
           <Currently
             recentlyListened={recentlyListened}
@@ -72,7 +75,7 @@
   /* port of the old Details.svelte styles onto the accordion's hooks */
   section :global(.hz-accordion-item) {
     interpolate-size: allow-keywords;
-    margin-bottom: var(--space-away);
+    margin-bottom: var(--hz-space-away);
   }
   section :global(.hz-accordion-item::details-content) {
     transition:
@@ -84,17 +87,19 @@
   section :global(.hz-accordion-item[open]::details-content) {
     block-size: auto;
   }
+  /* The trigger is a flex row of [heading, chevron] and the component aligns it
+     to flex-start, which tops the 24px chevron against a 50px heading and leaves
+     it sitting ~12px high. Child combinator so this outweighs the component's
+     own two-class scoped rule. */
+  section :global(.hz-accordion-item > .hz-accordion-trigger) {
+    align-items: center;
+  }
   section :global(.hz-accordion-icon) {
-    color: var(--c-accent);
+    color: var(--hz-intent-primary);
     transition: transform 0.3s ease;
   }
   section :global(.hz-accordion-item[data-state='open'] .hz-accordion-icon) {
     transform: rotate(180deg);
-  }
-
-  /* helpful if the children contain a lot of links */
-  .tall > p {
-    margin-bottom: var(--space-away);
   }
 
   /* `scale` and `rotate` are separate properties, not one packed `transform`,

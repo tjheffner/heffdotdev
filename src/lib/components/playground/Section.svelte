@@ -62,18 +62,18 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     /* Chrome colors flip with canvas luminance (set on .playground). */
-    color: var(--pg-chrome-fg, var(--pg-text));
+    color: var(--pg-chrome-fg, var(--hz-color-text));
     background: var(--pg-chrome-chip, rgba(10, 10, 14, 0.62));
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid var(--pg-chrome-line, var(--pg-line));
+    border: 1px solid var(--pg-chrome-line, var(--hz-color-border));
     border-radius: 999px;
     padding: 0.34rem 0.7rem;
     cursor: pointer;
     transition: color 160ms ease, background 160ms ease, border-color 120ms ease;
   }
   .pill:hover {
-    border-color: var(--pg-chrome-fg, var(--pg-text));
+    border-color: var(--pg-chrome-fg, var(--hz-color-text));
   }
   /* Active = a solid monochrome swatch (no colored accent in the chrome). */
   .pill.active {
@@ -82,7 +82,7 @@
     border-color: transparent;
   }
   .pill:focus-visible {
-    outline: 2px solid var(--pg-chrome-fg, var(--pg-text));
+    outline: 2px solid var(--pg-chrome-fg, var(--hz-color-text));
     outline-offset: 2px;
   }
   .chev {
@@ -114,18 +114,18 @@
     background: rgba(20, 20, 26, 0.94);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--pg-line);
+    border: 1px solid var(--hz-color-border);
     border-radius: 10px;
     padding: 0.7rem 0.8rem 0.85rem;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
     scrollbar-width: thin;
-    scrollbar-color: var(--pg-line) transparent;
+    scrollbar-color: var(--hz-color-border) transparent;
   }
   .card::-webkit-scrollbar {
     width: 6px;
   }
   .card::-webkit-scrollbar-thumb {
-    background: var(--pg-line);
+    background: var(--hz-color-border);
     border-radius: 3px;
   }
   .card-head {
@@ -140,7 +140,7 @@
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
   }
   .card-close {
     flex: none;
@@ -151,7 +151,7 @@
     font: inherit;
     font-size: 0.95rem;
     line-height: 1;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     background: transparent;
     border: 1px solid transparent;
     border-radius: 4px;
@@ -159,11 +159,11 @@
     padding: 0;
   }
   .card-close:hover {
-    color: var(--pg-text);
-    border-color: var(--pg-line);
+    color: var(--hz-color-text);
+    border-color: var(--hz-color-border);
   }
   .card-close:focus-visible {
-    outline: 2px solid var(--pg-accent);
+    outline: 2px solid var(--hz-intent-primary);
     outline-offset: 1px;
   }
   .card-body {

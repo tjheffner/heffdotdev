@@ -7,16 +7,66 @@ import remarkUnwrapImages from 'remark-unwrap-images'
 import rehypeStringify from 'rehype-stringify'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutoLink from 'rehype-autolink-headings'
-import rehypeZoomImages from './rehype-wrap-img.js'
+import rehypeCdnImages from './rehype-cdn-images.js'
+import rehypeShiki from '@shikijs/rehype'
+import rehypeUnescapeCode from './rehype-unescape-code.js'
+import { shikiTheme } from './shiki-theme.js'
 
 import type { BaseContentItem, GithubIssue } from '$lib/types.js'
 
 const remarkPlugins = [remarkUnwrapImages]
+
+/**
+ * Every language that appears in a fence across the archive, counted over all
+ * 54 posts. Naming them keeps shiki loading six grammars instead of its whole
+ * ~6MB bundle, which matters because formatContent runs inside the Lambda,
+ * not at build.
+ */
+const CODE_LANGS = ['ts', 'js', 'css', 'yaml', 'html', 'php']
+
 const rehypePlugins = [
   rehypeStringify,
   rehypeSlug,
   rehypeAutoLink,
-  rehypeZoomImages,
+  rehypeCdnImages,
+  // must precede shiki: it highlights whatever text it is handed, so the
+  // fences have to hold real characters rather than mdsvex's entities
+  rehypeUnescapeCode,
+  [
+    rehypeShiki,
+    {
+      // Ours (see shiki-theme.js). Every shipped theme was wrong in one of two
+      // ways: the dark ones punched a hole in a light page, and the light ones
+      // arrived with a palette unrelated to this site's.
+      theme: shikiTheme,
+      transformers: [
+        {
+          name: 'surface-from-token',
+          pre(node) {
+            // Drop shiki's inline background so code-block.css can paint
+            // --hz-color-surface-muted instead. An inline style would win over
+            // any stylesheet, so stripping it here is the only way the block
+            // can follow the palette rather than pin a hex of its own. The
+            // foreground stays: it is the theme's plain-text color.
+            const style = node.properties?.style
+            if (typeof style === 'string') {
+              node.properties.style = style
+                .replace(/background-color:[^;]*;?/g, '')
+                .trim()
+            }
+          },
+        },
+      ],
+      langs: CODE_LANGS,
+      // put language-<lang> back on the <code>; the client upgrade reads it
+      // to label CodeBlock's chip
+      addLanguageClass: true,
+      // Roughly a third of the fences in the archive have no language. Prism
+      // stamped those `language-undefined` and left them unstyled; shiki
+      // renders them as plain text in the same frame as everything else.
+      fallbackLanguage: 'text',
+    },
+  ],
 ]
 
 export function readingTime(text: string): string {
@@ -88,7 +138,7 @@ export function baseIssueContent(issue: GithubIssue): BaseContentItem {
 
 /**
  * Normalize raw <img> HTML into markdown image syntax so every image gets the
- * same treatment downstream (zoom wrapper + lazy loading via rehypeZoomImages),
+ * same treatment downstream (CDN + lazy loading via rehypeCdnImages),
  * regardless of how GitHub embedded it. GitHub now pastes images as raw
  * <img width height alt src /> tags instead of ![alt](src); without this those
  * tags pass through as opaque HTML and never get wrapped. Runs before the
@@ -177,13 +227,15 @@ export async function formatContent(content: string): Promise<string> {
       remarkPlugins,
       // @ts-ignore
       rehypePlugins,
+      // mdsvex highlights with its bundled PrismJS by default. Shiki does it
+      // in the rehype pass above instead, so turn the built-in off rather
+      // than have the two fight over the same <pre>.
+      highlight: false,
     })
   ).code
     // https://github.com/pngwn/MDsveX/issues/392
     .replace(/>{@html `<code class="language-/g, '><code class="language-')
     .replace(/<\/code>`}<\/pre>/g, '</code></pre>')
-  // lazy load images, if not using rehypeZoomImages
-  // .replace(/<img/g, '<img loading="lazy" ')
 
   return output
 }

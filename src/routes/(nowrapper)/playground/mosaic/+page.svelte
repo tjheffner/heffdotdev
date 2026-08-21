@@ -627,7 +627,7 @@
     width: 100%;
     height: 100%;
     padding: 0;
-    border: 1px solid var(--pg-line);
+    border: 1px solid var(--hz-color-border);
     border-radius: 4px;
     background: none;
     cursor: pointer;
@@ -643,9 +643,9 @@
     font: inherit;
     font-size: 0.7rem;
     line-height: 1;
-    color: var(--pg-text);
-    background: var(--pg-panel);
-    border: 1px solid var(--pg-line);
+    color: var(--hz-color-text);
+    background: var(--hz-color-surface-muted);
+    border: 1px solid var(--hz-color-border);
     border-radius: 50%;
     cursor: pointer;
     padding: 0;
@@ -664,14 +664,14 @@
     font: inherit;
     font-size: 1rem;
     line-height: 1;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     background: transparent;
-    border: 1px dashed var(--pg-line);
+    border: 1px dashed var(--hz-color-border);
     border-radius: 4px;
     cursor: pointer;
   }
   .swatch-add:hover {
-    color: var(--pg-text);
-    border-color: var(--pg-dim);
+    color: var(--hz-color-text);
+    border-color: var(--hz-color-text-muted);
   }
 </style>

@@ -637,7 +637,7 @@
   }
   .layer {
     position: relative;
-    border: 1px solid var(--pg-line);
+    border: 1px solid var(--hz-color-border);
     border-radius: 6px;
     background: #14141a;
     transition: border-color 120ms ease, opacity 120ms ease;
@@ -646,7 +646,7 @@
     opacity: 0.4;
   }
   .layer.drop-target {
-    border-color: var(--pg-accent, #ff6b35);
+    border-color: var(--hz-intent-primary);
   }
   .drag-handle {
     flex: none;
@@ -656,20 +656,20 @@
     font: inherit;
     font-size: 0.8rem;
     line-height: 1;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     background: transparent;
     border: none;
     cursor: grab;
     touch-action: none;
   }
   .drag-handle:hover {
-    color: var(--pg-text);
+    color: var(--hz-color-text);
   }
   .drag-handle:active {
     cursor: grabbing;
   }
   .drag-handle:focus-visible {
-    outline: 2px solid var(--pg-accent);
+    outline: 2px solid var(--hz-intent-primary);
     outline-offset: 1px;
     border-radius: 3px;
   }
@@ -688,7 +688,7 @@
     display: none;
   }
   .layer summary:focus-visible {
-    outline: 2px solid var(--pg-accent);
+    outline: 2px solid var(--hz-intent-primary);
     outline-offset: 2px;
     border-radius: 6px;
   }
@@ -704,7 +704,7 @@
   }
   .layer-meta {
     margin-left: auto;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     font-size: 0.64rem;
   }
   .layer-delete {
@@ -719,7 +719,7 @@
     font: inherit;
     font-size: 0.85rem;
     line-height: 1;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     background: transparent;
     border: 1px solid transparent;
     border-radius: 4px;
@@ -731,7 +731,7 @@
     border-color: #e05555;
   }
   .layer-delete:focus-visible {
-    outline: 2px solid var(--pg-accent);
+    outline: 2px solid var(--hz-intent-primary);
     outline-offset: 1px;
   }
   .layer-delete:disabled {
@@ -743,7 +743,7 @@
     flex-direction: column;
     gap: 0.45rem;
     padding: 0.2rem 0.6rem 0.7rem;
-    border-top: 1px solid var(--pg-line);
+    border-top: 1px solid var(--hz-color-border);
   }
   .layer-body h3 {
     margin: 0.5rem 0 0;
@@ -751,7 +751,7 @@
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
   }
   .layer-actions {
     display: flex;

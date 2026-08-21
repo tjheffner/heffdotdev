@@ -1,0 +1,95 @@
+/*
+ * Code block layout. The Laserwave palette that used to fill this file — 133
+ * lines of PrismJS theme, hand-ported from Jared Jones' VS Code original — is
+ * gone: shiki highlights server-side with our own theme (shiki-theme.js) and
+ * inlines the token colors onto the elements. The surface is the exception —
+ * a transformer strips shiki's inline background so the block can take
+ * --hz-color-surface-muted from the palette instead of pinning a hex.
+ *
+ * Two states to dress, because the chrome is a client upgrade: the bare
+ * shiki <pre> the server sends, and the hyzer CodeBlock that codeBlocks()
+ * wraps it in after hydration. They are kept as close as possible so the
+ * upgrade doesn't visibly reflow the page.
+ */
+
+/* Server-rendered state — also what a reader with no JS keeps. */
+.prose pre.shiki {
+  /* the token the main theme already uses for raised, quiet surfaces */
+  background: var(--hz-color-surface-muted);
+  padding: 1rem;
+  /* bleed a little past the 65ch column, so code reads wider than prose */
+  margin: 0.5em -1rem;
+  border-radius: 0.5em;
+  font-size: var(--hz-font-size-sm);
+  line-height: var(--hz-line-height-base);
+
+  /* .prose pre sets pre-wrap for ordinary <pre>, and the CodeBlock theme's
+     own rule is :where(pre) — zero specificity, so it cannot win this.
+     Code scrolls rather than reflowing mid-expression, which is what the
+     PrismJS sheet did with its own `white-space: pre`. */
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* Upgraded state: the frame (border, radius, header, copy) belongs to the
+   CodeBlock theme now, so hand the outer box back and let the <pre> sit flush
+   inside it. */
+.prose .hz-code-block {
+  margin: 0.5em -1rem;
+}
+.prose .hz-code-block pre.shiki {
+  margin: 0;
+  /* Square only where it meets the header. The bottom keeps the frame's curve,
+     inset by the 1px border: squaring it let the pre's own background paint
+     over the wrapper's rounded corners, which notched the bottom border. */
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
+  border-end-start-radius: calc(var(--hz-radius-md) - 1px);
+  border-end-end-radius: calc(var(--hz-radius-md) - 1px);
+}
+
+/* Now that the block is light, selection can use the same secondary tint the
+   prose already uses for inline code and table banding, rather than a wash
+   borrowed from the highlighter's palette. */
+.prose pre.shiki ::selection {
+  background: var(--hz-palette-secondary-tint);
+  color: inherit;
+}
+
+/* The language chip ships as text-muted, which lands at 4.20 on the header's
+   own 12% tint over our page background — just under AA. Full text color
+   instead (11.45); the chip is small and already set apart by the tint. */
+.prose .hz-code-block .hz-code-block-lang {
+  color: var(--hz-color-text);
+}
+
+/* The header ships transparent, so it showed the page background while the
+   code area sat on surface-muted — a visible seam across one block. Both take
+   the same surface now; the crimson hairline is what separates them. */
+.prose .hz-code-block-header {
+  background: var(--hz-color-surface-muted);
+}
+
+/* The copy button arrives as a bare bordered box: it is a hyzer Button, and we
+   deliberately import no button.css, so what renders is the browser's own
+   default border. Currently.svelte works around the same thing for the
+   carousel's controls. Give it the secondary tint the prose already uses for
+   inline code and table banding, and drop the border outright. Text stays at
+   full --hz-color-text (7.95 on the tint); the secondary blue on its own tint
+   would only manage 3.64. Hover fills solid, the way every link on the site
+   does. */
+.prose .hz-code-block-copy {
+  border: 0;
+  border-radius: 0.25rem;
+  padding: 0.15rem 0.5rem;
+  background: var(--hz-palette-secondary-tint);
+  color: var(--hz-color-text);
+  font-size: var(--hz-font-size-sm);
+  cursor: pointer;
+  transition: background-color var(--hz-duration-fast) var(--hz-ease-standard);
+}
+.prose .hz-code-block-copy:hover,
+.prose .hz-code-block-copy:focus-visible {
+  background: var(--hz-intent-secondary);
+  color: var(--hz-color-surface);
+}

@@ -38,8 +38,8 @@
 
 <style>
   li {
-    margin: var(--space-away) 0;
-    border-bottom: 1px dashed var(--c-accent);
+    margin: var(--hz-space-away) 0;
+    border-bottom: 1px dashed var(--hz-intent-primary);
 
     &:last-child {
       border-bottom: none;
@@ -49,14 +49,14 @@
   .post-link {
     text-decoration: none;
     width: 100%;
-    padding: var(--space-away) var(--space-near);
-    margin-bottom: var(--space-away);
+    padding: var(--hz-space-away) var(--hz-space-near);
+    margin-bottom: var(--hz-space-away);
     display: block;
-    color: var(--c-text);
+    color: var(--hz-color-text);
   }
   .post:hover {
     & h2 {
-      color: var(--c-secondary);
+      color: var(--hz-intent-secondary);
     }
   }
 
@@ -64,6 +64,6 @@
     text-align: right;
     /* the date shouldn't wrap once the title column squeezes it on mobile */
     white-space: nowrap;
-    padding-left: var(--space-near);
+    padding-left: var(--hz-space-near);
   }
 </style>

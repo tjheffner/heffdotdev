@@ -177,7 +177,7 @@
     font-size: 0.7rem;
   }
   .video-opts .lab {
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
@@ -185,14 +185,14 @@
     width: 2.6rem;
     font: inherit;
     font-size: 0.66rem;
-    color: var(--pg-text);
-    background: var(--pg-panel);
-    border: 1px solid var(--pg-line);
+    color: var(--hz-color-text);
+    background: var(--hz-color-surface-muted);
+    border: 1px solid var(--hz-color-border);
     border-radius: 4px;
     padding: 0.2rem 0.35rem;
   }
   .video-secs:focus-visible {
-    outline: 2px solid var(--pg-accent);
+    outline: 2px solid var(--hz-intent-primary);
     outline-offset: 1px;
   }
   .video-secs:disabled {
@@ -200,7 +200,7 @@
     cursor: not-allowed;
   }
   .video-opts .unit {
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     margin-left: -0.15rem;
   }
   .loop-toggle {
@@ -209,12 +209,12 @@
     align-items: center;
     gap: 0.3rem;
     cursor: pointer;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
   .loop-toggle input {
-    accent-color: var(--pg-accent);
+    accent-color: var(--hz-intent-primary);
   }
   .saved-list {
     list-style: none;
@@ -228,7 +228,7 @@
     display: flex;
     align-items: center;
     gap: 0.35rem;
-    border: 1px solid var(--pg-line);
+    border: 1px solid var(--hz-color-border);
     border-radius: 6px;
     background: #14141a;
     padding: 0.3rem;
@@ -240,7 +240,7 @@
     align-items: center;
     gap: 0.5rem;
     font: inherit;
-    color: var(--pg-text);
+    color: var(--hz-color-text);
     background: transparent;
     border: none;
     border-radius: 4px;
@@ -249,10 +249,10 @@
     text-align: left;
   }
   .saved-load:hover .saved-name {
-    color: var(--pg-accent);
+    color: var(--hz-intent-primary);
   }
   .saved-load:focus-visible {
-    outline: 2px solid var(--pg-accent);
+    outline: 2px solid var(--hz-intent-primary);
     outline-offset: 1px;
   }
   .saved-thumb {
@@ -280,19 +280,19 @@
     font-size: 0.6rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     background: transparent;
-    border: 1px solid var(--pg-line);
+    border: 1px solid var(--hz-color-border);
     border-radius: 4px;
     padding: 0.25rem 0.4rem;
     cursor: pointer;
   }
   .saved-act:hover {
-    color: var(--pg-text);
-    border-color: var(--pg-dim);
+    color: var(--hz-color-text);
+    border-color: var(--hz-color-text-muted);
   }
   .saved-act:focus-visible {
-    outline: 2px solid var(--pg-accent);
+    outline: 2px solid var(--hz-intent-primary);
     outline-offset: 1px;
   }
   .saved-act.del {
