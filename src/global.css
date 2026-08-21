@@ -137,60 +137,19 @@ body:not([data-group='nowrapper']) img {
 .lazy-image {
   background-color: grey;
 }
-/* zoomable images */
-.zoom-trigger {
-  display: block;
-  width: 100%;
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: zoom-in;
-}
-.zoom-trigger img {
+/* Zoomable images. The viewer itself is @hyzer-labs/ui's lightboxGroup
+   attachment (see the two [slug] pages) with its cherry-picked skin; it marks
+   each enhanced image [data-lightbox-trigger] and ships only a zoom-in
+   cursor, so the hover lift and the backdrop blur — both deliberate here —
+   are carried over. */
+.prose [data-lightbox-trigger] {
   transition: transform 0.2s ease;
 }
-.zoom-trigger:hover img,
-.zoom-trigger:focus-visible img {
+.prose [data-lightbox-trigger]:hover,
+.prose [data-lightbox-trigger]:focus-visible {
   transform: scale(1.02);
 }
-
-/* lightbox dialog (opened by the `lightbox` action) */
-:root.lightbox-open {
-  overflow: hidden;
-}
-dialog.lightbox {
-  position: fixed;
-  inset: 0;
-  margin: 0;
-  padding: var(--hz-space-near);
-  border: 0;
-  background: transparent;
-  /* the image is sized to fit, so the dialog itself never needs to scroll */
-  overflow: hidden;
-  cursor: zoom-out;
-  width: 100%;
-  height: 100%;
-}
-dialog.lightbox[open] {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-dialog.lightbox img {
-  /* Viewport units (minus the dialog padding) always resolve, unlike a
-     percentage max-height on a grid item — so tall images scale down to fit
-     the whole thing instead of overflowing and getting clipped. Nothing is
-     cropped, and the fit means opening never introduces extra scroll. */
-  max-width: calc(100dvw - var(--hz-space-near) * 2);
-  max-height: calc(100dvh - var(--hz-space-near) * 2);
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  background: transparent;
-  cursor: zoom-out;
-}
-dialog.lightbox::backdrop {
-  background: rgba(0, 0, 0, 0.85);
+.hz-lightbox::backdrop {
   backdrop-filter: blur(2px);
 }
 

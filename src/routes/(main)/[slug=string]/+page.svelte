@@ -3,7 +3,12 @@
   import Comments from '$lib/components/Comments.svelte'
   import Metatags from '$lib/components/Metatags.svelte'
   import TableOfContents from '$lib/components/TableOfContents.svelte';
-  import { lightbox } from '$lib/actions/lightbox';
+  import { lightboxGroup } from '@hyzer-labs/ui'
+  // The viewer's skin. Cherry-picked rather than the full theme: it lives in
+  // the hz-theme cascade layer (so unlayered site CSS still wins) and its
+  // carousel rules are scoped under .hz-lightbox, so Currently's rail is
+  // untouched.
+  import '@hyzer-labs/ui/theme/components/lightbox.css'
 
   import '$lib/code-highlight.css'
 
@@ -45,7 +50,7 @@
 
   <hr />
 
-  <div class="prose" use:lightbox>
+  <div class="prose" {@attach lightboxGroup()}>
     {@html json.content}
   </div>
 </article>
