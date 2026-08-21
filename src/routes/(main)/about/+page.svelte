@@ -24,7 +24,17 @@
     <Accordion {items} type="single" defaultOpen="about" headingLevel={2} class="about-accordion">
       {#snippet panel(item)}
         {#if item.id === 'about'}
-          <p>My name is <strong>tanner heffner</strong> and I am based out of <strong>portland, oregon</strong>.</p>
+          <p>heffner.dev is perpetually under construction, same as me <span class="surfer">🏄‍♂️</span></p>
+
+          <p>parts <a href="/blog">blog,</a> <a href="/gallery">photo gallery,</a> and some <a href="/playground">playground</a> too.
+             this website is my own personal <a href="https://joelhooks.com/digital-garden" target="_blank">digital garden</a>
+          </p>
+
+          <p>
+            My name is <strong>tanner heffner</strong>, a software engineer of over a decade
+            based out of <strong>portland, oregon</strong>. I still love the feeling when
+            launching a fresh <strong>hello world!</strong>
+          </p>
 
           <p>
             I enjoy disc golf, cooking, gardening, making art, riding bikes and plenty more.
@@ -32,47 +42,14 @@
             There's beauty in the struggle.
           </p>
 
-          <p>A software engineer for over a decade and I still love the feeling when launching a fresh <strong>hello world!</strong></p>
-
-          <p>heffner.dev is perpetually under construction, same as me <span class="surfer">🏄‍♂️</span></p>
-
-          <p>parts <a href="/blog">blog,</a> <a href="/gallery">photo gallery,</a> and some <a href="/playground">playground</a> too.
-             this website is my own personal <a href="https://joelhooks.com/digital-garden" target="_blank">digital garden</a>
-          </p>
-
-          <a href="https://hyzer.sh" target="_blank">[business]</a>
-          <a href="/resume" target="_blank">[resume]</a>
+          <a href="https://hyzer.sh" target="_blank">business</a>
+          <a href="/resume" target="_blank">resume</a>
         {:else if item.id === 'colophon'}
-          <p>
-            built with <a href="https://svelte.dev/docs/kit/introduction" target="_blank">sveltekit</a>,
-            hosted on netlify, and <a href="https://github.com/tjheffner/heffdotdev">public on github</a>.
-            every post and gallery is a github issue, so the writing lives where the code does.
-          </p>
+          <p>this site is built with <a href="https://svelte.dev/docs/kit/introduction" target="_blank">sveltekit</a>. the codebase is <a href="https://github.com/tjheffner/heffdotdev">public on github</a>.</p>
 
-          <p>
-            the components and design tokens come from <a href="https://design.hyzer.sh" target="_blank">@hyzer-labs/ui</a>.
-            palette, type scale, spacing and density are all authored in one config file and generated into css —
-            one place to change how the whole site looks, instead of hunting through stylesheets.
-          </p>
+          <p>the ui comes from my design system, <a href="https://design.hyzer.sh" target="_blank">@hyzer-labs/ui</a>.</p>
 
-          <p>
-            headings are merriweather, body is mulish, and the colors are written in oklch.
-            spacing follows <a href="https://complementary.space/" target="_blank">complementary space</a>:
-            two distances, near and away, that tighten automatically as regions nest inside each other.
-          </p>
-
-          <p>
-            photos are resized on the fly by netlify's image cdn, since they come off github at full camera size.
-            code is highlighted on the server by <a href="https://shiki.style" target="_blank">shiki</a>,
-            using a theme I built for this palette rather than a stock one.
-          </p>
-
-          <p>
-            color contrast is checked in ci, and every page gets scanned by
-            <a href="https://playwright.dev" target="_blank">playwright</a> +
-            <a href="https://www.deque.com/axe/" target="_blank">axe</a> before it ships.
-            accessible is the whole point of building it myself.
-          </p>
+          <p>type is <a href="https://fonts.google.com/specimen/Merriweather" target="_blank">merriweather</a> and <a href="https://fonts.google.com/specimen/Mulish" target="_blank">mulish</a>, both from google fonts.</p>
 
           <p><a href="/heffdotdev-technical-details">this post</a> (and later, <a href="/2025-site-updates">this one</a>) explains more about the tools I chose and why.</p>
         {:else if item.id === 'recent-activity'}
@@ -109,6 +86,13 @@
   }
   section :global(.hz-accordion-item[open]::details-content) {
     block-size: auto;
+  }
+  /* The trigger is a flex row of [heading, chevron] and the component aligns it
+     to flex-start, which tops the 24px chevron against a 50px heading and leaves
+     it sitting ~12px high. Child combinator so this outweighs the component's
+     own two-class scoped rule. */
+  section :global(.hz-accordion-item > .hz-accordion-trigger) {
+    align-items: center;
   }
   section :global(.hz-accordion-icon) {
     color: var(--hz-intent-primary);
