@@ -64,6 +64,13 @@ test('code blocks are highlighted server-side and upgraded to CodeBlock', async 
       whiteSpace: getComputedStyle(pre).whiteSpace,
       // PrismJS is gone, and with it the bogus language-undefined fences
       prismTokens: document.querySelectorAll('.token').length,
+      // mdsvex escapes { } < > in fences so Svelte can't read a sample as
+      // template syntax. Shiki highlights whatever text it is handed, so
+      // without a decode pass first it tokenizes `&gt;` into three spans and
+      // the browser can no longer parse it back into a character.
+      entityLeak: /&#12[35];|&gt;|&lt;|&amp;/.test(
+        document.querySelector('pre.shiki')?.textContent ?? ''
+      ),
       undefinedLang: document.querySelectorAll('[class*="language-undefined"]')
         .length,
     }
@@ -71,11 +78,12 @@ test('code blocks are highlighted server-side and upgraded to CodeBlock', async 
 
   expect(state.stray).toBe(0)
   expect(state.highlighted).toBe(true)
-  expect(state.preBg).toBe('rgb(39, 33, 46)')
+  expect(state.preBg).toBe('rgb(36, 39, 58)') // catppuccin-macchiato #24273a
   expect(state.wrapperBg).toBe('rgba(0, 0, 0, 0)')
   expect(state.whiteSpace).toBe('pre')
   expect(state.prismTokens).toBe(0)
   expect(state.undefinedLang).toBe(0)
+  expect(state.entityLeak).toBe(false)
 })
 
 test('copy button copies the source, not the highlighted markup', async ({

@@ -1,8 +1,9 @@
 /*
  * Code block layout. The Laserwave palette that used to fill this file — 133
  * lines of PrismJS theme, hand-ported from Jared Jones' VS Code original — is
- * gone: shiki highlights server-side with its own `laserwave` theme and
- * inlines every color, including the #27212e surface, onto the elements.
+ * gone: shiki highlights server-side with its own `catppuccin-macchiato`
+ * theme and inlines every color, including the #24273a surface, onto the
+ * elements.
  *
  * Two states to dress, because the chrome is a client upgrade: the bare
  * shiki <pre> the server sends, and the hyzer CodeBlock that codeBlocks()
@@ -38,9 +39,10 @@
   border-radius: 0;
 }
 
-/* Laserwave's own pink, kept from the old sheet. */
+/* Macchiato's own selection wash, so highlighting text inside a block stays
+   in the theme's palette rather than the page's. */
 .prose pre.shiki ::selection {
-  background: #eb64b927;
+  background: #939ab740;
   color: inherit;
 }
 
@@ -49,4 +51,28 @@
    instead (11.45); the chip is small and already set apart by the tint. */
 .prose .hz-code-block .hz-code-block-lang {
   color: var(--hz-color-text);
+}
+
+/* The copy button arrives as a bare bordered box: it is a hyzer Button, and we
+   deliberately import no button.css, so what renders is the browser's own
+   default border. Currently.svelte works around the same thing for the
+   carousel's controls. Give it the secondary tint the prose already uses for
+   inline code and table banding, and drop the border outright. Text stays at
+   full --hz-color-text (7.95 on the tint); the secondary blue on its own tint
+   would only manage 3.64. Hover fills solid, the way every link on the site
+   does. */
+.prose .hz-code-block-copy {
+  border: 0;
+  border-radius: 0.25rem;
+  padding: 0.15rem 0.5rem;
+  background: var(--hz-palette-secondary-tint);
+  color: var(--hz-color-text);
+  font-size: var(--hz-font-size-sm);
+  cursor: pointer;
+  transition: background-color var(--hz-duration-fast) var(--hz-ease-standard);
+}
+.prose .hz-code-block-copy:hover,
+.prose .hz-code-block-copy:focus-visible {
+  background: var(--hz-intent-secondary);
+  color: var(--hz-color-surface);
 }

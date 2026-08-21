@@ -9,6 +9,7 @@ import rehypeSlug from 'rehype-slug'
 import rehypeAutoLink from 'rehype-autolink-headings'
 import rehypeCdnImages from './rehype-cdn-images.js'
 import rehypeShiki from '@shikijs/rehype'
+import rehypeUnescapeCode from './rehype-unescape-code.js'
 
 import type { BaseContentItem, GithubIssue } from '$lib/types.js'
 
@@ -27,12 +28,20 @@ const rehypePlugins = [
   rehypeSlug,
   rehypeAutoLink,
   rehypeCdnImages,
+  // must precede shiki: it highlights whatever text it is handed, so the
+  // fences have to hold real characters rather than mdsvex's entities
+  rehypeUnescapeCode,
   [
     rehypeShiki,
     {
-      // The same Laserwave the old hand-ported PrismJS sheet was a copy of,
-      // so the colors survive the swap; shiki just generates them now.
-      theme: 'laserwave',
+      // Laserwave, which the old hand-ported PrismJS sheet was a copy of, is
+      // a warm plum (#27212e) and read as a foreign object on a cool
+      // blue-grey page. Macchiato's #24273a lands eight RGB units from the
+      // site's own text navy (#1d293d), so a code block sits in the page
+      // rather than on it. It is also the only family clearing WCAG AA on all
+      // 17 of its token colors, which is what retires the per-hue patching
+      // laserwave needed.
+      theme: 'catppuccin-macchiato',
       langs: CODE_LANGS,
       // put language-<lang> back on the <code>; the client upgrade reads it
       // to label CodeBlock's chip
@@ -41,19 +50,6 @@ const rehypePlugins = [
       // stamped those `language-undefined` and left them unstyled; shiki
       // renders them as plain text in the same frame as everything else.
       fallbackLanguage: 'text',
-      /**
-       * Two of laserwave's hues miss WCAG AA on its own #27212e surface, and
-       * the blog-post axe test now catches them. Both are nudged to a passing
-       * value in the same hue family rather than swapping theme.
-       *
-       * The keyword purple is the one the old hand-ported PrismJS sheet had
-       * quietly substituted for cyan already, so restoring #40b4c4 is what
-       * the site actually rendered for years.
-       */
-      colorReplacements: {
-        '#a96bc0': '#40b4c4', // keywords: 4.13 -> 6.36
-        '#7b6995': '#9588ad', // punctuation: 3.20 -> 4.77
-      },
     },
   ],
 ]
