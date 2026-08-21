@@ -17,6 +17,34 @@ test('Gallery page renders without a11y errors', async ({
   expect(accessibilityScanResults.violations.length).toEqual(0)
 })
 
+/**
+ * The detail page, not the index — this is where .prose lives and where
+ * lightboxGroup actually enhances images, none of which the index scan above
+ * ever reached.
+ */
+test('Gallery post renders without a11y errors', async ({
+  page,
+  makeAxeBuilder,
+}) => {
+  await goto(page, '/gallery/generative-art')
+  await expect(page.locator('.prose')).toBeVisible()
+
+  // lightboxGroup swaps a native <button> wrapper for an ARIA button on the
+  // image itself; this is the scan that keeps that trade honest.
+  await expect(page.locator('[data-lightbox-trigger]').first()).toHaveAttribute(
+    'role',
+    'button'
+  )
+
+  const accessibilityScanResults = await makeAxeBuilder().analyze()
+
+  if (accessibilityScanResults.violations.length > 0) {
+    generateReport(accessibilityScanResults, 'gallery-post')
+  }
+
+  expect(accessibilityScanResults.violations.length).toEqual(0)
+})
+
 test('Loaded images drop the grey placeholder, broken ones keep it', async ({
   page,
 }) => {

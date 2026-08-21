@@ -10,7 +10,11 @@
   // untouched.
   import '@hyzer-labs/ui/theme/components/lightbox.css'
 
-  import '$lib/code-highlight.css'
+  import { codeBlocks } from '$lib/actions/codeBlocks'
+  // CodeBlock's skin, cherry-picked like the lightbox's. It suppresses its
+  // own surface fill under [data-highlighted] so shiki's palette shows.
+  import '@hyzer-labs/ui/theme/components/code-block.css'
+  import '$lib/code-block.css'
 
   let { data } = $props();
   let json: BaseContentItem = $derived(data.json) // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
@@ -50,7 +54,7 @@
 
   <hr />
 
-  <div class="prose" {@attach lightboxGroup()}>
+  <div class="prose" {@attach lightboxGroup()} {@attach codeBlocks()}>
     {@html json.content}
   </div>
 </article>

@@ -8,15 +8,54 @@ import rehypeStringify from 'rehype-stringify'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutoLink from 'rehype-autolink-headings'
 import rehypeCdnImages from './rehype-cdn-images.js'
+import rehypeShiki from '@shikijs/rehype'
 
 import type { BaseContentItem, GithubIssue } from '$lib/types.js'
 
 const remarkPlugins = [remarkUnwrapImages]
+
+/**
+ * Every language that appears in a fence across the archive, counted over all
+ * 54 posts. Naming them keeps shiki loading six grammars instead of its whole
+ * ~6MB bundle, which matters because formatContent runs inside the Lambda,
+ * not at build.
+ */
+const CODE_LANGS = ['ts', 'js', 'css', 'yaml', 'html', 'php']
+
 const rehypePlugins = [
   rehypeStringify,
   rehypeSlug,
   rehypeAutoLink,
   rehypeCdnImages,
+  [
+    rehypeShiki,
+    {
+      // The same Laserwave the old hand-ported PrismJS sheet was a copy of,
+      // so the colors survive the swap; shiki just generates them now.
+      theme: 'laserwave',
+      langs: CODE_LANGS,
+      // put language-<lang> back on the <code>; the client upgrade reads it
+      // to label CodeBlock's chip
+      addLanguageClass: true,
+      // Roughly a third of the fences in the archive have no language. Prism
+      // stamped those `language-undefined` and left them unstyled; shiki
+      // renders them as plain text in the same frame as everything else.
+      fallbackLanguage: 'text',
+      /**
+       * Two of laserwave's hues miss WCAG AA on its own #27212e surface, and
+       * the blog-post axe test now catches them. Both are nudged to a passing
+       * value in the same hue family rather than swapping theme.
+       *
+       * The keyword purple is the one the old hand-ported PrismJS sheet had
+       * quietly substituted for cyan already, so restoring #40b4c4 is what
+       * the site actually rendered for years.
+       */
+      colorReplacements: {
+        '#a96bc0': '#40b4c4', // keywords: 4.13 -> 6.36
+        '#7b6995': '#9588ad', // punctuation: 3.20 -> 4.77
+      },
+    },
+  ],
 ]
 
 export function readingTime(text: string): string {
@@ -177,6 +216,10 @@ export async function formatContent(content: string): Promise<string> {
       remarkPlugins,
       // @ts-ignore
       rehypePlugins,
+      // mdsvex highlights with its bundled PrismJS by default. Shiki does it
+      // in the rehype pass above instead, so turn the built-in off rather
+      // than have the two fight over the same <pre>.
+      highlight: false,
     })
   ).code
     // https://github.com/pngwn/MDsveX/issues/392

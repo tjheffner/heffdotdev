@@ -1,0 +1,52 @@
+/*
+ * Code block layout. The Laserwave palette that used to fill this file — 133
+ * lines of PrismJS theme, hand-ported from Jared Jones' VS Code original — is
+ * gone: shiki highlights server-side with its own `laserwave` theme and
+ * inlines every color, including the #27212e surface, onto the elements.
+ *
+ * Two states to dress, because the chrome is a client upgrade: the bare
+ * shiki <pre> the server sends, and the hyzer CodeBlock that codeBlocks()
+ * wraps it in after hydration. They are kept as close as possible so the
+ * upgrade doesn't visibly reflow the page.
+ */
+
+/* Server-rendered state — also what a reader with no JS keeps. */
+.prose pre.shiki {
+  padding: 1rem;
+  /* bleed a little past the 65ch column, so code reads wider than prose */
+  margin: 0.5em -1rem;
+  border-radius: 0.5em;
+  font-size: var(--hz-font-size-sm);
+  line-height: var(--hz-line-height-base);
+
+  /* .prose pre sets pre-wrap for ordinary <pre>, and the CodeBlock theme's
+     own rule is :where(pre) — zero specificity, so it cannot win this.
+     Code scrolls rather than reflowing mid-expression, which is what the
+     PrismJS sheet did with its own `white-space: pre`. */
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* Upgraded state: the frame (border, radius, header, copy) belongs to the
+   CodeBlock theme now, so hand the outer box back and let the <pre> sit flush
+   inside it. */
+.prose .hz-code-block {
+  margin: 0.5em -1rem;
+}
+.prose .hz-code-block pre.shiki {
+  margin: 0;
+  border-radius: 0;
+}
+
+/* Laserwave's own pink, kept from the old sheet. */
+.prose pre.shiki ::selection {
+  background: #eb64b927;
+  color: inherit;
+}
+
+/* The language chip ships as text-muted, which lands at 4.20 on the header's
+   own 12% tint over our page background — just under AA. Full text color
+   instead (11.45); the chip is small and already set apart by the tint. */
+.prose .hz-code-block .hz-code-block-lang {
+  color: var(--hz-color-text);
+}
