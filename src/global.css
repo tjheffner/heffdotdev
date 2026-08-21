@@ -131,10 +131,16 @@ body:not([data-group='nowrapper']) img {
   /* https://ishadeed.com/article/defensive-css */
   max-width: 100%;
   object-fit: cover;
-  background-color: grey;
 }
-/* lazy loaded images */
-.lazy-image {
+
+/* The grey placeholder: shown while an image loads, and kept for good if it
+   never does — that lasting box is the defensive-CSS point. Dropped the
+   moment the image paints, which is what keeps a transparent PNG off a grey
+   card. No transparency detection needed: every image here is object-fit
+   cover, so an opaque one never letterboxes and had already hidden this
+   behind its own pixels. The root layout stamps data-loaded; a broken image
+   never fires load, so it keeps the placeholder. */
+body:not([data-group='nowrapper']) img:not([data-loaded]) {
   background-color: grey;
 }
 /* Zoomable images. The viewer itself is @hyzer-labs/ui's lightboxGroup
@@ -151,6 +157,18 @@ body:not([data-group='nowrapper']) img {
 }
 .hz-lightbox::backdrop {
   backdrop-filter: blur(2px);
+}
+
+/* Drop the viewer's framing shadow. It is drawn on Image's wrapper box, which
+   only hugs the bitmap for a lone image — a gallery slide stretches it to the
+   whole stage (width/height 100%, with the bitmap contained inside), so the
+   shadow traces a big empty rectangle instead of the picture. It cannot earn
+   its keep either way here: it is black at 18% over an 85% black backdrop, so
+   it is invisible when correct and an artifact when not. Same story for a
+   transparent PNG, where it would outline the bounding box rather than the
+   art. Unlayered, so it beats hz-theme without a specificity fight. */
+.hz-lightbox .hz-lightbox-img {
+  box-shadow: none;
 }
 
 /* Links that highlight from bottom */

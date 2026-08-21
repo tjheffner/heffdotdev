@@ -22,7 +22,7 @@
     <div>
       <a data-sveltekit-prefetch class="gallery-link" href={'/gallery/' + href}>
         <img
-          class="gallery-image lazy-image"
+          class="gallery-image"
           loading="lazy"
           src={cdnImage(item.image)}
           srcset={cdnSrcset(item.image)}

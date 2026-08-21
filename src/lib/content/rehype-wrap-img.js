@@ -21,8 +21,6 @@ export default function rehypeZoomImages(options = { selector: 'img' }) {
         node.properties['data-lightbox-src'] = cdnImage(original, 1600)
 
         node.properties.loading = 'lazy'
-        // add class for bg color before loading
-        node.properties.class = 'lazy-image'
         // needs height and width defined for lazy loading
         node.properties.height = '100%'
         node.properties.width = '100%'
