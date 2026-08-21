@@ -8,12 +8,16 @@
  * a code block reads as part of the page.
  *
  * It is deliberately spread around the wheel rather than shaded along one arc.
- * An earlier pass ran purple, violet, plum, fuchsia and indigo together, which
- * looked coherent in a swatch and turned to mush in real code: five neighbours
- * competing for the eye. Strings are teal and numbers are rust now, which puts
- * real distance between the three things you scan for most — what is a name,
- * what is a literal, what is a keyword — and the near-duplicate violet is
- * folded back into the keyword purple.
+ * The six syntax hues sit at roughly 15°, 142°, 193°, 225°, 272° and 335°,
+ * which is about as evenly as six colors divide. Two earlier passes failed
+ * this way: the first ran purple, violet, plum, fuchsia and indigo together,
+ * and the second still left types in indigo right beside functions in blue —
+ * two blue-violets on adjacent tokens, which is precisely where the eye needs
+ * the help (`base.extend<AxeFixture>`, `new AxeBuilder(...).withTags`).
+ *
+ * So types are cyan now, a different family from the function blue rather
+ * than a shade of it, and storage has its own pink instead of being folded
+ * into the keyword purple. Strings moved teal → green to clear the way.
  *
  * The surface is deliberately absent. `editor.background` is declared so the
  * contrast numbers below mean something, but a transformer strips it from the
@@ -31,14 +35,25 @@ export const CODE_SURFACE = '#ffffff'
 const NAVY = '#1d293d' // 14.62 — the site's own text color
 const MUTED = '#6b6382' // 5.63 — comments, a purple-shifted gray
 const GRAY = '#646b78' // 5.36 — the site's gray, for punctuation
-const PURPLE = '#7e22ce' // 6.98 — keywords, and storage after the merge
-const TEAL = '#115e59' // 7.58 — strings
-const RUST = '#9a3412' // 7.31 — numbers and constants
-const BLUE = '#1d4ed8' // 6.70 — the site's secondary, for functions
-const INDIGO = '#4338ca' // 7.90 — type and class names
+const RUST = '#9a3412' // 7.31 — numbers and constants          hue  15
+const GREEN = '#15803d' // 5.02 — strings                        hue 142
+const CYAN = '#0e7490' // 5.36 — type and class names            hue 193
+const BLUE = '#1d4ed8' // 6.70 — the site's secondary, functions hue 225
+const PURPLE = '#7e22ce' // 6.98 — keywords                        hue 272
+const PINK = '#be185d' // 6.04 — storage: const, let, type, export hue 335
 
 /** Every hue above, for the contrast assertion in the theme's own test. */
-export const CODE_COLORS = [NAVY, MUTED, GRAY, PURPLE, TEAL, RUST, BLUE, INDIGO]
+export const CODE_COLORS = [
+  NAVY,
+  MUTED,
+  GRAY,
+  RUST,
+  GREEN,
+  CYAN,
+  BLUE,
+  PURPLE,
+  PINK,
+]
 
 export const shikiTheme = {
   name: 'heffnerdotdev',
@@ -57,12 +72,12 @@ export const shikiTheme = {
 
     {
       scope: ['string', 'string.quoted', 'punctuation.definition.string'],
-      settings: { foreground: TEAL },
+      settings: { foreground: GREEN },
     },
     // template literals read as strings; their ${} punctuation does not
     {
       scope: ['string.template', 'punctuation.definition.template-expression'],
-      settings: { foreground: TEAL },
+      settings: { foreground: GREEN },
     },
 
     {
@@ -80,11 +95,11 @@ export const shikiTheme = {
       scope: ['keyword', 'keyword.control', 'keyword.other'],
       settings: { foreground: PURPLE },
     },
-    // storage shares the keyword purple: `const` and `return` are the same
-    // kind of thing to a reader, and a separate violet only added a neighbour
+    // storage keeps a hue of its own. Merging it into the keyword purple did
+    // remove a near-duplicate, but `export const` then read as one long word.
     {
       scope: ['storage', 'storage.type', 'storage.modifier'],
-      settings: { foreground: PURPLE },
+      settings: { foreground: PINK },
     },
 
     {
@@ -103,7 +118,7 @@ export const shikiTheme = {
         'support.type',
         'entity.other.inherited-class',
       ],
-      settings: { foreground: INDIGO },
+      settings: { foreground: CYAN },
     },
 
     {
@@ -128,7 +143,7 @@ export const shikiTheme = {
     },
     {
       scope: ['entity.other.attribute-name'],
-      settings: { foreground: INDIGO },
+      settings: { foreground: CYAN },
     },
     {
       scope: [
@@ -138,7 +153,7 @@ export const shikiTheme = {
       ],
       settings: { foreground: BLUE },
     },
-    { scope: ['string.regexp'], settings: { foreground: TEAL } },
+    { scope: ['string.regexp'], settings: { foreground: GREEN } },
     // php and js sigil-prefixed variables stay plain text, not punctuation
     {
       scope: ['variable.other.php', 'punctuation.definition.variable'],
