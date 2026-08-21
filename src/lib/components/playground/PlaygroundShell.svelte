@@ -180,27 +180,23 @@
   }
 
   .playground {
-    /* The semantic layer, now sourced from the "playground" theme block in
-     * hyzer-tokens.css (authored in hyzer.config.ts) rather than repeating
-     * hexes. A data-theme="playground" body is what activates it — stamped
-     * during SSR in hooks.server.ts, so it is live on the first paint. */
-    --pg-bg: var(--hz-color-surface);
-    --pg-panel: var(--hz-color-surface-muted);
-    --pg-line: var(--hz-color-border);
-    --pg-text: var(--hz-color-text);
-    --pg-dim: var(--hz-color-text-muted);
-    --pg-accent: var(--hz-intent-primary);
-    --pg-track: var(--hz-palette-track);
-
-    /* Chrome colors flip with the canvas luminance (see .light-canvas). These
-     * drive the title and the pill/action chips so they read over any backdrop. */
-    --pg-chrome-fg: #e8e8ec;
+    /* The playground reads the "playground" theme block in hyzer-tokens.css
+     * (authored in hyzer.config.ts) directly — there is no --pg-* alias layer
+     * any more. A data-theme="playground" body activates it, stamped during
+     * SSR in hooks.server.ts, so it is live on the first paint.
+     *
+     * --pg-chrome-* below is what survives, and it is not an alias: these
+     * flip with the canvas luminance (see .light-canvas), which is runtime
+     * state rather than a theme, so the indirection is doing real work. The
+     * dark defaults are the theme's own text/surface-muted, so only the
+     * inverted set has to spell out literals. */
+    --pg-chrome-fg: var(--hz-color-text);
     --pg-chrome-chip: rgba(10, 10, 14, 0.62);
-    --pg-chrome-line: var(--pg-line);
+    --pg-chrome-line: var(--hz-color-border);
     /* Monochrome "selected" fill for the active pill (no colored accent up in
      * the chrome): a solid swatch of the fg color with inverted text. */
-    --pg-chrome-solid: #e8e8ec;
-    --pg-chrome-on-solid: #16161c;
+    --pg-chrome-solid: var(--hz-color-text);
+    --pg-chrome-on-solid: var(--hz-color-surface-muted);
 
     position: relative;
     width: 100vw;
@@ -208,8 +204,8 @@
     height: 100dvh;
     overflow: hidden;
     font-family: var(--hz-font-family-mono);
-    color: var(--pg-text);
-    background: var(--pg-bg);
+    color: var(--hz-color-text);
+    background: var(--hz-color-surface);
   }
 
   /* Light canvas → dark chrome (light chip, dark text, darker hairline). */
@@ -299,7 +295,7 @@
     background: rgba(20, 20, 26, 0.94);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--pg-line);
+    border: 1px solid var(--hz-color-border);
     border-radius: 10px;
     padding: 0.7rem 0.8rem 0.85rem;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
@@ -316,13 +312,13 @@
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
   }
   .title-sub {
     margin: 0;
     font-size: 0.72rem;
     line-height: 1.55;
-    color: var(--pg-text);
+    color: var(--hz-color-text);
   }
   .title-keys h3 {
     margin: 0 0 0.35rem;
@@ -330,7 +326,7 @@
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
   }
   .title-keys ul {
     list-style: none;
@@ -345,7 +341,7 @@
     align-items: center;
     gap: 0.5rem;
     font-size: 0.7rem;
-    color: var(--pg-text);
+    color: var(--hz-color-text);
   }
   .title-keys kbd {
     flex: none;
@@ -354,14 +350,14 @@
     font: inherit;
     font-size: 0.62rem;
     padding: 0.1rem 0.35rem;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     background: rgba(255, 255, 255, 0.06);
-    border: 1px solid var(--pg-line);
+    border: 1px solid var(--hz-color-border);
     border-radius: 4px;
   }
   .title-link {
     font-size: 0.7rem;
-    color: var(--pg-accent);
+    color: var(--hz-intent-primary);
     text-decoration: none;
     width: fit-content;
   }
@@ -377,7 +373,7 @@
     font: inherit;
     font-size: 0.95rem;
     line-height: 1;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     background: transparent;
     border: 1px solid transparent;
     border-radius: 4px;
@@ -385,11 +381,11 @@
     padding: 0;
   }
   .card-close:hover {
-    color: var(--pg-text);
-    border-color: var(--pg-line);
+    color: var(--hz-color-text);
+    border-color: var(--hz-color-border);
   }
   .card-close:focus-visible {
-    outline: 2px solid var(--pg-accent);
+    outline: 2px solid var(--hz-intent-primary);
     outline-offset: 1px;
   }
   .bar-actions {
@@ -452,7 +448,7 @@
     margin: 0.1rem 0 0;
     font-size: 0.66rem;
     line-height: 1.5;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
   }
 
   :global(.playground .btn) {
@@ -460,18 +456,18 @@
     font-size: 0.66rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--pg-text);
+    color: var(--hz-color-text);
     background: transparent;
-    border: 1px solid var(--pg-line);
+    border: 1px solid var(--hz-color-border);
     border-radius: 4px;
     padding: 0.3rem 0.6rem;
     cursor: pointer;
   }
   :global(.playground .btn:hover) {
-    border-color: var(--pg-dim);
+    border-color: var(--hz-color-text-muted);
   }
   :global(.playground .btn:focus-visible) {
-    outline: 2px solid var(--pg-accent);
+    outline: 2px solid var(--hz-intent-primary);
     outline-offset: 2px;
   }
   :global(.playground .btn:disabled) {
@@ -479,8 +475,8 @@
     cursor: not-allowed;
   }
   :global(.playground .btn.accent) {
-    border-color: var(--pg-accent);
-    color: var(--pg-accent);
+    border-color: var(--hz-intent-primary);
+    color: var(--hz-intent-primary);
   }
   :global(.playground .btn.accent:hover) {
     border-color: #ff8a5c;
@@ -512,14 +508,14 @@
     font-size: 0.7rem;
   }
   :global(.playground .mode-row .lab) {
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
   :global(.playground .mode-btns) {
     display: flex;
     gap: 0;
-    border: 1px solid var(--pg-line);
+    border: 1px solid var(--hz-color-border);
     border-radius: 4px;
     overflow: hidden;
   }
@@ -529,10 +525,10 @@
     font-size: 0.62rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     background: transparent;
     border: none;
-    border-right: 1px solid var(--pg-line);
+    border-right: 1px solid var(--hz-color-border);
     padding: 0.3rem 0;
     cursor: pointer;
     transition: background 100ms ease, color 100ms ease;
@@ -541,14 +537,14 @@
     border-right: none;
   }
   :global(.playground .mode-btn:hover) {
-    color: var(--pg-text);
+    color: var(--hz-color-text);
   }
   :global(.playground .mode-btn.active) {
-    background: var(--pg-line);
-    color: var(--pg-text);
+    background: var(--hz-color-border);
+    color: var(--hz-color-text);
   }
   :global(.playground .mode-btn:focus-visible) {
-    outline: 2px solid var(--pg-accent);
+    outline: 2px solid var(--hz-intent-primary);
     outline-offset: -2px;
   }
 
@@ -566,23 +562,23 @@
     font-size: 0.62rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     background: transparent;
-    border: 1px solid var(--pg-line);
+    border: 1px solid var(--hz-color-border);
     border-radius: 4px;
     padding: 0.35rem 0;
     cursor: pointer;
   }
   :global(.playground .chip:hover) {
-    color: var(--pg-text);
-    border-color: var(--pg-dim);
+    color: var(--hz-color-text);
+    border-color: var(--hz-color-text-muted);
   }
   :global(.playground .chip.active) {
-    background: var(--pg-line);
-    color: var(--pg-text);
+    background: var(--hz-color-border);
+    color: var(--hz-color-text);
   }
   :global(.playground .chip:focus-visible) {
-    outline: 2px solid var(--pg-accent);
+    outline: 2px solid var(--hz-intent-primary);
     outline-offset: -2px;
   }
   :global(.playground .chip-field) {
@@ -592,7 +588,7 @@
     font-size: 0.7rem;
   }
   :global(.playground .chip-field .lab) {
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
@@ -621,12 +617,12 @@
     font-size: 0.7rem;
   }
   :global(.playground .toggle-row .lab) {
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
   :global(.playground .toggle-row input) {
-    accent-color: var(--pg-accent);
+    accent-color: var(--hz-intent-primary);
   }
 
   :global(.playground .color-row) {
@@ -637,19 +633,19 @@
     font-size: 0.7rem;
   }
   :global(.playground .color-row .lab) {
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
   :global(.playground .color-row .val) {
-    color: var(--pg-text);
+    color: var(--hz-color-text);
     text-align: right;
   }
   :global(.playground .color-row input[type='color']) {
     width: 34px;
     height: 22px;
     padding: 0;
-    border: 1px solid var(--pg-line);
+    border: 1px solid var(--hz-color-border);
     border-radius: 4px;
     background: none;
     cursor: pointer;

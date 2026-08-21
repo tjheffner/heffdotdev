@@ -417,7 +417,7 @@
     font-size: 0.6rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
   }
   .palette-row {
     display: flex;
@@ -428,15 +428,15 @@
     width: 34px;
     height: 22px;
     padding: 0;
-    border: 1px solid var(--pg-line);
+    border: 1px solid var(--hz-color-border);
     border-radius: 4px;
     cursor: pointer;
   }
   .palette-chip:hover {
-    border-color: var(--pg-dim);
+    border-color: var(--hz-color-text-muted);
   }
   .palette-chip:focus-visible {
-    outline: 2px solid var(--pg-accent);
+    outline: 2px solid var(--hz-intent-primary);
     outline-offset: 1px;
   }
 </style>

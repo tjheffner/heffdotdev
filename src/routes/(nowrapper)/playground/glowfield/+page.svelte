@@ -750,32 +750,32 @@ ${layerLines}
     height: 64px;
     display: block;
     background: #101016;
-    border: 1px solid var(--pg-line);
+    border: 1px solid var(--hz-color-border);
     border-radius: 4px;
     cursor: pointer;
     touch-action: none;
   }
   .curve:focus-visible {
-    outline: 2px solid var(--pg-accent, #6ea8fe);
+    outline: 2px solid var(--hz-intent-primary);
     outline-offset: 2px;
   }
   .curve .axis {
-    stroke: var(--pg-line);
+    stroke: var(--hz-color-border);
     stroke-width: 0.6;
   }
   .curve .trace {
     fill: none;
-    stroke: var(--pg-accent);
+    stroke: var(--hz-intent-primary);
     stroke-width: 1.4;
     vector-effect: non-scaling-stroke;
   }
   .curve .cursor {
-    stroke: var(--pg-dim);
+    stroke: var(--hz-color-text-muted);
     stroke-width: 0.5;
     stroke-dasharray: 2 2;
   }
   .curve .dot {
-    fill: var(--pg-accent);
+    fill: var(--hz-intent-primary);
   }
 
   /* --- layers ------------------------------------------------------------ */
@@ -789,7 +789,7 @@ ${layerLines}
   }
   .layer {
     position: relative;
-    border: 1px solid var(--pg-line);
+    border: 1px solid var(--hz-color-border);
     border-radius: 6px;
     background: #14141a;
     transition: border-color 120ms ease, opacity 120ms ease;
@@ -798,7 +798,7 @@ ${layerLines}
     opacity: 0.4;
   }
   .layer.drop-target {
-    border-color: var(--pg-accent, #ff6b35);
+    border-color: var(--hz-intent-primary);
   }
   .drag-handle {
     flex: none;
@@ -808,20 +808,20 @@ ${layerLines}
     font: inherit;
     font-size: 0.8rem;
     line-height: 1;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     background: transparent;
     border: none;
     cursor: grab;
     touch-action: none;
   }
   .drag-handle:hover {
-    color: var(--pg-text);
+    color: var(--hz-color-text);
   }
   .drag-handle:active {
     cursor: grabbing;
   }
   .drag-handle:focus-visible {
-    outline: 2px solid var(--pg-accent);
+    outline: 2px solid var(--hz-intent-primary);
     outline-offset: 1px;
     border-radius: 3px;
   }
@@ -840,7 +840,7 @@ ${layerLines}
     display: none;
   }
   .layer summary:focus-visible {
-    outline: 2px solid var(--pg-accent);
+    outline: 2px solid var(--hz-intent-primary);
     outline-offset: 2px;
     border-radius: 6px;
   }
@@ -855,7 +855,7 @@ ${layerLines}
   }
   .layer-meta {
     margin-left: auto;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     font-size: 0.64rem;
   }
   .layer-delete {
@@ -870,7 +870,7 @@ ${layerLines}
     font: inherit;
     font-size: 0.85rem;
     line-height: 1;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     background: transparent;
     border: 1px solid transparent;
     border-radius: 4px;
@@ -882,7 +882,7 @@ ${layerLines}
     border-color: #e05555;
   }
   .layer-delete:focus-visible {
-    outline: 2px solid var(--pg-accent);
+    outline: 2px solid var(--hz-intent-primary);
     outline-offset: 1px;
   }
   .layer-delete:disabled {
@@ -894,7 +894,7 @@ ${layerLines}
     flex-direction: column;
     gap: 0.45rem;
     padding: 0.2rem 0.6rem 0.7rem;
-    border-top: 1px solid var(--pg-line);
+    border-top: 1px solid var(--hz-color-border);
   }
   .layer-body h3 {
     margin: 0.5rem 0 0;
@@ -902,7 +902,7 @@ ${layerLines}
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
   }
   .layer-actions {
     display: flex;
@@ -915,9 +915,9 @@ ${layerLines}
     padding: 0.6rem;
     font-size: 0.62rem;
     line-height: 1.55;
-    color: var(--pg-dim);
+    color: var(--hz-color-text-muted);
     background: #101016;
-    border: 1px solid var(--pg-line);
+    border: 1px solid var(--hz-color-border);
     border-radius: 4px;
     overflow-x: auto;
     white-space: pre;
@@ -929,7 +929,7 @@ ${layerLines}
     gap: 0.4rem;
     margin-top: 0.6rem;
     padding-top: 0.6rem;
-    border-top: 1px solid var(--pg-line);
+    border-top: 1px solid var(--hz-color-border);
   }
   .code-head {
     display: flex;
