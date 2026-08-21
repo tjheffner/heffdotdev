@@ -1,9 +1,10 @@
 /*
  * Code block layout. The Laserwave palette that used to fill this file — 133
  * lines of PrismJS theme, hand-ported from Jared Jones' VS Code original — is
- * gone: shiki highlights server-side with its own `catppuccin-macchiato`
- * theme and inlines every color, including the #24273a surface, onto the
- * elements.
+ * gone: shiki highlights server-side with our own theme (shiki-theme.js) and
+ * inlines the token colors onto the elements. The surface is the exception —
+ * a transformer strips shiki's inline background so the block can take
+ * --hz-color-surface-muted from the palette instead of pinning a hex.
  *
  * Two states to dress, because the chrome is a client upgrade: the bare
  * shiki <pre> the server sends, and the hyzer CodeBlock that codeBlocks()
@@ -13,6 +14,8 @@
 
 /* Server-rendered state — also what a reader with no JS keeps. */
 .prose pre.shiki {
+  /* the token the main theme already uses for raised, quiet surfaces */
+  background: var(--hz-color-surface-muted);
   padding: 1rem;
   /* bleed a little past the 65ch column, so code reads wider than prose */
   margin: 0.5em -1rem;
@@ -36,13 +39,20 @@
 }
 .prose .hz-code-block pre.shiki {
   margin: 0;
-  border-radius: 0;
+  /* Square only where it meets the header. The bottom keeps the frame's curve,
+     inset by the 1px border: squaring it let the pre's own background paint
+     over the wrapper's rounded corners, which notched the bottom border. */
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
+  border-end-start-radius: calc(var(--hz-radius-md) - 1px);
+  border-end-end-radius: calc(var(--hz-radius-md) - 1px);
 }
 
-/* Macchiato's own selection wash, so highlighting text inside a block stays
-   in the theme's palette rather than the page's. */
+/* Now that the block is light, selection can use the same secondary tint the
+   prose already uses for inline code and table banding, rather than a wash
+   borrowed from the highlighter's palette. */
 .prose pre.shiki ::selection {
-  background: #939ab740;
+  background: var(--hz-palette-secondary-tint);
   color: inherit;
 }
 

@@ -1,4 +1,21 @@
 import { test, expect, generateReport, goto } from './utils'
+import { contrastRatio } from '@hyzer-labs/ui/utils'
+import { CODE_COLORS, CODE_SURFACE } from '../src/lib/content/shiki-theme.js'
+
+/**
+ * The axe scan below only grades hues that happen to appear in the sample
+ * post. This grades the whole hand-rolled palette, so a color added to
+ * shiki-theme.js cannot slip in below the bar just because no post uses it
+ * yet.
+ */
+test('every syntax color clears AA on the code surface', () => {
+  for (const color of CODE_COLORS) {
+    expect(
+      contrastRatio(color, CODE_SURFACE),
+      `${color} on ${CODE_SURFACE}`
+    ).toBeGreaterThanOrEqual(4.5)
+  }
+})
 
 test('blog page renders without a11y errors', async ({
   page,
@@ -57,13 +74,19 @@ test('code blocks are highlighted server-side and upgraded to CodeBlock', async 
       // every shiki <pre> got wrapped; none left loose in the prose
       stray: document.querySelectorAll('.prose > pre.shiki').length,
       highlighted: el.hasAttribute('data-highlighted'),
-      // shiki inlines its palette, so the theme yields its own fill
+      // the CodeBlock theme yields its own fill under [data-highlighted], so
+      // what paints is --hz-color-surface-muted from code-block.css
       preBg: getComputedStyle(pre).backgroundColor,
       wrapperBg: getComputedStyle(el).backgroundColor,
       // code scrolls rather than reflowing mid-expression
       whiteSpace: getComputedStyle(pre).whiteSpace,
       // PrismJS is gone, and with it the bogus language-undefined fences
       prismTokens: document.querySelectorAll('.token').length,
+      // the surface is ours, not shiki's: a transformer strips its inline
+      // background so --hz-color-surface-muted can paint the block
+      inlineBg: /background/.test(
+        document.querySelector('pre.shiki')?.getAttribute('style') ?? ''
+      ),
       // mdsvex escapes { } < > in fences so Svelte can't read a sample as
       // template syntax. Shiki highlights whatever text it is handed, so
       // without a decode pass first it tokenizes `&gt;` into three spans and
@@ -78,12 +101,13 @@ test('code blocks are highlighted server-side and upgraded to CodeBlock', async 
 
   expect(state.stray).toBe(0)
   expect(state.highlighted).toBe(true)
-  expect(state.preBg).toBe('rgb(36, 39, 58)') // catppuccin-macchiato #24273a
+  expect(state.preBg).toBe('rgb(255, 255, 255)') // --hz-color-surface-muted
   expect(state.wrapperBg).toBe('rgba(0, 0, 0, 0)')
   expect(state.whiteSpace).toBe('pre')
   expect(state.prismTokens).toBe(0)
   expect(state.undefinedLang).toBe(0)
   expect(state.entityLeak).toBe(false)
+  expect(state.inlineBg).toBe(false)
 })
 
 test('copy button copies the source, not the highlighted markup', async ({

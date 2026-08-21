@@ -10,6 +10,7 @@ import rehypeAutoLink from 'rehype-autolink-headings'
 import rehypeCdnImages from './rehype-cdn-images.js'
 import rehypeShiki from '@shikijs/rehype'
 import rehypeUnescapeCode from './rehype-unescape-code.js'
+import { shikiTheme } from './shiki-theme.js'
 
 import type { BaseContentItem, GithubIssue } from '$lib/types.js'
 
@@ -34,14 +35,28 @@ const rehypePlugins = [
   [
     rehypeShiki,
     {
-      // Laserwave, which the old hand-ported PrismJS sheet was a copy of, is
-      // a warm plum (#27212e) and read as a foreign object on a cool
-      // blue-grey page. Macchiato's #24273a lands eight RGB units from the
-      // site's own text navy (#1d293d), so a code block sits in the page
-      // rather than on it. It is also the only family clearing WCAG AA on all
-      // 17 of its token colors, which is what retires the per-hue patching
-      // laserwave needed.
-      theme: 'catppuccin-macchiato',
+      // Ours (see shiki-theme.js). Every shipped theme was wrong in one of two
+      // ways: the dark ones punched a hole in a light page, and the light ones
+      // arrived with a palette unrelated to this site's.
+      theme: shikiTheme,
+      transformers: [
+        {
+          name: 'surface-from-token',
+          pre(node) {
+            // Drop shiki's inline background so code-block.css can paint
+            // --hz-color-surface-muted instead. An inline style would win over
+            // any stylesheet, so stripping it here is the only way the block
+            // can follow the palette rather than pin a hex of its own. The
+            // foreground stays: it is the theme's plain-text color.
+            const style = node.properties?.style
+            if (typeof style === 'string') {
+              node.properties.style = style
+                .replace(/background-color:[^;]*;?/g, '')
+                .trim()
+            }
+          },
+        },
+      ],
       langs: CODE_LANGS,
       // put language-<lang> back on the <code>; the client upgrade reads it
       // to label CodeBlock's chip
