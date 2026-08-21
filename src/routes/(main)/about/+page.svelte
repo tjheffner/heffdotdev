@@ -6,9 +6,9 @@
 
   // type="single" keeps only one panel open at a time — the old `linked` behavior
   const items = [
-    { id: 'about-me', title: 'about me' },
+    { id: 'about', title: 'about' },
     { id: 'recent-activity', title: 'recent activity' },
-    { id: 'about-this-site', title: 'about this site' },
+    { id: 'colophon', title: 'colophon' },
     { id: 'contact', title: 'contact' },
   ]
 
@@ -21,9 +21,9 @@
 <section class="prose" id="content" tabindex="-1">
     <h1>information kiosk</h1>
 
-    <Accordion {items} type="single" defaultOpen="about-me" headingLevel={2} class="about-accordion">
+    <Accordion {items} type="single" defaultOpen="about" headingLevel={2} class="about-accordion">
       {#snippet panel(item)}
-        {#if item.id === 'about-me'}
+        {#if item.id === 'about'}
           <p>My name is <strong>tanner heffner</strong> and I am based out of <strong>portland, oregon</strong>.</p>
 
           <p>
@@ -34,21 +34,47 @@
 
           <p>A software engineer for over a decade and I still love the feeling when launching a fresh <strong>hello world!</strong></p>
 
+          <p>heffner.dev is perpetually under construction, same as me <span class="surfer">🏄‍♂️</span></p>
+
+          <p>parts <a href="/blog">blog,</a> <a href="/gallery">photo gallery,</a> and some <a href="/playground">playground</a> too.
+             this website is my own personal <a href="https://joelhooks.com/digital-garden" target="_blank">digital garden</a>
+          </p>
+
           <a href="https://hyzer.sh" target="_blank">[business]</a>
           <a href="/resume" target="_blank">[resume]</a>
-        {:else if item.id === 'about-this-site'}
-          <div class="tall">
-            <p>heffner.dev is perpetually under construction, same as me <span class="surfer">🏄‍♂️</span></p>
+        {:else if item.id === 'colophon'}
+          <p>
+            built with <a href="https://svelte.dev/docs/kit/introduction" target="_blank">sveltekit</a>,
+            hosted on netlify, and <a href="https://github.com/tjheffner/heffdotdev">public on github</a>.
+            every post and gallery is a github issue, so the writing lives where the code does.
+          </p>
 
-            <p>parts <a href="/blog">blog,</a> <a href="/gallery">photo gallery,</a> and some <a href="/playground">playground</a> too.
-               this website is my own personal <a href="https://joelhooks.com/digital-garden" target="_blank">digital garden</a>
-            </p>
+          <p>
+            the components and design tokens come from <a href="https://design.hyzer.sh" target="_blank">@hyzer-labs/ui</a>.
+            palette, type scale, spacing and density are all authored in one config file and generated into css —
+            one place to change how the whole site looks, instead of hunting through stylesheets.
+          </p>
 
-            <p>
-              it is built with <a href="https://svelte.dev/docs/kit/introduction" target="_blank">sveltekit</a>.
-              the codebase is <a href="https://github.com/tjheffner/heffdotdev">public on github</a> and hosted via netlify.
-            <a href="/heffdotdev-technical-details">this post</a> (and later, <a href="/2025-site-updates">this one</a>) explains more about the tools I chose and why.</p>
-          </div>
+          <p>
+            headings are merriweather, body is mulish, and the colors are written in oklch.
+            spacing follows <a href="https://complementary.space/" target="_blank">complementary space</a>:
+            two distances, near and away, that tighten automatically as regions nest inside each other.
+          </p>
+
+          <p>
+            photos are resized on the fly by netlify's image cdn, since they come off github at full camera size.
+            code is highlighted on the server by <a href="https://shiki.style" target="_blank">shiki</a>,
+            using a theme I built for this palette rather than a stock one.
+          </p>
+
+          <p>
+            color contrast is checked in ci, and every page gets scanned by
+            <a href="https://playwright.dev" target="_blank">playwright</a> +
+            <a href="https://www.deque.com/axe/" target="_blank">axe</a> before it ships.
+            accessible is the whole point of building it myself.
+          </p>
+
+          <p><a href="/heffdotdev-technical-details">this post</a> (and later, <a href="/2025-site-updates">this one</a>) explains more about the tools I chose and why.</p>
         {:else if item.id === 'recent-activity'}
           <Currently
             recentlyListened={recentlyListened}
@@ -90,11 +116,6 @@
   }
   section :global(.hz-accordion-item[data-state='open'] .hz-accordion-icon) {
     transform: rotate(180deg);
-  }
-
-  /* helpful if the children contain a lot of links */
-  .tall > p {
-    margin-bottom: var(--hz-space-away);
   }
 
   /* `scale` and `rotate` are separate properties, not one packed `transform`,
