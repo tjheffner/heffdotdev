@@ -7,7 +7,7 @@ import remarkUnwrapImages from 'remark-unwrap-images'
 import rehypeStringify from 'rehype-stringify'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutoLink from 'rehype-autolink-headings'
-import rehypeZoomImages from './rehype-wrap-img.js'
+import rehypeCdnImages from './rehype-cdn-images.js'
 
 import type { BaseContentItem, GithubIssue } from '$lib/types.js'
 
@@ -16,7 +16,7 @@ const rehypePlugins = [
   rehypeStringify,
   rehypeSlug,
   rehypeAutoLink,
-  rehypeZoomImages,
+  rehypeCdnImages,
 ]
 
 export function readingTime(text: string): string {
@@ -88,7 +88,7 @@ export function baseIssueContent(issue: GithubIssue): BaseContentItem {
 
 /**
  * Normalize raw <img> HTML into markdown image syntax so every image gets the
- * same treatment downstream (zoom wrapper + lazy loading via rehypeZoomImages),
+ * same treatment downstream (CDN + lazy loading via rehypeCdnImages),
  * regardless of how GitHub embedded it. GitHub now pastes images as raw
  * <img width height alt src /> tags instead of ![alt](src); without this those
  * tags pass through as opaque HTML and never get wrapped. Runs before the
@@ -182,8 +182,6 @@ export async function formatContent(content: string): Promise<string> {
     // https://github.com/pngwn/MDsveX/issues/392
     .replace(/>{@html `<code class="language-/g, '><code class="language-')
     .replace(/<\/code>`}<\/pre>/g, '</code></pre>')
-  // lazy load images, if not using rehypeZoomImages
-  // .replace(/<img/g, '<img loading="lazy" ')
 
   return output
 }
