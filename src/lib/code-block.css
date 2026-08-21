@@ -63,6 +63,13 @@
   color: var(--hz-color-text);
 }
 
+/* The header ships transparent, so it showed the page background while the
+   code area sat on surface-muted — a visible seam across one block. Both take
+   the same surface now; the crimson hairline is what separates them. */
+.prose .hz-code-block-header {
+  background: var(--hz-color-surface-muted);
+}
+
 /* The copy button arrives as a bare bordered box: it is a hyzer Button, and we
    deliberately import no button.css, so what renders is the browser's own
    default border. Currently.svelte works around the same thing for the
