@@ -207,7 +207,7 @@
     height: 100vh;
     height: 100dvh;
     overflow: hidden;
-    font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+    font-family: var(--hz-font-family-mono);
     color: var(--pg-text);
     background: var(--pg-bg);
   }

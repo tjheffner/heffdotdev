@@ -59,16 +59,16 @@
 
 <style>
   .article {
-    margin: var(--space-near) 0;
+    margin: var(--hz-space-near) 0;
   }
 
   .details {
-    /* margin: var(--space-near) 0; */
+    /* margin: var(--hz-space-near) 0; */
     /* display: flex;
     flex-direction: column; */
 
     h1 {
-      margin-bottom: var(--space-near);
+      margin-bottom: var(--hz-space-near);
     }
   }
   .side {

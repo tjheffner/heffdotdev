@@ -22,9 +22,8 @@ body {
   max-width: 7.5in;
   padding: min(0.5in, 6vw);
 
-  font-family: 'Mulish', sans-serif;
+  font-family: var(--hz-font-family-sans);
   line-height: 1.5;
-  --c-accent: black;
 }
 a {
   color: inherit;
@@ -32,7 +31,7 @@ a {
 }
 
 h1 {
-  font-family: 'Merriweather', serif;
+  font-family: var(--hz-font-family-serif);
   font-weight: 700;
   font-size: 2.5em;
   margin-block: 0;
@@ -43,7 +42,7 @@ h1 {
 
 h2 {
   display: flex;
-  font-family: 'Merriweather', serif;
+  font-family: var(--hz-font-family-serif);
   font-weight: 700;
   font-size: 1.5em;
   margin-block: 1em 0.5em;
@@ -72,11 +71,6 @@ h4 {
 ul {
   margin: 0;
   padding: 0;
-  /* Every list here is a Stack or a Cluster, which own display/direction and
-     read their gap from this token. Defined in em, not the token default's
-     rem, so the rhythm keeps tracking font-size — the print block relies on
-     that when it shrinks the type. */
-  --hz-space-xs: 0.5em;
 }
 .contact {
   list-style: none;
@@ -89,7 +83,7 @@ ul {
   display: inline-flex;
   width: 2.5ch;
   margin-right: 1ch;
-  background-color: var(--c-accent);
+  background-color: var(--hz-intent-primary);
   border-radius: 50px;
   color: white;
   font-weight: 600;
@@ -179,6 +173,9 @@ p {
     font-size: 0.85em;
   }
 
+  /* The em-based screen value comes from the resume theme in hyzer.config.ts;
+     only the print tightening has to live here, since a token sheet has no
+     @media print. */
   ul {
     --hz-space-xs: 0.25em;
   }

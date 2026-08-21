@@ -47,15 +47,15 @@
 
 <style>
   .article {
-    margin: var(--space-near) 0;
+    margin: var(--hz-space-near) 0;
   }
   .details {
     display: flex;
-    gap: var(--space-near);
+    gap: var(--hz-space-near);
     align-items: center;
 
     h1 {
-      margin-bottom: var(--space-near);
+      margin-bottom: var(--hz-space-near);
     }
   }
   .side {

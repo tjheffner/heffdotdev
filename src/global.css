@@ -1,24 +1,11 @@
 /* set up global css vars & fonts */
 :root {
-  --c-accent: oklch(57.057% 0.21474 14.568);
-  --c-accent-brighter: oklch(from var(--c-accent) l c h / calc(alpha - 0.75));
-  --c-secondary: oklch(48.821% 0.21724 264.392);
-  --c-secondary-brighter: oklch(
-    from var(--c-secondary) l c h / calc(alpha - 0.75)
-  );
-  --c-text: oklch(27.9% 0.041 260.031);
-  --c-background: oklch(96.8% 0.007 247.896);
-
-  --density: 0.4rem; /* ~10pt grid */
-
-  /* the sticky header's rendered height: its vertical padding (2 × the
-     body-level --space-near, written via --density since --space-near
-     shifts inside density regions) + the taller of nav text and toggle.
-     Sticky bars below the header offset by this instead of magic pixels,
-     so they track the root font clamp. */
-  --header-height: calc(var(--density) * 10 + 2rem);
-
-  accent-color: var(--c-accent);
+  /* the sticky header's rendered height: its vertical padding (2 x the
+     body-level --hz-space-near, written off --hz-density since
+     --hz-space-near shifts inside density regions) + the taller of nav text
+     and toggle. Sticky bars below the header offset by this instead of magic
+     pixels, so they track the root font clamp. */
+  --header-height: calc(var(--hz-density) * 10 + 2rem);
 }
 
 @font-face {
@@ -48,12 +35,17 @@
     interpolate-size: allow-keywords;
   }
 }
+body {
+  /* data-theme sits on <body>, so every --hz-* read has to happen at or below
+     it; on :root the tokens resolve against the default theme, not ours. */
+  accent-color: var(--hz-intent-primary);
+}
 body:not([data-group='nowrapper']) {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 
-  background-color: var(--c-background);
-  font-family: 'Mulish', sans-serif;
+  background-color: var(--hz-color-surface);
+  font-family: var(--hz-font-family-sans);
 }
 
 img,
@@ -73,14 +65,14 @@ select {
 
 body:not([data-group='nowrapper']) :is(p, h1, h2, h3, h4, h5, h6) {
   overflow-wrap: break-word;
-  color: var(--c-text);
+  color: var(--hz-color-text);
 }
 p {
   text-wrap: pretty;
 }
 body:not([data-group='nowrapper']) :is(h1, h2, h3, h4, h5, h6) {
   text-wrap: balance;
-  font-family: 'Merriweather', serif;
+  font-family: var(--hz-font-family-serif);
 }
 #root,
 #__next {
@@ -89,62 +81,36 @@ body:not([data-group='nowrapper']) :is(h1, h2, h3, h4, h5, h6) {
 
 /* type scale */
 body:not([data-group='nowrapper']) :is(h1, .h1) {
-  font-size: 2.75em;
+  font-size: var(--hz-font-size-2xl);
   line-height: 1.1;
-  margin-bottom: var(--space-away);
+  margin-bottom: var(--hz-space-away);
 }
 body:not([data-group='nowrapper']) :is(h2, .h2) {
-  font-size: 1.6583em;
+  font-size: var(--hz-font-size-xl);
 }
 body:not([data-group='nowrapper']) :is(h3, .h3, h4, h5, h6) {
-  font-size: 1.401em;
-  margin-bottom: var(--space-near);
+  font-size: var(--hz-font-size-lg);
+  margin-bottom: var(--hz-space-near);
 }
 body:not([data-group='nowrapper']) :is(small, .small) {
-  font-size: 0.8448em;
+  font-size: var(--hz-font-size-sm);
   display: block;
-  margin-bottom: var(--space-near);
+  margin-bottom: var(--hz-space-near);
 }
 html {
   font-size: clamp(1em, 0.8333vw + 0.775em, 1.25em);
 }
 
-/* https://complementary.space/ */
-body {
-  --space-near: calc(var(--density) * 5);
-  --space-away: calc(var(--density) * 10);
-}
-body [data-density-shift] {
-  --space-near: calc(var(--density) * 2);
-  --space-away: calc(var(--density) * 5);
-}
-body [data-density-shift] [data-density-shift] {
-  --space-near: calc(var(--density) * 1);
-  --space-away: calc(var(--density) * 2);
-}
-
-/* @hyzer-labs/ui components speak --hz-space-*; alias them to the site's
-   density scale at every shift level so gap="near"/"away" on Split/Stack/etc
-   resolve to the same distances the handwritten CSS used. Selectors mirror
-   tokens.css exactly (same specificity, loaded after) so these win. */
-body,
-body [data-density-shift],
-body [data-density-shift] [data-density-shift],
-body [data-density-shift] [data-density-shift] [data-density-shift] {
-  --hz-space-near: var(--space-near);
-  --hz-space-away: var(--space-away);
-}
-
 /* colors */
 :focus-visible {
-  outline-color: var(--c-accent);
+  outline-color: var(--hz-intent-primary);
 }
 ::selection {
-  color: var(--c-background);
-  background-color: var(--c-accent);
+  color: var(--hz-color-surface);
+  background-color: var(--hz-intent-primary);
 }
 ::marker {
-  color: var(--c-accent);
+  color: var(--hz-intent-primary);
 }
 :is(
     ::-webkit-calendar-picker-indicator,
@@ -152,13 +118,13 @@ body [data-density-shift] [data-density-shift] [data-density-shift] {
     ::-webkit-inner-spin-button,
     ::-webkit-outer-spin-button
   ) {
-  color: var(--c-accent);
+  color: var(--hz-intent-primary);
 }
 
 body:not([data-group='nowrapper']) hr {
   width: 100%;
-  border: 1px solid var(--c-accent);
-  margin: var(--space-away) 0;
+  border: 1px solid var(--hz-intent-primary);
+  margin: var(--hz-space-away) 0;
 }
 
 body:not([data-group='nowrapper']) img {
@@ -196,7 +162,7 @@ dialog.lightbox {
   position: fixed;
   inset: 0;
   margin: 0;
-  padding: var(--space-near);
+  padding: var(--hz-space-near);
   border: 0;
   background: transparent;
   /* the image is sized to fit, so the dialog itself never needs to scroll */
@@ -215,8 +181,8 @@ dialog.lightbox img {
      percentage max-height on a grid item — so tall images scale down to fit
      the whole thing instead of overflowing and getting clipped. Nothing is
      cropped, and the fit means opening never introduces extra scroll. */
-  max-width: calc(100dvw - var(--space-near) * 2);
-  max-height: calc(100dvh - var(--space-near) * 2);
+  max-width: calc(100dvw - var(--hz-space-near) * 2);
+  max-height: calc(100dvh - var(--hz-space-near) * 2);
   width: auto;
   height: auto;
   object-fit: contain;
@@ -232,14 +198,14 @@ dialog.lightbox::backdrop {
 .nav-link,
 .gallery-link,
 .prose a {
-  color: var(--c-accent);
+  color: var(--hz-intent-primary);
   cursor: pointer;
   text-decoration: none;
   padding: 2px 4px;
   background: linear-gradient(
     to bottom,
-    var(--c-secondary) 0%,
-    var(--c-secondary) 100%
+    var(--hz-intent-secondary) 0%,
+    var(--hz-intent-secondary) 100%
   );
   background-position: 0 100%;
   background-repeat: repeat-x;
@@ -250,7 +216,7 @@ dialog.lightbox::backdrop {
   &[aria-current],
   &:hover {
     background-size: 2px 50px;
-    color: var(--c-background);
+    color: var(--hz-color-surface);
   }
 }
 /* nav links (rendered by @hyzer-labs/ui Link, so styled here, not scoped) */
@@ -269,7 +235,7 @@ h2 > a,
 /* layout wrapper + breakout */
 .wrapper {
   max-width: 65ch;
-  margin: 0 var(--space-near);
+  margin: 0 var(--hz-space-near);
 
   @media (width >=768px) {
     margin: auto;
@@ -283,14 +249,14 @@ h2 > a,
 /* style markdown content from gh */
 .prose {
   p {
-    margin: var(--space-near) 0;
+    margin: var(--hz-space-near) 0;
   }
   ul,
   ol,
   img,
   table,
   blockquote {
-    margin: var(--space-away) 0;
+    margin: var(--hz-space-away) 0;
   }
 
   /* Content images carry width/height attrs from markdown. Once the responsive
@@ -312,20 +278,20 @@ h2 > a,
     border-collapse: collapse;
   }
   thead > tr {
-    background-color: var(--c-accent-brighter);
+    background-color: var(--hz-palette-primary-tint);
   }
   tr:nth-child(even) {
-    background-color: var(--c-secondary-brighter);
+    background-color: var(--hz-palette-secondary-tint);
   }
   th,
   td {
-    padding: var(--space-near);
+    padding: var(--hz-space-near);
   }
 
   blockquote {
-    border-left: 8px solid var(--c-secondary);
-    padding-left: var(--space-away);
-    font-size: 1.6583em;
+    border-left: 8px solid var(--hz-intent-secondary);
+    padding-left: var(--hz-space-away);
+    font-size: var(--hz-font-size-xl);
   }
   blockquote p:first-of-type::before {
     content: '';
@@ -340,7 +306,7 @@ h2 > a,
 
   /* handles `inline code`. larger code blocks are wrapped with pre tags and styled separately */
   code:not(pre *) {
-    background: var(--c-secondary-brighter);
+    background: var(--hz-palette-secondary-tint);
     border-radius: 0.125em;
     color: currentColor;
     font-family: monospace;
@@ -363,8 +329,8 @@ h2 > a,
   list-style-type: none;
 }
 .accent {
-  color: var(--c-accent);
+  color: var(--hz-intent-primary);
 }
 .secondary {
-  color: var(--c-secondary);
+  color: var(--hz-intent-secondary);
 }

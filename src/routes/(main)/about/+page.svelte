@@ -72,7 +72,7 @@
   /* port of the old Details.svelte styles onto the accordion's hooks */
   section :global(.hz-accordion-item) {
     interpolate-size: allow-keywords;
-    margin-bottom: var(--space-away);
+    margin-bottom: var(--hz-space-away);
   }
   section :global(.hz-accordion-item::details-content) {
     transition:
@@ -85,7 +85,7 @@
     block-size: auto;
   }
   section :global(.hz-accordion-icon) {
-    color: var(--c-accent);
+    color: var(--hz-intent-primary);
     transition: transform 0.3s ease;
   }
   section :global(.hz-accordion-item[data-state='open'] .hz-accordion-icon) {
@@ -94,7 +94,7 @@
 
   /* helpful if the children contain a lot of links */
   .tall > p {
-    margin-bottom: var(--space-away);
+    margin-bottom: var(--hz-space-away);
   }
 
   /* `scale` and `rotate` are separate properties, not one packed `transform`,

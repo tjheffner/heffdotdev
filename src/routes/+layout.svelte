@@ -3,10 +3,13 @@
   // always present on every route — deterministic, regardless of which route
   // group you land on or navigate through.
   // The generated token sheet stands in for @hyzer-labs/ui/tokens.css: the
-  // same custom properties (--hz-*, no visual rules, so it can't leak styles
-  // into either group) plus our three [data-theme] blocks. Authored in
-  // hyzer.config.ts, regenerated with `npm run tokens`, committed by hand.
-  // global.css loads after it so the --hz-space aliases there win.
+  // same custom properties (--hz-*, no visual rules beyond the density
+  // cascade, so it can't leak styles into either group) plus our three
+  // [data-theme] blocks. Every token the site uses -- palette, type scale,
+  // font stacks, spacing rhythm and density grid -- is authored in
+  // hyzer.config.ts; global.css consumes them and adds only what a token
+  // sheet cannot express (@font-face, layout, the site's own --c-* colors).
+  // Regenerate with `npm run tokens`, commit by hand.
   import '../hyzer-tokens.css'
   import '../global.css'
   import { page } from '$app/state'

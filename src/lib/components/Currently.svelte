@@ -168,7 +168,7 @@
     --hz-carousel-item-width: clamp(16rem, 48%, 21rem);
     /* clear the accordion summary — the rail's first row would otherwise start
        immediately under "recent activity" */
-    margin-top: var(--space-away);
+    margin-top: var(--hz-space-away);
   }
 
   /* A looping rail hides its scrollbar — the thumb describes a position in a
@@ -189,19 +189,19 @@
      Only margin-top here: the row's own justify-content/gap are set by the
      library's scoped rules at equal specificity and would win anyway. */
   :global(.activity-rail .hz-carousel-controls) {
-    margin-top: var(--space-near);
+    margin-top: var(--hz-space-near);
   }
   :global(.activity-rail .hz-button) {
     border: 0;
     border-radius: 8px;
     padding: 0.25rem;
     background: none;
-    color: var(--c-accent);
+    color: var(--hz-intent-primary);
     transition: all ease-in-out 0.3s;
   }
   :global(.activity-rail .hz-button:hover) {
-    background-color: var(--c-secondary);
-    color: var(--c-background);
+    background-color: var(--hz-intent-secondary);
+    color: var(--hz-color-surface);
   }
 
   /* Two columns, both starting on row 1: the icon leads the first row and every
@@ -212,16 +212,16 @@
     height: 100%;
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: var(--space-near);
+    gap: var(--hz-space-near);
     align-items: start;
   }
 
   /* The rule separates entries from each other, so it goes between rows rather
      than capping the group. `p + p` means the first row never gets one. */
   .group[data-rows] p + p {
-    border-top: 1px dashed var(--c-secondary);
-    padding-top: var(--space-near);
-    margin-top: var(--space-near);
+    border-top: 1px dashed var(--hz-intent-secondary);
+    padding-top: var(--hz-space-near);
+    margin-top: var(--hz-space-near);
   }
   .group-head {
     margin: 0;

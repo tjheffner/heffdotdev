@@ -141,26 +141,26 @@
 
 <style>
   .button {
-    background-color: var(--c-accent-brighter);
+    background-color: var(--hz-palette-primary-tint);
     border: none;
     border-radius: 2rem;
     cursor: pointer;
 
-    margin: var(--space-near) 0;
+    margin: var(--hz-space-near) 0;
     padding: .5rem 1rem;
     transition: .3s all ease-in-out;
     
     &:hover {
-        background-color: var(--c-accent);
-        color: var(--c-background);
+        background-color: var(--hz-intent-primary);
+        color: var(--hz-color-surface);
     }
   }
   .empty {
-    margin: var(--space-away) 0;
-    padding: var(--space-away) 0;
+    margin: var(--hz-space-away) 0;
+    padding: var(--hz-space-away) 0;
     min-height: 400px;
   }
   #results {
-    margin: var(--space-away) 0;
+    margin: var(--hz-space-away) 0;
   }
 </style>

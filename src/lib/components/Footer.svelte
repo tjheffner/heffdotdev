@@ -51,7 +51,7 @@
 
 <style>
   :global(.site-footer .hz-footer-social) {
-    margin: var(--space-away) 0 var(--space-near);
+    margin: var(--hz-space-away) 0 var(--hz-space-near);
     text-align: right;
   }
   :global(.site-footer .icon) {
@@ -60,10 +60,10 @@
     border-radius: 8px;
     margin: 0.25rem;
     transition: all ease-in-out 0.3s;
-    color: var(--c-accent);
+    color: var(--hz-intent-primary);
   }
   :global(.site-footer .icon:hover) {
-    background-color: var(--c-secondary);
-    color: var(--c-background);
+    background-color: var(--hz-intent-secondary);
+    color: var(--hz-color-surface);
   }
 </style>

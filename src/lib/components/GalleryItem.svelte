@@ -41,9 +41,9 @@
 
 <style>
   .gallery-item {
-    margin-bottom: var(--space-near);
-    padding: var(--space-near) 0 calc(var(--space-away) * 2);
-    border-bottom: 1px var(--c-secondary) dashed;
+    margin-bottom: var(--hz-space-near);
+    padding: var(--hz-space-near) 0 calc(var(--hz-space-away) * 2);
+    border-bottom: 1px var(--hz-intent-secondary) dashed;
   }
   .gallery-image {
     max-height: 600px;
@@ -63,7 +63,7 @@
 
   @media (min-width: 668px) {
     .gallery-item {
-      margin: var(--space-away) var(--space-near);
+      margin: var(--hz-space-away) var(--hz-space-near);
     }
   }
 </style>

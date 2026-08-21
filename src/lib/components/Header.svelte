@@ -95,14 +95,14 @@
 
 <style>
   :global(.site-header) {
-    padding: var(--space-near) 0;
-    background-color: var(--c-background);
+    padding: var(--hz-space-near) 0;
+    background-color: var(--hz-color-surface);
   }
 
   /* the page-width wrapper, applied to the header's inner bar */
   :global(.site-header .hz-header-inner) {
     max-width: 65ch;
-    margin: 0 var(--space-near);
+    margin: 0 var(--hz-space-near);
   }
   @media (width >= 768px) {
     :global(.site-header .hz-header-inner) {
@@ -157,16 +157,16 @@
      the old second-density-shift distance (0.8rem). */
   :global(.site-header .hz-header-drawer) {
     position: absolute;
-    top: calc(100% - var(--space-near));
-    padding: calc(var(--density) * 2) 0;
-    background-color: var(--c-background);
-    border-bottom: 2px solid var(--c-accent);
+    top: calc(100% - var(--hz-space-near));
+    padding: calc(var(--hz-density) * 2) 0;
+    background-color: var(--hz-color-surface);
+    border-bottom: 2px solid var(--hz-intent-primary);
   }
   /* drawer links: same row layout the old mobile menu had */
   :global(.site-header .hz-header-drawer .hz-nav[data-orientation='vertical'] .hz-nav-links) {
     flex-direction: row;
     justify-content: space-between;
-    margin-inline: var(--space-near);
+    margin-inline: var(--hz-space-near);
     gap: 1rem;
   }
   /* fade + slide on open. The drawer is display:none while closed, so the

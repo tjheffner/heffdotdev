@@ -81,8 +81,8 @@
   /* Mirrors PostItem: dashed accent divider, title shifts to secondary on
      hover. No dates/right-column — experiments carry no metadata. */
   .post {
-    margin: var(--space-away) 0;
-    border-bottom: 1px dashed var(--c-accent);
+    margin: var(--hz-space-away) 0;
+    border-bottom: 1px dashed var(--hz-intent-primary);
 
     &:last-child {
       border-bottom: none;
@@ -92,13 +92,13 @@
   .post-link {
     text-decoration: none;
     width: 100%;
-    padding: var(--space-away) var(--space-near);
+    padding: var(--hz-space-away) var(--hz-space-near);
     display: flex;
     flex-direction: column;
-    color: var(--c-text);
+    color: var(--hz-color-text);
   }
   .post:hover h2 {
-    color: var(--c-secondary);
+    color: var(--hz-intent-secondary);
   }
 
   .left {
