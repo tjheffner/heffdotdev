@@ -4,9 +4,11 @@ import RSS from 'rss'
 import { SITE_TITLE, SITE_URL } from '$lib/siteConfig'
 import { remark } from 'remark'
 import remarkHTML from 'remark-html'
+// Not prerendered: listContentFromIssues reads GH_TOKEN from $env/dynamic/private,
+// which only exists at runtime. s-maxage keeps the edge from re-fetching every
+// issue per request; there are no asset hashes in here, so a stale copy after a
+// deploy is harmless.
 import { listContentFromIssues } from '$lib/content/content'
-
-export const prerender = true
 
 export const GET: RequestHandler = async ({ fetch }) => {
   const feed = new RSS({
@@ -40,7 +42,7 @@ export const GET: RequestHandler = async ({ fetch }) => {
       ),
     {
       headers: {
-        'Cache-Control': `public, max-age=${86400}`, // 24 hours
+        'Cache-Control': `public, max-age=${86400}, s-maxage=${86400}`, // 24 hours
         'Content-Type': 'application/xml; charset=utf-8', // not application/rss+xml
         'x-content-type-options': 'nosniff',
       },

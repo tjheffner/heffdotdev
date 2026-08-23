@@ -5,7 +5,6 @@ import type {
   SteamRecentlyPlayed,
   DuolingoUser,
 } from '$lib/types'
-import { LASTFM_API_KEY, STEAM_API_KEY } from '$env/static/private'
 import {
   LASTFM_ID,
   LETTERBOXD_ID,
@@ -14,6 +13,8 @@ import {
   SITE_URL,
 } from '$lib/siteConfig'
 import letterboxd from 'letterboxd'
+// Runtime secrets, not build-time — see the note in lib/content/content.js.
+import { env } from '$env/dynamic/private'
 import { ACTIVITY_FIXTURES } from '$lib/server/activityFixtures'
 
 // CI a11y-scans /about, and this page's four third-party sources are both the
@@ -60,7 +61,7 @@ async function getRecentlyListened(
 ): Promise<LastfmTrack[]> {
   const json = await safeJson(
     fetch,
-    `http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_ID}&api_key=${LASTFM_API_KEY}&format=json`,
+    `http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_ID}&api_key=${env.LASTFM_API_KEY}&format=json`,
     'last.fm'
   )
   return json?.recenttracks?.track?.slice(0, 5) ?? []
@@ -83,7 +84,7 @@ async function getRecentlyPlayed(
 ): Promise<SteamRecentlyPlayed> {
   const json = await safeJson(
     fetch,
-    `http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key=${STEAM_API_KEY}&steamid=${STEAM_ID}`,
+    `http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key=${env.STEAM_API_KEY}&steamid=${STEAM_ID}`,
     'Steam'
   )
   return json?.response ?? {}

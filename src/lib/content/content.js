@@ -1,5 +1,10 @@
 import { dev } from '$app/environment'
-import { GH_TOKEN } from '$env/static/private'
+// Dynamic rather than static: $env/static/private is inlined by Vite, so the
+// token would have to be a Workers Builds *build* variable — and those don't
+// reach non-production branch builds, which breaks every PR preview. Read at
+// runtime from the worker's secrets instead. The cost is that nothing calling
+// this can be prerendered (see rss.xml / sitemap.xml).
+import { env } from '$env/dynamic/private'
 import {
   GH_USER_REPO,
   APPROVED_POSTERS_GH_USERNAME,
@@ -27,7 +32,7 @@ export async function listContentFromIssues(fetch, label) {
   // rules"). Node's fetch supplied one for free; workerd's does not.
   const ghHeaders = {
     'User-Agent': GH_USER_REPO,
-    ...(GH_TOKEN && { Authorization: `token ${GH_TOKEN}` }),
+    ...(env.GH_TOKEN && { Authorization: `token ${env.GH_TOKEN}` }),
   }
 
   let url =
@@ -82,8 +87,7 @@ export async function getContent(fetch, slug) {
 
     if (!allPosts.length)
       throw new Error(
-        'failed to load posts from github issues for some reason. check token' +
-          process.env.GH_TOKEN
+        'failed to load posts from github issues for some reason. check GH_TOKEN'
       )
   }
   if (!allPosts.length) throw new Error('no posts')
