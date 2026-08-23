@@ -1,0 +1,5 @@
+# Worker-rendered responses don't see this file — see src/hooks.server.ts.
+# This only covers what the static asset server hands back directly.
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff

@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "heffdotdev",
+  "main": ".svelte-kit/cloudflare/_worker.js",
+  "compatibility_date": "2026-08-21",
+  // nodejs_compat covers nodejs_als (which SvelteKit needs) plus the node
+  // builtins satori and the content pipeline reach for at runtime.
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".svelte-kit/cloudflare"
+  },
+  "observability": {
+    "enabled": true
+  },
+  // Playground scene shortener (/api/shorten -> /p/<code>).
+  "kv_namespaces": [
+    {
+      "binding": "SCENES",
+      "id": "cd5ff7a8e80b4ea89b337a3c9157d098"
+    }
+  ]
+}

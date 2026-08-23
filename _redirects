@@ -1,6 +1,0 @@
-/feed /rss.xml
-/rss /rss.xml
-/api/rss.xml /rss.xml
-/about/latest /about 301
-
-# read docs for more https://docs.netlify.com/routing/redirects/

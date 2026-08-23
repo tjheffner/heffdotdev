@@ -23,8 +23,11 @@ export async function listContentFromIssues(fetch, label) {
   let allContentWithLabel = []
   let next = null
 
-  const authheader = GH_TOKEN && {
-    Authorization: `token ${GH_TOKEN}`,
+  // GitHub rejects requests with no User-Agent ("forbidden by administrative
+  // rules"). Node's fetch supplied one for free; workerd's does not.
+  const ghHeaders = {
+    'User-Agent': GH_USER_REPO,
+    ...(GH_TOKEN && { Authorization: `token ${GH_TOKEN}` }),
   }
 
   let url =
@@ -44,9 +47,7 @@ export async function listContentFromIssues(fetch, label) {
   }
 
   do {
-    const res = await fetch(next?.url ?? url, {
-      headers: authheader,
-    })
+    const res = await fetch(next?.url ?? url, { headers: ghHeaders })
 
     const issues = await res.json()
     if ('message' in issues && res.status > 400)

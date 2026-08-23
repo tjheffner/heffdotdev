@@ -1,6 +1,6 @@
 /* general site settings */
-// apex is the canonical/primary host (www 301-redirects to it in Netlify), so
-// point every absolute URL at apex. og:image then serves a direct 200 with no
+// apex is the canonical/primary host (a Cloudflare redirect rule sends www to
+// it), so point every absolute URL at apex. og:image then serves a direct 200 with no
 // redirect hop, which every crawler can fetch — including ones that won't
 // follow redirects on images (iMessage, etc.).
 export const SITE_URL = 'https://heffner.dev'

@@ -8,7 +8,9 @@ import rehypeStringify from 'rehype-stringify'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutoLink from 'rehype-autolink-headings'
 import rehypeCdnImages from './rehype-cdn-images.js'
-import rehypeShiki from '@shikijs/rehype'
+import rehypeShikiFromHighlighter from '@shikijs/rehype/core'
+import { createHighlighter, type ThemeRegistrationRaw } from 'shiki'
+import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
 import rehypeUnescapeCode from './rehype-unescape-code.js'
 import { shikiTheme } from './shiki-theme.js'
 
@@ -19,55 +21,75 @@ const remarkPlugins = [remarkUnwrapImages]
 /**
  * Every language that appears in a fence across the archive, counted over all
  * 54 posts. Naming them keeps shiki loading six grammars instead of its whole
- * ~6MB bundle, which matters because formatContent runs inside the Lambda,
+ * ~6MB bundle, which matters because formatContent runs inside the worker,
  * not at build.
  */
 const CODE_LANGS = ['ts', 'js', 'css', 'yaml', 'html', 'php']
 
-const rehypePlugins = [
-  rehypeStringify,
-  rehypeSlug,
-  rehypeAutoLink,
-  rehypeCdnImages,
-  // must precede shiki: it highlights whatever text it is handed, so the
-  // fences have to hold real characters rather than mdsvex's entities
-  rehypeUnescapeCode,
-  [
-    rehypeShiki,
-    {
-      // Ours (see shiki-theme.js). Every shipped theme was wrong in one of two
-      // ways: the dark ones punched a hole in a light page, and the light ones
-      // arrived with a palette unrelated to this site's.
-      theme: shikiTheme,
-      transformers: [
-        {
-          name: 'surface-from-token',
-          pre(node) {
-            // Drop shiki's inline background so code-block.css can paint
-            // --hz-color-surface-muted instead. An inline style would win over
-            // any stylesheet, so stripping it here is the only way the block
-            // can follow the palette rather than pin a hex of its own. The
-            // foreground stays: it is the theme's plain-text color.
-            const style = node.properties?.style
-            if (typeof style === 'string') {
-              node.properties.style = style
-                .replace(/background-color:[^;]*;?/g, '')
-                .trim()
-            }
+// Shiki's default oniguruma engine compiles a wasm module on first use, and
+// Workers forbids runtime wasm compilation ("Wasm code generation disallowed by
+// embedder") — every post 404'd on it. The JS engine covers every grammar in
+// CODE_LANGS with no wasm at all. @shikijs/rehype's default export builds its
+// own highlighter and drops the engine option, so build one here and hand it to
+// the /core plugin instead. Created once and reused; formatContent runs per
+// request.
+let highlighter: Awaited<ReturnType<typeof createHighlighter>> | undefined
+
+async function rehypePlugins() {
+  highlighter ??= await createHighlighter({
+    // Ours (see shiki-theme.js). Every shipped theme was wrong in one of two
+    // ways: the dark ones punched a hole in a light page, and the light ones
+    // arrived with a palette unrelated to this site's.
+    themes: [shikiTheme as ThemeRegistrationRaw],
+    langs: CODE_LANGS,
+    engine: createJavaScriptRegexEngine(),
+  })
+
+  return [
+    rehypeStringify,
+    rehypeSlug,
+    rehypeAutoLink,
+    rehypeCdnImages,
+    // must precede shiki: it highlights whatever text it is handed, so the
+    // fences have to hold real characters rather than mdsvex's entities
+    rehypeUnescapeCode,
+    [
+      // unified hands a plugin exactly one options argument, so the highlighter
+      // can't ride along as a second entry in the tuple — close over it.
+      function rehypeShiki(options) {
+        return rehypeShikiFromHighlighter.call(this, highlighter, options)
+      },
+      {
+        theme: shikiTheme,
+        transformers: [
+          {
+            name: 'surface-from-token',
+            pre(node) {
+              // Drop shiki's inline background so code-block.css can paint
+              // --hz-color-surface-muted instead. An inline style would win over
+              // any stylesheet, so stripping it here is the only way the block
+              // can follow the palette rather than pin a hex of its own. The
+              // foreground stays: it is the theme's plain-text color.
+              const style = node.properties?.style
+              if (typeof style === 'string') {
+                node.properties.style = style
+                  .replace(/background-color:[^;]*;?/g, '')
+                  .trim()
+              }
+            },
           },
-        },
-      ],
-      langs: CODE_LANGS,
-      // put language-<lang> back on the <code>; the client upgrade reads it
-      // to label CodeBlock's chip
-      addLanguageClass: true,
-      // Roughly a third of the fences in the archive have no language. Prism
-      // stamped those `language-undefined` and left them unstyled; shiki
-      // renders them as plain text in the same frame as everything else.
-      fallbackLanguage: 'text',
-    },
-  ],
-]
+        ],
+        // put language-<lang> back on the <code>; the client upgrade reads it
+        // to label CodeBlock's chip
+        addLanguageClass: true,
+        // Roughly a third of the fences in the archive have no language. Prism
+        // stamped those `language-undefined` and left them unstyled; shiki
+        // renders them as plain text in the same frame as everything else.
+        fallbackLanguage: 'text',
+      },
+    ],
+  ]
+}
 
 export function readingTime(text: string): string {
   let minutes = Math.ceil(text.trim().split(' ').length / 225)
@@ -226,7 +248,7 @@ export async function formatContent(content: string): Promise<string> {
     await compile(formatted, {
       remarkPlugins,
       // @ts-ignore
-      rehypePlugins,
+      rehypePlugins: await rehypePlugins(),
       // mdsvex highlights with its bundled PrismJS by default. Shiki does it
       // in the rehype pass above instead, so turn the built-in off rather
       // than have the two fight over the same <pre>.
