@@ -9,8 +9,14 @@ import rehypeSlug from 'rehype-slug'
 import rehypeAutoLink from 'rehype-autolink-headings'
 import rehypeCdnImages from './rehype-cdn-images.js'
 import rehypeShikiFromHighlighter from '@shikijs/rehype/core'
-import { createHighlighter, type ThemeRegistrationRaw } from 'shiki'
+import { createHighlighterCore, type ThemeRegistrationRaw } from 'shiki/core'
 import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
+import langTs from '@shikijs/langs/typescript'
+import langJs from '@shikijs/langs/javascript'
+import langCss from '@shikijs/langs/css'
+import langYaml from '@shikijs/langs/yaml'
+import langHtml from '@shikijs/langs/html'
+import langPhp from '@shikijs/langs/php'
 import rehypeUnescapeCode from './rehype-unescape-code.js'
 import { shikiTheme } from './shiki-theme.js'
 
@@ -20,11 +26,12 @@ const remarkPlugins = [remarkUnwrapImages]
 
 /**
  * Every language that appears in a fence across the archive, counted over all
- * 54 posts. Naming them keeps shiki loading six grammars instead of its whole
- * ~6MB bundle, which matters because formatContent runs inside the worker,
- * not at build.
+ * 54 posts. Imported one grammar at a time from @shikijs/langs rather than
+ * named as strings: the `shiki` entrypoint statically pulls in all 722 bundled
+ * grammars regardless of what you ask it to load, which on its own put the
+ * worker over Cloudflare's size limit.
  */
-const CODE_LANGS = ['ts', 'js', 'css', 'yaml', 'html', 'php']
+const CODE_LANGS = [langTs, langJs, langCss, langYaml, langHtml, langPhp]
 
 // Shiki's default oniguruma engine compiles a wasm module on first use, and
 // Workers forbids runtime wasm compilation ("Wasm code generation disallowed by
@@ -33,10 +40,10 @@ const CODE_LANGS = ['ts', 'js', 'css', 'yaml', 'html', 'php']
 // own highlighter and drops the engine option, so build one here and hand it to
 // the /core plugin instead. Created once and reused; formatContent runs per
 // request.
-let highlighter: Awaited<ReturnType<typeof createHighlighter>> | undefined
+let highlighter: Awaited<ReturnType<typeof createHighlighterCore>> | undefined
 
 async function rehypePlugins() {
-  highlighter ??= await createHighlighter({
+  highlighter ??= await createHighlighterCore({
     // Ours (see shiki-theme.js). Every shipped theme was wrong in one of two
     // ways: the dark ones punched a hole in a light page, and the light ones
     // arrived with a palette unrelated to this site's.
