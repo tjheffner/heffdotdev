@@ -13,6 +13,11 @@
   "observability": {
     "enabled": true
   },
+  // Both default to off on a worker created from a dashboard template, which
+  // makes every preview URL 404. The Playwright job builds its target from the
+  // preview alias, so previews have to stay reachable.
+  "workers_dev": true,
+  "preview_urls": true,
   // Playground scene shortener (/api/shorten -> /p/<code>).
   "kv_namespaces": [
     {
