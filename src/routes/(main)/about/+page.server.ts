@@ -5,14 +5,15 @@ import type {
   SteamRecentlyPlayed,
   DuolingoUser,
 } from '$lib/types'
-import { LASTFM_API_KEY, STEAM_API_KEY } from '$env/static/private'
 import {
   LASTFM_ID,
   LETTERBOXD_ID,
   STEAM_ID,
   DUOLINGO_ID,
+  SITE_URL,
 } from '$lib/siteConfig'
 import letterboxd from 'letterboxd'
+// Runtime secrets, not build-time — see the note in lib/content/content.js.
 import { env } from '$env/dynamic/private'
 import { ACTIVITY_FIXTURES } from '$lib/server/activityFixtures'
 
@@ -22,17 +23,16 @@ import { ACTIVITY_FIXTURES } from '$lib/server/activityFixtures'
 // this header instead. It can't be stubbed browser-side — these calls run here,
 // during SSR — so the opt-in has to live in the app.
 //
-// Fails closed, and deliberately not on Netlify's CONTEXT: that is a *build*
-// variable and is not guaranteed to exist at function runtime, so a
-// `CONTEXT !== 'production'` test would wave the header through on production
-// the moment the variable went missing. The deploy has to opt in explicitly
-// instead — no ALLOW_ACTIVITY_FIXTURES, no fixtures, whatever the header says.
-// All the header can do is swap real activity for static placeholders, but it
-// is still untrusted input changing server behaviour.
+// Fails closed on the canonical host: Workers Builds ships previews to a
+// *.workers.dev alias and production to heffner.dev, and unlike Netlify there
+// is no per-deploy env var to key off — a version upload carries the same vars
+// as production. The host is what actually distinguishes the two. All the
+// header can do is swap real activity for static placeholders, but it is still
+// untrusted input changing server behaviour.
 const FIXTURE_HEADER = 'x-activity-fixtures'
 
-function wantsFixtures(request: Request): boolean {
-  if (env.ALLOW_ACTIVITY_FIXTURES !== 'true') return false
+function wantsFixtures(url: URL, request: Request): boolean {
+  if (url.hostname === new URL(SITE_URL).hostname) return false
   return request.headers.get(FIXTURE_HEADER) === '1'
 }
 
@@ -61,7 +61,7 @@ async function getRecentlyListened(
 ): Promise<LastfmTrack[]> {
   const json = await safeJson(
     fetch,
-    `http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_ID}&api_key=${LASTFM_API_KEY}&format=json`,
+    `http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_ID}&api_key=${env.LASTFM_API_KEY}&format=json`,
     'last.fm'
   )
   return json?.recenttracks?.track?.slice(0, 5) ?? []
@@ -84,7 +84,7 @@ async function getRecentlyPlayed(
 ): Promise<SteamRecentlyPlayed> {
   const json = await safeJson(
     fetch,
-    `http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key=${STEAM_API_KEY}&steamid=${STEAM_ID}`,
+    `http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key=${env.STEAM_API_KEY}&steamid=${STEAM_ID}`,
     'Steam'
   )
   return json?.response ?? {}
@@ -105,14 +105,14 @@ async function getDuolingo(
 // Return the promises *unawaited* so SvelteKit streams each source into the
 // page as it resolves: the shell renders immediately and slow third-party
 // calls fill in independently. Keys stay server-side (this is a .server file).
-export function load({ fetch, request }: PageServerLoadEvent): {
+export function load({ fetch, request, url }: PageServerLoadEvent): {
   recentlyWatched: Promise<LetterboxdEntry[]>
   recentlyListened: Promise<LastfmTrack[]>
   recentlyPlayed: Promise<SteamRecentlyPlayed>
   duolingo: Promise<DuolingoUser>
 } {
   // Still promises, so the page streams and renders identically either way.
-  if (wantsFixtures(request)) {
+  if (wantsFixtures(url, request)) {
     return {
       recentlyListened: Promise.resolve(ACTIVITY_FIXTURES.recentlyListened),
       recentlyWatched: Promise.resolve(ACTIVITY_FIXTURES.recentlyWatched),

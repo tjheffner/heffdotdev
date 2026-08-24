@@ -27,7 +27,8 @@
 
 <style>
   * {
-    display: flex; /* Helps satisfy Satori's CSS requirements */
+    /* satori lays out with flexbox only */
+    display: flex;
     margin: 0;
   }
   .container {
@@ -62,17 +63,15 @@
   }
 
   .brand {
+    /* Satori's gradient parser only matches a single-line value — wrapping this
+       declaration across lines makes it throw and the whole PNG fails. */
     font-family: "Merriweather", serif;
     font-size: 72px;
     font-weight: 600;
     align-self: flex-end;
 
     color: white;
-    background: linear-gradient(
-      to bottom,
-      black 0%,
-      black 100%
-    );
+    background: linear-gradient(to bottom, black 0%, black 100%);
     background-position: 0 100%;
     background-repeat: repeat-x;
 

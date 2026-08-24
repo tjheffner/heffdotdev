@@ -41,7 +41,7 @@ export default defineConfig({
   },
 
   /* Locally, boot the dev server so `npm test` is self-contained. In CI we
-   * point at a deployed Netlify preview via PLAYWRIGHT_TEST_BASE_URL, so skip
+   * point at a deployed Cloudflare preview via PLAYWRIGHT_TEST_BASE_URL, so skip
    * starting a server there. */
   webServer: process.env.PLAYWRIGHT_TEST_BASE_URL
     ? undefined

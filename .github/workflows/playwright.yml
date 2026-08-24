@@ -2,23 +2,8 @@ name: Playwright Tests
 
 on: [pull_request]
 
-env:
-  GITHUB_PR_NUMBER: ${{github.event.pull_request.number}}
-
 jobs:
-  prepare:
-    name: Wait for Netlify deployment
-    runs-on: ubuntu-latest
-    steps:
-      - name: Waiting for Netlify Preview
-        uses: jakepartusch/wait-for-netlify-action@v1.4
-        id: wait-for-netlify-preview
-        with:
-          site_name: 'heffner'
-          max_timeout: 180
-
   test:
-    needs: prepare
     name: Run tests against PR environment
     runs-on: ubuntu-latest
     # The suite runs serially-ish against a deployed preview, so every
@@ -28,9 +13,36 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+
+      # Workers Builds uploads a preview version per non-production branch and
+      # aliases it to the branch name, lowercased with everything outside
+      # [a-z0-9] collapsed to a dash. CF_WORKERS_SUBDOMAIN is a repo variable —
+      # the account's workers.dev subdomain, which isn't derivable from here.
+      - name: Resolve preview URL
+        id: preview
+        run: |
+          alias=$(echo "${{ github.head_ref }}" \
+            | tr '[:upper:]' '[:lower:]' \
+            | sed 's/[^a-z0-9]\+/-/g; s/^-//; s/-$//' \
+            | cut -c1-63)
+          echo "url=https://${alias}-heffdotdev.${{ vars.CF_WORKERS_SUBDOMAIN }}.workers.dev/" >> "$GITHUB_OUTPUT"
+
+      # ponytail: polls for *a* 200, not for this commit's version — a re-push
+      # can race and test the previous upload. Stamp the commit into a response
+      # header and compare it here if that ever actually bites.
+      - name: Wait for Cloudflare preview
+        run: |
+          for i in $(seq 1 60); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "${{ steps.preview.outputs.url }}" || true)
+            [ "$code" = "200" ] && exit 0
+            sleep 5
+          done
+          echo "preview never answered 200 (last status: $code)"
+          exit 1
+
       - uses: actions/setup-node@v4
         with:
-          node-version: 22 # matches netlify.toml / ci.yml
+          node-version: 22 # matches ci.yml
           cache: npm
       - name: install dependencies
         run: npm ci
@@ -58,7 +70,7 @@ jobs:
       - name: run tests
         run: npm run test
         env:
-          PLAYWRIGHT_TEST_BASE_URL: 'https://deploy-preview-${{env.GITHUB_PR_NUMBER}}--heffner.netlify.app/'
+          PLAYWRIGHT_TEST_BASE_URL: ${{ steps.preview.outputs.url }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:

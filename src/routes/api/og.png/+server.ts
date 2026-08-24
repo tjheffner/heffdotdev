@@ -1,11 +1,12 @@
 import type { RequestHandler } from './$types'
 import { dev } from '$app/environment'
 import { read } from '$app/server'
-import { render } from 'svelte/server'
-import satori from 'satori'
-import { html as toReactNode } from 'satori-html'
-import { Resvg } from '@resvg/resvg-js'
+import { ImageResponse } from '@ethercorps/sveltekit-og'
 import OpenGraphImage from '$lib/components/OpenGraphImage.svelte'
+
+// Satori rasterises through a wasm build of resvg — Workers can't load the
+// native @resvg/resvg-js addon. sveltekit-og wraps satori + resvg-wasm and its
+// vite plugin (see vite.config.ts) does the wasm bundling Cloudflare needs.
 
 // import & load fonts
 import Merriweather from '$lib/font/Merriweather-Bold.ttf'
@@ -14,47 +15,25 @@ import Mulish from '$lib/font/Mulish-Regular.ttf'
 const titleFontData = read(Merriweather).arrayBuffer()
 const fontData = read(Mulish).arrayBuffer()
 
-const height = 630
-const width = 1200
-
-export const GET: RequestHandler = async ({ url, setHeaders }) => {
+export const GET: RequestHandler = async ({ url }) => {
   const message = url.searchParams.get('message') ?? undefined
 
-  const { body, head } = render(OpenGraphImage, { props: { message } })
-  const html = toReactNode(`${head}${body}`)
-
-  const svg = await satori(html, {
-    fonts: [
-      {
-        name: 'Merriweather',
-        data: await titleFontData,
-        style: 'normal',
+  return new ImageResponse(
+    OpenGraphImage,
+    {
+      width: 1200,
+      height: 630,
+      fonts: [
+        { name: 'Merriweather', data: await titleFontData, style: 'normal' },
+        { name: 'Mulish', data: await fontData, style: 'normal' },
+      ],
+      headers: {
+        'Content-Type': 'image/png',
+        'Cache-Control': dev
+          ? 'no-cache'
+          : 's-maxage=31536000, stale-while-revalidate=31536000',
       },
-      {
-        name: 'Mulish',
-        data: await fontData,
-        style: 'normal',
-      },
-    ],
-    height,
-    width,
-  })
-
-  const resvg = new Resvg(svg, {
-    fitTo: {
-      mode: 'width',
-      value: width,
     },
-  })
-
-  const image = resvg.render()
-
-  setHeaders({
-    'Content-Type': 'image/png',
-    'Cache-Control': dev
-      ? 'no-cache'
-      : 's-maxage=31536000, stale-while-revalidate=31536000',
-  })
-
-  return new Response(new Uint8Array(image.asPng()))
+    { message }
+  )
 }
