@@ -37,7 +37,6 @@ self.addEventListener('fetch', (event) => {
 
     // ...and cache successful responses...
     promise.then((response) => {
-      // cache successful responses
       if (response.ok && response.type === 'basic') {
         const clone = response.clone()
         caches.open(name).then((cache) => {

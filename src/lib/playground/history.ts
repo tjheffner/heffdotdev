@@ -1,14 +1,12 @@
-// Undo history for playground scenes: a small persisted stack of scene tokens
-// per playground. Pages `touch()` it whenever their state changes (debounced,
-// encoding lazily on the quiet edge) and `undo()` steps back. Because the
-// stack lives in localStorage it survives a refresh — on a fresh load the
-// current scene has diverged from the stack top, so the first Undo restores
-// the last state you were looking at. SSR-safe (all storage access guarded).
+// Undo history for playground scenes: a stack of scene tokens per playground,
+// persisted to localStorage. `touch()` records a change, encoded after a quiet
+// period. `undo()` steps back. The stack survives a refresh, so the first undo
+// on a fresh load restores the last state you were looking at. SSR-safe.
 
 const LIMIT = 40
 
 export type SceneHistory = {
-  /** Note that the scene changed; the token is encoded after a quiet period. */
+  /** Record that the scene changed. The token is encoded after a quiet period. */
   touch: (encode: () => string) => void
   /**
    * Step back. Pass the current scene's token; returns the token to restore,
@@ -28,7 +26,7 @@ export function createHistory(page: string, debounceMs = 600): SceneHistory {
           .filter((t): t is string => typeof t === 'string')
           .slice(-LIMIT)
     } catch {
-      // Corrupt entry — start fresh.
+      // Corrupt entry, start fresh.
     }
   }
 
@@ -40,7 +38,7 @@ export function createHistory(page: string, debounceMs = 600): SceneHistory {
     try {
       localStorage.setItem(key, JSON.stringify(stack))
     } catch {
-      // Storage full/unavailable — undo just won't survive a refresh.
+      // Storage full or unavailable. Undo will not survive a refresh.
     }
   }
   const push = (token: string) => {

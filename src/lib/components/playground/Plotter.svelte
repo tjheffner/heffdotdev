@@ -14,9 +14,9 @@
     // pen
     color: string;
     width: number; // stroke px
-    ink: number; // 0..1 — semi-transparent ink pools where paths cross
+    ink: number; // 0..1, semi-transparent ink pools where paths cross
     wob: number; // 0..1 servo wobble, baked into the path
-    // turtle — a space-filling walker: pens prefer unvisited nodes and hop to
+    // turtle: a space-filling walker. pens prefer unvisited nodes and hop to
     // open ground when boxed in, so Fill 1 inks the whole grid
     angle45: boolean; // eight headings instead of four
     pens: number;
@@ -26,7 +26,7 @@
     turnEvery: number; // force a turn every N steps, 0 = off
     fill: number; // 0..1 fraction of grid nodes this rule inks
     hop: PlotHop; // where the pen re-drops when boxed in
-    // hatch — sheet-wide ruled lines, or per-cell triangle fills built from
+    // hatch: sheet-wide ruled lines, or per-cell triangle fills built from
     // many short strokes
     hatchStyle: PlotHatchStyle;
     hatchAngle: number; // deg
@@ -34,8 +34,8 @@
     cross: boolean; // second pass at +90°
     warp: number; // 0..1 displacement off the ruled line (lines style)
     warpDetail: number; // 0..1 how fine the warp noise is
-    dash: number; // 0..1 — lines: pen-up runs; cells: fraction skipped
-    // flow — streams seeded per grid cell, so density 1 starts one everywhere
+    dash: number; // 0..1. lines: pen-up runs. cells: fraction skipped
+    // flow: streams seeded per grid cell, so density 1 starts one everywhere
     density: number; // 0..1 fraction of cells that seed a stream
     breadth: number; // 0..1 widens each stream into parallel passes
     press: number; // 0..1 area pressure: width swells + ink bleeds by region
@@ -79,11 +79,10 @@
   const DIRS = [
     [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]
   ];
-  // Keep pathological settings from freezing the tab — the sim stops adding
-  // points past this, which simply truncates the plot.
+  // Keeps bad settings from freezing the tab. Past this the sim stops adding
+  // points, which truncates the plot.
   const POINT_BUDGET = 150_000;
 
-  // --- deterministic value noise --------------------------------------------
   // Smooth 2D value noise from an integer-lattice hash; drives hatch warp/dash
   // and the flow field, so everything reproduces from the seed alone.
   function latticeHash(seedN: number, x: number, y: number): number {
@@ -105,13 +104,11 @@
     return a + (b - a) * sx + (c - a) * sy + (a - b - c + d) * sx * sy;
   }
 
-  // --- path building ---------------------------------------------------------
-  // All rules compile to polylines up front; rendering (and the plot replay)
-  // is a pure reveal over them. `start` is each path's offset into the global
-  // drawn length, so the reveal runs rule by rule, pen by pen — like a real
-  // single-carriage machine swapping pens.
-  // wm/hm are per-point width and bleed-halo multipliers (flow pressure/jitter);
-  // paths that carry them render as short chunked strokes instead of one pass.
+  // All rules compile to polylines up front. Rendering and the plot replay are
+  // a reveal over them. `start` is each path's offset into the global drawn
+  // length, so the reveal runs rule by rule, pen by pen. wm/hm are per-point
+  // width and bleed-halo multipliers (flow pressure/jitter); paths that carry
+  // them render as short chunked strokes instead of one pass.
   type BuiltPath = {
     pts: number[];
     start: number;
@@ -148,11 +145,9 @@
     r: PlotRule, ri: number, cell: number, colsN: number, rowsN: number,
     out: number[][], budget: { left: number }
   ) {
-    // A space-filling walker: each step prefers an unvisited node (so the rule
-    // can ink the whole grid), with Straight/Bias/Turn-every deciding which
-    // free neighbor it reaches for first — that's what shapes the texture,
-    // from 10-PRINT runs to tight zigzag mazes. Boxed in, the pen lifts and
-    // hops to open ground.
+    // A space-filling walker. Each step prefers an unvisited node, so the rule
+    // can ink the whole grid, with Straight/Bias/Turn-every deciding which free
+    // neighbor it takes first. Boxed in, the pen lifts and hops to open ground.
     const rng = makeRng(ruleSeed(ri, 'walk'));
     const unit = r.angle45 ? 1 : 2;
     const leftP = 0.5 - clamp(r.bias, -1, 1) * 0.5;
@@ -173,8 +168,8 @@
         inked++;
       }
     };
-    // Re-drop when boxed in: Near grows the region organically from where the
-    // pen stopped; Scatter starts a fresh patch anywhere open.
+    // Re-drop when boxed in. Near grows the region from where the pen stopped,
+    // Scatter starts a fresh patch anywhere open.
     const hopTo = (x: number, y: number): [number, number] | null => {
       if (!open.size) return null;
       if (r.hop === 'scatter') {
@@ -252,8 +247,8 @@
       let penInked = 1;
 
       for (let s = 1; penInked < share && inked < target && budget.left > 0; s++) {
-        // The heading it *wants*: hold course, or turn on the roll/cadence —
-        // Bias splits which way the turns break.
+        // The heading it *wants*: hold course, or turn on the roll/cadence.
+        // Bias sets which way the turns break.
         let want = dir;
         if (r.turnEvery > 0 && s % Math.round(r.turnEvery) === 0)
           want = (dir + (rng() < leftP ? -unit : unit) + 8) % 8;
@@ -278,7 +273,7 @@
         }
 
         if (!moved) {
-          // Boxed in — lift the pen and re-drop.
+          // Boxed in: lift the pen and re-drop.
           flush();
           const hopped = hopTo(x, y);
           if (!hopped) break;
@@ -358,8 +353,8 @@
 
     if (r.hatchStyle !== 'lines') {
       // Per-cell triangle fills: each cell rolls a seeded half or quarter of
-      // itself and shades it with short parallel strokes — Skip (dash) leaves
-      // a share of cells empty. Cells run boustrophedon so the pen sweeps.
+      // itself and shades it with short parallel strokes. Skip (dash) leaves a
+      // share of cells empty. Cells run boustrophedon so the pen sweeps.
       const colsN = Math.max(1, Math.round(w0 / cell));
       const rowsN = Math.max(1, Math.ceil(h0 / cell));
       const orientSeed = ruleSeed(ri, 'orient');
@@ -440,8 +435,8 @@
           } else flush();
         }
         flush();
-        // Boustrophedon: alternate line direction so the replay sweeps back
-        // and forth like a real raster pass.
+        // Boustrophedon: alternate line direction so the replay sweeps back and
+        // forth like a real raster pass.
         if (k % 2) {
           linePaths.reverse();
           for (const p of linePaths) {
@@ -458,9 +453,9 @@
     r: PlotRule, ri: number, cell: number, w0: number, h0: number,
     out: number[][], budget: { left: number }
   ) {
-    // Streams are seeded per grid cell (Seeds is the fraction of cells that
-    // get one), walked in a boustrophedon cell order so the replay sweeps the
-    // sheet — density 1 touches every cell, filling the page with flow.
+    // Streams are seeded per grid cell (Seeds is the fraction of cells that get
+    // one), walked in boustrophedon cell order so the replay sweeps the sheet.
+    // Density 1 touches every cell, filling the page with flow.
     const rng = makeRng(ruleSeed(ri, 'drop'));
     const fieldSeed = ruleSeed(ri, 'field');
     const detail = 0.05 + clamp(r.flowDetail, 0, 1) * 0.4;
@@ -499,9 +494,9 @@
         }
         if (pts.length < 4) continue;
 
-        // Breadth widens the stream into parallel offset passes — a flat
-        // brush built the way a plotter fills area, adjacent passes nearly
-        // touching at the pen's width. Passes run boustrophedon.
+        // Breadth widens the stream into parallel offset passes, the way a
+        // plotter fills area: adjacent passes nearly touch at the pen's width.
+        // Passes run boustrophedon.
         const half = (clamp(r.breadth, 0, 1) * cell * 1.7) / 2;
         const passGap = Math.max(2, r.width * 1.3);
         const nSide = Math.floor(half / passGap);
@@ -555,9 +550,9 @@
       // sheet and the export all agree.
       const wobSeed = ruleSeed(ri, 'wob');
       const wobAmp = clamp(r.wob, 0, 1) * cell * 0.3;
-      // Flow pressure/jitter bake per-point width + bleed multipliers: a
-      // coarse spatial field (so whole regions press harder and soak
-      // together, across adjacent passes) plus fine per-point/per-pass noise.
+      // Flow pressure/jitter bake per-point width and bleed multipliers: a
+      // coarse spatial field, so whole regions press harder and soak together
+      // across adjacent passes, plus fine per-point/per-pass noise.
       const dynamic = r.mode === 'flow' && (r.press > 0 || r.jit > 0);
       const pressSeed = ruleSeed(ri, 'press');
       const jitSeed = ruleSeed(ri, 'jit');
@@ -608,9 +603,8 @@
     }
   }
 
-  // --- plot replay ------------------------------------------------------------
-  // `headway` is the drawn length in px; the pen travels at a constant pace,
-  // so a scene with more ink genuinely takes longer to plot.
+  // `headway` is the drawn length in px. The pen travels at a constant pace, so
+  // a scene with more ink takes longer to plot.
   let headway = 0;
   let rafId = 0;
   let lastNow = 0;
@@ -627,7 +621,7 @@
       stage?.paint();
       if (headway >= built.total) {
         rafId = 0;
-        return; // done — hold the finished sheet
+        return; // done, hold the finished sheet
       }
     }
     rafId = requestAnimationFrame(tick);
@@ -659,7 +653,6 @@
     }
   }
 
-  // --- rendering --------------------------------------------------------------
   const paperIsLight = () => {
     const { r, g, b } = hexRgb(bg);
     return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.55;
@@ -700,10 +693,10 @@
     ctx.stroke();
   }
 
-  // Draw a pressure/jitter path as short chunks so width and bleed can vary
-  // along it: each chunk gets its baked width multiplier, plus a wide faint
-  // halo under-stroke where the local pressure soaks the paper. Honors the
-  // reveal limit; returns the pen tip when the limit lands inside the path.
+  // Draw a pressure/jitter path as short chunks so width and bleed vary along
+  // it. Each chunk gets its baked width multiplier, plus a wide faint halo
+  // under-stroke where the local pressure soaks the paper. Honors the reveal
+  // limit and returns the pen tip when the limit lands inside the path.
   const CHUNK = 3; // segments per chunk
   function drawChunked(
     ctx: CanvasRenderingContext2D, p: BuiltPath, r: PlotRule, limit: number
@@ -794,8 +787,8 @@
     const colsN = Math.max(4, Math.round(cols));
     drawGrid(ctx, built.cell, colsN, built.rowsN);
 
-    // Semi-transparent ink over multiply (light paper) / screen (dark paper)
-    // pools where passes cross — multiply on a dark sheet would crush to black.
+    // Semi-transparent ink over multiply (light paper) or screen (dark paper)
+    // pools where passes cross. Multiply on a dark sheet would crush to black.
     const blend: GlobalCompositeOperation = paperIsLight() ? 'multiply' : 'screen';
     let tip: [number, number] | null = null;
     let tipRule = -1;
@@ -866,8 +859,8 @@
     renderScene(ctx, w, h, panX, panY, motion === 'plot' ? headway : null);
   }
 
-  // Repaint on any visual prop change; ensureBuilt decides whether the sim
-  // actually needs a rebuild (colors/widths/ink don't).
+  // Repaint on any visual prop change. ensureBuilt decides whether the sim
+  // needs a rebuild (colors, widths and ink do not).
   $: if (
     mounted &&
     (void [bg, seed, cols, grid, gridAmount, rules, motion, speed], true)
@@ -891,9 +884,9 @@
     return shot;
   };
 
-  // --- video capture ----------------------------------------------------------
-  // A clip is one plot run: `u` sweeps the reveal, with the tail held on the
-  // finished sheet. Rendered by scaling the live framing to clip resolution.
+  // Video capture: a clip is one plot run. `u` sweeps the reveal, with the tail
+  // held on the finished sheet. Rendered by scaling the live framing to clip
+  // resolution.
   export function captureFrame(ctx: CanvasRenderingContext2D, W: number, H: number, u: number) {
     if (!built || !w) return;
     const k = W / w;

@@ -11,7 +11,6 @@
 </script>
 
 <div class="blog-search" data-density-shift id="filters">
-  <!-- Search Bar -->
   <div class="search">
     <TextInput
       name="search"
@@ -27,7 +26,6 @@
     </TextInput>
   </div>
 
-  <!-- Filter Buttons -->
   <div class="pillbox">
     <p class="pillbox-label"> Category: </p>
     <div class="pills">
@@ -63,8 +61,7 @@
     padding: var(--hz-space-away) 0;
     border-bottom: 2px solid var(--hz-intent-primary);
   }
-  /* the old .input pill styling, moved onto the field's bordered box — the
-     wrapper carries the border so the suffix icon sits inside it */
+  /* the wrapper carries the border so the suffix icon sits inside it */
   .search :global(.hz-input-wrapper) {
     height: 2.5rem;
     border-radius: 2rem;

@@ -18,8 +18,7 @@ test('About page renders without a11y errors', async ({
   expect(accessibilityScanResults.violations.length).toEqual(0)
 })
 
-// The tracker lives in an accordion panel now, so it has to be opened before
-// axe will look at it — closed <details> content is hidden and gets skipped.
+// axe skips hidden content, so the accordion has to be open before it scans.
 test('Tracker panel renders without a11y errors', async ({
   page,
   makeAxeBuilder,
@@ -27,8 +26,8 @@ test('Tracker panel renders without a11y errors', async ({
   await goto(page, '/about')
 
   await page.locator('summary', { hasText: 'recent activity' }).click()
-  // the rail loops, so every slide also exists as aria-hidden clones either side
-  // of the real row — match the real one or this is a strict-mode violation
+  // the rail loops, so aria-hidden clones of each slide sit either side of the
+  // real row. match the real one or the locator hits a strict-mode violation.
   await expect(
     page
       .locator('.hz-carousel-slide:not([aria-hidden="true"])')

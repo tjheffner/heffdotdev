@@ -7,9 +7,8 @@
     DuolingoUser,
   } from '$lib/types'
 
-  // Props are promises: the server load streams each source in as it resolves,
-  // so this component renders its shell immediately and fills each section on
-  // arrival (see routes/(main)/about/+page.server.ts).
+  // Props are promises. The server load streams each source in as it resolves,
+  // so the shell renders right away (see routes/(main)/about/+page.server.ts).
   interface Props {
     recentlyListened: Promise<LastfmTrack[]>
     recentlyWatched: Promise<LetterboxdEntry[]>
@@ -24,13 +23,10 @@
     duolingo
   }: Props = $props();
 
-  // Every group is always a slide, even the ones whose data may never arrive:
-  // the count has to be stable or the rail's dots would appear one at a time as
-  // each third-party call settles. Each slide awaits its own source inside, so
-  // the streaming load survives.
-  // `rows` marks the groups that are genuinely a list of peer entries, so the
-  // dashed rule goes between them. Duolingo is one entry plus the footnote
-  // explaining its asterisk — a rule there would cut the note off its own line.
+  // Every group is always a slide, so the dot count stays stable while the
+  // third-party calls settle. Each slide awaits its own source inside.
+  // `rows` marks the groups that are a list of peer entries, so the dashed
+  // rule goes between them. Duolingo is one entry plus a footnote, so no rule.
   const groups = [
     { id: 'music', emoji: '🎶', label: 'recently listened', rows: true },
     { id: 'movies', emoji: '🍿', label: 'recently watched', rows: true },
@@ -39,8 +35,8 @@
     { id: 'games', emoji: '🎮', label: 'recently played', rows: true },
   ]
 
-  // duolingo math — duolingo may be an empty object if the (unofficial) API
-  // was unreachable at load time, so guard every access.
+  // duolingo may be an empty object if the (unofficial) API was unreachable
+  // at load time, so guard every access.
   function duolingoStats(d: DuolingoUser) {
     const currentStreak = d.streakData?.currentStreak;
     const streakStartDate = currentStreak ? new Date(currentStreak.startDate) : null;
@@ -73,8 +69,8 @@
 >
   {#snippet slide(group)}
     <section class="group" data-density-shift data-rows={group.rows ? '' : undefined}>
-      <!-- The emoji leads the slide on its own; the title stays in the heading
-           for structure and to name the emoji, just not on screen. -->
+      <!-- The emoji leads the slide. The title stays in the heading for
+           structure and to name the emoji, off screen. -->
       <h3 class="group-head">
         <span class="emoji" aria-hidden="true">{group.emoji}</span>
         <span class="label sr-only">{group.label}</span>
@@ -158,25 +154,23 @@
 </Carousel>
 
 <style>
-  /* The rail's default slide is clamp(9rem, 20%, 18rem) — sized for thumbnails,
-     far too narrow for a track list. This gives ~2 groups in view inside the
-     65ch wrapper with the third peeking as the "keep scrolling" affordance. */
+  /* The rail's default slide width is sized for thumbnails, too narrow for a
+     track list. This gives about 2 groups in view inside the 65ch wrapper,
+     with the third peeking as the "keep scrolling" cue. */
   :global(.activity-rail) {
-    /* 48%, not 45%: the icon column costs each row ~58px, and the playtime line
-       needs most of it back to hold one line. Two slides still don't quite fill
-       the viewport, so the peeking third stays as the "keep scrolling" cue. */
+    /* 48%, not 45%: the icon column costs each row about 58px, and the
+       playtime line needs most of it back to hold one line. */
     --hz-carousel-item-width: clamp(16rem, 48%, 21rem);
-    /* clear the accordion summary — the rail's first row would otherwise start
-       immediately under "recent activity" */
+    /* clear the accordion summary, or the rail's first row starts right
+       under "recent activity" */
     margin-top: var(--hz-space-away);
   }
 
-  /* A looping rail hides its scrollbar — the thumb describes a position in a
+  /* A looping rail hides its scrollbar. The thumb describes a position in a
      fixed range, which is meaningless on content that wraps. @hyzer-labs/ui
-     ships exactly this rule, but in theme/components/carousel.css, and this app
-     deliberately loads only the token sheet (see routes/+layout.svelte) so the
-     library's visual rules can't leak across route groups. So: copied, not
-     imported. Drop it if the theme sheet ever does get loaded. */
+     ships this rule in theme/components/carousel.css, and this app loads only
+     the token sheet (see routes/+layout.svelte), so it is copied here. Drop
+     it if the theme sheet ever gets loaded. */
   :global(.activity-rail .hz-carousel-viewport) {
     scrollbar-width: none;
   }
@@ -184,10 +178,9 @@
     display: none;
   }
 
-  /* The default ghost Button reads as generic app chrome — a bordered grey box.
-     Match the footer's social icons instead: bare accent glyph, filled on hover.
-     Only margin-top here: the row's own justify-content/gap are set by the
-     library's scoped rules at equal specificity and would win anyway. */
+  /* Match the footer's social icons: bare accent glyph, filled on hover. Only
+     margin-top here. The row's justify-content and gap come from the library's
+     scoped rules at equal specificity and would win anyway. */
   :global(.activity-rail .hz-carousel-controls) {
     margin-top: var(--hz-space-near);
   }
@@ -204,11 +197,11 @@
     color: var(--hz-color-surface);
   }
 
-  /* Two columns, both starting on row 1: the icon leads the first row and every
-     row after it clears the icon's width. That indent is the point — it reads as
-     a wider gap between groups than the actual spacing provides. */
+  /* Two columns, both starting on row 1: the icon leads the first row and
+     every row after it clears the icon's width. That indent makes the gap
+     between groups look wider than the spacing alone does. */
   .group {
-    /* slides stretch to the tallest in the row; keep each one's content top-aligned */
+    /* slides stretch to the tallest in the row, so keep content top-aligned */
     height: 100%;
     display: grid;
     grid-template-columns: auto 1fr;
@@ -216,8 +209,8 @@
     align-items: start;
   }
 
-  /* The rule separates entries from each other, so it goes between rows rather
-     than capping the group. `p + p` means the first row never gets one. */
+  /* The rule separates entries from each other, so it goes between rows
+     rather than capping the group. `p + p` means the first row never gets one. */
   .group[data-rows] p + p {
     border-top: 1px dashed var(--hz-intent-secondary);
     padding-top: var(--hz-space-near);
@@ -232,15 +225,14 @@
     line-height: 1;
   }
 
-  /* Stack owns the rhythm between rows; the type scale's paragraph margin would
-     stack on top of its gap and undo the tightening. */
+  /* Stack owns the rhythm between rows. The type scale's paragraph margin
+     would stack on top of its gap and undo the tightening. */
   .group p {
     margin: 0;
   }
 
-  /* Game titles come from Steam, so a long one will always be able to force a
-     wrap. Keeping the stats unbreakable means the line breaks before them
-     rather than through them — "0h of" / "34h played" was the ugly part. */
+  /* Game titles come from Steam, so a long one can force a wrap. Keeping the
+     stats unbreakable means the line breaks before them, not through them. */
   .group .stat {
     white-space: nowrap;
   }

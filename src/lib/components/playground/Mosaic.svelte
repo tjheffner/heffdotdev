@@ -12,7 +12,6 @@
   import { paletteColor as palette } from '$lib/playground/palette';
   import CanvasStage, { type StageView } from './CanvasStage.svelte';
 
-  // --- grid ----------------------------------------------------------------
   export let bg = '#101018';
   export let seed: string | number = 'mosaic';
   export let mode: MosaicMode = 'simple'; // complex stacks several shapes per cell
@@ -21,7 +20,6 @@
   export let density = 0.92; // chance a cell is filled at all
   export let stack = 3; // complex mode: max shapes nested in one cell
 
-  // --- shapes ---------------------------------------------------------------
   export let shapes: MosaicShape[] = ['square', 'circle', 'arc'];
   export let size = 0.8; // base shape size, fraction of the cell
   export let vary = 0.3; // per-item size variation, 0..1
@@ -31,7 +29,6 @@
   export let strokeMatch = true; // derive the outline from each item's own color
   export let outlineColor = '#000000';
 
-  // --- color ----------------------------------------------------------------
   export let colorMode: MosaicColorMode = 'spectrum';
   export let hue = 210;
   export let hueSpread = 140;
@@ -39,11 +36,10 @@
   export let light = 60;
   export let customColors: string[] = ['#ff6b35', '#ffd23f', '#3bceac', '#0ead69', '#540d6e'];
 
-  // --- motion ---------------------------------------------------------------
-  // Any combination of tweens; every item carries its own phase/rate, so
+  // Any combination of tweens. Every item carries its own phase and rate, so
   // stacked shapes in one cell scale, swing and fade out of step. Each tween
-  // runs on its own tunable clock (0 = that tween is still). Desync blends
-  // between a coherent grid ripple and fully independent clocks.
+  // runs on its own clock (0 = that tween is still), and Desync blends between
+  // a coherent grid ripple and fully independent clocks.
   export let motions: MosaicMotion[] = ['pulse'];
   export let pulseSpeed = 0.25;
   export let spinSpeed = 0.25;
@@ -64,13 +60,12 @@
   const TAU = Math.PI * 2;
   const QUARTER = Math.PI / 2;
 
-  // --- per-cell randomness ---------------------------------------------------
   // Only raw rng draws are cached (they depend on the seed alone, in a fixed
-  // order); everything visible derives from them plus the current settings
-  // each frame. Tweaking a slider reshapes cells in place — never reshuffles —
-  // and cells keep their identity as the grid grows. Each cell carries slots
-  // for MAX_ITEMS stacked items so switching simple/complex or resizing the
-  // stack never shifts which random lands where.
+  // order); everything visible derives from them plus the current settings each
+  // frame. So a slider reshapes cells in place instead of reshuffling them, and
+  // cells keep their identity as the grid grows. Each cell carries slots for
+  // MAX_ITEMS stacked items, so resizing the stack never shifts which random
+  // lands where.
   const CELL_F = 2; // skip, count
   const ITEM_F = 9;
   const MAX_ITEMS = 6;
@@ -104,7 +99,6 @@
     return raw;
   }
 
-  // --- animation clock -------------------------------------------------------
   let time = 0;
   let rafId = 0;
   let lastNow = 0;
@@ -144,7 +138,6 @@
     syncLoop();
   }
 
-  // --- drawing ---------------------------------------------------------------
   function drawShape(
     ctx: CanvasRenderingContext2D,
     kind: MosaicShape,
@@ -230,9 +223,8 @@
   let panY = 0;
 
   // Seamless-loop state: every time-varying term is a sinusoid (or a rotation,
-  // which is 2π-periodic), so a loop just needs each one to advance a whole
-  // number of cycles over the clip — snapped per item AND per tween clock via
-  // round().
+  // which is 2π-periodic), so a loop needs each one to advance a whole number of
+  // cycles over the clip. round() snaps that per item and per tween clock.
   let loopT0 = 0;
   let loopSeconds = 0;
 
@@ -298,7 +290,7 @@
                 : outlineColor
               : null;
 
-          // Nested items step down in size; vary jitters each rung.
+          // Nested items step down in size. Vary jitters each rung.
           const rung = (count - j) / count;
           const sizeMul = Math.max(0.05, size * rung * (1 + (raw[b + I_SIZE] - 0.5) * vary));
           const orient =
@@ -343,8 +335,8 @@
     renderGrid(ctx, w, h, panX, panY, time, null);
   }
 
-  // Repaint on any visual prop change; the per-cell raws are seed-cached, so
-  // this is just a redraw, not a reshuffle.
+  // Repaint on any visual prop change. The per-cell raws are seed-cached, so
+  // this is a redraw, not a reshuffle.
   $: if (
     mounted &&
     (void [
@@ -363,10 +355,9 @@
   export const saveImage = (filename = 'mosaic.png') => stage?.saveImage(filename);
   export const sampleLuminance = (stripFrac = 0.16) => stage?.sampleLuminance(bg, stripFrac) ?? null;
 
-  // --- video capture ---------------------------------------------------------
-  // The grid is a pure function of (time, props, camera), so capture just
-  // re-renders at clip resolution with the pan scaled to match the on-screen
-  // framing. The live rAF loop keeps running untouched.
+  // Video capture: the grid is a pure function of (time, props, camera), so
+  // capture re-renders at clip resolution with the pan scaled to match the
+  // on-screen framing. The live rAF loop keeps running untouched.
   export const currentTime = () => time;
   export function captureFrame(ctx: CanvasRenderingContext2D, W: number, H: number, t: number) {
     const k = w ? W / w : 1;

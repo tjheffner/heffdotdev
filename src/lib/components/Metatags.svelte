@@ -26,8 +26,8 @@
     image = dev ? 'localhost:5173/api/og.png' : DEFAULT_OG_IMAGE
   }: Props = $props();
 
-  // encode the message: a raw space (multi-word titles) is an invalid URL
-  // and Slack silently drops the image, while Discord tolerates it
+  // encode the message: a raw space (multi-word titles) is an invalid URL and
+  // Slack drops the image without a word. Discord tolerates it.
   const fullImage = $derived(ogMessage ? `${image}?message=${encodeURIComponent(ogMessage)}` : image)
 </script>
 

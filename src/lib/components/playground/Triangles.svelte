@@ -10,7 +10,6 @@
   import { paletteColor as palette } from '$lib/playground/palette';
   import CanvasStage, { type StageView } from './CanvasStage.svelte';
 
-  // --- color ---------------------------------------------------------------
   export let bg = '#0a0a12';
   export let transparent = false; // skip the backdrop fill for transparent PNGs
   export let hue = 210;
@@ -23,7 +22,6 @@
   export let outlineColor = '#000000';
   export let strokeMatch = false; // derive stroke from each triangle's own color
 
-  // --- arrangement ---------------------------------------------------------
   export let shape: TriShape = 'triangle';
   export let seed: string | number = 'shatter';
   export let grid = 7; // cells per axis (density)
@@ -45,8 +43,8 @@
   export let interactive = false; // enable drag-to-pan and scroll-to-zoom
   export let onRendered: (() => void) | undefined = undefined; // fires after each paint
 
-  // Camera/canvas live in CanvasStage; these mirror the current view so the
-  // draw helpers below can read them unchanged.
+  // Camera and canvas live in CanvasStage. These mirror the current view for
+  // the draw helpers below.
   let stage: CanvasStage;
   let ctx: CanvasRenderingContext2D | null = null;
   let mounted = false;
@@ -62,7 +60,6 @@
   const paletteColor = (t: number) =>
     palette(colorMode, { hue, hueSpread, sat, light, customColors }, t);
 
-  // --- scene ---------------------------------------------------------------
   type Shard = { p: number[]; c: { h: number; s: number; l: number } };
   let shards: Shard[] = [];
 
@@ -79,9 +76,8 @@
     if (taper !== 0) {
       px = 0.5 + (px - 0.5) * (1 + taper * (py - 0.5));
     }
-    // Whole-sheet shear about the center: the two skew angles taper (a keystone)
-    // doesn't cover. Skew X slants columns sideways with height; Skew Y slants
-    // rows vertically with width. Together they tilt the sheet into a parallelogram.
+    // Whole-sheet shear about the center, which taper (a keystone) does not
+    // cover. Skew X slants columns with height, Skew Y slants rows with width.
     if (fieldSkewX !== 0 || fieldSkewY !== 0) {
       const cx = px - 0.5;
       const cy = py - 0.5;
@@ -189,10 +185,10 @@
         my = (dy / dist) * off;
       }
 
-      // Draw a fixed set of per-shard randoms up front — unconditionally — so
-      // toggling rotate/skew/warp never shifts the RNG stream the colors are
-      // drawn from. A zero slider just makes its transform a no-op; only
-      // density (the shard count) changes which colors land where.
+      // Draw a fixed set of per-shard randoms up front, so toggling
+      // rotate/skew/warp never shifts the RNG stream the colors come from. A
+      // zero slider makes its transform a no-op. Only density (the shard
+      // count) changes which colors land where.
       const angR = rng();
       const shxR = rng();
       const shyR = rng();
@@ -242,8 +238,7 @@
     shards = out;
   }
 
-  // --- drawing -------------------------------------------------------------
-  // The stage clears + sets the dpr transform and passes the current camera; we
+  // The stage clears, sets the dpr transform and passes the current camera. We
   // mirror w/h/panX/panY so the layout math (which uses the `zoom` prop) is
   // unchanged.
   function draw(context: CanvasRenderingContext2D, view: StageView) {
@@ -287,8 +282,8 @@
     stage?.paint();
   }
 
-  // Rebuild + repaint whenever anything scene-defining changes. `zoom` is left
-  // out — the stage repaints on zoom without needing to rebuild the shards.
+  // Rebuild and repaint whenever anything scene-defining changes. `zoom` is
+  // left out: the stage repaints on zoom without rebuilding the shards.
   $: if (
     mounted &&
     (void [shape, seed, grid, jitter, explode, warp, rotate, skew, fieldRotate, fieldWarp, taper, fieldSkewX, fieldSkewY, hue, hueSpread, sat, light, colorMode, customColors, bg, transparent, stroke, outlineColor, strokeMatch], true)
@@ -296,8 +291,8 @@
     redraw();
   }
 
-  // Camera + export helpers forward to the stage; luminance folds in the
-  // effective backdrop this scene shows.
+  // Camera and export helpers forward to the stage. Luminance uses the
+  // backdrop this scene actually shows.
   export const recenter = () => stage?.recenter();
   export const snapshot = (bgFill: string, maxDim = 128) => stage?.snapshot(bgFill, maxDim) ?? null;
   export const saveImage = (

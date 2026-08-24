@@ -13,16 +13,16 @@
     oy: number;
     swell: number; // traveling-wave amplitude 0..1, displacing along stroke normals
     rip: number; // waves along the stroke
-    trav: number; // wave phase advance per pass, degrees — rolls the swell through the sweep
-    relax: number; // 0..1 — how far the curve settles toward its chord by the end of the sweep
-    env: number; // 0..1 — bells the swell over the sweep (0 = constant, 1 = rises then dies)
+    trav: number; // wave phase advance per pass, degrees (rolls the swell through the sweep)
+    relax: number; // 0..1 how far the curve settles toward its chord by the end of the sweep
+    env: number; // 0..1 bells the swell over the sweep (0 = constant, 1 = rises then dies)
     press: number; // pen pressure 0..1 → line width, ink density, and how fast the ink runs dry
-    bleed: number; // 0..1 — how far ink soaks past the stroke; high values merge neighboring passes
-    nib: number; // nib cut angle in degrees (0-180) — strokes run thin along it, thick across it
-    jit: number; // pressure jitter 0..1 — width/ink variation between and along passes
+    bleed: number; // 0..1 how far ink soaks past the stroke. high values merge neighboring passes
+    nib: number; // nib cut angle in degrees (0-180). strokes run thin along it, thick across it
+    jit: number; // pressure jitter 0..1, width/ink variation between and along passes
     wob: number; // hand wobble, 0..1
     color: string;
-    open?: boolean; // page-only UI state; ignored here
+    open?: boolean; // page-only UI state, ignored here
   };
 </script>
 
@@ -51,13 +51,13 @@
 
   const TAU = Math.PI * 2;
   // Pen widths are authored in px-ish slider units but baked into pad-space
-  // ribbon geometry, so the nib scales with the sheet (like a real plot).
+  // ribbon geometry, so the nib scales with the sheet.
   const PXU = 1 / 450;
 
   // One fill of one pass: a variable-width ink ribbon (closed polygon in pad
   // space) plus its ink state. draw() only maps and fills, so camera events
-  // stay cheap. Ribbons — not stroked polylines — are what make the lines read
-  // as ink: tapered ends, wandering width, dry-brush gaps, bleed halos.
+  // stay cheap. Ribbons give tapered ends, wandering width, dry-brush gaps and
+  // bleed halos, which a stroked polyline cannot.
   type InkStroke = {
     poly: Float32Array;
     ox: number;
@@ -66,14 +66,14 @@
     mode: 'fill' | 'rim'; // rim = stroked dried edge (coffee-ring) on wet passes
   };
   // Ink accumulates per pen into a density buffer, so overlapping passes
-  // saturate toward solid ink (a pooling wash) instead of multiply-blackening;
-  // the buffer is tinted the pen color and composited onto the paper once.
+  // saturate toward solid ink instead of multiply-blackening. The buffer is
+  // tinted the pen color and composited onto the paper once.
   type LayerInk = { color: string; strokes: InkStroke[] };
   let built: LayerInk[] = [];
 
   // Centerline + per-point half-widths → closed ribbon polygon (left side
-  // forward, right side back). Zero-width spans pinch the ribbon shut, which is
-  // exactly what a skipping nib looks like.
+  // forward, right side back). Zero-width spans pinch the ribbon shut, like a
+  // skipping nib.
   function ribbon(cxA: Float32Array, cyA: Float32Array, hw: Float32Array): Float32Array {
     const n = cxA.length;
     const poly = new Float32Array(n * 4);
@@ -101,7 +101,7 @@
       const ink: LayerInk = { color: l.color, strokes: [] };
       out.push(ink);
       const reps = Math.max(1, Math.round(l.reps));
-      // Slightly wider base than a round pen would need — the directional nib
+      // Slightly wider base than a round pen needs. The directional nib
       // averages the width back down.
       const width = 0.35 + l.press * 3.2;
       const baseAlpha = 0.2 + l.press * 0.75;
@@ -125,7 +125,7 @@
 
       // The drawing's own centroid is the pivot for rotate/grow, so passes
       // twist and scale in place as they sweep instead of orbiting the pad
-      // center (which reads as spirograph, not plotter).
+      // center.
       let cx0 = 0;
       let cy0 = 0;
       let cn = 0;
@@ -163,10 +163,9 @@
           return { sp, n, nx, ny, ta, sx: sp[0], sy: sp[1], ex: sp[n * 2 - 2], ey: sp[n * 2 - 1] };
         });
 
-      // The nib is not a circle: it has a cut angle, and width follows the
-      // angle between stroke direction and nib — the calligraphic thick/thin
-      // that a dragged point can't produce. Heavy pressure flattens more of
-      // the nib onto the paper, so the footprint gets rounder.
+      // The nib has a cut angle, so width follows the angle between stroke
+      // direction and nib: the calligraphic thick/thin. Heavy pressure flattens
+      // more of the nib onto the paper, so the footprint gets rounder.
       const nibAng = ((l.nib ?? 40) * Math.PI) / 180;
       const nibRound = 0.22 + Math.min(1, l.press) * 0.45;
 
@@ -188,11 +187,11 @@
         const sa = Math.sin(ang);
         const u = reps > 1 ? r / (reps - 1) : 0; // progress through the sweep
         const settle = relax * u;
-        // Envelope bells the swell over the sweep: 0 keeps it constant, 1
-        // makes the undulation rise out of nothing and die away again.
+        // Envelope bells the swell over the sweep: 0 keeps it constant, 1 makes
+        // the undulation rise out of nothing and die away again.
         const effSwell = swellAmp * (1 - env + env * Math.sin(Math.PI * u));
         const alpha = Math.max(0.02, baseAlpha * (1 - dry * u));
-        // Pressure jitter, part 1: each pass lands a little heavier or lighter.
+        // Pressure jitter: each pass lands a little heavier or lighter.
         const passW = width * (1 + (rng() - 0.5) * jit * 0.7);
         const passA = Math.min(1, alpha * (1 + (rng() - 0.5) * jit * 0.6));
         // Width character along the pass: a smooth wander (jitter) plus
@@ -215,9 +214,9 @@
           const dep = new Float32Array(n); // local ink deposition
 
           // Dwells: where a real pen pauses or bears down, ink pools. Heavier
-          // pens dwell more; each dwell balloons the width profile and — via
-          // deposition — blots extra ink and bleed at that spot. Some land at
-          // touch-down/lift, the classic start/stop dots.
+          // pens dwell more; each dwell balloons the width profile and blots
+          // extra ink and bleed at that spot. Some land at touch-down or lift,
+          // the classic start/stop dots.
           const dwells: { t: number; amp: number; w: number }[] = [];
           if (rng() < l.press * 0.75) {
             const count = 1 + Math.floor(rng() * 2);
@@ -258,10 +257,10 @@
             cxA[i] = cx0 + px * ca - py * sa;
             cyA[i] = cy0 + px * sa + py * ca;
 
-            // Nib contact: taper at the ends (pen lift), the directional nib's
-            // thick/thin against stroke direction, pressure wander, dry skips,
-            // and dwell pooling. `dep` carries the same contact into how much
-            // ink the chunked body fills actually deposit.
+            // Nib contact: end taper (pen lift), the nib's thick/thin against
+            // stroke direction, pressure wander, dry skips and dwell pooling.
+            // `dep` carries the same contact into how much ink the chunked body
+            // fills deposit.
             const endT = Math.min(1, t / 0.08, (1 - t) / 0.08);
             const dir = nibRound + (1 - nibRound) * Math.abs(Math.sin(ta[i] + ang - nibAng));
             let wm =
@@ -283,16 +282,16 @@
           const doy = l.oy + l.dy * r - offMidY;
           const ox = offMidX + dox * sc - doy * ss;
           const oy = offMidY + dox * ss + doy * sc;
-          // How much ink this pass lays down overall — bleed follows it, so
+          // How much ink this pass lays down overall. Bleed follows it, so
           // heavy wet passes soak and light dry ones barely do.
           let depSum = 0;
           for (let i = 0; i < n; i++) depSum += dep[i];
           const depAvg = depSum / n;
 
-          // Bleed: two feathered halo rings (a soft soak, not a hard outline).
-          // The relative width term scales with the nib, the absolute term
-          // spreads even thin lines so adjacent passes pool into one wash;
-          // width follows hw, so dwells and heavy nib contact bleed locally.
+          // Bleed: two feathered halo rings, a soft soak rather than a hard
+          // outline. The relative width term scales with the nib, the absolute
+          // term spreads even thin lines so adjacent passes pool into one wash.
+          // Width follows hw, so dwells and heavy nib contact bleed locally.
           const halo = new Float32Array(n);
           const halo2 = new Float32Array(n);
           for (let i = 0; i < n; i++) {
@@ -306,8 +305,8 @@
           ink.strokes.push({ poly: ribbon(cxA, cyA, halo2), ox, oy, alpha: haloA * 0.35, mode: 'fill' });
           ink.strokes.push({ poly: ribbon(cxA, cyA, halo), ox, oy, alpha: haloA * 0.55, mode: 'fill' });
 
-          // Body in short chunks whose density follows the local nib contact —
-          // pressure, jitter, nib direction and dwells all change how much ink
+          // Body in short chunks whose density follows the local nib contact.
+          // Pressure, jitter, nib direction and dwells all change how much ink
           // lands, not just how wide the line is.
           const CH = 10;
           for (let c0 = 0; c0 < n - 1; c0 += CH) {
@@ -323,7 +322,7 @@
               mode: 'fill'
             });
           }
-          // Wet passes dry with a denser edge; skipping dry passes don't.
+          // Wet passes dry with a denser edge. Skipping dry passes do not.
           if (dryness <= 0.15) {
             ink.strokes.push({
               poly: ribbon(cxA, cyA, hw),
@@ -339,10 +338,9 @@
     built = out.filter((l) => l.strokes.length);
   }
 
-  // --- paper texture -------------------------------------------------------
-  // Deterministic (seeded) marks pre-rendered to an offscreen canvas and cached
+  // Paper texture: seeded marks pre-rendered to an offscreen canvas and cached
   // by everything that shapes them, so camera repaints just blit it. The paper
-  // itself doesn't pan/zoom — only the drawing does.
+  // itself does not pan or zoom, only the drawing does.
   let texCanvas: HTMLCanvasElement | null = null;
   let texKey = '';
 
@@ -366,8 +364,8 @@
     const a = texAmount;
 
     // The texture composites against the paper itself: the offscreen canvas is
-    // filled with the sheet color, dark marks multiply and light marks screen —
-    // so the grain reads on ANY background color, not just near-neutral ones.
+    // filled with the sheet color, dark marks multiply and light marks screen.
+    // That way the grain shows on any background color, not just neutral ones.
     cx.fillStyle = bg;
     cx.fillRect(0, 0, wd, hd);
     const inkMode = (isDark: boolean) => {
@@ -375,8 +373,8 @@
       return isDark ? dark : light;
     };
 
-    // Large soft tonal blotches under every texture, so the sheet reads as
-    // pulp with body rather than flat color.
+    // Large soft tonal blotches under every texture, so the sheet has some body
+    // instead of flat color.
     const blobs = Math.round((wd * hd) / 90000) + 6;
     for (let i = 0; i < blobs; i++) {
       const x = rng() * wd;
@@ -448,12 +446,11 @@
   };
 
   // Renders the precomputed ribbons; runs on every camera event too. Each pen
-  // accumulates as black density in its own buffer (overlaps saturate — ink
-  // pooling, never multiply-blackening within one pen), wet bodies get a
-  // denser rim (only a pool's outer edge survives saturation, like dried ink),
-  // then the buffer is tinted and laid on the paper: multiply on light paper
-  // (ink deepens), screen on dark paper (bright ink glows — multiply would
-  // crush any pen color into black there).
+  // accumulates as black density in its own buffer, so overlaps saturate like
+  // pooling ink instead of multiply-blackening within one pen. Wet bodies get a
+  // denser rim (only a pool's outer edge survives saturation, like dried ink).
+  // The buffer is then tinted and laid on the paper: multiply on light paper,
+  // screen on dark paper, where multiply would crush any pen color to black.
   function draw(ctx: CanvasRenderingContext2D, view: StageView) {
     const { w, h, panX, panY, dpr } = view;
     ctx.fillStyle = bg;
@@ -508,8 +505,8 @@
     stage?.paint();
   }
 
-  // Rebuild + repaint whenever anything scene-defining changes. `zoom` is left
-  // out — the stage repaints on zoom without needing to rebuild the strokes.
+  // Rebuild and repaint whenever anything scene-defining changes. `zoom` is
+  // left out: the stage repaints on zoom without rebuilding the strokes.
   $: if (mounted && (void [layers, seed, bg, inkBlend, texture, texAmount], true)) {
     redraw();
   }

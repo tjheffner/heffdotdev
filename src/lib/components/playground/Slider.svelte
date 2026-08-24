@@ -1,12 +1,9 @@
 <script lang="ts">
   import { Slider } from '@hyzer-labs/ui'
 
-  // Thin wrapper over @hyzer-labs/ui's Slider, the same shape every other
-  // component here takes over a hyzer primitive. It exists for two reasons:
-  // the ~40 call sites across the playgrounds pass only `label`, and hyzer's
-  // FieldBase requires a `name`; and the playground chrome is a compact
-  // three-column row (label | track | value) rather than the stacked field
-  // the library renders by default.
+  // Thin wrapper over @hyzer-labs/ui's Slider. Call sites pass only `label`,
+  // but hyzer's FieldBase needs a `name`. The playground also wants a compact
+  // three-column row (label | track | value) instead of the stacked field.
   let {
     label,
     value = $bindable(),
@@ -23,8 +20,8 @@
     unit?: string
   } = $props()
 
-  // Never submitted — these controls drive a canvas, not a form — so a slug of
-  // the label is name enough, and it keeps the call sites to just `label`.
+  // These controls drive a canvas, never a form submit, so a slug of the label
+  // is name enough.
   let name = $derived(label.toLowerCase().replace(/[^a-z0-9]+/g, '-'))
 </script>
 
@@ -58,8 +55,8 @@
     flex: 1;
   }
 
-  /* The exact-entry number field: bare, right-aligned, tabular so the digits
-     don't jitter as you drag. */
+  /* The number field: bare, right-aligned, tabular so the digits do not
+     jitter as you drag. */
   .slider :global(.hz-slider-number) {
     width: 3rem;
     font: inherit;

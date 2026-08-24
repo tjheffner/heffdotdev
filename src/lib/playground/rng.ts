@@ -1,5 +1,5 @@
-// Seeded RNG shared by the canvas playgrounds: an FNV-1a string hash feeding a
-// mulberry32 generator, so any seed word/number produces a stable sequence.
+// Seeded RNG shared by the canvas playgrounds. An FNV-1a string hash feeds a
+// mulberry32 generator, so any seed word or number gives a stable sequence.
 
 export function hashSeed(str: string): number {
   let h = 2166136261 >>> 0

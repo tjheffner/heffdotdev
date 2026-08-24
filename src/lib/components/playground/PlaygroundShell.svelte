@@ -1,23 +1,22 @@
 <script lang="ts">
   import { collapseMenus } from '$lib/playground/ui';
 
-  // Fullscreen canvas + a floating control layer over it.
-  // Default slot: <Section> pills (they render a pill in the top row and an
-  // expanding card below). "footer" slot: action buttons, shown as a cluster
-  // at the right of the pill row. "preview" slot: the <main class="preview">
-  // canvas, which fills the viewport behind the controls.
+  // Fullscreen canvas plus a floating control layer over it. Default slot:
+  // <Section> pills (a pill in the top row, an expanding card below). "footer"
+  // slot: action buttons, clustered at the right of the pill row. "preview"
+  // slot: the <main class="preview"> canvas behind the controls.
   export let title: string;
   export let subtitle = '';
   // Hex color of the canvas backdrop, so the chrome can flip light/dark to stay
   // legible over it. Pages pass their current bg (or a stand-in when transparent).
   export let bg = '';
-  // Optional override: when a page samples the real canvas pixels under the
-  // chrome (e.g. Triangles, which can be zoomed past its background), it passes
-  // the result here and it wins over the bg-color guess.
+  // Optional override. A page that samples the real canvas pixels under the
+  // chrome (e.g. Triangles, which can be zoomed past its background) passes the
+  // result here, and it wins over the bg-color guess.
   export let lightChrome: boolean | undefined = undefined;
 
   // Optional action hooks, wired to keyboard shortcuts (see onKeydown). A page
-  // supplies the ones it has; missing ones simply do nothing.
+  // supplies the ones it has; missing ones do nothing.
   export let onShuffle: (() => void) | undefined = undefined;
   export let onReset: (() => void) | undefined = undefined;
   export let onUndo: (() => void) | undefined = undefined;
@@ -53,8 +52,8 @@
   ];
 
   let controlsHidden = false;
-  // Open on arrival so visitors meet the description + shortcut list before
-  // the controls; closing it (×, Esc, or toggling the title) is one click.
+  // Open on arrival so visitors see the description and shortcuts before the
+  // controls. Closing it (×, Esc, or the title) is one click.
   let titleOpen = true;
   const titleCardId = `pg-title-${Math.random().toString(36).slice(2, 8)}`;
 
@@ -71,13 +70,13 @@
 
   // Keyboard: Esc hides the controls; "/" toggles them. F/R/P/S run the scene
   // actions (shuffle / reset / save PNG / save scene). All are ignored while
-  // typing in a field or when a modifier is held, so browser combos (Cmd+S,
-  // Cmd+R, Cmd+P) and text entry are never hijacked.
+  // typing in a field or when a modifier is held, so browser combos and text
+  // entry are never hijacked.
   function onKeydown(e: KeyboardEvent) {
     // composedPath()[0], not e.target: an event from inside an open shadow root
-    // is retargeted to the host, so a field there reads as a plain <div> and the
-    // typing guard below waves it through. Injected extension UI (hyzer-annotate)
-    // and any future web component land in exactly that case.
+    // is retargeted to the host, so a field there looks like a plain <div> and
+    // the typing guard below waves it through. Injected extension UI and any
+    // future web component land in that case.
     const t = (e.composedPath()[0] ?? e.target) as HTMLElement | null;
     const typing = !!t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
     if (e.key === 'Escape') {
@@ -88,7 +87,7 @@
     const k = e.key.toLowerCase();
     if (k === '/') {
       setHidden(!controlsHidden);
-      e.preventDefault(); // don't trigger the browser's quick-find
+      e.preventDefault(); // do not trigger the browser's quick-find
     } else if (k === 'f' && onShuffle) {
       onShuffle();
       e.preventDefault();
@@ -118,10 +117,10 @@
 
   <div class="control-layer" class:hidden={controlsHidden}>
     <div class="control-bar">
-      <!-- Easter egg: reads as a plain title, but clicking it reveals an info
-           card with the description and a link back to all experiments. Wrapped
-           in an <h1> so each immersive page has a proper top-level heading (the
-           heading wraps the button, which stays the interactive/visual chip). -->
+      <!-- Easter egg: it looks like a plain title, but clicking it opens an
+           info card with the description and a link back to all experiments.
+           The <h1> wrapper gives each immersive page a top-level heading; the
+           button inside stays the interactive chip. -->
       <h1 class="title-heading">
         <button
           class="title-chip"
@@ -158,8 +157,8 @@
           {/if}
         </div>
       {/if}
-      <!-- Sits in the right cluster (after the action buttons, before Hide); its
-           card still drops below via the order-2 / row-break mechanism. -->
+      <!-- Sits in the right cluster, after the action buttons and before Hide.
+           Its card still drops below via order-2 / row-break. -->
       <slot name="saved" />
       <button class="chrome-pill hide-toggle" on:click={toggleControls} title="Hide controls">
         Hide (Esc)
@@ -181,15 +180,14 @@
 
   .playground {
     /* The playground reads the "playground" theme block in hyzer-tokens.css
-     * (authored in hyzer.config.ts) directly — there is no --pg-* alias layer
-     * any more. A data-theme="playground" body activates it, stamped during
-     * SSR in hooks.server.ts, so it is live on the first paint.
+     * (authored in hyzer.config.ts) directly. A data-theme="playground" body
+     * activates it, stamped during SSR in hooks.server.ts, so it is live on the
+     * first paint.
      *
-     * --pg-chrome-* below is what survives, and it is not an alias: these
-     * flip with the canvas luminance (see .light-canvas), which is runtime
-     * state rather than a theme, so the indirection is doing real work. The
-     * dark defaults are the theme's own text/surface-muted, so only the
-     * inverted set has to spell out literals. */
+     * --pg-chrome-* below flips with the canvas luminance (see .light-canvas),
+     * which is runtime state rather than a theme. The dark defaults are the
+     * theme's own text/surface-muted, so only the inverted set has to spell out
+     * literals. */
     --pg-chrome-fg: var(--hz-color-text);
     --pg-chrome-chip: rgba(10, 10, 14, 0.62);
     --pg-chrome-line: var(--hz-color-border);
@@ -217,9 +215,8 @@
     --pg-chrome-on-solid: #f2f2f5;
   }
 
-  /* --- floating control layer --------------------------------------------- */
-  /* The layer spans the viewport but is click-through; only the pills, cards,
-   * and action cluster opt back into pointer events, so canvas drag/zoom keeps
+  /* The control layer spans the viewport but is click-through. Only the pills,
+   * cards and action cluster take pointer events, so canvas drag/zoom keeps
    * working everywhere except directly on a control. */
   .control-layer {
     position: absolute;
@@ -248,7 +245,7 @@
   }
 
   /* The heading wraps the chip but stays layout-neutral: it becomes the flex
-     item (order 0, where the chip used to sit) and imposes no box of its own. */
+     item (order 0) and imposes no box of its own. */
   .title-heading {
     order: 0;
     margin: 0;
@@ -258,8 +255,8 @@
     font: inherit;
   }
 
-  /* Easter egg: styled exactly like the old static title — no chip background,
-     no chevron, default cursor — so nothing hints it's clickable. */
+  /* Easter egg: no chip background, no chevron, default cursor, so nothing
+     hints it is clickable. */
   .title-chip {
     order: 0;
     pointer-events: auto;
@@ -282,7 +279,7 @@
     border-radius: 4px;
   }
 
-  /* Info card — mirrors the <Section> card panel, drops below the bar (order 2). */
+  /* Info card. Mirrors the <Section> card panel, drops below the bar (order 2). */
   .title-card {
     order: 2;
     align-self: flex-start;
@@ -398,9 +395,9 @@
     align-items: center;
     gap: 0.4rem;
   }
-  /* No wrapping pill (it isn't a collapsible menu); each button carries its own
-   * translucent chip so it stays legible over the canvas without adding a
-   * border-box that shifts the row when sections open/close. */
+  /* No wrapping pill: this is not a collapsible menu. Each button carries its
+   * own translucent chip so it stays legible over the canvas without a
+   * border-box that shifts the row when sections open and close. */
   .bar-actions :global(.btn) {
     color: var(--pg-chrome-fg);
     background: var(--pg-chrome-chip);
@@ -442,7 +439,7 @@
     z-index: 3;
   }
 
-  /* --- shared kit (styles the slotted sidebar content) -------------------- */
+  /* Shared kit: styles the slotted control content. */
 
   :global(.playground .hint) {
     margin: 0.1rem 0 0;
@@ -490,7 +487,7 @@
     grid-template-columns: 1fr 1fr;
     gap: 0.5rem;
   }
-  /* An odd trailing button spans the full width, so 3-button playgrounds don't
+  /* An odd trailing button spans the full width, so 3-button playgrounds do not
      leave a lonely half-width cell (4-button Poolside stays a clean 2×2). */
   :global(.playground .scene-actions .btn:last-child:nth-child(odd)) {
     grid-column: 1 / -1;
@@ -548,7 +545,7 @@
     outline-offset: -2px;
   }
 
-  /* Toggle chips on a wrapping grid — roomier than the segmented .mode-btns
+  /* Toggle chips on a wrapping grid, roomier than the segmented .mode-btns
    * pill. Used for multi-selects (Mosaic shapes/motions) and for 3-4-way
    * pickers that would otherwise cramp (palettes, hatch style). .chip-field
    * stacks a label above the grid. */
@@ -651,8 +648,6 @@
     cursor: pointer;
   }
 
-  /* --- preview ------------------------------------------------------------ */
-
   :global(.playground .preview) {
     position: absolute;
     inset: 0;
@@ -676,8 +671,6 @@
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.85);
   }
-
-  /* --- responsive --------------------------------------------------------- */
 
   @media (max-width: 640px) {
     .control-bar {

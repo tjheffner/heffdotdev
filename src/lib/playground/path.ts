@@ -1,7 +1,6 @@
 // Freeform pen paths: polylines drawn on a pad, stored as flat [x0,y0,x1,y1,…]
 // arrays in the pad's centered unit space ([-1,1] on both axes). A path is a
-// list of strokes. Helpers here keep them smooth (even resampling) and small
-// (fixed-width base36 packing for scene tokens).
+// list of strokes.
 
 import { clamp } from './math'
 

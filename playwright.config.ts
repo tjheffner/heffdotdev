@@ -1,28 +1,21 @@
 import { defineConfig, devices } from '@playwright/test'
 
 /**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// require('dotenv').config();
-
-/**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
+  /* Fail the build on CI if test.only was left in the source. */
   forbidOnly: !!process.env.CI,
   retries: 2,
-  /* No CI worker override: Playwright's default is half the available cores,
+  /* No CI worker override. Playwright defaults to half the available cores,
    * which is 2 on a standard GitHub runner. Forcing 1 made the suite serial and
-   * it ran past the job timeout. 2 is also about as much concurrency as the
-   * deployed preview wants — /about fans out to four third-party APIs per
-   * request, so piling on more parallel hits invites rate limiting. */
+   * it ran past the job timeout. More than 2 invites rate limiting, since
+   * /about fans out to four third-party APIs per request. */
 
-  /* `list` so a CI log shows per-test progress — with html alone the run prints
-   * nothing on a non-TTY runner, and a cancelled job is undiagnosable. `html`
+  /* `list` so a CI log shows per-test progress. With html alone the run prints
+   * nothing on a non-TTY runner, and a cancelled job cannot be diagnosed. `html`
    * stays for the uploaded artifact. */
   reporter: process.env.CI ? [['list'], ['html']] : 'html',
 
@@ -34,9 +27,9 @@ export default defineConfig({
     trace: 'on-first-retry',
 
     /* Ask /about for fixed activity payloads instead of its four third-party
-     * APIs — see about/+page.server.ts. Applies to every request because no
-     * other route reads the header, which keeps this to one line instead of a
-     * duplicated set of per-browser projects. A production deploy refuses it. */
+     * APIs, see about/+page.server.ts. Applies to every request because no other
+     * route reads the header, which keeps this to one line. A production deploy
+     * refuses it. */
     extraHTTPHeaders: { 'x-activity-fixtures': '1' },
   },
 
@@ -50,9 +43,6 @@ export default defineConfig({
         url: 'http://localhost:5173',
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
-        /* Lets the locally-booted server honour the fixture header, so
-         * `npm test` needs no setup. Deployed environments opt in themselves. */
-        env: { ALLOW_ACTIVITY_FIXTURES: 'true' },
       },
 
   /* Configure projects for major browsers */

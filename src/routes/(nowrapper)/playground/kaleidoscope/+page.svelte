@@ -25,7 +25,6 @@
 
   const presets = createPresetStore('kaleidoscope');
 
-  // --- palette (drives item colors) ---------------------------------------
   const paletteHex = (t: number) => {
     const c = paletteColor(colorMode, { hue, hueSpread, sat, light, customColors }, t);
     return hslToHex(c.h, c.s, c.l);
@@ -33,7 +32,6 @@
   // Even spread across the current item count, so a palette lays out cleanly.
   const spreadT = (i: number, total: number) => (total > 1 ? i / (total - 1) : 0.5);
 
-  // --- item factory -------------------------------------------------------
   function makeItem(i: number, total: number): KaleItem {
     return {
       shape: pick(KALE_SHAPES),
@@ -45,12 +43,12 @@
       skew: rand(-0.6, 0.6),
       warp: rand(0, 0.6),
       twist: rand(-0.5, 0.5),
-      seed: randInt(1, 46655), // 36^3 - 1 → a 3-char base36 seed; plenty of jitter variety
+      seed: randInt(1, 46655), // 36^3 - 1, a 3-char base36 seed
       open: false
     };
   }
 
-  // A hand-tuned starting bouquet, so the default scene reads well immediately.
+  // Hand-tuned starting items, so the default scene reads well on load.
   const DEFAULT_ITEMS: KaleItem[] = [
     { shape: 'triangle', u: 0.567, v: 0.672, size: 0.187, color: '#c92cbc', rotate: 224, skew: -0.32, warp: 0.53, twist: -0.35, seed: 40598, open: false },
     { shape: 'shard', u: 0.207, v: 0.127, size: 0.161, color: '#c92c63', rotate: 28, skew: -0.57, warp: 0.06, twist: -0.47, seed: 23712, open: false },
@@ -63,7 +61,6 @@
   ];
   const cloneItems = (arr: KaleItem[]) => arr.map((it) => ({ ...it }));
 
-  // --- defaults -----------------------------------------------------------
   const DEFAULTS = {
     bg: '#0a0a12',
     transparent: false,
@@ -78,12 +75,11 @@
     strokeMatch: true,
     mode: 'radial' as KaleMode,
     segments: 16,
-    spin: -0.12, // a slow default drift so the scene reads as alive on load
+    spin: -0.12, // a slow default drift, so the scene moves on load
     animate: 0.53, // segment shapes breathe on load
     zoom: 1.0
   };
 
-  // --- state --------------------------------------------------------------
   let bg = DEFAULTS.bg;
   let transparent = DEFAULTS.transparent;
   let hue = DEFAULTS.hue;
@@ -109,7 +105,6 @@
   $: posULabel = mode === 'radial' ? 'Angle' : 'X';
   $: posVLabel = mode === 'radial' ? 'Radius' : 'Y';
 
-  // --- item list edits ----------------------------------------------------
   function addItem() {
     items = [...items, { ...makeItem(items.length, items.length + 1), open: true }];
   }
@@ -117,9 +112,8 @@
     items = items.filter((_, idx) => idx !== i);
   }
 
-  // --- reorder (drag & drop, plus keyboard) -------------------------------
   // Order is draw order, so reordering restacks the shapes. Each item carries a
-  // grip handle; the whole card is a drop target.
+  // grip handle. The whole card is a drop target.
   let dragIndex: number | null = null;
   let overIndex: number | null = null;
   let handleEls: HTMLButtonElement[] = [];
@@ -135,7 +129,7 @@
     }
   }
   // The whole list is the drop target, so the cursor snaps to the nearest slot
-  // even in the gaps between cards (dropping there used to cancel the move).
+  // even in the gaps between cards.
   function onListDragOver(e: DragEvent) {
     if (dragIndex === null) return;
     e.preventDefault();
@@ -165,7 +159,7 @@
       ...items[i],
       u: round(Math.min(1, items[i].u + 0.06), 3),
       v: round(Math.min(1, items[i].v + 0.06), 3),
-      seed: randInt(1, 46655), // 36^3 - 1 → a 3-char base36 seed; plenty of jitter variety
+      seed: randInt(1, 46655), // 36^3 - 1, a 3-char base36 seed
       open: true
     };
     items = [...items.slice(0, i + 1), copy, ...items.slice(i + 1)];
@@ -177,12 +171,11 @@
   function recolorItems() {
     const n = items.length;
     // Mutate in place so open item cards don't re-mount while a palette slider
-    // is dragged; the reassignment just invalidates for a repaint.
+    // is dragged. The reassignment just invalidates for a repaint.
     items.forEach((it, i) => (it.color = paletteHex(spreadT(i, n))));
     items = items;
   }
 
-  // --- custom palette swatches --------------------------------------------
   function addColor() {
     customColors = [...customColors, '#ffffff'];
   }
@@ -202,9 +195,9 @@
           ? 'A single hue. Items vary only in lightness.'
           : 'Items are tinted from this set, in order.';
 
-  // Recolor every item whenever a palette control moves — but never while
-  // hydrating a shared scene (which carries its own per-item colors), and never
-  // from a single item's own swatch edit (that leaves the palette key alone).
+  // Recolor every item when a palette control moves. Skipped while hydrating a
+  // shared scene, which carries its own per-item colors, and skipped for a single
+  // item's own swatch edit, which leaves the palette key alone.
   let hydrated = false;
   const paletteKeyNow = () =>
     `${colorMode}|${hue}|${hueSpread}|${sat}|${light}|${customColors.join(',')}`;
@@ -215,7 +208,6 @@
     recolorItems();
   }
 
-  // --- shuffle / reset ----------------------------------------------------
   const PALETTES: KaleColorMode[] = ['spectrum', 'duo', 'mono', 'custom'];
 
   function shuffle() {
@@ -230,8 +222,8 @@
     outlineColor = randomHex();
     mode = pick(['radial', 'prism'] as const);
     segments = randInt(4, 16);
-    // Motion: a slow drift in a random direction (magnitude squared → biased
-    // slow), and a morph kept in a lively-but-not-frantic 0.25–0.75 band.
+    // A slow drift in a random direction (squaring the magnitude biases it slow),
+    // and a morph kept in a lively 0.25–0.75 band.
     spin = round((Math.random() < 0.5 ? -1 : 1) * Math.random() ** 2 * 0.5, 2);
     animate = round(0.25 + Math.random() * 0.5, 2);
     randomizeItems(); // colors itself from the palette just set
@@ -261,7 +253,7 @@
     renderer?.recenter();
   }
 
-  // --- shareable scene code (compact base36 token) ------------------------
+  // Shareable scene code: a compact base36 token.
   function encodeState(): string {
     const g = [
       n36(mode === 'prism' ? 1 : 0),
@@ -328,7 +320,7 @@
         .filter(Boolean) as KaleItem[];
       if (parsed.length) items = parsed;
     } catch {
-      // Malformed token — keep the current scene.
+      // Malformed token, keep the current scene.
     }
   }
 
@@ -344,7 +336,6 @@
     renderer?.saveImage(`kaleidoscope-${shortId(encodeState())}.png`);
   }
 
-  // --- video capture ------------------------------------------------------
   const CLIP_FPS = 30;
   let videoSeconds = 6;
   let videoLoop = false;
@@ -379,7 +370,6 @@
     }
   }
 
-  // --- saved scenes -------------------------------------------------------
   function applyScene(token: string) {
     decodeState(token);
     _prevKey = paletteKeyNow(); // decoded scene carries its own item colors
@@ -389,8 +379,8 @@
   const sceneSnapshot = () => renderer?.snapshot(transparent ? '#16161c' : bg) ?? null;
   $: sceneLabel = `${mode === 'prism' ? 'Tiled' : 'Radial'} · ${segments} seg`;
 
-  // Flip the overlay chrome against the actual pixels under it. Coalesced to one
-  // sample per frame so a drag / animation stays cheap.
+  // Flip the overlay chrome against the pixels under it. Coalesced to one sample
+  // per frame so drags and animation stay cheap.
   let chromeLight = false;
   let sampleQueued = false;
   function onCanvasRendered() {
@@ -421,7 +411,7 @@
     hydrated = true;
   });
 
-  // Record scene edits (debounced) so Undo can step back — even across a refresh.
+  // Record scene edits (debounced) so Undo can step back, even across a refresh.
   const history = createHistory('kaleidoscope');
   $: (void [mode, colorMode, hue, hueSpread, sat, light, stroke, segments, spin, animate, zoom, strokeMatch, transparent, outlineColor, bg, customColors, items], history.touch(encodeState));
   function undoScene() {
@@ -719,8 +709,8 @@
     border-color: var(--hz-color-text-muted);
   }
 
-  /* The list is one drop target so drags snap to the nearest slot; it also
-     owns the spacing the card-body flex gap used to provide. */
+  /* The list is one drop target so drags snap to the nearest slot. It also owns
+     the spacing between cards. */
   .reorder-list {
     display: flex;
     flex-direction: column;

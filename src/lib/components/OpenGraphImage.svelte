@@ -63,7 +63,7 @@
   }
 
   .brand {
-    /* Satori's gradient parser only matches a single-line value — wrapping this
+    /* Satori's gradient parser only matches a single-line value. Wrapping this
        declaration across lines makes it throw and the whole PNG fails. */
     font-family: "Merriweather", serif;
     font-size: 72px;

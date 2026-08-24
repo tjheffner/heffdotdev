@@ -79,7 +79,7 @@
 
         this.x += this.xVel * elapsed
         this.y += this.yVel * elapsed
-        this.angle += this.xVel * 0.05 * elapsed //this.angleVel * elapsed
+        this.angle += this.xVel * 0.05 * elapsed
 
         if (
           this.y - this.size > height ||
@@ -102,7 +102,6 @@
       }
     }
 
-    // Utils
     const rand = (min, max) => min + Math.random() * (max - min)
 
     function resize() {
@@ -141,8 +140,6 @@
     {data.where} | <span class="sans">{data.when}</span>
   </p>
   <p>
-    <!-- <p class="text-4xl sans">{data.when}</p>
-  <p class="text-4xl my-6">at {data.where}<p> -->
   </p>
   <h2 class="mb-6 mt-20 text-2xl underline underline-offset-4">Schedule</h2>
   <ul class="list-none">

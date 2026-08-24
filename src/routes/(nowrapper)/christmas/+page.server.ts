@@ -1,8 +1,7 @@
 import { json } from './christmas'
 
-// Static invite data, so prerender it to a real HTML file. Same reason as
-// /resume: otherwise the [slug=string] catch-all can pick up /christmas and
-// 404 it as an unknown content slug.
+// Static invite data, so prerender it. Same reason as /resume: otherwise the
+// [slug=string] catch-all picks up /christmas and 404s it as an unknown slug.
 export const prerender = true
 
 export const load = async () => {

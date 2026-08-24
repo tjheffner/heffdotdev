@@ -13,22 +13,19 @@ import {
   SITE_URL,
 } from '$lib/siteConfig'
 import letterboxd from 'letterboxd'
-// Runtime secrets, not build-time — see the note in lib/content/content.js.
+// Secrets are read at runtime, not at build time. See the note in
+// lib/content/content.js.
 import { env } from '$env/dynamic/private'
 import { ACTIVITY_FIXTURES } from '$lib/server/activityFixtures'
 
-// CI a11y-scans /about, and this page's four third-party sources are both the
-// slowest thing on the site to load and the likeliest to fail for reasons that
-// have nothing to do with this repo. A request may opt into fixed payloads with
-// this header instead. It can't be stubbed browser-side — these calls run here,
-// during SSR — so the opt-in has to live in the app.
+// CI a11y-scans /about. Its four third-party sources are the slowest and
+// flakiest part of the site, so a request can opt into fixed payloads with this
+// header. The calls run here during SSR, so the opt-in has to live in the app.
 //
-// Fails closed on the canonical host: Workers Builds ships previews to a
-// *.workers.dev alias and production to heffner.dev from the same variables, so
-// there is no per-deploy value to gate on — a version upload carries whatever
-// production carries. The host is the only thing that actually separates the
-// two. All the header can do is swap real activity for static placeholders, but
-// it is still untrusted input changing server behaviour.
+// Fails closed on the canonical host: Workers Builds ships previews and
+// production from the same variables, so the host is the only thing separating
+// them. The header only swaps real activity for placeholders, but it is still
+// untrusted input changing server behaviour.
 const FIXTURE_HEADER = 'x-activity-fixtures'
 
 function wantsFixtures(url: URL, request: Request): boolean {
@@ -36,10 +33,9 @@ function wantsFixtures(url: URL, request: Request): boolean {
   return request.headers.get(FIXTURE_HEADER) === '1'
 }
 
-// These are all third-party endpoints — several are unofficial/undocumented
-// (the Duolingo one especially) and can go down, rate-limit, or change shape
-// without notice. Every source degrades to an empty result instead of
-// throwing, and the components tolerate empty data.
+// Third-party endpoints, several of them unofficial (Duolingo especially). They
+// can go down, rate-limit, or change shape without notice, so every source
+// degrades to an empty result instead of throwing.
 async function safeJson(
   fetch: typeof globalThis.fetch,
   url: string,
@@ -55,7 +51,7 @@ async function safeJson(
   }
 }
 
-// last.fm — recently played songs
+// last.fm: recently played songs
 async function getRecentlyListened(
   fetch: typeof globalThis.fetch
 ): Promise<LastfmTrack[]> {
@@ -67,7 +63,7 @@ async function getRecentlyListened(
   return json?.recenttracks?.track?.slice(0, 5) ?? []
 }
 
-// letterboxd — recently watched movies (scrapes the RSS feed)
+// letterboxd: recently watched movies (scrapes the RSS feed)
 async function getRecentlyWatched(): Promise<LetterboxdEntry[]> {
   try {
     const items = await letterboxd(LETTERBOXD_ID)
@@ -78,7 +74,7 @@ async function getRecentlyWatched(): Promise<LetterboxdEntry[]> {
   }
 }
 
-// Steam — recently played games
+// Steam: recently played games
 async function getRecentlyPlayed(
   fetch: typeof globalThis.fetch
 ): Promise<SteamRecentlyPlayed> {
@@ -90,7 +86,7 @@ async function getRecentlyPlayed(
   return json?.response ?? {}
 }
 
-// Duolingo — unofficial endpoint, may break without notice
+// Duolingo: unofficial endpoint, may break without notice
 async function getDuolingo(
   fetch: typeof globalThis.fetch
 ): Promise<DuolingoUser> {
@@ -102,9 +98,9 @@ async function getDuolingo(
   return json?.users?.[0] ?? {}
 }
 
-// Return the promises *unawaited* so SvelteKit streams each source into the
-// page as it resolves: the shell renders immediately and slow third-party
-// calls fill in independently. Keys stay server-side (this is a .server file).
+// Return the promises unawaited so SvelteKit streams each source into the page
+// as it resolves: the shell renders right away and slow calls fill in later.
+// Keys stay server-side (this is a .server file).
 export function load({ fetch, request, url }: PageServerLoadEvent): {
   recentlyWatched: Promise<LetterboxdEntry[]>
   recentlyListened: Promise<LastfmTrack[]>

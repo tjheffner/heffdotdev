@@ -1,4 +1,4 @@
-/* This file contains consistent configuration for a11y tests across other test files. */
+/* Shared a11y test setup, used by the other test files. */
 import { test as base, Page } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 import { createHtmlReport } from 'axe-html-reporter'
@@ -8,10 +8,8 @@ type AxeFixture = {
   makeAxeBuilder: () => AxeBuilder
 }
 
-// Extend Playwright's base test by providing "makeAxeBuilder"
-//
-// This new "test" can be used in multiple test files, and each of them will get
-// a consistently configured AxeBuilder instance.
+// Extends Playwright's base test with "makeAxeBuilder", so every test file gets
+// the same AxeBuilder setup.
 export const test = base.extend<AxeFixture>({
   makeAxeBuilder: async ({ page }, use, testInfo) => {
     const makeAxeBuilder = () =>
@@ -21,19 +19,16 @@ export const test = base.extend<AxeFixture>({
         'wcag21a',
         'wcag21aa',
       ])
-    // .exclude('#commonly-reused-element-with-known-issue');
 
     await use(makeAxeBuilder)
   },
 })
 
-// Exported here for convenience
-// so other test files can do import { test, export } from './utils'
+// Re-exported so test files can import { test, expect } from './utils'
 export { expect } from '@playwright/test'
 
 // Generate readable report outputs for a given check.
 export const generateReport = (accessibilityScanResults, key) => {
-  // axe-html-reporter builds a nice page, use that.
   const htmlReport = createHtmlReport({
     results: accessibilityScanResults,
     options: {
@@ -42,14 +37,13 @@ export const generateReport = (accessibilityScanResults, key) => {
     },
   })
 
-  // write report to file. test-results is gitignored
+  // test-results is gitignored
   const htmlReportDir = 'test-results/a11y'
   if (!fs.existsSync(htmlReportDir)) {
     fs.mkdirSync(htmlReportDir, { recursive: true })
   }
   fs.writeFileSync(`${htmlReportDir}/${key}.html`, htmlReport)
 
-  // create useful json object
   const errors = accessibilityScanResults.violations.map((v) => {
     return {
       issue: v.id,

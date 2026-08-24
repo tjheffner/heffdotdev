@@ -4,7 +4,6 @@
 
   interface Props {
     href?: string;
-    // gimme full item
     item: BlogItem;
     children?: import('svelte').Snippet;
   }
@@ -15,8 +14,7 @@
 <li data-density-shift class="post">
   <a data-sveltekit-prefetch class="post-link" href={'/' + href}>
     <!-- auto-end: title/description grows, the date column hugs its content.
-         stackBelow="none": the date stays on the right at every width — stacked
-         it read as a stray line under the description. -->
+         stackBelow="none" keeps the date on the right at every width. -->
     <Split fraction="auto-end" gap="none" stackBelow="none" class="post-split">
       <div>
         <h2>

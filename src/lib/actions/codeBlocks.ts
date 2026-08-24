@@ -3,22 +3,20 @@ import ProseCodeBlock from '$lib/components/ProseCodeBlock.svelte'
 
 /**
  * Upgrade every shiki-highlighted <pre> inside a container to hyzer's
- * CodeBlock — header bar, language chip, copy button.
+ * CodeBlock: header bar, language chip, copy button.
  *
  * Written as a Svelte attachment, `{@attach codeBlocks()}`, the same shape
- * lightboxGroup takes, and for the same reason: post content arrives as one
- * `{@html}` blob, so there is no markup to put a component in. The library
- * ships a lightboxGroup for images but no equivalent for code, so this is the
- * mount layer.
+ * lightboxGroup takes. Post content arrives as one `{@html}` blob, so there is
+ * no markup to put a component in. The library ships a lightboxGroup for
+ * images but no equivalent for code, so this is the mount layer.
  *
- * Highlighting itself is not done here. Shiki runs server-side in the rehype
+ * Highlighting happens elsewhere. Shiki runs server-side in the rehype
  * pipeline (see content/utils.ts), so a block is already colored on first
- * paint and stays readable with no JS at all; this only adds the chrome
- * around it.
+ * paint and stays readable with no JS. This only adds the chrome around it.
  */
 export function codeBlocks() {
   return (node: Element) => {
-    // attachments are client-only, but guard so nothing here can run in SSR
+    // attachments are client-only, but guard against SSR anyway
     if (typeof document === 'undefined') return () => {}
 
     const mounted: {
@@ -31,9 +29,9 @@ export function codeBlocks() {
       const codeEl = pre.querySelector('code')
       if (!codeEl) continue
 
-      // The source for copy and the line-count gutter has to be the text, not
-      // the highlighted markup — CodeBlock is explicit that `code` is read
-      // from the original and never from `children`.
+      // copy and the line-count gutter read `code`, so it has to be the plain
+      // text rather than the highlighted markup. CodeBlock never falls back to
+      // `children` for this.
       const code = codeEl.textContent ?? ''
       const language = codeEl.className.match(/language-(\S+)/)?.[1]
 
@@ -52,8 +50,8 @@ export function codeBlocks() {
     return () => {
       for (const m of mounted) {
         unmount(m.app)
-        // put the untouched <pre> back, so a re-attach starts from the same
-        // markup the server sent rather than from our own wrapper
+        // put the untouched <pre> back, so a re-attach starts from the markup
+        // the server sent rather than from our own wrapper
         m.holder.replaceWith(m.original)
       }
     }

@@ -2,9 +2,8 @@ import { redirect, type Handle } from '@sveltejs/kit'
 import { groupFor, themeFor } from '$lib/theme'
 import { SITE_URL } from '$lib/siteConfig'
 
-// Cloudflare's _redirects and _headers files only cover responses the static
-// asset server produces — anything the worker renders (every page, every
-// endpoint) is untouched by them. So both live here instead.
+// Cloudflare's _redirects and _headers files only apply to static assets, not
+// to anything the worker renders. Every page and endpoint goes through here.
 const REDIRECTS: Record<string, string> = {
   '/feed': '/rss.xml',
   '/rss': '/rss.xml',
@@ -16,18 +15,16 @@ export const handle: Handle = async ({ event, resolve }) => {
   const to = REDIRECTS[event.url.pathname]
   if (to) redirect(301, to)
 
-  // Tag <body> with the route group (the CSS barrier) and the palette theme.
-  // See src/lib/theme.ts for why those are two attributes and not one. The
-  // root layout keeps both in sync on client-side navigation; this sets them
-  // for the initial SSR paint, so the first frame is already themed.
+  // Tag <body> with the route group and the palette theme, so the first
+  // server-rendered frame is already themed. The root layout keeps them in sync
+  // after that. See src/lib/theme.ts for why it's two attributes, not one.
   const group = groupFor(event.route.id)
   const theme = themeFor(event.route.id)
   const response = await resolve(event, {
-    // Target the valueless placeholder attributes from app.html, not a bare
-    // "<body". String.replace takes the FIRST match in the document, and any
-    // inlined stylesheet in <head> that happens to contain the text "<body"
-    // precedes the real tag — which silently stamps a CSS comment and leaves
-    // the actual body unthemed.
+    // Match the placeholder attributes from app.html, not a bare "<body".
+    // String.replace only replaces the first match, and an inlined stylesheet
+    // containing the text "<body" comes first, which would leave the real body
+    // unthemed.
     transformPageChunk: ({ html }) =>
       html.replace(
         '<body data-group data-theme>',
@@ -40,28 +37,17 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   response.headers.set('X-Frame-Options', 'DENY')
   response.headers.set('X-Content-Type-Options', 'nosniff')
-  // Every HTML response gets a short shared-cache TTL, whatever the route asked
-  // for. adapter-cloudflare's worker stores cacheable responses in
-  // caches.default, and a deploy does not purge it. A page held under the
-  // route's own max-age=86400 therefore outlives the release that built it and
-  // keeps serving _app/immutable hashes the current deploy no longer has, so it
-  // renders and then fails to hydrate. Bounding this only when the header is
-  // absent isn't enough: the content pages call setHeaders themselves, so the
-  // pages that cache longest are exactly the ones that would skip it.
+  // Cap the shared-cache TTL on every HTML response, overriding whatever the
+  // route asked for. adapter-cloudflare stores responses in caches.default and
+  // deploys don't purge it, so cached HTML can outlive the build it came from
+  // and reference _app/immutable hashes that no longer exist. The page renders
+  // and then fails to hydrate. Only HTML needs this; nothing else embeds asset
+  // hashes. Browsers still honour the longer max-age.
   //
-  // Browsers still honour the longer max-age; this bounds the shared copy only.
-  // Non-HTML responses keep their own policy (the OG image's year-long
-  // s-maxage), since nothing but HTML embeds a build's asset hashes.
-  //
-  // Previews don't get cached at all. 60s is a fine bound on heffner.dev, which
-  // deploys occasionally; a *.workers.dev alias is re-uploaded on every push,
-  // and CI navigates to a new version seconds after it goes live — well inside
-  // the window where the shared copy is still the previous build's HTML. That
-  // makes the hydration failure above reliable rather than rare. no-store, not
-  // s-maxage=0: the adapter decides what to cache by testing Cache-Control for
-  // /private|no-cache|no-store/ and never reads s-maxage, so a zero TTL is
-  // still handed to cache.put. Same host check as /about's fixture opt-in —
-  // the canonical hostname is the only thing separating the two.
+  // Previews skip the cache entirely: they redeploy on every push, so stale
+  // HTML is the norm rather than the exception. It has to be no-store, not
+  // s-maxage=0. The adapter decides what to cache by matching Cache-Control
+  // against /private|no-cache|no-store/ and never looks at s-maxage.
   const isPreview = event.url.hostname !== new URL(SITE_URL).hostname
   const contentType = response.headers.get('content-type') ?? ''
   if (contentType.startsWith('text/html')) {

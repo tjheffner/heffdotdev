@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store'
 
-// A saved playground scene: the compact share `token` is the source of truth;
-// `label` and `thumb` are just for the library UI.
+// A saved playground scene. The share `token` is the source of truth; `label`
+// and `thumb` are only for the library UI.
 export type Preset = {
   id: string
   label: string
@@ -12,11 +12,10 @@ export type Preset = {
 
 const keyFor = (namespace: string) => `pg:presets:${namespace}`
 
-// A small localStorage-backed store of saved scenes, one namespace per
-// playground. SSR-safe (all reads/writes guard `localStorage`), and it starts
-// empty so the server and first client render match — call `refresh()` in
-// onMount to hydrate from storage. `max` caps growth (oldest evicted) so a
-// library of thumbnails can't balloon a user's storage.
+// localStorage-backed store of saved scenes, one namespace per playground.
+// SSR-safe, and it starts empty so the server and first client render match.
+// Call `refresh()` in onMount to hydrate. `max` caps growth (oldest evicted) so
+// a library of thumbnails cannot fill up a user's storage.
 export function createPresetStore(namespace: string, max = 30) {
   const key = keyFor(namespace)
   const store = writable<Preset[]>([])
@@ -35,7 +34,7 @@ export function createPresetStore(namespace: string, max = 30) {
       try {
         localStorage.setItem(key, JSON.stringify(list))
       } catch {
-        // Quota exceeded or storage disabled — keep the in-memory list usable.
+        // Quota exceeded or storage disabled. Keep the in-memory list usable.
       }
     }
     store.set(list)

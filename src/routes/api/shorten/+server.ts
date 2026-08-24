@@ -3,8 +3,8 @@ import type { RequestHandler } from './$types'
 
 // Stores a playground scene under a short code so it can be shared as
 // `/p/<code>` instead of a long `?s=<token>` URL. Backed by the SCENES KV
-// namespace — no database to provision. The key is derived from a hash of the
-// token, so re-sharing the same scene reuses its code (no unbounded growth).
+// namespace, so there is no database to provision. The key is a hash of the
+// token, so re-sharing the same scene reuses its code.
 //
 // ponytail: KV is eventually consistent, so a code can 404 at an edge that
 // already cached a miss for it (up to 60s). Move to D1 if that ever bites.
@@ -57,16 +57,16 @@ export const POST: RequestHandler = async ({ request, platform }) => {
     throw error(400, 'invalid token')
   if (!PAGE_RE.test(page)) throw error(400, 'invalid page')
 
-  // KV isn't bound under plain `vite dev` — treat a missing binding or any
+  // KV isn't bound under plain `vite dev`. Treat a missing binding or any
   // storage failure as "no shortener": a null code tells the client to fall
   // back to the self-contained long `?s=` link instead of surfacing a 500.
   const store = platform?.env?.SCENES
   if (!store) return json({ code: null })
 
   try {
-    // Deterministic key: identical scene → identical code, so repeat "Copy link"
-    // clicks don't pile up entries. On the vanishingly rare hash collision with a
-    // *different* scene, fall back to a random code.
+    // Deterministic key: identical scene, identical code, so repeat "Copy link"
+    // clicks don't pile up entries. On a hash collision with a different scene,
+    // fall back to a random code.
     const key = await hashCode(token)
     const existing = (await store.get(key, 'json')) as Record | null
     if (existing) {

@@ -13,23 +13,22 @@
 
 <style>
   /* The hero takes whatever the header and footer leave over: #svelte becomes a
-     column, main absorbs the slack, the heading centers in it. No measured
-     header/footer heights to keep in sync, and min-height (not height) means a
-     tall heading on a short screen grows the page instead of clipping.
-     Scoped to #svelte, not body — app.html nests the whole app one div deep, so
-     a `body > main` child selector never matches. */
+     column, main absorbs the slack, the heading centers in it. min-height (not
+     height) means a tall heading on a short screen grows the page instead of
+     clipping. Scoped to #svelte because app.html nests the whole app one div
+     deep, so a `body > main` child selector never matches. */
   :global(#svelte:has(> main > .hero)) {
     display: flex;
     flex-direction: column;
     min-height: 100dvh;
   }
-  /* .wrapper's `margin: auto` would otherwise shrink each row to its own content
-     — auto margins on the cross axis eat the free space instead of stretching —
-     so the footer collapsed to icon width and its right-aligned social row
-     drifted inward. width:100% restores the block-flow width and leaves the auto
-     margins doing only the centering. Gated on .wrapper's own breakpoint
-     (global.css): below it the margins are fixed, so flex already stretches
-     these and 100% would overflow by the margin. Keep the two in sync. */
+  /* Auto margins on the cross axis eat the free space instead of stretching, so
+     .wrapper's `margin: auto` shrank each row to its own content and the footer
+     collapsed to icon width. width:100% restores the block-flow width and
+     leaves the auto margins doing only the centering. Gated on .wrapper's own
+     breakpoint (global.css): below it the margins are fixed, so flex already
+     stretches these and 100% would overflow by the margin. Keep the two in
+     sync. */
   @media (width >= 768px) {
     :global(#svelte:has(> main > .hero) > *) {
       width: 100%;

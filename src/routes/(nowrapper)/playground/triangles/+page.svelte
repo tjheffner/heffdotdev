@@ -15,7 +15,7 @@
 
   const presets = createPresetStore('triangles');
 
-  // Single source of truth for defaults, shared by initial state and Reset.
+  // Defaults, shared by initial state and Reset.
   const DEFAULTS = {
     bg: '#0a0a12',
     transparent: false,
@@ -44,7 +44,6 @@
     zoom: 1
   };
 
-  // --- color --------------------------------------------------------------
   let bg = DEFAULTS.bg;
   let transparent = DEFAULTS.transparent;
   let hue = DEFAULTS.hue;
@@ -77,7 +76,6 @@
           ? 'A single hue. Triangles vary only in lightness.'
           : 'Each triangle is filled with a random color from this set.';
 
-  // --- arrangement --------------------------------------------------------
   let shape: TriShape = DEFAULTS.shape;
   let seed = DEFAULTS.seed;
   let grid = DEFAULTS.grid;
@@ -96,9 +94,9 @@
   let renderer: Triangles;
   let savedScenes: SavedScenes;
 
-  // Flip the overlay chrome against the actual pixels under it. The canvas can
-  // be zoomed past its background, so sampling beats keying off `bg`. Coalesced
-  // to one sample per frame so a drag (which repaints on every move) stays cheap.
+  // Flip the overlay chrome against the pixels under it. The canvas can be
+  // zoomed past its background, so sampling beats keying off `bg`. Coalesced to
+  // one sample per frame so drags stay cheap.
   let chromeLight = false;
   let sampleQueued = false;
   function onCanvasRendered() {
@@ -117,8 +115,8 @@
     seed = `${w}-${Math.random().toString(36).slice(2, 6)}`;
   }
 
-  // Shuffle the shape, colors, and per-triangle variables, plus the seed. Field
-  // warp/taper and view/backdrop are left as-is.
+  // Shuffle the shape, colors, per-triangle variables and the seed. Field
+  // warp/taper and the view and backdrop are left alone.
   function shuffle() {
     shape = pick(['triangle', 'square'] as const);
     colorMode = pick(PALETTES);
@@ -133,7 +131,7 @@
     grid = randInt(4, 28);
     jitter = rand(-1, 1);
     // The clean, un-exploded look is the best one, so bias hard toward it:
-    // often exactly 0, otherwise a squared (low-weighted) amount.
+    // often 0, otherwise a squared (low-weighted) amount.
     explode = Math.random() < 0.35 ? 0 : Math.round(Math.random() ** 2 * 0.6 * 100) / 100;
     warp = rand(0, 1);
     rotate = randInt(0, 360);
@@ -183,9 +181,8 @@
     renderer?.recenter();
   }
 
-  // --- shareable scene code -----------------------------------------------
-  // The whole scene packs into one short token (?s=…). Nothing is written to
-  // the URL as you tweak; the link is built only when you copy it.
+  // The whole scene packs into one short token (?s=…). Nothing is written to the
+  // URL as you tweak; the link is built only when you copy it.
   const PALETTES: TriColorMode[] = ['spectrum', 'duo', 'mono', 'custom'];
 
   function encodeState(): string {
@@ -200,7 +197,7 @@
       outlineColor.replace(/^#/, ''), bg.replace(/^#/, ''),
       packHex(customColors)
     ].join('.');
-    return `t1~${g}~${seed}`; // seed is a word — kept raw as the trailing section
+    return `t1~${g}~${seed}`; // seed is a word, kept raw as the trailing section
   }
 
   function decodeState(token: string) {
@@ -234,11 +231,10 @@
       if (g[23]) customColors = unpackHex(g[23]);
       seed = parts.slice(2).join('~') || seed; // remainder, in case a seed word holds '~'
     } catch {
-      // Malformed token — keep defaults.
+      // Malformed token, keep the defaults.
     }
   }
 
-  // --- saved scenes -------------------------------------------------------
   function applyScene(token: string) {
     decodeState(token);
     renderer?.recenter();
@@ -251,7 +247,7 @@
     if (token) decodeState(token);
   });
 
-  // Record scene edits (debounced) so Undo can step back — even across a refresh.
+  // Record scene edits (debounced) so Undo can step back, even across a refresh.
   const history = createHistory('triangles');
   $: (void [shape, colorMode, hue, hueSpread, sat, light, stroke, grid, jitter, explode, warp, rotate, skew, zoom, fieldRotate, fieldWarp, taper, fieldSkewX, fieldSkewY, strokeMatch, transparent, outlineColor, bg, customColors, seed], history.touch(encodeState));
   function undoScene() {

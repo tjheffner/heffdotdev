@@ -1,15 +1,14 @@
-// Canvas camera + export helpers shared by the canvas playgrounds. Pure
-// functions over a canvas + a { panX, panY, zoom } camera, so both the
-// renderers and the forthcoming CanvasStage can reuse them.
+// Camera and export helpers shared by the canvas playgrounds. Pure functions
+// over a canvas and a { panX, panY, zoom } camera.
 import { hexRgb } from './color'
 import { clamp } from './math'
 
 export type Camera = { panX: number; panY: number; zoom: number }
 
 /**
- * Cursor-anchored zoom: returns a new camera that holds the scene point under
- * (mx, my) fixed while scaling. Works for any renderer that centers its scene at
- * (w/2 + panX, h/2 + panY) and scales linearly with zoom.
+ * Cursor-anchored zoom. Holds the scene point under (mx, my) fixed while
+ * scaling. Assumes the renderer centers its scene at (w/2 + panX, h/2 + panY)
+ * and scales linearly with zoom.
  */
 export function zoomAt(
   cam: Camera,
@@ -33,8 +32,8 @@ export function zoomAt(
 }
 
 /**
- * Downscaled JPEG dataURL of a canvas, painting `bgFill` first so transparent
- * scenes don't thumbnail see-through. For the saved-scenes library.
+ * Downscaled JPEG dataURL of a canvas. Paints `bgFill` first so transparent
+ * scenes do not thumbnail see-through.
  */
 export function snapshotCanvas(
   canvas: HTMLCanvasElement | undefined,
@@ -77,15 +76,14 @@ export function downloadCanvasPng(
   }, 'image/png')
 }
 
-// Reused scratch canvas for luminance sampling (a few hundred pixels read back
-// instead of the full multi-MB strip).
+// Reused scratch canvas so luminance sampling reads back a few hundred pixels
+// instead of the full strip.
 let scratch: HTMLCanvasElement | undefined
 let sctx: CanvasRenderingContext2D | null = null
 
 /**
  * Average perceived brightness (0..1) of the top `stripFrac` of a canvas,
- * composited over `backdropHex` so semi-transparent pixels read correctly. Lets
- * overlaid chrome flip light/dark against whatever is actually under it.
+ * composited over `backdropHex` so semi-transparent pixels read correctly.
  */
 export function sampleLuminance(
   canvas: HTMLCanvasElement | undefined,

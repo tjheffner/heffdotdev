@@ -5,20 +5,18 @@ import type {
   DuolingoUser,
 } from '$lib/types'
 
-// Stand-in payloads for /about's four activity sources, shaped exactly like the
-// slices the real getters return (already trimmed to 5, already unwrapped from
-// their envelopes) so the page can't tell the difference.
+// Stand-in payloads for /about's four activity sources, shaped like the slices
+// the real getters return: already trimmed to 5, already unwrapped from their
+// envelopes.
 //
-// These exist so CI can a11y-scan /about without last.fm, Letterboxd, Steam and
+// They exist so CI can a11y-scan /about without last.fm, Letterboxd, Steam and
 // Duolingo getting a vote on whether the build passes. They can't be stubbed
 // from the browser: the calls happen server-side during SSR, and Letterboxd's
 // client reaches for node-fetch inside the package rather than the fetch
 // SvelteKit hands to `load`. See about/+page.server.ts for how they're opted in.
 //
-// Deliberately boring values — the point is a stable DOM, and a fixture that
-// looks like real activity invites someone to read it as real activity. The one
-// exception is the Duolingo start date, which has to be a real parseable date
-// because the page does arithmetic on it.
+// The Duolingo start date has to be a real parseable date because the page does
+// arithmetic on it.
 export const ACTIVITY_FIXTURES = {
   recentlyListened: [
     {

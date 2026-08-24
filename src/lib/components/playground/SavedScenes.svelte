@@ -1,8 +1,7 @@
 <script lang="ts">
-  // A "Saved" control Section: stores the current scene into localStorage and
-  // lists what's been saved, each row loadable / copyable / deletable. Playground-
-  // agnostic — the page supplies how to encode, apply, thumbnail, and label a
-  // scene; the shared token contract is all this needs.
+  // A "Saved" control Section. Stores the current scene in localStorage and
+  // lists what is saved, each row loadable, copyable and deletable. The page
+  // supplies how to encode, apply, thumbnail and label a scene.
   import { onMount } from 'svelte';
   import Section from './Section.svelte';
   import type { Preset, PresetStore } from '$lib/playground/presets';
@@ -15,11 +14,11 @@
   export let saveVideo: (() => void) | undefined = undefined; // video export, if the playground has one
   export let videoLabel = 'Video (V)'; // page-supplied (shows recording progress)
   export let videoBusy = false; // disable while a clip is encoding
-  export let videoSeconds = 6; // bindable clip length (seconds); the page reads it when recording
-  export let showLoop = false; // whether this playground supports seamless-loop clips
+  export let videoSeconds = 6; // bindable clip length in seconds, read by the page when recording
+  export let showLoop = false; // does this playground support seamless-loop clips
   export let videoLoop = false; // bindable: record a seamless loop
 
-  // Keep the free-entry length a sane whole number of seconds.
+  // Keep the typed length a whole number of seconds.
   function clampSeconds() {
     const n = Math.round(Number(videoSeconds));
     videoSeconds = Number.isFinite(n) ? Math.min(60, Math.max(1, n)) : 6;
@@ -54,8 +53,8 @@
     }
   }
 
-  // Copy the (eventual) short link. Uses a promise-backed ClipboardItem so the
-  // async round-trip keeps the user gesture on Safari; falls back to writeText.
+  // Copy the short link. A promise-backed ClipboardItem keeps the user gesture
+  // alive on Safari across the round-trip. Falls back to writeText.
   async function copyShare(token: string) {
     const pending = shortLink(token);
     try {
