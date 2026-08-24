@@ -24,11 +24,11 @@ import { ACTIVITY_FIXTURES } from '$lib/server/activityFixtures'
 // during SSR — so the opt-in has to live in the app.
 //
 // Fails closed on the canonical host: Workers Builds ships previews to a
-// *.workers.dev alias and production to heffner.dev, and unlike Netlify there
-// is no per-deploy env var to key off — a version upload carries the same vars
-// as production. The host is what actually distinguishes the two. All the
-// header can do is swap real activity for static placeholders, but it is still
-// untrusted input changing server behaviour.
+// *.workers.dev alias and production to heffner.dev from the same variables, so
+// there is no per-deploy value to gate on — a version upload carries whatever
+// production carries. The host is the only thing that actually separates the
+// two. All the header can do is swap real activity for static placeholders, but
+// it is still untrusted input changing server behaviour.
 const FIXTURE_HEADER = 'x-activity-fixtures'
 
 function wantsFixtures(url: URL, request: Request): boolean {

@@ -4,7 +4,7 @@ Tanner Heffner's personal website
 
 This site is originally based on swyxkit, a lightly opinionated starter for Svelte projects:
 
-- SvelteKit + Netlify adapter!
+- SvelteKit + Cloudflare Workers adapter
 - [GitHub Issues as CMS](https://github.com/sw-yx/swyxkit/issues/10)
 
 ## Setup

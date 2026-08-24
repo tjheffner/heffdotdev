@@ -1,10 +1,11 @@
 import { test, expect } from './utils'
 
-// The Netlify -> Cloudflare move pulled the redirect table and the security
-// headers out of netlify.toml and into hooks.server.ts, and swapped the OG
-// image's rasteriser for a wasm build. None of the three is covered by a page
-// test, and all three fail silently (a 404 feed, a missing header, a 0-byte
-// PNG), so they get checked here.
+// Cloudflare applies its _headers and _redirects files only to responses the
+// static asset server produces, so the redirect table and the security headers
+// live in hooks.server.ts instead, and the OG image rasterises through wasm
+// because Workers can't load a native addon. None of the three is covered by a
+// page test, and all three fail silently — a 404 feed, a missing header, a
+// 0-byte PNG — so they get checked here.
 
 const REDIRECTS = [
   ['/feed', '/rss.xml'],
