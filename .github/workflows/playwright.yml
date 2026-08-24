@@ -8,9 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     # The suite runs serially-ish against a deployed preview, so every
     # navigation is a network round trip plus a possible function cold start.
-    # 5 minutes had no headroom over `npm ci` + the browser install and the job
-    # was being cancelled mid-run.
-    timeout-minutes: 15
+    # On top of that the job can spend up to 7m30s waiting on Workers Builds,
+    # so leave the whole thing plenty of room rather than cancelling mid-run.
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
@@ -26,19 +26,6 @@ jobs:
             | sed 's/[^a-z0-9]\+/-/g; s/^-//; s/-$//' \
             | cut -c1-63)
           echo "url=https://${alias}-heffdotdev.${{ vars.CF_WORKERS_SUBDOMAIN }}.workers.dev/" >> "$GITHUB_OUTPUT"
-
-      # ponytail: polls for *a* 200, not for this commit's version — a re-push
-      # can race and test the previous upload. Stamp the commit into a response
-      # header and compare it here if that ever actually bites.
-      - name: Wait for Cloudflare preview
-        run: |
-          for i in $(seq 1 60); do
-            code=$(curl -s -o /dev/null -w '%{http_code}' "${{ steps.preview.outputs.url }}" || true)
-            [ "$code" = "200" ] && exit 0
-            sleep 5
-          done
-          echo "preview never answered 200 (last status: $code)"
-          exit 1
 
       - uses: actions/setup-node@v4
         with:
@@ -67,6 +54,26 @@ jobs:
       - name: install playwright system deps
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: npx playwright install-deps
+      # The branch alias keeps serving the previous upload while the new build
+      # runs, so "responds 200" says nothing about which commit is up. svelte
+      # config stamps WORKERS_CI_COMMIT_SHA into /_app/version.json; wait for
+      # that to match the commit this run is testing. Deliberately placed after
+      # the setup steps above so the Cloudflare build overlaps with them.
+      - name: Wait for Cloudflare preview of this commit
+        run: |
+          sha='${{ github.event.pull_request.head.sha }}'
+          url='${{ steps.preview.outputs.url }}_app/version.json'
+          for i in $(seq 1 90); do
+            got=$(curl -fsS --max-time 10 "$url" | jq -r '.version' || true)
+            if [ "$got" = "$sha" ]; then
+              echo "preview is up to date after $((i * 5))s"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "preview never reached $sha within 7m30s (last seen: ${got:-no response})"
+          exit 1
+
       - name: run tests
         run: npm run test
         env:
