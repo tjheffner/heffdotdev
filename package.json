@@ -17,7 +17,7 @@
     "test": "npx playwright test"
   },
   "dependencies": {
-    "@axe-core/playwright": "^4.9.1",
+    "@axe-core/playwright": "^4.13.0",
     "@hyzer-labs/ui": "^0.8.0",
     "@leeoniya/ufuzzy": "^1.0.11",
     "@shikijs/rehype": "^4.4.3",
