@@ -39,19 +39,33 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   response.headers.set('X-Frame-Options', 'DENY')
   response.headers.set('X-Content-Type-Options', 'nosniff')
-  // max-age: just over an hour, so webpagetest stops complaining.
+  // Every HTML response gets a short shared-cache TTL, whatever the route asked
+  // for. adapter-cloudflare's worker stores cacheable responses in
+  // caches.default and a release doesn't purge it, unlike Netlify's atomic
+  // deploys. A page held under the route's own max-age=86400 keeps serving
+  // _app/immutable hashes the new deploy no longer has, so it renders and then
+  // fails to hydrate — which is exactly what happened after the first
+  // production deploy. Setting this only when the header was absent wasn't
+  // enough: the content pages call setHeaders themselves.
   //
-  // s-maxage is the Cloudflare-specific half. adapter-cloudflare's worker puts
-  // every cacheable response into caches.default, and unlike Netlify's atomic
-  // deploys nothing purges that on release — HTML held for the full hour would
-  // keep pointing at _app/immutable hashes the new deploy no longer serves, so
-  // the page would render and then fail to hydrate. A minute is still enough to
-  // absorb bursts (each miss re-fetches the whole issue list from GitHub).
-  //
-  // Endpoints that set their own policy (the OG image's year-long s-maxage)
-  // keep it.
-  if (!response.headers.has('cache-control'))
+  // Browsers still honour the longer max-age; this bounds the shared copy only.
+  // Non-HTML responses keep their own policy (the OG image's year-long
+  // s-maxage), since nothing but HTML embeds a build's asset hashes.
+  const contentType = response.headers.get('content-type') ?? ''
+  if (contentType.startsWith('text/html')) {
+    const directives = (
+      response.headers.get('cache-control') ?? 'public, max-age=4000'
+    )
+      .split(',')
+      .map((d) => d.trim())
+      .filter((d) => d && !d.startsWith('s-maxage='))
+    response.headers.set(
+      'Cache-Control',
+      [...directives, 's-maxage=60'].join(', ')
+    )
+  } else if (!response.headers.has('cache-control')) {
     response.headers.set('Cache-Control', 'public, max-age=4000, s-maxage=60')
+  }
 
   return response
 }

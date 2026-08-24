@@ -27,6 +27,16 @@ test('pages carry the security headers', async ({ request }) => {
   expect(headers['x-content-type-options']).toBe('nosniff')
 })
 
+// A page cached at the edge under its own max-age=86400 outlives a deploy and
+// keeps serving asset hashes that no longer exist, so it renders and then fails
+// to hydrate. The bound has to hold for routes that set their own header too.
+test('HTML responses bound the shared cache TTL', async ({ request }) => {
+  for (const path of ['/', '/gallery']) {
+    const cc = (await request.get(path)).headers()['cache-control'] ?? ''
+    expect(cc, `${path} cache-control`).toContain('s-maxage=60')
+  }
+})
+
 test('OG image renders a real PNG', async ({ request }) => {
   const res = await request.get('/api/og.png?message=Test')
   expect(res.status()).toBe(200)
