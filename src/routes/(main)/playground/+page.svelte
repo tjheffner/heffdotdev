@@ -1,9 +1,8 @@
 <script lang="ts">
   import Metatags from '$lib/components/Metatags.svelte'
 
-  // Landing page for the playground. Lives in (main) so it wears the site
-  // chrome/type; the individual experiments stay in (nowrapper) and go
-  // full-bleed immersive on their own.
+  // Lives in (main) so it wears the site chrome and type. The experiments
+  // themselves stay in (nowrapper) and go full-bleed.
   const experiments = [
     {
       href: '/playground/plotter',
@@ -78,8 +77,7 @@
 </section>
 
 <style>
-  /* Mirrors PostItem: dashed accent divider, title shifts to secondary on
-     hover. No dates/right-column — experiments carry no metadata. */
+  /* Mirrors PostItem, minus the date column: experiments carry no metadata. */
   .post {
     margin: var(--hz-space-away) 0;
     border-bottom: 1px dashed var(--hz-intent-primary);

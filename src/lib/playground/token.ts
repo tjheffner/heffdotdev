@@ -1,7 +1,7 @@
-// Compact, URL-safe scene tokens. Numbers are stored as scaled base36 integers
-// (no decimal points, no floating-point bloat, no base64 wrapper — each of which
-// blew up the old tokens). Callers join with '~' (sections), '.' (fields), and
-// '_' (list items); all of those plus base36 digits and '-' are URL-safe.
+// Compact, URL-safe scene tokens. Numbers are stored as scaled base36 integers,
+// so there are no decimal points and no base64 wrapper. Callers join with '~'
+// (sections), '.' (fields) and '_' (list items); those, base36 digits and '-'
+// are all URL-safe.
 
 /** number → scaled base36 int, e.g. n36(0.42, 100) => "bo", n36(-0.08, 100) => "-8". */
 export const n36 = (value: number, scale = 1): string =>

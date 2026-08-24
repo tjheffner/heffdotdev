@@ -1,8 +1,7 @@
 import { test, expect, generateReport, goto } from './utils'
 
 // Playground routes live under the (nowrapper) layout group, which never sets
-// `body.started` (that's only wired up in the (main) layout). Skip waiting for
-// it so the page-load helper doesn't time out.
+// `body.started`. Skip waiting for it or the page-load helper times out.
 const gotoPlayground = (page, url: string) =>
   goto(page, url, { waitForStarted: false })
 
@@ -26,8 +25,8 @@ test('Playground index renders without a11y errors', async ({
   expect(accessibilityScanResults.violations.length).toEqual(0)
 })
 
-// The immersive experiments share PlaygroundShell: the title is a clickable chip
-// (not an <h1>), and the visualization mounts into a full-bleed `preview` — a
+// The immersive experiments share PlaygroundShell: the title renders as a
+// clickable chip, and the visualization mounts into a full-bleed `preview`. A
 // <canvas> for the canvas playgrounds, DOM gradient divs for Glowfield.
 const experiments = [
   { name: 'Mosaic', path: '/playground/mosaic', preview: 'canvas' },
@@ -49,12 +48,11 @@ for (const x of experiments) {
     await gotoPlayground(page, x.path)
 
     await expect(page).toHaveTitle(`${x.name} | heffner.dev`)
-    // The title chip is both the page's <h1> and an interactive disclosure button.
+    // The title chip is both the page's <h1> and a disclosure button.
     await expect(
       page.getByRole('heading', { name: x.name, level: 1 })
     ).toBeVisible()
     await expect(page.getByRole('button', { name: x.name })).toBeVisible()
-    // Visualization mounted (canvas / glow field).
     await expect(page.locator(x.preview).first()).toBeVisible()
 
     const accessibilityScanResults = await makeAxeBuilder().analyze()

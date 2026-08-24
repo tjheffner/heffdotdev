@@ -1,7 +1,7 @@
 <script lang="ts">
-  // A small square canvas the user draws a pen curve on: click/touch and drag,
-  // each drag adds one stroke to `path` (flat [x,y,…] pairs in the pad's
-  // centered [-1,1] space). The page binds `path` and hands it to the renderer.
+  // A square canvas for drawing pen curves. Each drag adds one stroke to
+  // `path`: flat [x,y,…] pairs in the pad's centered [-1,1] space. The page
+  // binds `path` and hands it to the renderer.
   import { onMount } from 'svelte';
   import { resampleStroke } from '$lib/playground/path';
 
@@ -87,7 +87,7 @@
     if (!drawing) return;
     const [x, y] = point(e);
     const n = current.length;
-    // Skip sub-jitter movements; resampleStroke smooths the rest on release.
+    // Skip tiny jitter. resampleStroke smooths the rest on release.
     if (n >= 2 && Math.hypot(x - current[n - 2], y - current[n - 1]) < 0.015) return;
     current = [...current, x, y];
     repaint();
@@ -115,9 +115,9 @@
   });
 </script>
 
-<!-- The pad is a pointer-driven drawing surface; role=application is the
-     closest fit (there is no keyboard equivalent — the page offers Random
-     curve / Undo / Clear buttons as alternatives). -->
+<!-- A pointer-driven drawing surface, so role=application is the closest fit.
+     There is no keyboard equivalent; the page offers Random curve / Undo /
+     Clear buttons instead. -->
 <div
   class="pad"
   bind:this={host}

@@ -10,7 +10,7 @@
     ['🏔','🏕','🌲','🦅','🌝','🏂']
   ]
 
-  // randomly replace array elements with something else
+  // replace `count` random elements with values pulled from `fill`
   function fillRandom(array, fill, count) {
     return function () {
         const indices = new Set();
@@ -21,7 +21,6 @@
     };
   }
 
-  // Create the emoji walls.
   const scenes = []
   emojis.forEach(set => {
     const background = set.shift()
@@ -39,7 +38,6 @@
         .map(({ value }) => value)
   }
 
-  // increment counter and update visible wall
   function changeWall() {
     initial++
     if (initial === scenes.length) initial = 0
@@ -47,14 +45,12 @@
     visible = shuffleArray(scenes[initial])
   }
 
-  // set default wall
   let initial = 0
   let visible = $state(shuffleArray(scenes[initial]))
 </script>
 
 <div class="emoji-wall" aria-hidden="true">
   {#each visible as f, i}
-    <!-- <span>{i}</span> -->
     <button
       class="emoji emoji-{i} p-1 m-1"
       onclick={() => changeWall()}

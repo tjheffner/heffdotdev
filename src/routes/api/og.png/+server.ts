@@ -4,11 +4,10 @@ import { read } from '$app/server'
 import { ImageResponse } from '@ethercorps/sveltekit-og'
 import OpenGraphImage from '$lib/components/OpenGraphImage.svelte'
 
-// Satori rasterises through a wasm build of resvg — Workers can't load the
-// native @resvg/resvg-js addon. sveltekit-og wraps satori + resvg-wasm and its
-// vite plugin (see vite.config.ts) does the wasm bundling Cloudflare needs.
+// Satori rasterises through a wasm build of resvg, because Workers cannot load
+// the native @resvg/resvg-js addon. sveltekit-og wraps satori + resvg-wasm and
+// its vite plugin (see vite.config.ts) does the wasm bundling Cloudflare needs.
 
-// import & load fonts
 import Merriweather from '$lib/font/Merriweather-Bold.ttf'
 import Mulish from '$lib/font/Mulish-Regular.ttf'
 

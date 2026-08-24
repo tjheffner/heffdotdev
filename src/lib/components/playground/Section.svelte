@@ -1,8 +1,7 @@
 <script lang="ts">
-  // A control group rendered as a floating pill that expands into a drop-down
-  // card over the canvas. Pills sit in the shell's top row (flex order 0);
-  // open cards flow onto the line(s) below the row-break (flex order 2).
-  // Sections are independent — several can be open at once.
+  // A control group: a floating pill that expands into a drop-down card over
+  // the canvas. Pills sit in the shell's top row (flex order 0), open cards
+  // below the row-break (order 2). Several can be open at once.
   import { collapseSignal } from '$lib/playground/ui';
 
   export let title: string;
@@ -50,7 +49,7 @@
 {/if}
 
 <style>
-  /* --- pill (collapsed state, lives in the top row) ----------------------- */
+  /* Pill: the collapsed state, sits in the top row. */
   .pill {
     order: 0;
     pointer-events: auto;
@@ -98,7 +97,7 @@
     transform: rotate(-135deg);
   }
 
-  /* --- card (expanded state, drops below the pill row) -------------------- */
+  /* Card: the expanded state, drops below the pill row. */
   .card {
     order: 2;
     align-self: flex-start;

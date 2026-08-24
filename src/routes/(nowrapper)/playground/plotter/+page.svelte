@@ -58,8 +58,8 @@
     lines: 'Lines'
   };
 
-  // Every rule carries the full field set so switching modes keeps tuning and
-  // token rows stay fixed-width; the base fills whatever an override omits.
+  // Every rule carries the full field set, so switching modes keeps its tuning
+  // and token rows stay fixed width. The base fills whatever an override omits.
   const RULE_BASE: PlotRule = {
     mode: 'turtle',
     color: '#2f6f5e',
@@ -93,10 +93,9 @@
   };
   const makeRule = (over: Partial<PlotRule>): PlotRule => ({ ...RULE_BASE, ...over });
 
-  // Single source of truth for defaults, shared by initial state and Reset —
-  // a hand-tuned scene: one blue cross-hatched underlay plus 24 stacked pink
-  // turtle walkers (each rule index seeds its own walk, so the duplicates
-  // layer 24 distinct mazes).
+  // Defaults, shared by initial state and Reset. A hand-tuned scene: one blue
+  // cross-hatched underlay plus 24 stacked pink turtle walkers. Each rule index
+  // seeds its own walk, so the duplicates layer 24 distinct mazes.
   const DEFAULT_HATCH: Partial<PlotRule> = {
     mode: 'hatch',
     color: '#6087dc',
@@ -168,7 +167,6 @@
     seed: 'axis-fw5k'
   };
 
-  // --- state ----------------------------------------------------------------
   let rules: PlotRule[] = INITIAL_RULES.map(makeRule);
   let bg = DEFAULTS.bg;
   let cols = DEFAULTS.cols;
@@ -179,9 +177,9 @@
   let zoom = DEFAULTS.zoom;
   let seed = DEFAULTS.seed;
 
-  // Flip the overlay chrome against the actual pixels under it (the default
-  // paper is light, so this matters from the first paint). Coalesced to one
-  // sample per frame so the replay stays cheap.
+  // Flip the overlay chrome against the pixels under it. The default paper is
+  // light, so this matters from the first paint. Coalesced to one sample per
+  // frame so the replay stays cheap.
   let chromeLight = false;
   let sampleQueued = false;
   function onCanvasRendered() {
@@ -194,8 +192,7 @@
     });
   }
 
-  // --- rule management ------------------------------------------------------
-  // Perceived luminance, not HSL lightness — saturated mid-tones read dark.
+  // Perceived luminance, not HSL lightness: saturated mid-tones read dark.
   const paperIsLight = () => {
     const { r, g, b } = hexRgb(bg);
     return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.55;
@@ -265,9 +262,8 @@
     return `${Math.round(r.density * 100)}% seeds`;
   }
 
-  // --- reorder (drag & drop, plus keyboard) ---------------------------------
-  // Order is plot order: earlier rules go down first and lower rules ink over
-  // them — and the replay draws them in this sequence, pen-swap style.
+  // Order is plot order: earlier rules go down first and later rules ink over
+  // them. The replay draws them in this sequence, pen-swap style.
   let dragIndex: number | null = null;
   let overIndex: number | null = null;
   let handleEls: HTMLButtonElement[] = [];
@@ -307,7 +303,6 @@
     handleEls[to]?.focus();
   }
 
-  // --- shuffle / reset ------------------------------------------------------
   const WORDS = ['gantry', 'servo', 'carriage', 'stepper', 'vector', 'gcode', 'axis', 'nib'];
   function reseed() {
     const w = WORDS[Math.floor(Math.random() * WORDS.length)];
@@ -340,7 +335,7 @@
     renderer?.replay();
   }
 
-  // --- shareable scene code (compact base36 token) --------------------------
+  // Shareable scene code: a compact base36 token.
   function encodeState(): string {
     const g = [
       n36(cols),
@@ -369,7 +364,7 @@
         ].join('.')
       )
       .join('_');
-    return `r1~${g}~${rs}~${seed}`; // seed is a word — kept raw as the trailing section
+    return `r1~${g}~${rs}~${seed}`; // seed is a word, kept raw as the trailing section
   }
 
   function decodeState(token: string) {
@@ -422,11 +417,10 @@
       }
       seed = parts.slice(3).join('~') || seed;
     } catch {
-      // Malformed token — keep current scene.
+      // Malformed token, keep the current scene.
     }
   }
 
-  // --- export / saved scenes ------------------------------------------------
   // A short hash of the full scene, so the PNG filename changes with any edit.
   function shortId(s: string) {
     let h = 2166136261 >>> 0;
@@ -447,7 +441,6 @@
   const sceneSnapshot = () => renderer?.snapshot(bg) ?? null;
   $: sceneLabel = `${rules.length} rule${rules.length === 1 ? '' : 's'} · ${cols} cols`;
 
-  // --- video capture ----------------------------------------------------------
   const CLIP_FPS = 30;
   let videoSeconds = 10;
   let recording = false;
@@ -455,7 +448,7 @@
   let videoErr = false;
 
   // A clip is always one full plot run swept over the chosen length, with the
-  // finished sheet held at the tail — independent of the live replay's speed.
+  // finished sheet held at the tail. The live replay speed does not affect it.
   async function saveVideo() {
     if (recording) return;
     recording = true;
@@ -484,7 +477,7 @@
     if (token) decodeState(token);
   });
 
-  // Record scene edits (debounced) so Undo can step back — even across a refresh.
+  // Record scene edits (debounced) so Undo can step back, even across a refresh.
   const history = createHistory('plotter');
   $: (void [bg, cols, grid, gridAmount, motion, speed, zoom, rules, seed], history.touch(encodeState));
   function undoScene() {

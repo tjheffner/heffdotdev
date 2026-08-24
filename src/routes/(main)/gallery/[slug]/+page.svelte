@@ -4,19 +4,18 @@
   import Metatags from '$lib/components/Metatags.svelte'
   import TableOfContents from '$lib/components/TableOfContents.svelte';
   import { lightboxGroup } from '@hyzer-labs/ui'
-  // The viewer's skin. Cherry-picked rather than the full theme: it lives in
-  // the hz-theme cascade layer (so unlayered site CSS still wins) and its
-  // carousel rules are scoped under .hz-lightbox, so Currently's rail is
-  // untouched.
+  // The viewer's skin, cherry-picked rather than the full theme. It lives in the
+  // hz-theme cascade layer, so unlayered site CSS still wins, and its carousel
+  // rules are scoped under .hz-lightbox, so Currently's rail is untouched.
   import '@hyzer-labs/ui/theme/components/lightbox.css'
 
   let { data } = $props();
   let json: BaseContentItem = $derived(data.json) // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
 </script>
 
-<Metatags 
-  title={json.title} 
-  description={json.description} 
+<Metatags
+  title={json.title}
+  description={json.description}
   ogMessage={json.title}
   canonical={'gallery/' + json.slug}
 />

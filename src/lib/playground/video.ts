@@ -1,12 +1,12 @@
-// Client-side video capture for the canvas playgrounds. Frame-stepped (not a
-// real-time screen grab) so the resolution, fps and duration are exact and the
-// motion is smooth regardless of the live frame rate.
+// Client-side video capture for the canvas playgrounds. Frames are stepped, not
+// screen-grabbed in real time, so resolution, fps and duration hold regardless
+// of the live frame rate.
 //
-// Primary path: WebCodecs `VideoEncoder` (H.264) + `mp4-muxer` → a real .mp4,
-// which embeds everywhere that matters (GitHub, LinkedIn, Slack, this site).
-// Fallback: `MediaRecorder` on a captured canvas stream → .webm, for browsers
-// without WebCodecs/H.264 (older Firefox). The caller supplies a `draw(ctx, i)`
-// that paints frame `i`; we own the canvas, the encoder, and the download.
+// Primary path: WebCodecs `VideoEncoder` (H.264) + `mp4-muxer` for a real .mp4,
+// which embeds inline on GitHub, LinkedIn, Slack and this site. Fallback:
+// `MediaRecorder` on a captured canvas stream for .webm, for browsers without
+// WebCodecs/H.264. The caller's `draw(ctx, i)` paints frame `i`; we own the
+// canvas, the encoder and the download.
 
 export type RecordOptions = {
   width: number

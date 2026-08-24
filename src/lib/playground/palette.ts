@@ -1,6 +1,5 @@
-// Palette color generation shared by the playgrounds. `t` is a 0..1 position, so
-// the palette controls the *range* while each caller decides where within it a
-// given shape/item lands.
+// Palette color generation shared by the playgrounds. `t` is a 0..1 position
+// within the palette's range; each caller decides where its shape/item lands.
 import { hexToHsl, hslToHex, type Hsl } from './color'
 
 export type PaletteMode = 'spectrum' | 'duo' | 'mono' | 'custom'
@@ -41,7 +40,7 @@ export function paletteColor(
   }
 }
 
-/** A random pleasant hex (mid sat/light so palettes don't come out muddy). */
+/** A random hex at mid sat/light, so palettes do not come out muddy. */
 export const randomHex = () =>
   hslToHex(
     Math.floor(Math.random() * 360),

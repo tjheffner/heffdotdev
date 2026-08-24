@@ -25,28 +25,23 @@ import type { BaseContentItem, GithubIssue } from '$lib/types.js'
 const remarkPlugins = [remarkUnwrapImages]
 
 /**
- * Every language that appears in a fence across the archive, counted over all
- * 54 posts. Imported one grammar at a time from @shikijs/langs rather than
- * named as strings: the `shiki` entrypoint statically pulls in all 722 bundled
- * grammars regardless of what you ask it to load, which on its own put the
+ * Every language used in a code fence across the archive. Imported one grammar
+ * at a time rather than named as strings, because the `shiki` entrypoint pulls
+ * in all 722 bundled grammars no matter what you ask for, which alone puts the
  * worker over Cloudflare's size limit.
  */
 const CODE_LANGS = [langTs, langJs, langCss, langYaml, langHtml, langPhp]
 
-// Shiki's default oniguruma engine compiles a wasm module on first use, and
-// Workers forbids runtime wasm compilation ("Wasm code generation disallowed by
-// embedder") — every post 404'd on it. The JS engine covers every grammar in
-// CODE_LANGS with no wasm at all. @shikijs/rehype's default export builds its
-// own highlighter and drops the engine option, so build one here and hand it to
-// the /core plugin instead. Created once and reused; formatContent runs per
-// request.
+// Shiki's default oniguruma engine compiles wasm at runtime, which Workers
+// forbids. The JS engine covers every grammar in CODE_LANGS without any wasm.
+// @shikijs/rehype's default export builds its own highlighter and ignores the
+// engine option, so build one here and pass it to the /core plugin. Built once
+// and reused, since formatContent runs per request.
 let highlighter: Awaited<ReturnType<typeof createHighlighterCore>> | undefined
 
 async function rehypePlugins() {
   highlighter ??= await createHighlighterCore({
-    // Ours (see shiki-theme.js). Every shipped theme was wrong in one of two
-    // ways: the dark ones punched a hole in a light page, and the light ones
-    // arrived with a palette unrelated to this site's.
+    // Ours, built from the site's own palette. See shiki-theme.js.
     themes: [shikiTheme as ThemeRegistrationRaw],
     langs: CODE_LANGS,
     engine: createJavaScriptRegexEngine(),
@@ -57,12 +52,12 @@ async function rehypePlugins() {
     rehypeSlug,
     rehypeAutoLink,
     rehypeCdnImages,
-    // must precede shiki: it highlights whatever text it is handed, so the
-    // fences have to hold real characters rather than mdsvex's entities
+    // Must run before shiki, which highlights whatever text it's handed. The
+    // fences need real characters, not mdsvex's HTML entities.
     rehypeUnescapeCode,
     [
-      // unified hands a plugin exactly one options argument, so the highlighter
-      // can't ride along as a second entry in the tuple — close over it.
+      // unified passes a plugin exactly one options argument, so the
+      // highlighter can't ride along in the tuple. Close over it instead.
       function rehypeShiki(options) {
         return rehypeShikiFromHighlighter.call(this, highlighter, options)
       },
@@ -73,10 +68,9 @@ async function rehypePlugins() {
             name: 'surface-from-token',
             pre(node) {
               // Drop shiki's inline background so code-block.css can paint
-              // --hz-color-surface-muted instead. An inline style would win over
-              // any stylesheet, so stripping it here is the only way the block
-              // can follow the palette rather than pin a hex of its own. The
-              // foreground stays: it is the theme's plain-text color.
+              // --hz-color-surface-muted instead. An inline style beats any
+              // stylesheet, so this is the only way the block follows the
+              // palette. The foreground stays; it's the theme's text color.
               const style = node.properties?.style
               if (typeof style === 'string') {
                 node.properties.style = style
@@ -86,12 +80,11 @@ async function rehypePlugins() {
             },
           },
         ],
-        // put language-<lang> back on the <code>; the client upgrade reads it
-        // to label CodeBlock's chip
+        // Puts language-<lang> back on the <code>. The client upgrade reads it
+        // to label CodeBlock's chip.
         addLanguageClass: true,
-        // Roughly a third of the fences in the archive have no language. Prism
-        // stamped those `language-undefined` and left them unstyled; shiki
-        // renders them as plain text in the same frame as everything else.
+        // About a third of the fences in the archive have no language. This
+        // renders them as plain text instead of leaving them unstyled.
         fallbackLanguage: 'text',
       },
     ],
@@ -105,19 +98,17 @@ export function readingTime(text: string): string {
 
 export function slugify(text: string | number): string {
   return text
-    .toString() // Cast to string (optional)
-    .normalize('NFKD') // The normalize() using NFKD method returns the Unicode Normalization Form of a given string.
-    .toLowerCase() // Convert the string to lowercase letters
-    .trim() // Remove whitespace from both sides of a string (optional)
-    .replace(/\s+/g, '-') // Replace spaces with hyphen
-    .replace(/[^\w-]+/g, '') // Remove all non-word chars
-    .replace(/--+/g, '-') // Replace multiple hyphen with single hyphen
-    .replace(/(^-|-$)/g, '') // Remove leading or trailing hyphen
+    .toString()
+    .normalize('NFKD') // split accented characters so the strip below drops the accents
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]+/g, '')
+    .replace(/--+/g, '-')
+    .replace(/(^-|-$)/g, '')
 }
 
-/**
- * All pages built from github issue should contain this data at minimum
- */
+/** The minimum data every page built from a GitHub issue needs. */
 export function baseIssueContent(issue: GithubIssue): BaseContentItem {
   const src = issue.body
   const { content, data } = grayMatter(src)
@@ -130,7 +121,7 @@ export function baseIssueContent(issue: GithubIssue): BaseContentItem {
   }
 
   let description = data.description ?? content.trim().split('\n')[0]
-  // extract plain text from markdown
+  // Reduce the description to plain text: markdown first, then any HTML.
   description = remark()
     .use(remarkParse)
     .use(remarkStringify)
@@ -138,11 +129,7 @@ export function baseIssueContent(issue: GithubIssue): BaseContentItem {
     .processSync(description)
     .toString()
   description = description.replace(/\n/g, ' ')
-  // strip html
   description = description.replace(/<[^>]*>?/gm, '')
-  // strip markdown
-  description = description.replace(/[[\]]/gm, '')
-  // strip markdown
   description = description.replace(/[[\]]/gm, '')
 
   return {
@@ -166,17 +153,16 @@ export function baseIssueContent(issue: GithubIssue): BaseContentItem {
 }
 
 /**
- * Normalize raw <img> HTML into markdown image syntax so every image gets the
- * same treatment downstream (CDN + lazy loading via rehypeCdnImages),
- * regardless of how GitHub embedded it. GitHub now pastes images as raw
- * <img width height alt src /> tags instead of ![alt](src); without this those
- * tags pass through as opaque HTML and never get wrapped. Runs before the
- * youtube/tweet embeds below so it doesn't touch the <img> they generate.
+ * Rewrite raw <img> tags as markdown images so every image goes through the CDN
+ * and lazy-loading pass in rehypeCdnImages. GitHub now pastes images as <img>
+ * tags rather than ![alt](src), and those would otherwise pass through as
+ * opaque HTML. Runs before the youtube/tweet embeds so it doesn't touch the
+ * <img> tags they generate.
  */
 function normalizeRawImages(content: string): string {
   return content.replace(/<img\b[^>]*?\/?>/gi, (tag) => {
     const src = tag.match(/\bsrc\s*=\s*["']([^"']*)["']/i)?.[1]
-    if (!src) return tag // no src to work with — leave it alone
+    if (!src) return tag // nothing to rewrite
     const alt = tag.match(/\balt\s*=\s*["']([^"']*)["']/i)?.[1] ?? ''
     return `![${alt}](${src})`
   })
@@ -184,7 +170,7 @@ function normalizeRawImages(content: string): string {
 
 export async function formatContent(content: string): Promise<string> {
   const formatted = normalizeRawImages(content)
-    // replace youtube vids
+    // {% youtube <id or url> %} -> a click-to-play thumbnail
     .replace(/\n{% youtube (.*?) %}/g, (_, x) => {
       // https://stackoverflow.com/a/27728417/1106414
       function youtube_parser(url) {
@@ -238,7 +224,7 @@ export async function formatContent(content: string): Promise<string> {
 		allowFullScreen
 		aria-hidden="true"></iframe>`
     })
-    // replace tweet embeds
+    // {% tweet <id or url> %} -> twitter's own embed
     .replace(/\n{% (tweet|twitter) (.*?) %}/g, (_, _2, x) => {
       const url = x.startsWith('https://twitter.com/')
         ? x
@@ -250,18 +236,18 @@ export async function formatContent(content: string): Promise<string> {
 				`
     })
 
-  // compile it with mdsvex
   const output = (
     await compile(formatted, {
       remarkPlugins,
       // @ts-ignore
       rehypePlugins: await rehypePlugins(),
-      // mdsvex highlights with its bundled PrismJS by default. Shiki does it
-      // in the rehype pass above instead, so turn the built-in off rather
-      // than have the two fight over the same <pre>.
+      // mdsvex highlights with PrismJS by default. Shiki does it in the rehype
+      // pass above, so turn the built-in off rather than have both fight over
+      // the same <pre>.
       highlight: false,
     })
   ).code
+    // Unwrap mdsvex's {@html} around code blocks.
     // https://github.com/pngwn/MDsveX/issues/392
     .replace(/>{@html `<code class="language-/g, '><code class="language-')
     .replace(/<\/code>`}<\/pre>/g, '</code></pre>')

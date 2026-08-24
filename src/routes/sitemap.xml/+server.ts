@@ -1,10 +1,9 @@
 import type { RequestHandler } from './$types'
 
 import { SITE_URL } from '$lib/siteConfig'
-// Not prerendered: listContentFromIssues reads GH_TOKEN from $env/dynamic/private,
-// which only exists at runtime. s-maxage keeps the edge from re-fetching every
-// issue per request; there are no asset hashes in here, so a stale copy after a
-// deploy is harmless.
+// Not prerendered: listContentFromIssues reads GH_TOKEN from
+// $env/dynamic/private, which only exists at runtime. s-maxage keeps the edge
+// from re-fetching every issue per request.
 import { listContentFromIssues } from '$lib/content/content'
 
 export const GET: RequestHandler = async ({ fetch }) => {

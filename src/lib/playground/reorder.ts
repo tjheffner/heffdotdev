@@ -18,10 +18,9 @@ export function moveInArray<T>(arr: T[], from: number, to: number): T[] {
 
 /**
  * Destination index for a row currently at `from`, given the pointer's Y over
- * the list. Counts the row midpoints above the pointer, so the cursor snaps to
- * the nearest slot — including the gaps between rows, which would otherwise
- * cancel the drop. Returns a value in `[0, rows.length - 1]` ready for
- * `moveInArray(arr, from, dropIndexAt(...))`.
+ * the list. Counts the row midpoints above the pointer, so the pointer snaps to
+ * the nearest slot even in the gaps between rows, which would otherwise cancel
+ * the drop. Pass the result to `moveInArray(arr, from, ...)`.
  */
 export function dropIndexAt(
   rows: HTMLElement[],

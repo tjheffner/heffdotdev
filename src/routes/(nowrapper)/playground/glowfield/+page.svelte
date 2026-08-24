@@ -26,7 +26,7 @@
 
   type ColorMode = 'anchor' | 'rainbow' | 'mono';
 
-  // --- defaults (shared by initial state and Reset) ---------------------
+  // Defaults, shared by initial state and Reset.
   const INITIAL_LAYERS: Layer[] = [
     { sz: 710, ox: -29,  oy: -227, a: 0.43, h: 9,   s: 86, l: 59, fx: 0.3,  fy: 0.18, ax: 104, ay: 91,  ph: 4.12, open: true },
     { sz: 710, ox: -139, oy: -165, a: 0.31, h: 38,  s: 86, l: 59, fx: 0.24, fy: 0.17, ax: 103, ay: 88,  ph: 2.02, open: false },
@@ -47,8 +47,6 @@
     anchorSpread: 278,
     rainbowSat: 86
   };
-
-  // --- state ------------------------------------------------------------
 
   let layers: Layer[] = INITIAL_LAYERS.map((l) => ({ ...l }));
   let anchor = { ...INITIAL.anchor };
@@ -74,12 +72,10 @@
         ? 'Gives each layer a random hue. Sat sets how vivid.'
         : 'A grayscale ramp from dark to light across the layers.';
 
-  // --- color generation ---------------------------------------------------
-
   function generateColor(index: number, total: number): { h: number; s: number; l: number } {
     switch (colorMode) {
       case 'anchor': {
-        // Deterministic fan around the anchor hue — smooth when the sliders move.
+        // Deterministic fan around the anchor hue, so slider moves stay smooth.
         const offset =
           total > 1 ? (index / (total - 1) - 0.5) * anchorSpread : 0;
         return {
@@ -133,8 +129,6 @@
     layers = layers.map((l) => ({ ...l, s: rainbowSat }));
   }
 
-  // --- helpers ----------------------------------------------------------
-
   const rnd = (min: number, max: number) => min + Math.random() * (max - min);
   const round = (n: number, p = 3) => Math.round(n * 10 ** p) / 10 ** p;
 
@@ -175,9 +169,8 @@
     layers = layers.filter((_, idx) => idx !== i);
   }
 
-  // --- reorder (drag & drop, plus keyboard) -------------------------------
   // Order is paint order (screen-blended), so restacking changes the mix. Each
-  // layer has a grip handle; the whole card is a drop target.
+  // layer has a grip handle. The whole card is a drop target.
   let dragIndex: number | null = null;
   let overIndex: number | null = null;
   let handleEls: HTMLButtonElement[] = [];
@@ -193,7 +186,7 @@
     }
   }
   // The whole list is the drop target, so the cursor snaps to the nearest slot
-  // even in the gaps between cards (dropping there used to cancel the move).
+  // even in the gaps between cards.
   function onListDragOver(e: DragEvent) {
     if (dragIndex === null) return;
     e.preventDefault();
@@ -224,7 +217,7 @@
     layers = Array.from({ length: count }, (_, i) => randomLayer(i, count));
   }
 
-  // Shuffle re-rolls the color mode/hue, anchor, layer count, and every layer;
+  // Shuffle re-rolls the color mode, hue, anchor, layer count and every layer.
   // Reset restores the defaults.
   function shuffle() {
     const modes: ColorMode[] = ['anchor', 'rainbow', 'mono'];
@@ -237,8 +230,8 @@
     _prevSpread = anchorSpread;
     _prevRainbowSat = rainbowSat;
     anchor = { x: round(rnd(0.2, 0.8), 2), y: round(rnd(0.15, 0.6), 2) };
-    // A dark backdrop — the glow is screen-blended on top, so keep lightness very
-    // low with only a subtle tint.
+    // The glow is screen-blended on top, so keep the backdrop dark: very low
+    // lightness with only a subtle tint.
     bg = hslToHex(Math.round(rnd(0, 360)), Math.round(rnd(0, 40)), Math.round(rnd(4, 12)));
     const count = Math.floor(rnd(3, 9)); // 3–8 layers
     layers = Array.from({ length: count }, (_, i) => randomLayer(i, count));
@@ -258,15 +251,11 @@
     _prevRainbowSat = rainbowSat;
   }
 
-  // --- intensity curve graph ---------------------------------------------
   // The curve function reads `intensity` from closure, but Svelte's compiler
-  // only tracks top-level variable references inside $: blocks — it can't
-  // see through function calls.  If `curveMax` doesn't change value (e.g.
-  // header stays the max while you adjust middle), `curvePath` never
-  // recomputes even though the curve shape changed.
-  //
-  // Fix: destructure `intensity` directly inside each reactive expression
-  // so Svelte knows to invalidate them when any property moves.
+  // only tracks top-level variable references inside $: blocks, so it cannot see
+  // through function calls. Destructure `intensity` inside each reactive
+  // expression so Svelte invalidates them when any property moves. Otherwise
+  // `curvePath` goes stale whenever the shape changes but `curveMax` does not.
 
   const smooth = (t: number) => t * t * (3 - 2 * t);
 
@@ -325,8 +314,6 @@
     return 36 - (v / curveMax) * 32;
   })();
 
-  // --- config export ------------------------------------------------------
-
   function snippet() {
     const layerLines = layers
       .map(
@@ -356,7 +343,7 @@ ${layerLines}
     }
   }
 
-  // --- shareable scene code (compact base36 token) ------------------------
+  // Shareable scene code: a compact base36 token.
   const CM: ColorMode[] = ['anchor', 'rainbow', 'mono'];
 
   function encodeState(): string {
@@ -412,11 +399,10 @@ ${layerLines}
       _prevSpread = anchorSpread;
       _prevRainbowSat = rainbowSat;
     } catch {
-      // Malformed token — keep current scene.
+      // Malformed token, keep the current scene.
     }
   }
 
-  // --- saved scenes -------------------------------------------------------
   function applyScene(token: string) {
     decodeState(token);
   }
@@ -427,11 +413,10 @@ ${layerLines}
       ? intensity.header + (intensity.middle - intensity.header) * smooth(p / 0.5)
       : intensity.middle + (intensity.footer - intensity.middle) * smooth((p - 0.5) / 0.5);
 
-  // Glowfield is DOM gradients (no canvas), so the thumbnail, PNG and video are
-  // synthesized by painting the layers onto a canvas at the given size. `e` is
-  // the elapsed seconds of drift (0 = the static rest layout used by the PNG);
-  // the video passes an advancing `e` to reproduce the live wander (same formula
-  // as the renderer's `place()`).
+  // Glowfield is DOM gradients, not canvas, so the thumbnail, PNG and video are
+  // painted onto a canvas here instead. `e` is the elapsed seconds of drift (0 is
+  // the static rest layout the PNG uses). The video passes an advancing `e` to
+  // reproduce the live wander, using the same formula as the renderer's `place()`.
   function renderGlow(cx: CanvasRenderingContext2D, W: number, H: number, e = 0) {
     cx.globalCompositeOperation = 'source-over';
     cx.fillStyle = bg;
@@ -503,7 +488,6 @@ ${layerLines}
     }, 'image/png');
   }
 
-  // --- video capture ------------------------------------------------------
   const CLIP_FPS = 30;
   let videoSeconds = 6;
   let recording = false;
@@ -537,7 +521,7 @@ ${layerLines}
     if (token) decodeState(token);
   });
 
-  // Record scene edits (debounced) so Undo can step back — even across a refresh.
+  // Record scene edits (debounced) so Undo can step back, even across a refresh.
   const history = createHistory('glowfield');
   $: (void [colorMode, anchorHue, anchorSpread, rainbowSat, anchor, intensity, depth, bg, layers], history.touch(encodeState));
   function undoScene() {
@@ -604,8 +588,8 @@ ${layerLines}
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div class="reorder-list" on:dragover={onListDragOver} on:drop={onListDrop}>
     {#each layers as layer, i (layer)}
-      <!-- Delete sits outside <summary> to avoid nested-interactive; it's
-        overlaid on the header row and stays visible when the layer collapses. -->
+      <!-- Delete sits outside <summary> to avoid nested interactive controls. It
+        overlays the header row and stays visible when the layer collapses. -->
       <div
         class="layer"
         bind:this={layerEls[i]}
@@ -743,8 +727,6 @@ ${layerLines}
 <style>
   /* Glowfield-specific bits; shared sidebar styling lives in PlaygroundShell. */
 
-  /* --- intensity curve --------------------------------------------------- */
-
   .curve {
     width: 100%;
     height: 64px;
@@ -778,10 +760,8 @@ ${layerLines}
     fill: var(--hz-intent-primary);
   }
 
-  /* --- layers ------------------------------------------------------------ */
-
-  /* The list is one drop target so drags snap to the nearest slot; it also
-     owns the spacing the card-body flex gap used to provide. */
+  /* The list is one drop target so drags snap to the nearest slot. It also owns
+     the spacing between cards. */
   .reorder-list {
     display: flex;
     flex-direction: column;

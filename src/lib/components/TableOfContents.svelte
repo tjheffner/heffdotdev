@@ -28,11 +28,8 @@
 </section>
 
 <style>
-  /* Scrolls with the page. It used to be sticky, but the bar is only a "Back"
-     link on the page's own background — it did not read as a bar, so content
-     passing underneath just looked clipped. The ToC rail below is pinned on
-     its own instead, which is the part that actually wants to follow the
-     reader. */
+  /* Scrolls with the page. The ToC rail below is pinned on its own, since
+     that is the part that should follow the reader. */
   .post-nav {
     background-color: var(--hz-color-surface);
   }
@@ -63,11 +60,9 @@
 
     @media (min-width: 1200px) {
       display: block;
-      /* Pinned to the viewport rather than riding the nav bar, which now
-         scrolls away. `main.wrapper` is max-width 65ch and centred, so its
-         right edge sits at 50% + 32.5ch; margin-left keeps the same gap past
-         it the absolute version had, and top parks it under the sticky
-         header. */
+      /* Pinned to the viewport, not to the nav bar. `main.wrapper` is
+         max-width 65ch and centred, so its right edge sits at 50% + 32.5ch.
+         top parks the rail under the sticky header. */
       position: fixed;
       top: var(--header-height);
       left: calc(50% + 32.5ch);

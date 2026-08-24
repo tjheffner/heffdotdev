@@ -28,9 +28,8 @@
     weave: 'Weave'
   };
 
-  // --- starter curves -------------------------------------------------------
-  // Pens hold freeform pad drawings; defaults and Shuffle synthesize polylines
-  // so the first paint (and every reroll) looks drawn-with-intent.
+  // Pens hold freeform pad drawings. Defaults and Shuffle synthesize polylines
+  // so the first paint, and every reroll, looks drawn on purpose.
   function sampled(fn: (t: number) => [number, number], n = 72): number[] {
     const pts: number[] = [];
     for (let i = 0; i < n; i++) {
@@ -40,16 +39,16 @@
     }
     return pts;
   }
-  // Simple open curves — the sweep does the work, so the strokes stay plain.
-  // Weighted toward C/U arcs and hooks; full-width waves (sway/ess/ridge) are
-  // the minority — deep partial curves sweep into more pleasing forms.
+  // Simple open curves. The sweep does the work, so the strokes stay plain.
+  // Weighted toward C/U arcs and hooks: deep partial curves sweep into better
+  // shapes than full-width waves (sway/ess/ridge).
   function randomPath(): number[][] {
     const roll = Math.random();
     const kind =
       roll < 0.45 ? 'arc' : roll < 0.7 ? 'hook' : roll < 0.82 ? 'ess' : roll < 0.92 ? 'sway' : 'ridge';
     switch (kind) {
       case 'arc': {
-        // A deep partial arc — reads as a C or U depending on orientation.
+        // A deep partial arc. Reads as a C or U depending on orientation.
         const span = rand(1.6, 3.6);
         const a0 = rand(0, 6.28);
         const rr = rand(0.5, 0.9);
@@ -92,7 +91,7 @@
         ];
       }
       case 'hook': {
-        // An open hook: the radius eases in over a partial turn — not a spiral.
+        // An open hook: the radius eases in over a partial turn.
         const span = rand(2, 4);
         const a0 = rand(0, 6.28);
         const r1 = rand(0.25, 0.55);
@@ -107,8 +106,8 @@
     }
   }
 
-  // Single source of truth for defaults, shared by initial state and Reset.
-  // The paths are hand-drawn pad strokes, kept verbatim as point data.
+  // Defaults, shared by initial state and Reset. The paths are hand-drawn pad
+  // strokes, kept verbatim as point data.
   const INITIAL_LAYERS: PenLayer[] = [
     {
       reps: 29, size: 0.86, rot: -0.68, spin: 0, grow: 0.79, dx: -1.7, dy: 5.7, ox: 47, oy: -27, swell: 0.55, rip: 2.9, trav: -2.2, relax: 0.29, env: 0.22, press: 0.27, bleed: 0.13, nib: 81, jit: 0.37, wob: 0.03, color: '#64d8b7',
@@ -149,7 +148,6 @@
   const cloneLayers = (ls: PenLayer[]) =>
     ls.map((l) => ({ ...l, path: l.path.map((s) => s.slice()) }));
 
-  // --- state --------------------------------------------------------------
   let layers: PenLayer[] = cloneLayers(INITIAL_LAYERS);
   let bg = DEFAULTS.bg;
   let inkBlend = DEFAULTS.inkBlend;
@@ -158,9 +156,9 @@
   let seed = DEFAULTS.seed;
   let zoom = DEFAULTS.zoom;
 
-  // Flip the overlay chrome against the actual pixels under it (the default
-  // paper is light, so this matters from the first paint). Coalesced to one
-  // sample per frame so drags stay cheap.
+  // Flip the overlay chrome against the pixels under it. The default paper is
+  // light, so this matters from the first paint. Coalesced to one sample per
+  // frame so drags stay cheap.
   let chromeLight = false;
   let sampleQueued = false;
   function onCanvasRendered() {
@@ -173,8 +171,7 @@
     });
   }
 
-  // --- layer management ---------------------------------------------------
-  // Perceived luminance, not HSL lightness — saturated mid-tones read dark.
+  // Perceived luminance, not HSL lightness: saturated mid-tones read dark.
   const paperIsLight = () => {
     const { r, g, b } = hexRgb(bg);
     return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.55;
@@ -251,7 +248,6 @@
     layers[i].path = randomPath();
   }
 
-  // --- reorder (drag & drop, plus keyboard) -------------------------------
   // Order is paint order (ink stacks), so restacking changes the overlap.
   let dragIndex: number | null = null;
   let overIndex: number | null = null;
@@ -292,14 +288,13 @@
     handleEls[to]?.focus();
   }
 
-  // --- shuffle / reset ----------------------------------------------------
   const WORDS = ['nib', 'quill', 'stylus', 'india', 'sumi', 'vellum', 'bristol', 'gouache'];
   function reseed() {
     const w = WORDS[Math.floor(Math.random() * WORDS.length)];
     seed = `${w}-${Math.random().toString(36).slice(2, 6)}`;
   }
 
-  // Shuffle re-rolls the paper, the seed, and every pen; Reset restores defaults.
+  // Shuffle re-rolls the paper, the seed and every pen. Reset restores defaults.
   function shuffle() {
     bg =
       Math.random() < 0.6
@@ -321,7 +316,7 @@
     renderer?.recenter();
   }
 
-  // --- shareable scene code (compact base36 token) ------------------------
+  // Shareable scene code: a compact base36 token.
   function encodeState(): string {
     const g = [
       n36(inkBlend ? 1 : 0),
@@ -343,7 +338,7 @@
         ].join('.')
       )
       .join('_');
-    return `p1~${g}~${ls}~${seed}`; // seed is a word — kept raw as the trailing section
+    return `p1~${g}~${ls}~${seed}`; // seed is a word, kept raw as the trailing section
   }
 
   function decodeState(token: string) {
@@ -387,11 +382,10 @@
       }
       seed = parts.slice(3).join('~') || seed;
     } catch {
-      // Malformed token — keep current scene.
+      // Malformed token, keep the current scene.
     }
   }
 
-  // --- export / saved scenes ----------------------------------------------
   // A short hash of the full scene, so the PNG filename changes with any edit.
   function shortId(s: string) {
     let h = 2166136261 >>> 0;
@@ -419,7 +413,7 @@
     if (token) decodeState(token);
   });
 
-  // Record scene edits (debounced) so Undo can step back — even across a refresh.
+  // Record scene edits (debounced) so Undo can step back, even across a refresh.
   const history = createHistory('feather');
   $: (void [inkBlend, zoom, texture, texAmount, bg, layers, seed], history.touch(encodeState));
   function undoScene() {

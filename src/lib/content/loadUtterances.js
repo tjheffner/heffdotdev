@@ -1,5 +1,5 @@
-// this is an action that loads utterances comments when the element is in view
-// so as not to incur the JS cost upfront if the person never scrolls down to the comments
+// action that loads utterances comments once the element scrolls into view,
+// so the JS cost is only paid if someone reads the comments
 
 // https://svelte.dev/repl/c6a402704224403f96a3db56c2f48dfc?version=3.55.1
 
@@ -11,7 +11,7 @@ let intersectionObserver
 let hasLoaded = false
 
 export function injectScript(element, number) {
-  // have to do this because direct injection using @html doesnt work
+  // direct injection with @html doesn't work
   // adapted from https://github.com/utterance/utterances/issues/161#issuecomment-550991248
   const scriptElem = document.createElement('script')
   scriptElem.src = 'https://utteranc.es/client.js'
@@ -24,7 +24,6 @@ export function injectScript(element, number) {
     : 'boxy-light'
   scriptElem.setAttribute('theme', theme)
 
-  // replace all contents of element and append script
   element.innerHTML = ''
   element.appendChild(scriptElem)
 }

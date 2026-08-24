@@ -4,7 +4,7 @@
   import Currently from '$lib/components/Currently.svelte';
   import type { PageData } from './$types'
 
-  // type="single" keeps only one panel open at a time — the old `linked` behavior
+  // type="single" keeps only one panel open at a time
   const items = [
     { id: 'about', title: 'about' },
     { id: 'recent-activity', title: 'recent activity' },
@@ -72,7 +72,6 @@
 </section>
 
 <style>
-  /* port of the old Details.svelte styles onto the accordion's hooks */
   section :global(.hz-accordion-item) {
     interpolate-size: allow-keywords;
     margin-bottom: var(--hz-space-away);
@@ -87,10 +86,9 @@
   section :global(.hz-accordion-item[open]::details-content) {
     block-size: auto;
   }
-  /* The trigger is a flex row of [heading, chevron] and the component aligns it
-     to flex-start, which tops the 24px chevron against a 50px heading and leaves
-     it sitting ~12px high. Child combinator so this outweighs the component's
-     own two-class scoped rule. */
+  /* The trigger is a flex row of [heading, chevron] aligned to flex-start, which
+     leaves the 24px chevron sitting about 12px high against a 50px heading.
+     Child combinator so this outweighs the component's own scoped rule. */
   section :global(.hz-accordion-item > .hz-accordion-trigger) {
     align-items: center;
   }
@@ -102,14 +100,12 @@
     transform: rotate(180deg);
   }
 
-  /* `scale` and `rotate` are separate properties, not one packed `transform`,
-     so the keyframes can own the wobble while a transition owns the size. That
-     split is what lets hover-out ease back down: a lone `animation: shake` on
-     :hover has nothing to interpolate and snaps the instant the cursor leaves.
-     Only scale is transitioned — pulling an animation snaps its property to the
-     base value rather than transitioning out of it, so a rotate transition here
-     would be dead CSS. The tilt does drop instantly, but it's ±10deg against a
-     0.35s glide back to size; the eye follows the size. */
+  /* `scale` and `rotate` are separate properties here, not one packed
+     `transform`, so the keyframes can own the wobble while a transition owns the
+     size. That split is what lets hover-out ease back down. Only scale is
+     transitioned: pulling an animation snaps its property to the base value
+     rather than transitioning out of it, so a rotate transition would be dead
+     CSS. */
   .surfer {
     display: inline-block; /* transforms don't apply to inline boxes */
     scale: 1;
@@ -124,8 +120,7 @@
     0%, 100% { rotate: -10deg; }
     50%      { rotate: 10deg; }
   }
-  /* the scale is the part that still reads as a response to hover once the
-     wobble is gone */
+  /* scale still reads as a response to hover once the wobble is gone */
   @media (prefers-reduced-motion: reduce) {
     .surfer:hover {
       animation: none;

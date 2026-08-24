@@ -88,9 +88,9 @@ export type GHUser = {
   site_admin: boolean
 }
 
-// Third-party activity-feed payloads consumed by /about. Only the
-// fields actually read are modelled; everything is optional-friendly because
-// these are external APIs whose responses we don't control.
+// Third-party activity-feed payloads used by /about. Only the fields we
+// actually read are modelled, and they stay loose because these are external
+// APIs whose responses we don't control.
 export type LastfmTrack = {
   name: string
   artist: { '#text': string }

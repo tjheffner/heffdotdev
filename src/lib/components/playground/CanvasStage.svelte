@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-  // The camera + canvas metrics handed to a scene's draw() each paint.
+  // Camera and canvas metrics passed to a scene's draw() each paint.
   export type StageView = {
     w: number;
     h: number;
@@ -11,10 +11,9 @@
 </script>
 
 <script lang="ts">
-  // Owns the <canvas>, its sizing (dpr + ResizeObserver), and the interactive
-  // camera (drag-to-pan, scroll-to-zoom, double-click-recenter). A scene just
-  // provides a `draw(ctx, view)` and calls `paint()` when its data changes; the
-  // stage repaints on camera/size changes itself.
+  // Owns the <canvas>, its sizing (dpr + ResizeObserver), and the camera
+  // (drag-to-pan, scroll-to-zoom, double-click recenter). A scene provides
+  // `draw(ctx, view)` and calls `paint()` when its data changes.
   import { onMount } from 'svelte';
   import {
     snapshotCanvas,
@@ -24,7 +23,7 @@
   } from '$lib/playground/canvas';
 
   export let draw: (ctx: CanvasRenderingContext2D, view: StageView) => void;
-  export let zoom = 1; // bindable — the camera scale, shared with a page slider
+  export let zoom = 1; // bindable camera scale, shared with a page slider
   export let zoomMin = 0.25;
   export let zoomMax = 4;
   export let contained = true;
@@ -58,7 +57,7 @@
     paint();
   }
 
-  // Export helpers over the owned canvas so the scene/page can reach them.
+  // Export helpers over the owned canvas, for the scene or the page.
   export const snapshot = (bgFill: string, maxDim = 128) => snapshotCanvas(canvas, bgFill, maxDim);
   export const saveImage = (filename: string) => downloadCanvasPng(canvas, filename);
   export const sampleLuminance = (backdropHex: string, stripFrac = 0.16) =>
@@ -79,14 +78,13 @@
     paint();
   }
 
-  // Repaint when the zoom changes from outside (e.g. a page slider). Pan changes
-  // happen only in the handlers below, which paint directly.
+  // Repaint when the zoom changes from outside (e.g. a page slider). Pan
+  // changes happen only in the handlers below, which paint directly.
   $: if (mounted) {
     void zoom;
     paint();
   }
 
-  // --- drag-to-pan / scroll-to-zoom ---------------------------------------
   let dragStartX = 0;
   let dragStartY = 0;
   let panStartX = 0;

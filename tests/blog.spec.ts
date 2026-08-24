@@ -3,10 +3,9 @@ import { contrastRatio } from '@hyzer-labs/ui/utils'
 import { CODE_COLORS, CODE_SURFACE } from '../src/lib/content/shiki-theme.js'
 
 /**
- * The axe scan below only grades hues that happen to appear in the sample
- * post. This grades the whole hand-rolled palette, so a color added to
- * shiki-theme.js cannot slip in below the bar just because no post uses it
- * yet.
+ * The axe scan below only grades hues that appear in the sample post. This
+ * grades the whole palette, so a color added to shiki-theme.js cannot slip in
+ * under the bar just because no post uses it yet.
  */
 test('every syntax color clears AA on the code surface', () => {
   for (const color of CODE_COLORS) {
@@ -37,9 +36,9 @@ test('blog page renders without a11y errors', async ({
 })
 
 /**
- * A real post, not the index. The index has no .prose, so nothing above
- * covered the things that actually run inside post content: the lightboxGroup
- * triggers and the shiki -> CodeBlock upgrade.
+ * A real post. The index has no .prose, so the scans above never reach what
+ * runs inside post content: the lightboxGroup triggers and the shiki ->
+ * CodeBlock upgrade.
  */
 const POST = '/accessibility-testing-with-playwright'
 
@@ -71,26 +70,25 @@ test('code blocks are highlighted server-side and upgraded to CodeBlock', async 
   const state = await block.evaluate((el) => {
     const pre = el.querySelector('pre.shiki') as HTMLElement
     return {
-      // every shiki <pre> got wrapped; none left loose in the prose
+      // every shiki <pre> got wrapped, none left loose in the prose
       stray: document.querySelectorAll('.prose > pre.shiki').length,
       highlighted: el.hasAttribute('data-highlighted'),
-      // the CodeBlock theme yields its own fill under [data-highlighted], so
-      // what paints is --hz-color-surface-muted from code-block.css
+      // under [data-highlighted] the CodeBlock theme yields, so what paints is
+      // --hz-color-surface-muted from code-block.css
       preBg: getComputedStyle(pre).backgroundColor,
       wrapperBg: getComputedStyle(el).backgroundColor,
       // code scrolls rather than reflowing mid-expression
       whiteSpace: getComputedStyle(pre).whiteSpace,
       // PrismJS is gone, and with it the bogus language-undefined fences
       prismTokens: document.querySelectorAll('.token').length,
-      // the surface is ours, not shiki's: a transformer strips its inline
-      // background so --hz-color-surface-muted can paint the block
+      // a transformer strips shiki's inline background so
+      // --hz-color-surface-muted can paint the block
       inlineBg: /background/.test(
         document.querySelector('pre.shiki')?.getAttribute('style') ?? ''
       ),
-      // mdsvex escapes { } < > in fences so Svelte can't read a sample as
-      // template syntax. Shiki highlights whatever text it is handed, so
-      // without a decode pass first it tokenizes `&gt;` into three spans and
-      // the browser can no longer parse it back into a character.
+      // mdsvex escapes { } < > in fences so Svelte cannot read a sample as
+      // template syntax. without a decode pass first, shiki tokenizes `&gt;`
+      // into three spans and the browser cannot parse it back to a character.
       entityLeak: /&#12[35];|&gt;|&lt;|&amp;/.test(
         document.querySelector('pre.shiki')?.textContent ?? ''
       ),
@@ -115,7 +113,6 @@ test('copy button copies the source, not the highlighted markup', async ({
   context,
   browserName,
 }) => {
-  // clipboard permissions are a Chromium-only API in Playwright
   test.skip(
     browserName !== 'chromium',
     'clipboard permissions are Chromium-only'
@@ -132,19 +129,3 @@ test('copy button copies the source, not the highlighted markup', async ({
   // CodeBlock reads `code` from the source text, never from the children markup
   expect(clip).not.toContain('<span')
 })
-
-// test('blog filters', async ({ page }) => {
-
-// })
-
-// test('blog search', async ({ page }) => {
-//
-// })
-//
-// test('see more posts', async ({ page }) => {
-//
-// })
-//
-// test('blog post table of contents', async ({ page }) => {
-//
-// })

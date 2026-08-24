@@ -19,12 +19,11 @@
     }))
   )
 
-  // Publish the header's real occluding height so sticky bars below it
-  // (blog filters, post-nav) sit flush underneath. Measuring beats deriving —
-  // the bar mixes rem text with a px-sized toggle. The open drawer is
-  // absolutely positioned (invisible to offsetHeight), so its bottom edge is
-  // included while it's open. The :root CSS formula is only the
-  // pre-hydration fallback.
+  // Publish the header's real occluding height so sticky bars below it (blog
+  // filters, post-nav) sit flush underneath. Measured, not derived: the bar
+  // mixes rem text with a px-sized toggle. The open drawer is absolutely
+  // positioned, so include its bottom edge while it is open. The :root CSS
+  // formula is only the pre-hydration fallback.
   let open = $state(false)
   let headerEl: HTMLElement | null = null
 
@@ -38,15 +37,14 @@
     document.documentElement.style.setProperty('--header-height', `${Math.round(h)}px`)
   }
 
-  // rides the component's restProps onto the <header> element; fires on
-  // mount and any bar resize. offsetHeight (not entry.contentRect, which
-  // would miss the padding) is read in publish().
+  // rides the component's restProps onto the <header> element; fires on mount
+  // and any bar resize. publish() reads offsetHeight, which includes padding.
   const measure = resize((entry) => {
     headerEl = entry.target as HTMLElement
     publish()
   })
 
-  // re-measure when the drawer toggles — effects run after the DOM updates
+  // re-measure when the drawer toggles. effects run after the DOM updates
   $effect(() => {
     open
     publish()
@@ -55,8 +53,7 @@
 
 <a class="skip-link" href="#content">Skip to main content</a>
 
-<!-- measured breakpoint matches the old 668px media query; the drawer closes
-     itself on link activation, so no remount needed -->
+<!-- the drawer closes itself on link activation, so no remount needed -->
 <Header
   {items}
   sticky
@@ -73,8 +70,8 @@
     {/snippet}
 
     {#snippet menuIcon()}
-      <!-- All three lines always render so they can transition; the two
-           outer lines rotate/translate into an X, the middle fades out. -->
+      <!-- All three lines always render so they can transition. The two outer
+           lines rotate into an X, the middle fades out. -->
       <svg
         class="menu-icon"
         width="24"
@@ -110,13 +107,13 @@
     }
   }
 
-  /* bar links: right-aligned row, same gap as before */
+  /* bar links: right-aligned row */
   :global(.site-header .hz-nav-links) {
     justify-content: flex-end;
     gap: 1rem;
   }
 
-  /* button reset only — the component owns the toggle's show/hide */
+  /* button reset only. the component owns the toggle's show/hide */
   :global(.site-header .hz-header-toggle) {
     align-items: center;
     justify-content: center;
@@ -150,11 +147,10 @@
     transform: translateY(-6px) rotate(-45deg);
   }
 
-  /* Drawer as overlay panel: pulled out of flow so it floats over page
-     content instead of pushing it down. Geometry matches the old .links
-     overlay: inset to the wrapper column, hung from the nav bar (100% of the
-     header includes its bottom padding, hence the subtraction), and padded at
-     the old second-density-shift distance (0.8rem). */
+  /* Drawer as overlay panel: pulled out of flow so it floats over page content
+     instead of pushing it down. It is inset to the wrapper column and hung off
+     the nav bar. 100% of the header includes its bottom padding, hence the
+     subtraction. */
   :global(.site-header .hz-header-drawer) {
     position: absolute;
     top: calc(100% - var(--hz-space-near));
@@ -162,7 +158,6 @@
     background-color: var(--hz-color-surface);
     border-bottom: 2px solid var(--hz-intent-primary);
   }
-  /* drawer links: same row layout the old mobile menu had */
   :global(.site-header .hz-header-drawer .hz-nav[data-orientation='vertical'] .hz-nav-links) {
     flex-direction: row;
     justify-content: space-between;
@@ -170,7 +165,7 @@
     gap: 1rem;
   }
   /* fade + slide on open. The drawer is display:none while closed, so the
-     close direction can't animate — @starting-style covers open only. */
+     close direction cannot animate. @starting-style covers open only. */
   :global(.site-header .hz-header-drawer[data-state='open']) {
     transition:
       opacity 0.2s ease,

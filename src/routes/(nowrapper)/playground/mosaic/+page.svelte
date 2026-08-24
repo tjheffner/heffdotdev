@@ -43,7 +43,7 @@
   };
   const PALETTES: MosaicColorMode[] = ['spectrum', 'duo', 'mono', 'custom'];
 
-  // Single source of truth for defaults, shared by initial state and Reset.
+  // Defaults, shared by initial state and Reset.
   const DEFAULTS = {
     bg: '#101018',
     seed: 'mosaic',
@@ -75,7 +75,6 @@
     zoom: 1
   };
 
-  // --- state ----------------------------------------------------------------
   let bg = DEFAULTS.bg;
   let seed = DEFAULTS.seed;
   let mode = DEFAULTS.mode;
@@ -111,8 +110,8 @@
       number
     >;
 
-  // Flip the overlay chrome against the actual pixels under it, coalesced to
-  // one sample per frame (motion repaints constantly).
+  // Flip the overlay chrome against the pixels under it. Coalesced to one sample
+  // per frame, since motion repaints constantly.
   let chromeLight = false;
   let sampleQueued = false;
   function onCanvasRendered() {
@@ -125,7 +124,6 @@
     });
   }
 
-  // --- shapes / motions -------------------------------------------------------
   function toggleShape(s: MosaicShape) {
     if (shapes.includes(s)) {
       if (shapes.length > 1) shapes = shapes.filter((x) => x !== s);
@@ -139,7 +137,6 @@
       : MOTIONS.filter((x) => motions.includes(x) || x === m);
   }
 
-  // --- color -----------------------------------------------------------------
   function addColor() {
     customColors = [...customColors, '#ffffff'];
   }
@@ -159,7 +156,6 @@
           ? 'A single hue. Items vary only in lightness.'
           : 'Each item picks a random color from this set.';
 
-  // --- shuffle / reset --------------------------------------------------------
   const WORDS = ['tessera', 'quilt', 'terrazzo', 'parquet', 'lattice', 'weft', 'pixel', 'motif'];
   function reseed() {
     const w = WORDS[Math.floor(Math.random() * WORDS.length)];
@@ -240,7 +236,7 @@
     renderer?.recenter();
   }
 
-  // --- shareable scene code (compact base36 token) ----------------------------
+  // Shareable scene code: a compact base36 token.
   function encodeState(): string {
     const shapeMask = shapes.reduce((m, s) => m | (1 << SHAPES.indexOf(s)), 0);
     const motionMask = motions.reduce((m, s) => m | (1 << MOTIONS.indexOf(s)), 0);
@@ -299,11 +295,10 @@
       if (g[26]) customColors = unpackHex(g[26]);
       seed = parts.slice(2).join('~') || seed;
     } catch {
-      // Malformed token — keep current scene.
+      // Malformed token, keep the current scene.
     }
   }
 
-  // --- export / saved scenes --------------------------------------------------
   function shortId(s: string) {
     let h = 2166136261 >>> 0;
     for (let i = 0; i < s.length; i++) {
@@ -322,7 +317,6 @@
   const sceneSnapshot = () => renderer?.snapshot(bg) ?? null;
   $: sceneLabel = `${mode} · ${cols} cols`;
 
-  // --- video capture ----------------------------------------------------------
   const CLIP_FPS = 30;
   let videoSeconds = 6;
   let videoLoop = false;
@@ -336,8 +330,8 @@
     recordPct = 0;
     videoErr = false;
     try {
-      // A seamless loop needs motion to close cycles over; otherwise record
-      // the live clock from "now".
+      // A seamless loop needs motion to close cycles over. Otherwise record the
+      // live clock from "now".
       const loop = videoLoop && motions.some((m) => MOTION_SPEEDS()[m] > 0);
       const t0 = renderer?.currentTime() ?? 0;
       if (loop) renderer?.beginLoop(videoSeconds);
@@ -365,7 +359,7 @@
     if (token) decodeState(token);
   });
 
-  // Record scene edits (debounced) so Undo can step back — even across a refresh.
+  // Record scene edits (debounced) so Undo can step back, even across a refresh.
   const history = createHistory('mosaic');
   $: (void [mode, cols, gap, density, stack, size, vary, rotate, round, stroke, strokeMatch, shapes, motions, pulseSpeed, spinSpeed, waveSpeed, fadeSpeed, desync, colorMode, hue, hueSpread, sat, light, zoom, outlineColor, bg, customColors, seed], history.touch(encodeState));
   function undoScene() {

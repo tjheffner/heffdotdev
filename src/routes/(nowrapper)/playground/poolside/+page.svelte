@@ -15,7 +15,7 @@
 
   const presets = createPresetStore('poolside');
 
-  // Single source of truth for defaults, shared by initial state and Reset.
+  // Defaults, shared by initial state and Reset.
   const DEFAULTS = {
     deepColor: '#0d3464',
     shallowColor: '#2ca3bd',
@@ -35,12 +35,10 @@
     zoom: 3.36
   };
 
-  // --- color ---------------------------------------------------------------
   let deepColor = DEFAULTS.deepColor;
   let shallowColor = DEFAULTS.shallowColor;
   let causticColor = DEFAULTS.causticColor;
 
-  // --- pattern -------------------------------------------------------------
   let speed = DEFAULTS.speed;
   let scale = DEFAULTS.scale;
   let intensity = DEFAULTS.intensity;
@@ -55,9 +53,9 @@
   let phase = DEFAULTS.phase;
   let zoom = DEFAULTS.zoom;
 
-  // Hand-tuned presets [deep, shallow, caustic] — click one to set all three
-  // color stops at once. Also the source shuffle draws from (fully-random trios
-  // come out muddy). A mix of pool-water blues/greens and non-liquid heat/neon.
+  // Hand-tuned [deep, shallow, caustic] trios. Click one to set all three stops.
+  // Shuffle draws from these too, because fully-random trios come out muddy. A
+  // mix of pool-water blues and greens plus non-liquid heat and neon.
   type Palette = { name: string; colors: [string, string, string] };
   const PALETTES: Palette[] = [
     { name: 'Lagoon', colors: ['#062b47', '#1f8fb5', '#e3fbff'] },
@@ -82,8 +80,8 @@
     [deepColor, shallowColor, causticColor] = p.colors;
   }
 
-  // Nudge one hex by small H/S/L deltas — lets shuffle land *near* a preset
-  // rather than on it (or on a muddy fully-random trio).
+  // Nudge one hex by small H/S/L deltas, so shuffle lands near a preset rather
+  // than exactly on it.
   function jitterHex(hex: string, dh: number, ds: number, dl: number): string {
     const c = hexToHsl(hex);
     return hslToHex(
@@ -96,21 +94,21 @@
   let renderer: Poolside;
   let savedScenes: SavedScenes;
 
-  // Chrome flips against the deep-water backdrop (the caustic sits over it).
-  // Derive it directly from the color — no per-frame canvas readback needed.
+  // Chrome flips against the deep-water backdrop, since the caustic sits over
+  // it. Derived from the color itself, so no per-frame canvas readback.
   $: chromeLight = (() => {
     const { r, g, b } = hexRgb(deepColor);
     return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.6;
   })();
 
-  // A signed value in [-max, max] that hugs 0 (cubing a uniform biases toward
-  // the center) — so "extremes are ok but minimal is preferred".
+  // A signed value in [-max, max] that hugs 0. Cubing a uniform biases it toward
+  // the center, so extremes stay possible but rare.
   const neutral = (max: number) => round(rand(-1, 1) ** 3 * max, 2);
 
-  // Shuffle colors + waves, and pick a scale/zoom/swirl *archetype*. Those three
-  // are correlated — randomizing them independently mostly lands on mush — so we
-  // draw from a few flavors that each hit a known sweet spot. Weighting favors
-  // the calm-swirl flavors; the vortex flavor is where big swirl lives.
+  // Shuffle the colors and waves, then pick a scale/zoom/swirl flavor. Those
+  // three are correlated, and rolling them independently mostly lands on mush,
+  // so each flavor hits a known sweet spot. The weighting favors calm swirl; the
+  // vortex flavor is where big swirl lives.
   function shuffle() {
     const base = pick(PALETTES);
     const dh = rand(-18, 18);
@@ -163,7 +161,6 @@
     renderer?.saveImage(`poolside-${shortId(encodeState())}.png`);
   }
 
-  // --- video capture ------------------------------------------------------
   const CLIP_FPS = 30;
   let videoSeconds = 6; // clip length; bound to the SavedScenes selector
   let videoLoop = false; // seamless loop toggle
@@ -221,7 +218,6 @@
     renderer?.recenter();
   }
 
-  // --- shareable scene code -----------------------------------------------
   // The whole scene packs into one short token (?s=…). `time` is never encoded,
   // so a shared scene reproduces the look while animating from wherever.
   function encodeState(): string {
@@ -266,11 +262,10 @@
       if (colors[1]) shallowColor = colors[1];
       if (colors[2]) causticColor = colors[2];
     } catch {
-      // Malformed token — keep defaults.
+      // Malformed token, keep the defaults.
     }
   }
 
-  // --- saved scenes -------------------------------------------------------
   function applyScene(token: string) {
     decodeState(token);
     renderer?.recenter();
@@ -283,7 +278,7 @@
     if (token) decodeState(token);
   });
 
-  // Record scene edits (debounced) so Undo can step back — even across a refresh.
+  // Record scene edits (debounced) so Undo can step back, even across a refresh.
   const history = createHistory('poolside');
   $: (void [speed, scale, intensity, sharpness, iterations, turbulence, zoom, detail, phase, angle, swirl, grain, weave, deepColor, shallowColor, causticColor], history.touch(encodeState));
   function undoScene() {
@@ -410,7 +405,7 @@
 </PlaygroundShell>
 
 <style>
-  /* Preset water palettes — a wrapping row of gradient chips, each applying its
+  /* Preset water palettes: a wrapping row of gradient chips, each applying its
      deep → shallow → caustic trio. Shared control styling lives in PlaygroundShell. */
   .grp-lab {
     display: block;

@@ -18,9 +18,8 @@ test('Gallery page renders without a11y errors', async ({
 })
 
 /**
- * The detail page, not the index — this is where .prose lives and where
- * lightboxGroup actually enhances images, none of which the index scan above
- * ever reached.
+ * The detail page. .prose lives here, and so does the lightboxGroup
+ * enhancement, neither of which the index scan above reaches.
  */
 test('Gallery post renders without a11y errors', async ({
   page,
@@ -29,8 +28,8 @@ test('Gallery post renders without a11y errors', async ({
   await goto(page, '/gallery/generative-art')
   await expect(page.locator('.prose')).toBeVisible()
 
-  // lightboxGroup swaps a native <button> wrapper for an ARIA button on the
-  // image itself; this is the scan that keeps that trade honest.
+  // lightboxGroup puts an ARIA button on the image instead of wrapping it in a
+  // native <button>. This check keeps that trade honest.
   await expect(page.locator('[data-lightbox-trigger]').first()).toHaveAttribute(
     'role',
     'button'
@@ -50,15 +49,15 @@ test('Loaded images drop the grey placeholder, broken ones keep it', async ({
 }) => {
   await goto(page, '/gallery')
 
-  // Every image that actually painted is stamped by the root layout, so the
-  // `img:not([data-loaded])` grey in global.css stops applying — that is what
-  // keeps a transparent PNG off a grey card.
+  // The root layout stamps every image that painted, so the
+  // `img:not([data-loaded])` grey in global.css stops applying. That keeps a
+  // transparent PNG off a grey card.
   const img = page.locator('.gallery-image').first()
   await expect(img).toHaveAttribute('data-loaded', '')
   await expect(img).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)')
 
-  // A broken image never fires load, so it must keep the placeholder — the
-  // defensive-CSS case the grey exists for in the first place.
+  // A broken image never fires load, so it keeps the placeholder. That is the
+  // case the grey exists for.
   const brokenStaysGrey = await page.evaluate(async () => {
     const el = document.createElement('img')
     el.src = '/definitely-not-a-real-image.png'

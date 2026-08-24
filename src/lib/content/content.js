@@ -1,9 +1,9 @@
 import { dev } from '$app/environment'
-// Dynamic rather than static: $env/static/private is inlined by Vite, so the
-// token would have to be a Workers Builds *build* variable — and those don't
-// reach non-production branch builds, which breaks every PR preview. Read at
-// runtime from the worker's secrets instead. The cost is that nothing calling
-// this can be prerendered (see rss.xml / sitemap.xml).
+// $env/static/private is inlined by Vite, so the token would have to be a
+// Workers Builds *build* variable, and those don't reach non-production branch
+// builds. That breaks every PR preview. Read it at runtime from the worker's
+// secrets instead. The cost is that nothing calling this can be prerendered
+// (see rss.xml / sitemap.xml).
 import { env } from '$env/dynamic/private'
 import {
   GH_USER_REPO,
@@ -29,7 +29,7 @@ export async function listContentFromIssues(fetch, label) {
   let next = null
 
   // GitHub rejects requests with no User-Agent ("forbidden by administrative
-  // rules"). Node's fetch supplied one for free; workerd's does not.
+  // rules"). Node's fetch sends one. workerd's does not.
   const ghHeaders = {
     'User-Agent': GH_USER_REPO,
     ...(env.GH_TOKEN && { Authorization: `token ${env.GH_TOKEN}` }),
@@ -91,7 +91,6 @@ export async function getContent(fetch, slug) {
       )
   }
   if (!allPosts.length) throw new Error('no posts')
-  // find the issue that matches this slug
   const post = allPosts.find((p) => p.slug === slug)
   if (post) {
     const content = await formatContent(post.content)

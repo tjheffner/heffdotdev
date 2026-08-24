@@ -22,13 +22,13 @@
     'shard'
   ];
 
-  // One editable item inside the fundamental segment. Every visual property is
-  // explicit; `seed` only fixes the sub-shape geometry (shard verts, warp jitter)
-  // so editing size/color/etc never reshuffles the shape. `open` is UI-only.
+  // One editable item inside the fundamental segment. `seed` only fixes the
+  // sub-shape geometry (shard verts, warp jitter), so editing size or color
+  // never reshuffles the shape. `open` is UI-only.
   export type KaleItem = {
     shape: KaleShape;
-    u: number; // 0..1 — angle across the wedge (radial) / x in the tile (prism)
-    v: number; // 0..1 — radius from center (radial) / y in the tile (prism)
+    u: number; // 0..1 angle across the wedge (radial) or x in the tile (prism)
+    v: number; // 0..1 radius from center (radial) or y in the tile (prism)
     size: number; // radius as a fraction of the segment size
     color: string; // #rrggbb
     rotate: number; // degrees, 0..360
@@ -46,14 +46,12 @@
   import { hexToHsl } from '$lib/playground/color';
   import CanvasStage, { type StageView } from './CanvasStage.svelte';
 
-  // --- appearance ----------------------------------------------------------
   export let bg = '#0a0a12';
   export let transparent = false; // skip the backdrop fill for transparent PNGs
   export let stroke = 0; // outline weight, 0 = none
   export let outlineColor = '#000000';
   export let strokeMatch = true; // derive stroke from each item's own color
 
-  // --- arrangement ---------------------------------------------------------
   // radial: mirror wedges fan around a center point.
   // prism:  a mirrored tile is tessellated across the whole canvas.
   export let mode: KaleMode = 'radial';
@@ -71,11 +69,11 @@
   export let onRendered: (() => void) | undefined = undefined; // fires after each paint
 
   // Prism tiles are much smaller than the radial disc, so the same size fraction
-  // reads as sparse. Scale item size up in prism so tiles fill and the seams knit.
+  // looks sparse. Scale item size up in prism so tiles fill and the seams knit.
   const PRISM_FILL = 2.6;
 
-  // Camera/canvas live in CanvasStage; these mirror the current view so the
-  // draw helpers below can read them unchanged.
+  // Camera and canvas live in CanvasStage. These mirror the current view for
+  // the draw helpers below.
   let stage: CanvasStage;
   let ctx: CanvasRenderingContext2D | null = null;
   let mounted = false;
@@ -87,7 +85,6 @@
   const TAU = Math.PI * 2;
   const DEG = Math.PI / 180;
 
-  // --- shape geometry ------------------------------------------------------
   function baseShape(kind: KaleShape, rng: () => number): number[][] {
     const poly = (n: number, phase = 0) => {
       const v: number[][] = [];
@@ -120,8 +117,8 @@
       case 'burst':
         return star(8, 0.32);
       case 'wave': {
-        // A sine-edged strip, closed into a band so it flows through the fill
-        // pipeline — reads as an undulating line.
+        // A sine-edged strip, closed into a band so it goes through the fill
+        // path like any other polygon.
         const seg = 16;
         const amp = 0.42;
         const th = 0.16;
@@ -148,9 +145,9 @@
     }
   }
 
-  // Precompute the per-item geometry so the render loop (which repeats items
-  // across many tiles/wedges) never rebuilds shapes. Recomputed only when the
-  // `items` array is invalidated (any edit).
+  // Precompute per-item geometry so the render loop, which repeats items across
+  // many tiles/wedges, never rebuilds shapes. Recomputed only when the `items`
+  // array is invalidated (any edit).
   type Prepared = {
     it: KaleItem;
     verts: number[][];
@@ -182,20 +179,17 @@
 
   $: prepared = (items || []).map(prep);
 
-  // --- animation state -----------------------------------------------------
   let spinClock = 0;
   let morphClock = 0;
   let rafId = 0;
   let lastTs = 0;
 
-  // --- seamless-loop capture ----------------------------------------------
-  // For a seamless loop every time-varying sinusoid must complete a whole number
-  // of cycles over the clip. We can't pick one duration that closes them all
-  // (spin/drift/morph run at incommensurate rates, and morph's rate is per-item),
-  // so instead each sinusoid's total advance is *snapped* to an integer number of
-  // cycles: `phase(u) = base + round(advance·rate / 2π)·2π·u`. The round() makes
-  // the loop exactly seamless no matter what the advances are; the advances only
-  // decide how much motion the loop shows.
+  // Seamless-loop capture. A loop needs every time-varying sinusoid to complete
+  // a whole number of cycles over the clip, and no single duration closes them
+  // all (spin, drift and morph run at incommensurate rates, and morph's rate is
+  // per-item). So each sinusoid's total advance is snapped to whole cycles:
+  // `phase(u) = base + round(advance·rate / 2π)·2π·u`. The advances only decide
+  // how much motion the loop shows.
   let looping = false;
   let loopU = 0;
   let spinClock0 = 0;
@@ -211,10 +205,9 @@
       ? morphClock0 * rate + Math.round((morphAdvance * rate) / TAU) * TAU * loopU
       : morphClock * rate;
 
-  // Per-item effective deform for this frame: the item's own value plus a sine
-  // of the morph clock. Every sine is 0 at clock 0, so a still scene (clock
-  // frozen at 0) is exactly the base values; once running, the clock advances
-  // and the pattern breathes, holding in place whenever the speed returns to 0.
+  // Per-item deform for this frame: the item's own value plus a sine of the
+  // morph clock. Every sine is 0 at clock 0, so a frozen clock gives the base
+  // values, and the pattern holds in place whenever the speed returns to 0.
   function morphed(p: Prepared) {
     const it = p.it;
     if (!looping && morphClock === 0)
@@ -228,7 +221,6 @@
     };
   }
 
-  // --- drawing -------------------------------------------------------------
   function drawItem(p: Prepared, cx: number, cy: number, size: number, ang: number, eSkew: number, eWarp: number) {
     if (!ctx) return;
     const cos = Math.cos(ang);
@@ -313,8 +305,8 @@
     const R = Math.min(w, h) * 0.46 * zoom;
     const slices = Math.max(2, Math.round(segments));
     const a = TAU / slices;
-    // Clock is frozen at 0 while still, so this is 0 for a static scene and
-    // simply holds its angle whenever spin returns to 0 — no snap at the seam.
+    // The clock is frozen at 0 while still, so a static scene is unrotated and
+    // the angle holds whenever spin returns to 0.
     const fieldRot = spinPhase(0.7);
 
     ctx.save();
@@ -322,9 +314,9 @@
     ctx.rotate(fieldRot);
     for (let i = 0; i < slices; i++) {
       ctx.save();
-      // Even slices rotate into place; odd slices are mirror images of their
-      // neighbor (reflect across +x, then rotate up into the wedge) so adjacent
-      // wedges meet seamlessly — the defining trick of a kaleidoscope.
+      // Even slices rotate into place. Odd slices mirror their neighbor
+      // (reflect across +x, then rotate up into the wedge) so adjacent wedges
+      // meet seamlessly.
       if (i % 2 === 0) {
         ctx.rotate(i * a);
       } else {
@@ -349,8 +341,8 @@
     if (cols * rows > budget) {
       T *= Math.sqrt((cols * rows) / budget);
     }
-    // Both sines are 0 at clock 0, so a still sheet is undrifted; different
-    // frequencies make it wander in 2D. Holds in place when spin returns to 0.
+    // Both sines are 0 at clock 0, so a still sheet is undrifted. Different
+    // frequencies make it wander in 2D.
     const driftX = Math.sin(spinPhase(0.2)) * Math.min(w, h) * 0.15;
     const driftY = Math.sin(spinPhase(0.17)) * Math.min(w, h) * 0.15;
     const originX = w / 2 + panX + driftX;
@@ -365,18 +357,17 @@
       for (let gx = gx0; gx <= gx1; gx++) {
         const x0 = originX + gx * T;
         const y0 = originY + gy * T;
-        // Mirror alternate tiles in each axis so content flows seamlessly across
-        // every seam — a plane of mirror rosettes where four tiles meet.
+        // Mirror alternate tiles on each axis so content flows across every
+        // seam, with mirror rosettes where four tiles meet.
         const fx = gx & 1 ? -1 : 1;
         const fy = gy & 1 ? -1 : 1;
         ctx.save();
         ctx.translate(x0, y0);
         ctx.translate(fx < 0 ? T : 0, fy < 0 ? T : 0);
         ctx.scale(fx, fy);
-        // Overlap the clip by ~1px so anti-aliased tile edges don't leave a
-        // hairline of backdrop between tiles. Neighboring tiles are exact mirror
-        // images across each seam, so the overlap draws matching color — it reads
-        // as a clean bleed, not a doubled edge.
+        // Overlap the clip by ~1px so anti-aliased tile edges do not leave a
+        // hairline of backdrop between tiles. Neighboring tiles mirror across
+        // each seam, so the overlap draws matching color.
         const bleed = 1;
         ctx.beginPath();
         ctx.rect(-bleed, -bleed, T + 2 * bleed, T + 2 * bleed);
@@ -387,9 +378,9 @@
     }
   }
 
-  // Paint the scene into the stage's canvas. The stage clears + sets the dpr
-  // transform first and passes the current camera; the render helpers below read
-  // the mirrored w/h/panX/panY and the `zoom` prop (== view.zoom).
+  // Paint the scene into the stage's canvas. The stage clears, sets the dpr
+  // transform and passes the current camera. The render helpers below read the
+  // mirrored w/h/panX/panY and the `zoom` prop (== view.zoom).
   function draw(context: CanvasRenderingContext2D, view: StageView) {
     ctx = context;
     w = view.w;
@@ -415,7 +406,6 @@
     stage?.paint();
   }
 
-  // --- animation loop ------------------------------------------------------
   const prefersReducedMotion = () =>
     typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -427,8 +417,8 @@
     const dt = lastTs ? Math.min(0.05, (ts - lastTs) / 1000) : 0;
     lastTs = ts;
     spinClock += dt * spin * 1.3;
-    // Morph ramps up faster than spin — a small boost plus a gentle curve so the
-    // low end still reads while 1.0 feels genuinely lively.
+    // Morph ramps up faster than spin: a small boost plus a gentle curve, so
+    // the low end still shows while 1.0 moves fast.
     morphClock += dt * (animate * 1.6 + animate * animate * 2.2);
     stage?.paint();
     rafId = requestAnimationFrame(tick);
@@ -449,15 +439,15 @@
   $: if (mounted) syncAnimation(animate, spin);
 
   // Zero the motion clocks so the scene returns to its base (un-morphed,
-  // un-rotated) state — used by the page's Reset.
+  // un-rotated) state. Used by the page's Reset.
   export function resetMotion() {
     spinClock = 0;
     morphClock = 0;
     stage?.paint();
   }
 
-  // Camera + export helpers forward to the stage; luminance folds in the
-  // effective backdrop this scene shows.
+  // Camera and export helpers forward to the stage. Luminance uses the backdrop
+  // this scene actually shows.
   export const recenter = () => stage?.recenter();
   export const snapshot = (bgFill: string, maxDim = 128) => stage?.snapshot(bgFill, maxDim) ?? null;
   export const saveImage = (filename = `kaleidoscope-${String(Date.now()).slice(-6)}.png`) =>
@@ -465,11 +455,10 @@
   export const sampleLuminance = (stripFrac = 0.16) =>
     stage?.sampleLuminance(transparent ? '#232329' : bg, stripFrac) ?? null;
 
-  // --- video capture -------------------------------------------------------
-  // draw() reads the shared motion clocks, so recording pauses the live loop and
-  // steps the clocks by hand. `startCapture` snapshots the current clocks; each
-  // `captureFrame(ctx, W, H, elapsed)` advances them at the live rate for a clip
-  // that matches what's on screen, painting centered at W×H.
+  // Video capture: draw() reads the shared motion clocks, so recording pauses
+  // the live loop and steps the clocks by hand. `startCapture` snapshots the
+  // current clocks; each `captureFrame(ctx, W, H, elapsed)` advances them at the
+  // live rate, painting centered at W×H.
   let capturing = false;
   let capSpin0 = 0;
   let capMorph0 = 0;
@@ -510,9 +499,9 @@
     rafId = 0;
     spinClock0 = spinClock;
     morphClock0 = morphClock;
-    // Advances only decide how much motion the loop shows (round() guarantees the
-    // seam). Give the field at least one full turn when spinning, and the morph at
-    // least ~one cycle when animating, so short clips still read as moving.
+    // round() guarantees the seam; the advances only set how much motion shows.
+    // Give the field at least one full turn when spinning, and the morph about
+    // one cycle when animating, so short clips still move.
     const spinTurns = spin === 0 ? 0 : Math.sign(spin) * Math.max(1, Math.round(Math.abs(spin) * seconds * 0.5));
     spinAdvance = spin === 0 ? 0 : (spinTurns * TAU) / 0.7; // fieldRot = spinTurns full turns
     const morphRate = animate * 1.6 + animate * animate * 2.2;

@@ -3,32 +3,29 @@
   import { hexRgb } from '$lib/playground/color';
   import CanvasStage, { type StageView } from './CanvasStage.svelte';
 
-  // Top-down pool caustics: an animated shimmering light-network over colored
-  // water. Unlike the other (static) canvas playgrounds, this one runs its own
-  // requestAnimationFrame loop — each tick advances `time`, recomputes a small
-  // offscreen buffer per-pixel, and repaints the stage. `draw()` is a pure blit;
-  // all the per-pixel work lives in the tick so panning/zooming stays smooth.
+  // Top-down pool caustics: an animated shimmering light network over colored
+  // water. This one runs its own requestAnimationFrame loop. Each tick advances
+  // `time`, recomputes a small offscreen buffer per pixel, and repaints the
+  // stage. `draw()` is a pure blit, so panning and zooming stay smooth.
 
-  // --- water color (3 gradient stops the caustic intensity maps through) ---
+  // Water color: 3 gradient stops the caustic intensity maps through.
   export let deepColor = '#0a3a5c'; // base water + the full-bleed pre-fill
   export let shallowColor = '#1f8fb5';
   export let causticColor = '#dffbff'; // bright veins
 
-  // --- pattern -------------------------------------------------------------
   export let speed = 1; // animation rate (0 = frozen)
-  export let scale = 6; // field zoom — vein density/size
+  export let scale = 6; // field zoom: vein density and size
   export let intensity = 1; // highlight gain
   export let sharpness = 8; // vein thinness/contrast (pow exponent)
   export let iterations = 5; // detail vs perf
   export let turbulence = 0.4; // domain-warp amount
   export let phase = 0; // offsets the field so scenes differ
-  export let angle = 0; // rotates the whole field (degrees) — flow direction
-  export let swirl = 0; // radius-based domain twist — bends the network into spirals
+  export let angle = 0; // rotates the whole field (degrees), the flow direction
+  export let swirl = 0; // radius-based domain twist, bends the network into spirals
   export let grain = 1; // caustic vein thickness / coverage (scales inner reciprocal)
-  export let weave = 3.5; // per-octave time divergence — restructures the interference
-  export let detail = 256; // offscreen buffer long edge (px) — perf/quality dial
+  export let weave = 3.5; // per-octave time divergence, restructures the interference
+  export let detail = 256; // offscreen buffer long edge (px), a perf/quality dial
 
-  // --- camera (mirrors Triangles) -----------------------------------------
   export let zoom = 1;
   export let zoomMin = 0.25;
   export let zoomMax = 4;
@@ -127,10 +124,10 @@
 
   // The classic TDM caustic, ported per-pixel into `out`. Each divisor is
   // epsilon-guarded (the sin/cos terms cross zero) and the final intensity
-  // clamped, so a bad pixel degrades to deep water rather than NaN/Infinity
-  // speckle. Pure over the current scene params + the passed time/camera, so the
-  // live loop and the video exporter share one code path. `pfx`/`pfy` are the
-  // pan as a fraction of the viewport (0,0 = centered).
+  // clamped, so a bad pixel degrades to deep water rather than NaN speckle.
+  // Pure over the scene params plus the passed time/camera, so the live loop
+  // and the video exporter share one code path. `pfx`/`pfy` are the pan as a
+  // fraction of the viewport (0,0 = centered).
   function fillCaustic(
     out: Uint32Array,
     bw: number,
@@ -166,10 +163,9 @@
     // Fold the camera into the field so the buffer always fills the viewport
     // (no border to reveal) and pan/zoom tile through an infinite caustic field.
     const iz = 1 / (zoom || 1);
-    // Structural levers that restructure the wave shapes (not just brightness):
-    // rotation sets the flow direction; swirl twists the domain by an angle that
-    // grows with radius (bending the network into spirals); weave changes how the
-    // octaves' phases diverge; grain scales the vein thickness.
+    // These change the wave shapes, not just brightness. Rotation sets the flow
+    // direction, swirl twists the domain by an angle that grows with radius,
+    // weave changes how the octave phases diverge, grain scales vein thickness.
     const ang = angle * (Math.PI / 180);
     const cosA = Math.cos(ang);
     const sinA = Math.sin(ang);
@@ -230,9 +226,9 @@
     bctx.putImageData(imageData, 0, 0);
   }
 
-  // Pure blit. `paint()` has already cleared + set the dpr transform. The buffer
-  // is computed at the viewport aspect and the camera lives inside the field, so
-  // we blit it 1:1 across the whole viewport — it always fills, no border. The
+  // Pure blit. `paint()` has already cleared and set the dpr transform. The
+  // buffer is computed at the viewport aspect with the camera folded in, so it
+  // blits 1:1 across the whole viewport and always fills, no border. The
   // deep-color fill only covers the first frame before the buffer exists.
   function draw(context: CanvasRenderingContext2D, view: StageView) {
     w = view.w;
@@ -275,7 +271,7 @@
     }
   }
 
-  // Rebuild the color LUT (cheap) whenever a stop changes.
+  // Rebuild the color LUT whenever a stop changes.
   $: if (mounted) {
     void [deepColor, shallowColor, causticColor];
     buildLut();
@@ -294,8 +290,8 @@
     return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
   };
 
-  // --- video capture -------------------------------------------------------
-  // A separate offscreen buffer so recording never disturbs the live buffer.
+  // Video capture uses a separate offscreen buffer, so recording never
+  // disturbs the live one.
   let capBuf: HTMLCanvasElement | undefined;
   let capBctx: CanvasRenderingContext2D | null = null;
   let capImg: ImageData | undefined;
@@ -329,8 +325,8 @@
 
   /**
    * Paint one frame at `W`×`H` for animation time `tSeconds` into `ctx`. Used by
-   * the video exporter: current zoom/pan/colors/params apply (the pan fraction is
-   * resolution-independent, so the clip matches the on-screen framing). The
+   * the video exporter: current zoom/pan/colors/params apply, and the pan is a
+   * fraction of the viewport, so the clip matches the on-screen framing. The
    * caustic is computed at the `detail` buffer size then upscaled.
    */
   export function captureFrame(
@@ -350,12 +346,11 @@
     ctx.drawImage(capBuf, 0, 0, capBw, capBh, 0, 0, W, H);
   }
 
-  // --- seamless loop -------------------------------------------------------
-  // The field depends on time only through one phase per octave, so a loop just
-  // needs each octave to advance a whole number of cycles. `beginLoop` snaps each
-  // octave's advance to the nearest integer cycle count; `captureLoopFrame(u)`
-  // then evaluates the field at loop position u∈[0,1). round() makes the seam
-  // exact; the advance size only affects how much motion the loop shows.
+  // Seamless loop: the field depends on time only through one phase per octave,
+  // so a loop needs each octave to advance a whole number of cycles. `beginLoop`
+  // snaps each advance to the nearest whole cycle; `captureLoopFrame(u)` then
+  // evaluates the field at loop position u∈[0,1). The advance size only sets how
+  // much motion the loop shows.
   export function beginLoop(seconds: number) {
     const iters = Math.max(2, Math.round(iterations));
     const T0 = time * 0.5 + 23.0 + phase * 0.15;
@@ -366,7 +361,7 @@
       const k = Math.abs(1 - wv / (n + 1));
       if (k > maxK) maxK = k;
     }
-    // Guarantee the fastest octave makes a couple of cycles so the loop isn't near-static.
+    // Guarantee the fastest octave makes a couple of cycles, so the loop is not near-static.
     if (speed > 0 && maxK > 0) dTnom = Math.max(dTnom, (2 * Math.PI * 2) / maxK);
     loopBase = new Float64Array(iters);
     loopCyc = new Float64Array(iters);
@@ -404,7 +399,7 @@
     mql.addEventListener?.('change', onMQ);
 
     onVisibility = () => {
-      // Reset the clock on return so the dt clamp doesn't have to absorb the gap.
+      // Reset the clock on return so the dt clamp does not absorb the gap.
       lastNow = performance.now();
     };
     document.addEventListener('visibilitychange', onVisibility);

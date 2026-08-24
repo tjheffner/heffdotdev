@@ -6,18 +6,16 @@ const WIDTHS = [400, 800, 1600]
 
 /**
  * Route a remote image through Cloudflare Image Transformations: resize, a
- * modern format picked by content negotiation, and an edge cache in front of
- * github.com. Every image on this site comes off a GitHub issue, and those
- * attachment URLs accept no size params of their own — proxying is the only
- * lever we have.
+ * modern format, and an edge cache in front of github.com. Every image here
+ * comes off a GitHub issue, and those attachment URLs take no size params of
+ * their own, so proxying is the only option.
  *
- * /cdn-cgi/ is a zone feature, so it exists on heffner.dev but not on a
- * *.workers.dev preview or under `vite dev`. Absolute URLs against the apex
- * keep previews rendering real images instead of 404s; dev hands back the
- * original URL untouched.
+ * /cdn-cgi/ only exists on the heffner.dev zone, not on a *.workers.dev preview
+ * or under `vite dev`. Pointing at the apex keeps previews rendering real
+ * images; dev returns the original URL untouched.
  *
- * Requires Transformations enabled on the zone, with resizing allowed from any
- * origin (the sources are github.com, not us) — otherwise the CDN answers 403.
+ * Needs Transformations enabled on the zone and resizing allowed from any
+ * origin, since the sources are github.com. Otherwise the CDN answers 403.
  */
 export function cdnImage(src: string | undefined, width = 800) {
   if (dev || !src?.startsWith('http')) return src

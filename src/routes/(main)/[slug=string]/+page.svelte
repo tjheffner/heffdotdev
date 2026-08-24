@@ -4,10 +4,9 @@
   import Metatags from '$lib/components/Metatags.svelte'
   import TableOfContents from '$lib/components/TableOfContents.svelte';
   import { lightboxGroup } from '@hyzer-labs/ui'
-  // The viewer's skin. Cherry-picked rather than the full theme: it lives in
-  // the hz-theme cascade layer (so unlayered site CSS still wins) and its
-  // carousel rules are scoped under .hz-lightbox, so Currently's rail is
-  // untouched.
+  // The viewer's skin, cherry-picked rather than the full theme. It lives in the
+  // hz-theme cascade layer, so unlayered site CSS still wins, and its carousel
+  // rules are scoped under .hz-lightbox, so Currently's rail is untouched.
   import '@hyzer-labs/ui/theme/components/lightbox.css'
 
   import { codeBlocks } from '$lib/actions/codeBlocks'
@@ -20,10 +19,10 @@
   let json: BaseContentItem = $derived(data.json) // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
 </script>
 
-<Metatags 
-  title={json.title} 
-  description={json.description} 
-  ogMessage={json.title} 
+<Metatags
+  title={json.title}
+  description={json.description}
+  ogMessage={json.title}
   canonical={json.slug}
 />
 
@@ -39,7 +38,7 @@
     <h1>
       {json.title}
     </h1>
- 
+
     <div class="side small" data-density-shift>
       <p>
         <span class="secondary">{new Date(json.date).toISOString().slice(0, 10)}</span>
@@ -72,9 +71,6 @@
   }
 
   .details {
-    /* margin: var(--hz-space-near) 0; */
-    /* display: flex;
-    flex-direction: column; */
 
     h1 {
       margin-bottom: var(--hz-space-near);
