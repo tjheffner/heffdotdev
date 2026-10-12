@@ -35,14 +35,14 @@
   <div class="list">
     <h2 id="experience">Experience</h2>
 
-    <h3 id="Hyzer">Hyzer</h3>
+    <h3 id="Hyzer"><a href="https://hyzer.sh">Hyzer</a></h3>
     <h4>Founder & Principal Engineer</h4>
     <p>June 2025 — Present</p>
     <p>Independent consultancy providing full-stack engineering and design leadership to agencies, startups, and direct clients.</p>
     <Stack as="ul" gap="xs">
-      <li>Shipped four mobile app prototypes for a Fortune 500 client over multiple engagements totaling one year. A 40-person focus group tested the second prototype to strong reception.</li>
-      <li>Partnered with an agency on multiple production launches, including a three-week animation-heavy brand rebuild and realtime messaging and notification features for a social platform.</li>
-      <li>Extended a retailer's headless Shopify codebase into a B2B storefront, forking from their existing D2C site and adding context-aware catalogs and pricing for different company and region segments. Also built a customer intake form integrated with Shopify.</li>
+      <li>Shipped four mobile app prototypes for <a href="https://hyzer.sh/work/ea-sports">EA Sports</a> over multiple engagements totaling one year. A 40-person focus group tested the second prototype to strong reception.</li>
+      <li>Partnered with <a href="https://wlcr.io">WLCR</a> on multiple production launches, including a three-week animation-heavy brand rebuild for Later and realtime messaging and notification features for <a href="https://wlcr.io/case-study/rally-crew">RallyCrew</a>.</li>
+      <li>Extended <a href="https://wlcr.io/case-study/coast-products">Coast Products</a>' headless Shopify codebase into a B2B storefront, forking from their existing D2C site and adding context-aware catalogs and pricing for different company and region segments. Also built a customer intake form integrated with Shopify.</li>
       <li>Stood up the design system for an early-stage startup over two months, migrating existing code into an accessible navigation system, a consistent type scale, and shared tokens.</li>
     </Stack>
 
@@ -101,17 +101,25 @@
     <p>Partnered with <a href="https://wlcr.io">WLCR</a> to deliver Later's rebrand on their existing marketing site, refreshing design system tokens across the board and updating responsive components with new motion and animation treatments. Also built the custom parallax landing page for <em>Made You Look</em>, a flagship creator campaign featuring original films, immersive scroll interactions, and multiple creator story panels.</p>
     <p>
       <a href="https://later.com/made-you-look/">later.com/made-you-look</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://wlcr.io/case-study/later">WLCR case study</a>
     </p>
 
     <h3 id="va.gov">VA.gov</h3>
     <p>Architected a Next.js build system on top of an existing headless Drupal installation to dramatically improve publishing times for VA editors. With over 55,000 pieces of content and growing daily, timely publishing is critical. The legacy system took a minimum of 45 minutes per build, sometimes closer to two hours. The new approach brings full builds under twenty minutes and supports sub-five-minute incremental publishing, while giving editors the ability to preview their work exactly as it will appear on VA.gov <em>before publishing</em>, addressing a major pain point of the prior workflow.</p>
     <p>
       <a href="https://va.gov">VA.gov</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://hyzer.sh/work/va-accelerated-publishing">Case study</a>
     </p>
 
     <h3 id="medical-bill-rights">Medical Bill Rights</h3>
     <p>Built in support of the No Surprises Act, this CMS.gov portal gives citizens the information they need to understand their rights around medical billing, whether or not they use Medicare/Medicaid. The site includes 26 fact pages localized in two languages (with support for more), a React-based wizard that helps users find the relevant fact page for their situation, and a multi-page form with client and server-side validation that routes submissions to a CRM for claims processing by CMS agents.</p>
-    <p><a href="https://www.cms.gov/medical-bill-rights">cms.gov/medical-bill-rights</a></p>
+    <p>
+      <a href="https://www.cms.gov/medical-bill-rights">cms.gov/medical-bill-rights</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://hyzer.sh/work/cms-medical-bill-rights">Case study</a>
+    </p>
   </div>
 </main>
 
