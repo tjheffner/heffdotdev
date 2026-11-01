@@ -29,9 +29,11 @@ test('Playground index renders without a11y errors', async ({
 // clickable chip, and the visualization mounts into a full-bleed `preview`. A
 // <canvas> for the canvas playgrounds, DOM gradient divs for Glowfield.
 const experiments = [
+  { name: 'Soundlab', path: '/playground/soundlab', preview: '.roll' },
   { name: 'Mosaic', path: '/playground/mosaic', preview: 'canvas' },
   { name: 'Plotter', path: '/playground/plotter', preview: 'canvas' },
   { name: 'Feather', path: '/playground/feather', preview: 'canvas' },
+  { name: 'Applique', path: '/playground/applique', preview: 'canvas' },
   { name: 'Poolside', path: '/playground/poolside', preview: 'canvas' },
   { name: 'Kaleidoscope', path: '/playground/kaleidoscope', preview: 'canvas' },
   { name: 'Shatter', path: '/playground/triangles', preview: 'canvas' },
@@ -64,3 +66,20 @@ for (const x of experiments) {
     expect(accessibilityScanResults.violations.length).toEqual(0)
   })
 }
+
+// Soundlab renders offline and hands back a real WAV: a 44-byte RIFF header
+// plus samples. Add one note from the keyboard so the render isn't empty.
+test('Soundlab exports a WAV', async ({ page }) => {
+  await gotoPlayground(page, '/playground/soundlab')
+  await page.getByRole('button', { name: 'Export' }).click()
+  const download = page.waitForEvent('download')
+  await page.getByRole('button', { name: /Save WAV/ }).click()
+  const file = await download
+  expect(file.suggestedFilename()).toBe('soundlab.wav')
+  const bytes = await (
+    await import('node:fs/promises')
+  ).readFile(await file.path())
+  expect(bytes.subarray(0, 4).toString()).toBe('RIFF')
+  expect(bytes.subarray(8, 12).toString()).toBe('WAVE')
+  expect(bytes.length).toBeGreaterThan(44 + 22050) // > 0.5s of 16-bit mono
+})

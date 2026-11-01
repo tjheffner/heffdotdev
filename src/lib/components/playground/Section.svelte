@@ -6,6 +6,9 @@
 
   export let title: string;
   export let open = false;
+  // Extra class on the open card, so a page can style its own panels.
+  let className = '';
+  export { className as class };
 
   // Links the pill (button) to its card (region) for assistive tech.
   const uid = `pg-sec-${Math.random().toString(36).slice(2, 8)}`;
@@ -36,7 +39,7 @@
 </button>
 
 {#if open}
-  <section class="card" id={uid} aria-label={title}>
+  <section class="card {className}" id={uid} aria-label={title}>
     <header class="card-head">
       <h2>{title}</h2>
       <slot name="actions" />
