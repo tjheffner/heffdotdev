@@ -9,8 +9,8 @@ import type { RequestHandler } from './$types'
 // ponytail: KV is eventually consistent, so a code can 404 at an edge that
 // already cached a miss for it (up to 60s). Move to D1 if that ever bites.
 
-// Tokens are our compact base36 scene codes: `k1~…` / `t1~…` / `g1~…` / `w1~…` / `p1~…` / `m1~…` / `r1~…`.
-const TOKEN_RE = /^[gktwpmr]1[~._\-a-z0-9]+$/i
+// Tokens are our compact base36 scene codes: `k1~…` / `t1~…` / `g1~…` / `w1~…` / `p1~…` / `m1~…` / `r1~…` / `a1~…` / `s1~…`.
+const TOKEN_RE = /^[gktwpmras]1[~._\-a-z0-9]+$/i
 // Only ever redirect back to a playground page (guards against open redirects).
 const PAGE_RE = /^\/playground\/[a-z-]+$/
 const ALPHABET =

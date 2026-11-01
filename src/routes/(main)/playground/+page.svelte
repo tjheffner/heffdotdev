@@ -3,7 +3,18 @@
 
   // Lives in (main) so it wears the site chrome and type. The experiments
   // themselves stay in (nowrapper) and go full-bleed.
+  // Chronological, newest first: add new experiments at the top.
   const experiments = [
+    {
+      href: '/playground/soundlab',
+      title: 'Soundlab',
+      blurb: 'Sketch tunes and sound effects, export WAVs.',
+    },
+    {
+      href: '/playground/applique',
+      title: 'Applique',
+      blurb: 'Stack cut-paper shapes you draw.',
+    },
     {
       href: '/playground/plotter',
       title: 'Plotter',
