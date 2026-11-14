@@ -33,7 +33,7 @@
   "devDependencies": {
     "@ethercorps/sveltekit-og": "^4.3.0",
     "@playwright/test": "^1.53.2",
-    "@sveltejs/adapter-cloudflare": "^7.2.9",
+    "@sveltejs/adapter-cloudflare": "^7.2.10",
     "@sveltejs/kit": "^2.22.2",
     "@sveltejs/vite-plugin-svelte": "^7.2.0",
     "@types/node": "^20.12.8",
